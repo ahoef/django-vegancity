@@ -1,5 +1,13 @@
+{% load url from future %}
+
 <html>
 <body>
-WELCOME TO THE HOMEPAGE PLACEHOLDER
+<h1>vegancity</h1>
+<h2>WELCOME TO THE HOMEPAGE PLACEHOLDER</h2>
+<p>Please check out the following links:</p>
+<ul>
+<li><a href="{% url 'home' %}">home</a></li>
+<li><a href="{% url 'search' %}">search</a></li>
+</ul>
 </body>
 <html>
