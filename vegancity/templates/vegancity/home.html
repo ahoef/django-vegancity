@@ -1,13 +1,10 @@
+{% extends "vegancity/base.html" %}
+
 {% load url from future %}
 
-<html>
-<body>
-<h1>vegancity</h1>
-<h2>WELCOME TO THE HOMEPAGE PLACEHOLDER</h2>
-<p>Please check out the following links:</p>
-<ul>
-<li><a href="{% url 'home' %}">home</a></li>
-<li><a href="{% url 'search' %}">search</a></li>
-</ul>
-</body>
-<html>
+{% block title %}vegancity{% endblock %}
+
+{% block content %}
+<h1>welcome to the homepage placeholder</h1>
+<p>I have no clue what's going to go on this page!</p>
+{% endblock %}
