@@ -1,0 +1,24 @@
+{% extends "vegancity/base.html" %}
+
+{% block content %}
+<h1>search</h1>
+<p>Here's all the restaurants/food vendors we've got so far:</p>
+
+<table>
+<th>name</th>
+<th>veg_level</th>
+<th>address</th>
+<th>notes</th>
+{% for vendor in vendors %}
+<tr>
+  <td>{{ vendor.name }}</td>
+  <td>{{ vendor.veg_level }}</td>
+  <td>{{ vendor.address }}</td>
+  <td>{{ vendor.notes }}</td>
+  <td>
+</tr>
+{% endfor %}
+</table>
+
+
+{% endblock %}

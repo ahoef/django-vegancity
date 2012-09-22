@@ -1,11 +1,11 @@
 from django.db import models
 
 VEG_LEVELS = (
-    ('1', "100% Vegan"),
-    ('2', "Vegetarian - Mostly Vegan"),
-    ('3', "Vegetarian - Hardly Vegan"),
-    ('4', "Not Vegetarian"),
-    ('5', "Beware!"),
+    (1, "100% Vegan"),
+    (2, "Vegetarian - Mostly Vegan"),
+    (3, "Vegetarian - Hardly Vegan"),
+    (4, "Not Vegetarian"),
+    (5, "Beware!"),
     )
     
 RATINGS = tuple((i, i) for i in range(1, 5))
