@@ -1,24 +1,35 @@
 {% extends "vegancity/base.html" %}
 
+{% block header_extra %}
+<link href="{{ STATIC_URL }}css/vegancity.css" rel="stylesheet"/>
+{% endblock %}
+
+{% block headline %}search{% endblock %}
+
+{% block summary %}
+find some delicious vegan food now!
+{% endblock %}
+
 {% block content %}
-<h1>search</h1>
-<p>Here's all the restaurants/food vendors we've got so far:</p>
-
-<table>
-<th>name</th>
-<th>veg_level</th>
-<th>address</th>
-<th>notes</th>
-{% for vendor in vendors %}
-<tr>
-  <td>{{ vendor.name }}</td>
-  <td>{{ vendor.veg_level }}</td>
-  <td>{{ vendor.address }}</td>
-  <td>{{ vendor.notes }}</td>
-  <td>
-</tr>
-{% endfor %}
+<h6>Here's all the restaurants/food vendors we've got so far:</h5>
+<table id="vendorList">
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>veg_level</th>
+      <th>address</th>
+      <th>notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for vendor in vendors %}
+    <tr>
+      <td>{{ vendor.name }}</td>
+      <td>{{ vendor.veg_level }}</td>
+      <td>{{ vendor.address }}</td>
+      <td>{{ vendor.notes }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
 </table>
-
-
 {% endblock %}
