@@ -11,6 +11,7 @@ VEG_LEVELS = (
 RATINGS = tuple((i, i) for i in range(1, 5))
 
 class Vendor(models.Model):
+    "The main class for this application"
     name = models.CharField(max_length=200)
     address = models.TextField()
     veg_level = models.IntegerField(choices=VEG_LEVELS)
