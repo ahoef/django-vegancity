@@ -1,16 +1,19 @@
 from django.conf.urls import patterns, include, url
-
 from django.contrib import admin
-admin.autodiscover()
 
 from settings import INSTALLED_APPS
 
-urlpatterns = patterns('',
-    url(r'^$', 'vegancity.views.home', name='home'),
-    url(r'^search/$', 'vegancity.views.search', name='search'),
-    url(r'^about/$', 'vegancity.views.about', name='about'),
-    url(r'^spread/$', 'vegancity.views.spread', name='spread'),
+admin.autodiscover()
+
+urlpatterns = patterns('vegancity.views',
+    url(r'^search/$', 'search', name='search'),
 )
+
+urlpatterns += patterns('django.views.generic.simple',
+    url(r'^$', 'direct_to_template', {'template': 'vegancity/home.html'}, name='home'),
+    url(r'^about/$', 'direct_to_template', {'template': 'vegancity/about.html'}, name='about'),
+    url(r'^spread/$','direct_to_template', {'template': 'vegancity/spread.html'}, name='spread'),
+)                        
 
 if 'django.contrib.admin' in INSTALLED_APPS:
     urlpatterns += patterns('',
