@@ -22,6 +22,22 @@ vendor.service_rating = 1
 vendor.atmosphere_rating = 1
 vendor.save()
 
+vendor = models.Vendor()
+vendor.name = "Jeff's Tacos"
+vendor.veg_level = 4
+vendor.food_rating = 4
+vendor.service_rating = 4
+vendor.atmosphere_rating = 1
+vendor.save()
+
+vendor = models.Vendor()
+vendor.name = "Bill's Blended Shakes"
+vendor.veg_level = 1
+vendor.food_rating = 1
+vendor.service_rating = 1
+vendor.atmosphere_rating = 1
+vendor.save()
+
 print "print all vendors:\n"
 
 for vendor in models.Vendor.objects.all():
