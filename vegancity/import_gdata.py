@@ -114,11 +114,25 @@ def main():
     
     for hash in hashes:
         vendor = models.Vendor()
-        vendor.name = hash['NAME']
-        vendor.address =  hash['ADDRESS']
-        vendor.phone = hash['PHONE']
-        vendor.url = hash['URL']
-        for tag in hash['TAGS']:
+
+        name = hash.get('NAME')
+        if name:
+            vendor.name = name
+
+        address = hash.get('ADDRESS')
+        if address:
+            vendor.address = address
+
+        phone = hash.get('PHONE')
+        if phone:
+            vendor.phone = phone
+
+        url = hash.get('URL')
+        if url:
+            print url
+            vendor.website = url
+        
+        for tag in hash.get('TAGS',[]):
             # add a tag for that vendor
             pass
         vendor.save()
