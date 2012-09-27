@@ -14,12 +14,14 @@ class Vendor(models.Model):
     "The main class for this application"
     name = models.CharField(max_length=200)
     address = models.TextField()
-    veg_level = models.IntegerField(choices=VEG_LEVELS)
-    food_rating = models.IntegerField(choices=RATINGS)
-    service_rating = models.IntegerField(choices=RATINGS)
-    atmosphere_rating = models.IntegerField(choices=RATINGS)
+    phone = models.CharField()
+    website = models.URLField()
+    veg_level = models.IntegerField(choices=VEG_LEVELS, blank=True, null=True,)
+    food_rating = models.IntegerField(choices=RATINGS, blank=True, null=True, )
+    service_rating = models.IntegerField(choices=RATINGS, blank=True, null=True,)
+    atmosphere_rating = models.IntegerField(choices=RATINGS, blank=True, null=True,)
     delivers = models.BooleanField(default=False)
-    notes = models.TextField()
+    notes = models.TextField(blank=True, null=True,)
 
     def __unicode__(self):
         return self.name
