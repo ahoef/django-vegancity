@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+import geocode
+
 VEG_LEVELS = (
     (1, "100% Vegan"),
     (2, "Vegetarian - Mostly Vegan"),
@@ -23,9 +25,18 @@ class Vendor(models.Model):
     atmosphere_rating = models.IntegerField(choices=RATINGS, blank=True, null=True,)
     delivers = models.BooleanField(default=False)
     notes = models.TextField(blank=True, null=True,)
+    latitude = models.FloatField(default=None, blank=True, null=True)
+    longitude = models.FloatField(default=None, blank=True, null=True)
 
     def __unicode__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if self.address and not (self.latitude and self.longitude):
+            geocode_result = geocode.geocode_address(self.address)
+            if geocode_result:
+                self.latitude, self.longitude = geocode_result
+        super(Vendor, self).save(*args, **kwargs)
 
 
 class Review(models.Model):
