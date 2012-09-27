@@ -1,7 +1,11 @@
 {% extends "vegancity/base.html" %}
 
-{% block headline %}{{ vendor.name }}{% endblock %}
+{% block header_extra %}
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+{% endblock %}
 
+{% block headline %}{{ vendor.name }}{% endblock %}
+n
 {% block summary %}
 {% endblock %}
 
@@ -14,6 +18,22 @@
 {% if veg_level %}Veg Level:{{ vendor.veg_level }}<br/>{% endif %}
 {% if vendor.notes %}{{ vendor.notes }}<br/>{% endif %}
 </p>
+
+{% block map %}
+<div id="map_canvas" style="width: 400px; height: 400px"></div>
+
+<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}/js/map.js"></script>
+<script type="text/javascript">
+
+var vendor_singleton = [
+  [{{ vendor.latitude }}, {{vendor.longitude }}],
+];
+jQuery("body").ready(createMap(vendor_singleton));
+</script>
+
+{% endblock %}
+
 
 {% if reviews %}
 <hr/>
