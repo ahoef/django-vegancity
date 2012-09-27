@@ -3,15 +3,16 @@
 import sys
 import ply.lex as lex
 import pprint
+import os
+import imp
 
 from django.core.management import setup_environ
 
-import settings
+settings = imp.load_source('vegancity.settings', os.path.join(os.path.abspath(os.path.pardir),"vegancity", "settings.py"))
 
 setup_environ(settings)
 
-import vegancity.models as models
-
+models = imp.load_source('vegancity.models', os.path.join(os.path.abspath(os.path.pardir),"vegancity", "models.py"))
 
 tokens = ('NAME', 'ADDRESS', 'PHONE', 'URL', 'ZAGAT', 'CATEGORY', 'TAGS', 'REVIEW')
 
