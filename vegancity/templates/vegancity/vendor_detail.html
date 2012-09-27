@@ -1,26 +1,31 @@
 {% extends "vegancity/base.html" %}
 
-{% block header_extra %}
-<link href="{{ STATIC_URL }}css/vegancity.css" rel="stylesheet"/>
-{% endblock %}
-
 {% block headline %}{{ vendor.name }}{% endblock %}
 
 {% block summary %}
 {% endblock %}
 
 {% block content %}
-<p>{{ vendor.id }}</p>
-<p>{{ vendor.name }}</p>
-<p>{{ vendor.veg_level }}</p>
-<p>{{ vendor.address }}</p>
-<p>{{ vendor.phone }}</p>
-<p>{{ vendor.website }}</p>
-<p>{{ vendor.notes }}</p>
+
+<p>{{ vendor.name }}<br/>
+{% if vendor.address %}Address:{{ vendor.address }}<br/>{% endif %}
+{% if vendor.phone %}Phone:{{ vendor.phone }}<br/>{% endif %}
+{% if vendor.website %}Website: <a href="http://{{ vendor.website }}">{{ vendor.website }}</a><br/>{% endif %}
+{% if veg_level %}Veg Level:{{ vendor.veg_level }}<br/>{% endif %}
+{% if vendor.notes %}{{ vendor.notes }}<br/>{% endif %}
+</p>
+
+{% if reviews %}
+<hr/>
+<div class="container">
+<h2>{{ reviews.count }} Review{% if reviews.count != 1 %}s{% endif %}:</h2>
 
 {% for review in reviews %}
-<h3>entered by: {% if review.entered_by %}{{ review.entered_by }}{% else %}anonymous{% endif %}<h3>
-<h3>{{ review.content }}<h3>
+<h3>entered by: {% if review.entered_by %}{{ review.entered_by }}{% else %}anonymous{% endif %}</h3>
+<p>{{ review.content }}</p>
 {% endfor %}
-
+</div>
+{% endif %}
 {% endblock %}
+
+
