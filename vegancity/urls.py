@@ -3,11 +3,14 @@ from django.contrib import admin
 
 from settings import INSTALLED_APPS
 
+from vegancity.views import vendor_detail
+
 admin.autodiscover()
 
 # CUSTOM VIEWS
 urlpatterns = patterns('vegancity.views',
-    url(r'^search/$', 'search', name='search'),
+    url(r'^vendors/$', 'vendors', name="vendors"),
+    url(r'^vendors/(?P<vendor_id>\d+)/$', 'vendor_detail', name="vendor_detail"),
     )
 
 # GENERIC VIEWS

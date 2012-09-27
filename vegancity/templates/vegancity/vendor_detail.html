@@ -1,0 +1,26 @@
+{% extends "vegancity/base.html" %}
+
+{% block header_extra %}
+<link href="{{ STATIC_URL }}css/vegancity.css" rel="stylesheet"/>
+{% endblock %}
+
+{% block headline %}{{ vendor.name }}{% endblock %}
+
+{% block summary %}
+{% endblock %}
+
+{% block content %}
+<p>{{ vendor.id }}</p>
+<p>{{ vendor.name }}</p>
+<p>{{ vendor.veg_level }}</p>
+<p>{{ vendor.address }}</p>
+<p>{{ vendor.phone }}</p>
+<p>{{ vendor.website }}</p>
+<p>{{ vendor.notes }}</p>
+
+{% for review in reviews %}
+<h3>entered by: {% if review.entered_by %}{{ review.entered_by }}{% else %}anonymous{% endif %}<h3>
+<h3>{{ review.content }}<h3>
+{% endfor %}
+
+{% endblock %}

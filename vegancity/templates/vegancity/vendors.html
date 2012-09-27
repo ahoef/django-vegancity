@@ -1,5 +1,7 @@
 {% extends "vegancity/base.html" %}
 
+{% load url from future %}
+
 {% block header_extra %}
 <link href="{{ STATIC_URL }}css/vegancity.css" rel="stylesheet"/>
 {% endblock %}
@@ -15,18 +17,24 @@ find some delicious vegan food now!
 <table id="vendorList">
   <thead>
     <tr>
+      <th>id</th>
       <th>name</th>
       <th>veg_level</th>
       <th>address</th>
+      <th>phone</th>
+      <th>website</th>
       <th>notes</th>
     </tr>
   </thead>
   <tbody>
     {% for vendor in vendors %}
     <tr>
-      <td>{{ vendor.name }}</td>
+      <td>{{ vendor.id }}</td>
+      <td><a href="{% url 'vendor_detail' vendor_id=vendor.id %}">{{ vendor.name }}</a></td>
       <td>{{ vendor.veg_level }}</td>
       <td>{{ vendor.address }}</td>
+      <td>{{ vendor.phone }}</td>
+      <td>{{ vendor.website }}</td>
       <td>{{ vendor.notes }}</td>
     </tr>
     {% endfor %}
