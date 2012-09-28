@@ -4,6 +4,7 @@
 
 {% block header_extra %}
 <link href="{{ STATIC_URL }}css/vegancity.css" rel="stylesheet"/>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 {% endblock %}
 
 {% block headline %}search{% endblock %}
@@ -14,6 +15,34 @@ find some delicious vegan food now!
 
 {% block content %}
 <h6>Here's all the restaurants/food vendors we've got so far:</h5>
+
+{% block map %}
+<div id="map_canvas" ></div>
+
+<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}/js/map.js"></script>
+<script type="text/javascript">
+
+var vendors = [
+{% for vendor in vendors  %}{% if vendor.latitude %}
+  [{{ vendor.latitude }}, {{vendor.longitude }}, 
+   '\
+    <strong><a href="{%url 'vendor_detail' vendor_id=vendor.id %}">{{vendor.name}}</a></strong><br/>\
+    {{vendor.address}}<br/>\
+    {{vendor.phone}}<br/>\
+    {url: <a href="http://{{vendor.website}}">{{vendor.website}}</a><br/>\
+    '],
+{% endif %}{% endfor %}
+];
+jQuery("body").ready(createMap(vendors));
+</script>
+
+
+
+{% endblock %}
+
+
+
 <table id="vendorList">
   <thead>
     <tr>

@@ -14,3 +14,8 @@ table#vendorList th {
 table#vendorList tr:nth-child(even) {
   background-color: #eeeeee;
 }
+
+div#map_canvas {
+    width: 920px;
+    height: 400px;
+}
