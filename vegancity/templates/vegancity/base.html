@@ -44,6 +44,13 @@
                                 <a href="{% url 'spread' %}">i want one!</a>
                             </li>
                         </ul>
+                        <form class="navbar-form pull-right" action="{% url 'vendors' %}" method="get">
+                          {% csrf_token %}
+                          <!-- do we need the class? -->
+                          <!-- <input class="span2" type="text" placeholder="great food!"> -->
+                          <input type="text" name="query" placeholder="great food!">
+                          <button type="submit" class="btn">Search!</button>
+                        </form>
                     </div>
                 </div>
             </div>
