@@ -13,6 +13,18 @@ VEG_LEVELS = (
     
 RATINGS = tuple((i, i) for i in range(1, 5))
 
+class QueryString(models.Model):
+    value = models.CharField(max_length=255)
+
+    def __unicode__(self):
+        return self.value
+
+class Tag(models.Model):
+    name = models.CharField(max_length=30)
+
+    def __unicode__(self):
+        return self.name
+
 class Vendor(models.Model):
     "The main class for this application"
     name = models.CharField(max_length=200)
@@ -24,6 +36,7 @@ class Vendor(models.Model):
     service_rating = models.IntegerField(choices=RATINGS, blank=True, null=True,)
     atmosphere_rating = models.IntegerField(choices=RATINGS, blank=True, null=True,)
     delivers = models.BooleanField(default=False)
+    tags = models.ManyToManyField(Tag)
     notes = models.TextField(blank=True, null=True,)
     latitude = models.FloatField(default=None, blank=True, null=True)
     longitude = models.FloatField(default=None, blank=True, null=True)

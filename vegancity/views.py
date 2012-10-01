@@ -10,6 +10,8 @@ def vendors(request):
         raise AssertionError, "this shouldn't happen!"
 
     if request.GET:
+        querystring = models.QueryString(value=request.GET['query'])
+        querystring.save()
         vendors = models.Vendor.objects.filter(name__icontains=request.GET['query'])
     
     else:
