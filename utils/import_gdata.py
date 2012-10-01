@@ -5,6 +5,7 @@ import ply.lex as lex
 import pprint
 import os
 import imp
+import pickle
 
 from django.core.management import setup_environ
 
@@ -88,8 +89,7 @@ t_ignore = ' \t\v\r'
 def t_error(t):
   t.lexer.skip(1) 
 
-def main():
-
+def process_raw_data():
     try:
         f = open(sys.argv[1], 'r')
     except IOError as e:
@@ -105,14 +105,22 @@ def main():
         if not tok: break
         result = result + [(tok.type, tok.value)]
 
-    pprint.pprint(result)
     name_indices = [i for i, v in enumerate(result) if v[0] == 'NAME']
     ranges = [range(name_indices[i], name_indices[i+1]) for i in range(len(name_indices) - 1)] + [range(name_indices[-1], len(result))]
     tuples_lists = (map(lambda x: map(lambda y: result[y], x), ranges))
     hashes = map(dict, tuples_lists)
     pprint.pprint(hashes)
-    
-    
+    return hashes
+
+def pickle_hashes(hashes, filename):
+    f = open(filename, 'w')
+    pickle.dump(hashes, f)
+
+def unpickle_hashes(filename):
+    f = open(filename, 'r')
+    return pickle.load(f)
+
+def write_hashes(hashes):
     for hash in hashes:
         vendor = models.Vendor()
 
@@ -130,13 +138,19 @@ def main():
 
         url = hash.get('URL')
         if url:
-            print url
             vendor.website = url
         
         for tag in hash.get('TAGS',[]):
             # add a tag for that vendor
             pass
         vendor.save()
+
+
+def main():
+    hashes = process_data()
+    write_hashes(hashes)
+    
+    
     
 if __name__ == '__main__':
     main()
