@@ -147,7 +147,7 @@ def write_hashes(hashes):
 
 
 def main():
-    hashes = process_data()
+    hashes = process_raw_data()
     write_hashes(hashes)
     
     
