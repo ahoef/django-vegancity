@@ -3,35 +3,41 @@ from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 
 import models
+import itertools
 
 def vendors(request):
 
     if request.method == 'POST':
         raise AssertionError, "this shouldn't happen!"
 
-    if request.GET:
-        query = request.GET.get('query')
-        vendors = models.Vendor.objects.filter(name__icontains=query)
+    query = request.GET.get('query', '')
+    
+    vendors = models.Vendor.objects.all()
+
+    if query:
 
         querystring = models.QueryString(value=query)
         querystring.save()
 
+        name_vendors = vendors.filter(name__icontains=query)
+        address_vendors = vendors.filter(address__icontains=query)
+
+        vendors = [vendor for vendor in vendors if vendor in itertools.chain(name_vendors, address_vendors)]
+
         result_set = [
-            {
-                'summary_statement' : "Found " + str(vendors.count()) + ' results where name contains "' + query + '".',
-                'vendors' : vendors,
-                }
+            {'summary_statement' : 'Found %d results where name contains "%s".'
+             % (name_vendors.count(), query),
+                'vendors' : name_vendors,},
+            {'summary_statement' : 'Found %d results where address contains "%s".'
+             % (address_vendors.count(), query),
+                'vendors' : address_vendors,},
             ]
 
     
     else:
-        vendors = models.Vendor.objects.all()
-        result_set = [
-            {
-                'summary_statement' : "We've got " + str(vendors.count()) + " food vendors in our database!",
-                'vendors' : vendors,
-                }
-            ]
+        result_set = [{'summary_statement' : "We've got %d food vendors in our database!" 
+             % vendors.count(),
+                'vendors' : vendors,}]
 
     ctx = {
         'vendors' : vendors,

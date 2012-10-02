@@ -51,20 +51,20 @@ jQuery("body").ready(createMap(vendors));
   <thead>
     <tr>
       <th>name</th>
-      <th>veg_level</th>
+      <!-- <th>veg_level</th> -->
       <th>address</th>
-      <th>phone</th>
-      <th>website</th>
+      <!-- <th>phone</th> -->
+      <!-- <th>website</th> -->
     </tr>
   </thead>
   <tbody>
     {% for vendor in result.vendors %}
     <tr>
       <td><a href="{% url 'vendor_detail' vendor_id=vendor.id %}">{{ vendor.name }}</a></td>
-      <td>{{ vendor.veg_level }}</td>
+      <!-- <td>{{ vendor.veg_level }}</td> -->
       <td>{{ vendor.address }}</td>
-      <td>{{ vendor.phone }}</td>
-      <td>{{ vendor.website }}</td>
+      <!-- <td>{{ vendor.phone }}</td> -->
+      <!-- <td>{{ vendor.website }}</td> -->
     </tr>
     {% endfor %}
   </tbody>
