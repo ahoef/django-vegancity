@@ -102,8 +102,6 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
 )
 
-print "TEMPLATE_DIRS:", TEMPLATE_DIRS
-
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -137,3 +135,8 @@ LOGGING = {
         },
     }
 }
+
+try:
+    from settings_private import *
+except ImportError:
+    pass
