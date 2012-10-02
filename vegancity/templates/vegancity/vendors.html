@@ -10,7 +10,6 @@
 {% block headline %}search{% endblock %}
 
 {% block summary %}
-find some delicious vegan food now!
 {% endblock %}
 
 {% block content %}
@@ -42,10 +41,12 @@ jQuery("body").ready(createMap(vendors));
 {% endif %}
 {% endblock %}
 
+{% block table %}
 <div class="span6">
 {% for result in result_set %}
 <h4>{{ result.summary_statement }}</h4><br/>
 
+{% if result.vendors %}
 <table id="vendorList">
   <thead>
     <tr>
@@ -68,7 +69,10 @@ jQuery("body").ready(createMap(vendors));
     {% endfor %}
   </tbody>
 </table>
+{% endif %}
 {% endfor %}
 </div>
+{% endblock %}
+
 </div>
 {% endblock %}
