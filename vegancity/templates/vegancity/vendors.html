@@ -14,9 +14,11 @@ find some delicious vegan food now!
 {% endblock %}
 
 {% block content %}
-
+<div class="row">
 {% block map %}
 {% if result_set.0.vendors %}
+<div class="span6">
+<br/>
 <div id="map_canvas" ></div>
 
 <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
@@ -36,38 +38,37 @@ var vendors = [
 ];
 jQuery("body").ready(createMap(vendors));
 </script>
+</div>
 {% endif %}
 {% endblock %}
 
+<div class="span6">
 {% for result in result_set %}
-
-<br/><h4>{{ result.summary_statement }}</h4><br/>
+<h4>{{ result.summary_statement }}</h4><br/>
 
 <table id="vendorList">
   <thead>
     <tr>
-      <th>id</th>
       <th>name</th>
       <th>veg_level</th>
       <th>address</th>
       <th>phone</th>
       <th>website</th>
-      <th>notes</th>
     </tr>
   </thead>
   <tbody>
     {% for vendor in result.vendors %}
     <tr>
-      <td>{{ vendor.id }}</td>
       <td><a href="{% url 'vendor_detail' vendor_id=vendor.id %}">{{ vendor.name }}</a></td>
       <td>{{ vendor.veg_level }}</td>
       <td>{{ vendor.address }}</td>
       <td>{{ vendor.phone }}</td>
       <td>{{ vendor.website }}</td>
-      <td>{{ vendor.notes }}</td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
 {% endfor %}
+</div>
+</div>
 {% endblock %}

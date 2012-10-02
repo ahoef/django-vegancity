@@ -1,6 +1,6 @@
 table#vendorList {
   margin-bottom: 3px;
-  width: 920px;
+  width: 500px;
 }
 
 table#vendorList td {
@@ -8,7 +8,7 @@ table#vendorList td {
 }
 
 table#vendorList th {
-  min-width: 150px;
+  min-width: 100px;
 }
 
 table#vendorList tr:nth-child(even) {
@@ -16,6 +16,6 @@ table#vendorList tr:nth-child(even) {
 }
 
 div#map_canvas {
-    width: 920px;
-    height: 400px;
+    width: 500px;
+    height: 700px;
 }
