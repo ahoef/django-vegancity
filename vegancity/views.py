@@ -10,15 +10,32 @@ def vendors(request):
         raise AssertionError, "this shouldn't happen!"
 
     if request.GET:
-        querystring = models.QueryString(value=request.GET['query'])
+        query = request.GET.get('query')
+        vendors = models.Vendor.objects.filter(name__icontains=query)
+
+        querystring = models.QueryString(value=query)
         querystring.save()
-        vendors = models.Vendor.objects.filter(name__icontains=request.GET['query'])
+
+        result_set = [
+            {
+                'summary_statement' : "Found " + str(vendors.count()) + ' results where name contains "' + query + '".',
+                'vendors' : vendors,
+                }
+            ]
+
     
     else:
         vendors = models.Vendor.objects.all()
+        result_set = [
+            {
+                'summary_statement' : "We've got " + str(vendors.count()) + " food vendors in our database!",
+                'vendors' : vendors,
+                }
+            ]
 
     ctx = {
         'vendors' : vendors,
+        'result_set' : result_set,
         }
     return render_to_response('vegancity/vendors.html', ctx, context_instance=RequestContext(request))
 
