@@ -32,7 +32,7 @@ var vendors = [
     <strong><a href="{%url 'vendor_detail' vendor_id=vendor.id %}">{{vendor.name}}</a></strong><br/>\
     {{vendor.address}}<br/>\
     {{vendor.phone}}<br/>\
-    {url: <a href="http://{{vendor.website}}">{{vendor.website}}</a><br/>\
+    url: <a href="http://{{vendor.website}}">{{vendor.website}}</a><br/>\
     '],
 {% endif %}{% endfor %}
 ];
