@@ -17,7 +17,6 @@ urlpatterns = patterns('vegancity.views',
 urlpatterns += patterns('django.views.generic.simple',
     url(r'^$', 'direct_to_template', {'template': 'vegancity/home.html'}, name='home'),
     url(r'^about/$', 'direct_to_template', {'template': 'vegancity/about.html'}, name='about'),
-    url(r'^spread/$','direct_to_template', {'template': 'vegancity/spread.html'}, name='spread'),
     )                        
 
 # ADMIN VIEWS

@@ -28,20 +28,14 @@
                         <span class="icon-bar"></span>
                     </a>
 
-                    <a class="brand" href="{% url 'home' %}">vegancity</a>
+                    <a class="brand" href="{% url 'home' %}">vegancity - beta</a>
                     <div class="nav-collapse collapse">
                         <ul class="nav">
                             <li>
-                                <a href="{% url 'home' %}">home</a>
-                            </li>
-                            <li>
-                                <a href="{% url 'vendors' %}">search</a>
+                                <a href="{% url 'vendors' %}">restaurants</a>
                             </li>
                             <li>
                                 <a href="{% url 'about' %}">about</a>
-                            </li>
-                            <li>
-                                <a href="{% url 'spread' %}">i want one!</a>
                             </li>
                         </ul>
                         <form class="navbar-form pull-right" action="{% url 'vendors' %}" method="get">

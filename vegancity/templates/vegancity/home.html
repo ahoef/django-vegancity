@@ -1,5 +1,7 @@
 {% extends "vegancity/base.html" %}
 
+{% load url from future %}
+
 {% block headline %}home{% endblock %}
 
 {% block summary %}
@@ -7,6 +9,8 @@ a vegan website for every city!
 {% endblock %}
 
 {% block content %}
-I dunno what's going here
+<h4>welcome to vegancity!</h4>
+<p>This site is currently under active development. For now, why not check out our <a href="{% url 'vendors' %}">restaurant</a> page? We've got maps and searches!</p>
+<p>Interested in helping out?  Take a look at our <a href="{% url 'about' %}">about</a> page for more info.</p>
 {% endblock %}
 
