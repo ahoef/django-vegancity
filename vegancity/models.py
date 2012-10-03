@@ -22,6 +22,15 @@ VEG_LEVELS = (
 RATINGS = tuple((i, i) for i in range(1, 5))
 
 
+class BlogEntry(models.Model):
+    title = models.CharField(max_length=255)
+    entry_date = models.DateTimeField(auto_now=True)
+    author = models.ForeignKey(User)
+    text = models.TextField()
+
+    class Meta:
+        ordering = ('entry_date',)
+
 class QueryString(models.Model):
     value = models.CharField(max_length=255)
     entry_date = models.DateTimeField(auto_now_add=True)

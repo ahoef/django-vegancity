@@ -61,6 +61,7 @@ the user is executing and display results accordingly."""
     return render_to_response('vegancity/vendors.html', ctx,
                               context_instance=RequestContext(request))
 
+
 def vendor_detail(request, vendor_id):
     """Display record level detail about a vendor.
 
@@ -73,3 +74,21 @@ Also grabs reviews and sends them to the template."""
         }
     return render_to_response('vegancity/vendor_detail.html', ctx, 
                               context_instance=RequestContext(request))
+
+
+def blog(request):
+    blog_entries = models.BlogEntry.objects.all()
+    ctx = {
+        'blog_entries' : blog_entries,
+        }
+    return render_to_response('vegancity/blog.html', ctx,
+                              context_instance=RequestContext(request))
+
+def blog_detail(requset, blog_entry_id):
+    blog_entry = models.BlogEntry.objects.get(id=blog_entry_id)
+    ctx = {
+        'blog_entry' : blog_entry,
+        }
+    return render_to_response('vegancity/blog_detail.html', ctx,
+                              context_instance=RequestContext(request))
+    

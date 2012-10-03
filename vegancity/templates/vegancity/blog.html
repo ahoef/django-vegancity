@@ -1,0 +1,23 @@
+{% extends "vegancity/base.html" %}
+
+{% block headline %}blog{% endblock %}
+
+{% block summary %}
+{% endblock %}
+
+{% block content %}
+<h4>welcome to the vegancity blog!</h4>
+{% if blog_entries %}
+{{ blog_entries.count }} entries.
+<hr/>
+{% for entry in blog_entries %}
+<h5>{{ entry.title }}</h5>
+<h6>by {{ entry.author }}</h6>
+<p>{{ entry.text }}</p>
+<hr/>
+{% endfor %}
+{% else %}
+<h4>no blog entries.</h4>  
+{% endif %}
+{% endblock %}
+

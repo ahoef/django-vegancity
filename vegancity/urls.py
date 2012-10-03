@@ -11,6 +11,8 @@ admin.autodiscover()
 urlpatterns = patterns('vegancity.views',
     url(r'^vendors/$', 'vendors', name="vendors"),
     url(r'^vendors/(?P<vendor_id>\d+)/$', 'vendor_detail', name="vendor_detail"),
+    url(r'^blog/$', 'blog', name="blog"),
+    url(r'^blog/(?P<blog_entry_id>\d+)/$', 'blog_detail', name="blog_detail"),
     )
 
 # GENERIC VIEWS
