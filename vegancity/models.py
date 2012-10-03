@@ -3,6 +3,19 @@ from django.contrib.auth.models import User
 
 import geocode
 
+TAG_LIST = (
+    # # commenting these tags out because we probably stick
+    # # with a dedicated DB field.
+    # ('vegan', "100% Vegan"),
+    # ('veg_mostly_vegan', "Vegetarian - Mostly Vegan"),
+    # ('veg_hardly_vegan', "Vegetarian - Hardly Vegan"),
+    # ('not_veg', "Not Vegetarian"),
+    # ('beware', "Beware!"),
+    ('chinese', 'Chinese'),
+    ('delivery','Offers Delivery'),
+    ('open_late', 'Open after 10pm'),
+    )
+
 VEG_LEVELS = (
     (1, "100% Vegan"),
     (2, "Vegetarian - Mostly Vegan"),
@@ -15,6 +28,7 @@ RATINGS = tuple((i, i) for i in range(1, 5))
 
 class QueryString(models.Model):
     value = models.CharField(max_length=255)
+    entry_date = models.DateTimeField()
 
     def __unicode__(self):
         return self.value
@@ -31,15 +45,13 @@ class Vendor(models.Model):
     address = models.TextField()
     phone = models.CharField(max_length=50)
     website = models.URLField()
+    notes = models.TextField(blank=True, null=True,)
     veg_level = models.IntegerField(choices=VEG_LEVELS, blank=True, null=True,)
     food_rating = models.IntegerField(choices=RATINGS, blank=True, null=True, )
-    service_rating = models.IntegerField(choices=RATINGS, blank=True, null=True,)
     atmosphere_rating = models.IntegerField(choices=RATINGS, blank=True, null=True,)
-    delivers = models.BooleanField(default=False)
-    tags = models.ManyToManyField(Tag)
-    notes = models.TextField(blank=True, null=True,)
     latitude = models.FloatField(default=None, blank=True, null=True)
     longitude = models.FloatField(default=None, blank=True, null=True)
+    tags = models.ManyToManyField(Tag, null=True, blank=True)
 
     def __unicode__(self):
         return self.name
@@ -59,4 +71,4 @@ class Review(models.Model):
     content = models.TextField()
 
     def __unicode__(self):
-        return self.vendor.name + " --  " + str(self.entry_date)
+        return "%s -- %s" % (self.vendor.name, str(self.entry_date))
