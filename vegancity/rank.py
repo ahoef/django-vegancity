@@ -6,7 +6,7 @@
 # a query and returing a rank tuple of the form:
 #
 #     ((score, type_string), (score, type_string))
-# ex. ((7, 'address'), (4, 'name'), (0, 'tag'))
+# ex. ((7, 'address'), (4, 'name'), (0, 'tags'))
 
 import sys
 import re
@@ -29,7 +29,7 @@ _ADDRESS_PATTERNS = [
     ]
 
 # eventually we'll replace this with just the list of tags and a value of 5
-_TAG_PATTERNS = [
+_TAGS_PATTERNS = [
     (5, "mexican"),
     (5, "italian"),
     (5, "chinese"),
@@ -56,8 +56,8 @@ def _calculate_rank(query, patterns):
 def _address_rank(query):
     return (_calculate_rank(query, _ADDRESS_PATTERNS), 'address')
 
-def _tag_rank(query):
-    return (_calculate_rank(query, _TAG_PATTERNS), 'tag')
+def _tags_rank(query):
+    return (_calculate_rank(query, _TAGS_PATTERNS), 'tags')
 
 def _name_rank(query):
     return (3, 'name')
@@ -71,10 +71,12 @@ def get_ranks(query):
     "The primary external function.  Builds a rank summary."
     address = _address_rank(query)
     name = _name_rank(query)
-    tag = _tag_rank(query)
-    return sorted([address, name, tag], reverse=True)
+    tags = _tags_rank(query)
+    return sorted([address, name, tags], reverse=True)
+
 
 def tests():
+    # todo :  write tome tests
     pass
 
 def main():
