@@ -5,6 +5,7 @@ from django.template import RequestContext
 import models
 import itertools
 import rank
+import tracking
 
 def vendors(request):
     """Display table level data about vendors.
@@ -23,14 +24,13 @@ the user is executing and display results accordingly."""
 
     if query:
 
-        # log the query in the db
-        querystring = models.QueryString(value=query)
-        querystring.save()
-
         # rank the likelihood of different search times
         ranks = rank.get_ranks(query)
         presentation_order = (rank[1] for rank in ranks)
-        
+
+        # log the query in the db
+        tracking.log_query(query, ranks)
+
         # execute searches and store them in a hash
         searches = {
             'name' : models.Vendor.objects.name_search(query),

@@ -21,9 +21,11 @@ VEG_LEVELS = (
     
 RATINGS = tuple((i, i) for i in range(1, 5))
 
+
 class QueryString(models.Model):
     value = models.CharField(max_length=255)
-    entry_date = models.DateTimeField()
+    entry_date = models.DateTimeField(auto_now_add=True)
+    rank_results = models.CharField(max_length=100, null=True, blank=True)
 
     def __unicode__(self):
         return self.value
@@ -132,7 +134,7 @@ class Vendor(models.Model):
 
     
 class Review(models.Model):
-    entry_date = models.DateTimeField()
+    entry_date = models.DateTimeField(auto_now_add=True)
     vendor = models.ForeignKey('Vendor')
     entered_by = models.ForeignKey(User, blank=True, null=True)
     content = models.TextField()
