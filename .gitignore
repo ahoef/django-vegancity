@@ -3,3 +3,4 @@ db
 *.pot
 *.pyc
 settings_private.py
+nohup.out
