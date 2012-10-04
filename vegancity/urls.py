@@ -26,3 +26,9 @@ if 'django.contrib.admin' in INSTALLED_APPS:
     urlpatterns += patterns('',
         url(r'^admin/', include(admin.site.urls)),
     )
+
+# AUTH VIEWS
+urlpatterns += patterns('',
+    url(r'^accounts/login/$',  'django.contrib.auth.views.login', name='login'),
+    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page' : '/'},  name='logout'),
+)
