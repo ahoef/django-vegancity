@@ -48,6 +48,12 @@ class Tag(models.Model):
 class VendorManager(models.Manager):
     "Manager class for handling searches by vendor."
 
+    def get_query_set(self):
+        "Changing initial queryset to ignore approved."
+        normal_qs = super(VendorManager, self).get_query_set()
+        new_qs = normal_qs.filter(approved=True)
+        return new_qs
+
     def tags_search(self, query):
         """Search vendors by tag.
 
@@ -127,6 +133,7 @@ class Vendor(models.Model):
                                             blank=True, null=True,)
     latitude = models.FloatField(default=None, blank=True, null=True)
     longitude = models.FloatField(default=None, blank=True, null=True)
+    approved = models.BooleanField(default=False)
     tags = models.ManyToManyField(Tag, null=True, blank=True)
     objects = VendorManager()
 
@@ -146,6 +153,7 @@ class Review(models.Model):
     entry_date = models.DateTimeField(auto_now_add=True)
     vendor = models.ForeignKey('Vendor')
     entered_by = models.ForeignKey(User, blank=True, null=True)
+    approved = models.BooleanField(default=False)
     content = models.TextField()
 
     def __unicode__(self):
