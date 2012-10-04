@@ -44,6 +44,9 @@ class BlogEntry(models.Model):
     class Meta:
         ordering = ('entry_date',)
 
+    def __unicode__(self):
+        return self.title
+
 class QueryString(models.Model):
     value = models.CharField(max_length=255)
     entry_date = models.DateTimeField(auto_now_add=True)
@@ -63,9 +66,18 @@ class VendorManager(models.Manager):
 
     def get_query_set(self):
         "Changing initial queryset to ignore approved."
+        # TODO - explore bugs this could cause!
         normal_qs = super(VendorManager, self).get_query_set()
         new_qs = normal_qs.filter(approved=True)
         return new_qs
+
+    def pending_approval(self):
+        """returns all vendors that are not approved, which are
+        otherwise impossible to get in a normal query (for now)."""
+        normal_qs = super(VendorManager, self).get_query_set()
+        pending = normal_qs.filter(approved=False)
+        return pending
+        
 
     def tags_search(self, query):
         """Search vendors by tag.
@@ -134,9 +146,9 @@ THIS WILL BE CHANGED SO NOT WRITING DOCUMENTATION."""
 class Vendor(models.Model):
     "The main class for this application"
     name = models.CharField(max_length=200)
-    address = models.TextField()
-    phone = models.CharField(max_length=50)
-    website = models.URLField()
+    address = models.TextField(blank=True, null=True)
+    phone = models.CharField(max_length=50, blank=True, null=True)
+    website = models.URLField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True,)
     veg_level = models.IntegerField(choices=VEG_LEVELS, 
                                     blank=True, null=True,)
