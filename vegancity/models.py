@@ -15,10 +15,18 @@ TAG_LIST = (
     ('thai', 'Thai'),
     ('mexican', 'Mexican'),
     ('pizza', 'Pizza'),
+    ('middle_eastern', 'Middle Eastern'),
+    ('southern', 'Southern'),
+    ('indian', 'Indian'),
+    ('bar_food', 'Bar Food'),
+    ('fast_food', 'Fast Food'),
+    ('cheese_steaks', 'Cheese Steaks'),
+    ('sandwiches', 'Sandwiches'),
+    ('coffeehouse', 'Coffeehouse'),
     ('food_cart', 'Food Cart'),
     ('cash_only', 'Cash Only'),
     ('delivery','Offers Delivery'),
-    ('open_late', 'Open after 10pm'),
+    ('open_late', 'Open after 10pm')
     )
 
 VEG_LEVELS = (
