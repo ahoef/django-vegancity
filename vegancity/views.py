@@ -1,6 +1,11 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render
 from django.template import RequestContext
+from django.core.urlresolvers import reverse
+
+from django.contrib.auth.decorators import login_required
+
+import forms
 
 import models
 import itertools
@@ -84,7 +89,7 @@ def blog(request):
     return render_to_response('vegancity/blog.html', ctx,
                               context_instance=RequestContext(request))
 
-def blog_detail(requset, blog_entry_id):
+def blog_detail(request, blog_entry_id):
     blog_entry = models.BlogEntry.objects.get(id=blog_entry_id)
     ctx = {
         'blog_entry' : blog_entry,
@@ -92,3 +97,26 @@ def blog_detail(requset, blog_entry_id):
     return render_to_response('vegancity/blog_detail.html', ctx,
                               context_instance=RequestContext(request))
     
+
+def register(request):
+    if request.method == 'POST':
+        form = forms.VegUserCreationForm(request.POST)
+        if form.is_valid():
+            new_user = form.save()
+            return HttpResponseRedirect(reverse("home"))
+    else:
+        form = forms.VegUserCreationForm()
+    return render_to_response("vegancity/register.html", {'form': form},
+                              context_instance=RequestContext(request))
+
+@login_required
+def new_vendor(request):
+    if request.method == 'POST':
+        form = forms.NewVendorForm(request.POST)
+        if form.is_valid():
+            new_vendor = form.save()
+            return HttpResponseRedirect(reverse("vendors"))
+    else:
+        form = forms.NewVendorForm()
+    return render_to_response("vegancity/new_vendor.html", {'form': form},
+                              context_instance=RequestContext(request))

@@ -1,6 +1,8 @@
-{% extends "vegancity/base.html" %}
+{% extends "base.html" %}
 
 {% load url from future %}
+
+{% block headline %}Login!{% endblock %}
 
 {% block content %}
 
@@ -14,9 +16,10 @@
     <input type="text" name="username" value="" id="username">
     <label for="password">Password:</label>
     <input type="password" name="password" value="" id="password">
-
+<br/>    
     <input type="submit" value="login" />
     <input type="hidden" name="next" value="{% url 'home' %}" />
   </form>
 
+<p>New user?  <a href="{% url 'register' %}">Sign up now!</a>
 {% endblock %}

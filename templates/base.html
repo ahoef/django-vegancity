@@ -47,7 +47,7 @@
             </form>
             <ul class="nav">                        
               <li>
-                {% if user.is_authenticated %}<a href="{% url 'logout' %}">logged in as {{user}}.  Click to logout</a>{% else %}<a href="{% url 'login' %}">Please login!</a>{% endif %}
+                {% if user.is_authenticated %}<a href="{% url 'logout' %}">Hello, <strong>{{user}}</strong>. <u>logout</u></a>{% else %}<a href="{% url 'login' %}">Please login!</a>{% endif %}
               </li>
             </ul>                          
           </div>

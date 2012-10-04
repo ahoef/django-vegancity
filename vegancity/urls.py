@@ -10,6 +10,7 @@ admin.autodiscover()
 # CUSTOM VIEWS
 urlpatterns = patterns('vegancity.views',
     url(r'^vendors/$', 'vendors', name="vendors"),
+    url(r'^vendors/add/$', 'new_vendor', name="new_vendor"),
     url(r'^vendors/(?P<vendor_id>\d+)/$', 'vendor_detail', name="vendor_detail"),
     url(r'^blog/$', 'blog', name="blog"),
     url(r'^blog/(?P<blog_entry_id>\d+)/$', 'blog_detail', name="blog_detail"),
@@ -31,4 +32,5 @@ if 'django.contrib.admin' in INSTALLED_APPS:
 urlpatterns += patterns('',
     url(r'^accounts/login/$',  'django.contrib.auth.views.login', name='login'),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page' : '/'},  name='logout'),
+    url(r'^accounts/register/$', 'vegancity.views.register', name='register'),
 )
