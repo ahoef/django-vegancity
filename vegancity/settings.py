@@ -1,8 +1,7 @@
 import os
 
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
-
-# Django settings for vegancity project.
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -98,7 +97,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'vegancity.urls'
 
 TEMPLATE_DIRS = (
-    os.path.join(SITE_ROOT, 'templates'),
+    os.path.join(PROJECT_ROOT, 'templates'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
 )
 
