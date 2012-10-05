@@ -120,3 +120,15 @@ def new_vendor(request):
         form = forms.NewVendorForm()
     return render_to_response("vegancity/new_vendor.html", {'form': form},
                               context_instance=RequestContext(request))
+
+@login_required
+def review(request, vendor_id):
+    if request.method == 'POST':
+        form = forms.ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save()
+            return HttpResponseRedirect(reverse("vendors"))
+    else:
+        form = forms.ReviewForm()
+    return render_to_response("vegancity/review.html", {'form': form},
+                              context_instance=RequestContext(request))
