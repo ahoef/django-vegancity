@@ -176,7 +176,7 @@ class Vendor(models.Model):
     
 class Review(models.Model):
     entry_date = models.DateTimeField(auto_now_add=True)
-    vendor = models.ForeignKey('Vendor')
+    vendor = models.ForeignKey(Vendor)
     entered_by = models.ForeignKey(User, blank=True, null=True)
     approved = models.BooleanField(default=False)
     content = models.TextField()

@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load url from future %}
+
 {% block header_extra %}
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 {% endblock %}
@@ -34,7 +36,7 @@ jQuery("body").ready(createMap(vendor_singleton));
 
 {% endblock %}
 
-
+<a href="{% url 'review' vendor_id=vendor.id %}">Write a review!</a>
 {% if reviews %}
 <hr/>
 <div class="container">

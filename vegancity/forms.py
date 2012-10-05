@@ -1,6 +1,6 @@
 from django import forms
 
-from models import Vendor
+from models import Vendor, Review
 
 from django.contrib.auth.forms import UserCreationForm
 
@@ -12,4 +12,11 @@ class VegUserCreationForm(UserCreationForm):
 class NewVendorForm(forms.ModelForm):
     class Meta:
         model = Vendor
+        exclude = ('latitude','longitude','approved',)
+
+class ReviewForm(forms.ModelForm):
+    vendor = forms.ModelChoiceField(queryset=Vendor.objects.filter(id=1))
+
+    class Meta:
+        model = Review
         exclude = ('latitude','longitude','approved',)
