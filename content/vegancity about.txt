@@ -1,3 +1,13 @@
+!!!NOTE!!!
+
+!!!NOTE!!!
+
+!!! THIS FILE IS OUTDATED.  PLEASE SEE django-vegancity/templates/vegancity/about.html !!!
+
+!!!NOTE!!!
+
+!!!NOTE!!!
+
 About Vegancity
 
 Vegancity helps answer the inevitable question: where are we going to eat? 

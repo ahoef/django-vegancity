@@ -4,3 +4,5 @@ db
 *.pyc
 *.py~
 settings_private.py
+nohup.out
+*~

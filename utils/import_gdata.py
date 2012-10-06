@@ -109,7 +109,6 @@ def process_raw_data():
     ranges = [range(name_indices[i], name_indices[i+1]) for i in range(len(name_indices) - 1)] + [range(name_indices[-1], len(result))]
     tuples_lists = (map(lambda x: map(lambda y: result[y], x), ranges))
     hashes = map(dict, tuples_lists)
-    pprint.pprint(hashes)
     return hashes
 
 def pickle_hashes(hashes, filename):
@@ -141,8 +140,9 @@ def write_hashes(hashes):
             vendor.website = url
         
         for tag in hash.get('TAGS',[]):
-            # add a tag for that vendor
-            pass
+            pprint.pprint(tag)
+
+        vendor.approved = True
         vendor.save()
 
 

@@ -1,7 +1,50 @@
-import re
-import models
+#!/usr/bin/env python
+# A module for taking a search query and deciding which resultset to show first.
 
-def calculate_rank(query, patterns):
+# The idea is that queries with certain patterns are likely to be lumped as an
+# address search, or a name search, etc.  This module contains tools for taking
+# a query and returing a rank tuple of the form:
+#
+#     ((score, type_string), (score, type_string))
+# ex. ((7, 'address'), (4, 'name'), (0, 'tags'))
+
+import sys
+import re
+
+
+#######################
+# STATIC CONTENT
+#######################
+
+# should we store this in the db?
+_ADDRESS_PATTERNS = [
+    (3, "\dth"), 
+    (3, "\dst"), 
+    (3, "\dnd"), 
+    (3,  "\drd"), 
+    (2, "near"),
+    (2, " by "),
+    (1, " and "), 
+    (1, " & "),
+    ]
+
+# eventually we'll replace this with just the list of tags and a value of 5
+_TAGS_PATTERNS = [
+    (5, "mexican"),
+    (5, "italian"),
+    (5, "chinese"),
+    (5, "french"),
+    (5, "comfort"),
+    (5, "soul"),
+    (5, "pizza"),
+    ]
+
+#######################
+# PRIVATE FUNCTIONS
+#######################
+
+def _calculate_rank(query, patterns):
+    """Takes a query and patterns tuple and determines score."""
     rank = 0
 
     for pattern in patterns:
@@ -10,54 +53,41 @@ def calculate_rank(query, patterns):
         rank += score * len(hits)
     return rank
     
+def _address_rank(query):
+    return (_calculate_rank(query, _ADDRESS_PATTERNS), 'address')
 
-def address_rank(query):
-    "takes a list of tokens and determines the likelihood of an address_search"
+def _tags_rank(query):
+    return (_calculate_rank(query, _TAGS_PATTERNS), 'tags')
 
-    buzz_patterns = [
-        (3, "\dth"), 
-        (3, "\dst"), 
-        (3, "\dnd"), 
-        (3,  "\drd"), 
-        (2, "near"),
-        (2, " by "),
-        (1, " and "), 
-        (1, " & "),
-        ]
+def _name_rank(query):
+    return (3, 'name')
 
-    return calculate_rank(query, buzz_patterns)
 
-def tag_rank(query):
-    "obvious"
-    
-    patterns = [(5, tag.name.lower()) for tag in models.Tag.objects.all()]
+#######################
+# PUBLIC / RUNMODES
+#######################
 
-    buzz_patterns = [
-        (5, "mexican"),
-        (5, "italian"),
-        (5, "chinese"),
-        (5, "french"),
-        (5, "comfort"),
-        (5, "soul"),
-        (5, "pizza"),
-        ]
-    return calculate_rank(query, buzz_patterns)
-       
-def name_rank(query):
-    return 3
+def get_ranks(query):
+    "The primary external function.  Builds a rank summary."
+    address = _address_rank(query)
+    name = _name_rank(query)
+    tags = _tags_rank(query)
+    return sorted([address, name, tags], reverse=True)
 
-queries = [query.value for query in models.QueryString.objects.all()]
 
-def rank_summary(query):
-    address = (address_rank(query), "address")
-    name = (name_rank(query), "name")
-    tag = (tag_rank(query), "tag")
-    return sorted([address, name, tag], reverse=True)
+def tests():
+    # todo :  write tome tests
+    pass
 
-def summary():
-    for query in queries:
-        print "query:", query
-        print "rank_summary:", rank_summary(query)
-        print
+def main():
+    tests()
+    if len(sys.argv) > 1:
+        results = ((query, get_ranks(query)) for query in sys.argv[1:])
+        for result in results:
+            query, ranks = result
+            print query
+            print result
+            print
 
-summary()
+if __name__ == '__main__':
+    main()
