@@ -1,4 +1,4 @@
-{% extends "vegancity/base.html" %}
+{% extends "base.html" %}
 
 {% load url from future %}
 
@@ -37,6 +37,8 @@ var vendors = [
 ];
 jQuery("body").ready(createMap(vendors));
 </script>
+<hr/>
+<h4>something missing? <a href="{% url 'new_vendor' %}">Add a food vendor!"</a></h4>
 </div>
 {% endif %}
 {% endblock %}
