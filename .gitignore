@@ -2,6 +2,7 @@ db
 *.log
 *.pot
 *.pyc
+*.py~
 settings_private.py
 nohup.out
 *~

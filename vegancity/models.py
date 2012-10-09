@@ -14,21 +14,41 @@ CUISINE_TAGS = (
     ('chinese', 'Chinese'),
     ('thai', 'Thai'),
     ('mexican', 'Mexican'),
+    ('pizza', 'Pizza'),
+    ('italian', 'Italian'),
     ('middle_eastern', 'Middle Eastern'),
     ('southern', 'Southern'),
+    ('soul_food', 'Soul Food'),
+    ('vietnamese', 'Vietnamese'),
     ('indian', 'Indian'),
+    ('ethiopian', 'Ethiopian'),
     ('pizza', 'Pizza'),
+    ('bar_food', 'Bar Food'),
+    ('fast_food', 'Fast Food'),
+    ('pan_asian', 'Pan-Asian'),
+    ('sushi', 'Sushi'),
     )
 
 FEATURE_TAGS = (
-    ('bar_food', 'Bar Food'),
-    ('fast_food', 'Fast Food'),
+
+    ('halal', 'Halal'),
+    ('kosher', 'Kosher'),
+    ('gluten_free_options', 'Gluten Free Options'),
+    ('all_gluten_free', '100% Gluten Free'),
+    ('gluten_free_desserts', 'Gluten Free Desserts'),
+    ('vegan_desserts', 'Vegan Desserts'),
+    ('fake_meat', 'Fake Meat'),
     ('cheese_steaks', 'Cheese Steaks'),
     ('sandwiches', 'Sandwiches'),
     ('coffeehouse', 'Coffeehouse'),
     ('food_cart', 'Food Cart'),
     ('cash_only', 'Cash Only'),
     ('delivery','Offers Delivery'),
+    ('beer', 'Beer'),
+    ('wine', 'Wine'),
+    ('full_bar', 'Full Bar'),
+    ('cheap', 'Cheap'),
+    ('expensive', 'Expensive'),
     ('open_late', 'Open after 10pm')
     )
 
