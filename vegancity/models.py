@@ -135,19 +135,25 @@ class NamedModel(models.Model):
     def __unicode__(self):
         return self.name
 
-
 ##########################################
-# BASIC MODELS
+# SITE MODELS
 ##########################################
 
-class CuisineTag(NamedModel):
-    description = models.CharField(max_length=255)
+class QueryString(models.Model):
+    """All raw queries that users search by.
 
-class FeatureTag(NamedModel):
-    description = models.CharField(max_length=255)
+    Store the query and how it was ranked.  This
+    is for researching how well the ranking algorithm
+    is doing in predicting search types."""
+    value = models.CharField(max_length=255)
+    entry_date = models.DateTimeField(auto_now_add=True)
+    rank_results = models.CharField(max_length=100, null=True, blank=True)
 
+    def __unicode__(self):
+        return self.value
 
 class BlogEntry(models.Model):
+    "Blog entries.  They get entered in the admin."
     title = models.CharField(max_length=255)
     entry_date = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User)
@@ -159,26 +165,48 @@ class BlogEntry(models.Model):
     def __unicode__(self):
         return self.title
 
-class QueryString(models.Model):
-    value = models.CharField(max_length=255)
-    entry_date = models.DateTimeField(auto_now_add=True)
-    rank_results = models.CharField(max_length=100, null=True, blank=True)
+##########################################
+# VENDOR-RELATED MODELS
+##########################################
 
-    def __unicode__(self):
-        return self.value
+class CuisineTag(NamedModel):
+    """Tags that describe vendor features.
+   
+    Example tags could be traditional ethnic cuisines
+    like "mexican" or "french".  They could also
+    be less traditional ones like "pizza" or
+    "comfort" or "junk"."""
+    description = models.CharField(max_length=255)
 
-        
+class FeatureTag(NamedModel):
+    """Tags that describe vendor features.
+   
+    Example tags would be "open late" or
+    "offers delivery"."""
+    description = models.CharField(max_length=255)
+
+
 class VeganDish(NamedModel):
     vendor = models.ForeignKey('Vendor')
 
 class Review(models.Model):
-    entry_date = models.DateTimeField(auto_now_add=True)
+    "The main class for handling reviews.  More or less requires a vendor."
+    
+    # CORE FIELDS
     vendor = models.ForeignKey('Vendor')
-    entered_by = models.ForeignKey(User, blank=True, null=True)
+    author = models.ForeignKey(User, blank=True, null=True)
+
+    # ADMINISTRATIVE FIELDS
+    entry_date = models.DateTimeField(auto_now_add=True)
     approved = models.BooleanField(default=False)
+
+    # DESCRIPTIVE FIELDS
     best_vegan_dish = models.ForeignKey(VeganDish, blank=True, null=True)
-    unlisted_vegan_dish = models.CharField("Favorite Dish (if not listed)", max_length=100,
-                                           help_text="We'll work on getting it in the database so others know about it!")
+    unlisted_vegan_dish = models.CharField(
+        "Favorite Vegan Dish (if not listed)", 
+        max_length=100,
+        help_text="We'll work on getting it in the database so others know about it!",
+        blank=True, null=True)
     content = models.TextField()
 
     def __unicode__(self):
@@ -186,25 +214,37 @@ class Review(models.Model):
 
 class Vendor(NamedModel):
     "The main class for this application"
-    entry_date = models.DateTimeField(auto_now_add=True)
+
+    # CORE FIELDS
     address = models.TextField(blank=True, null=True)
     phone = models.CharField(max_length=50, blank=True, null=True)
     website = models.URLField(blank=True, null=True)
-    notes = models.TextField(blank=True, null=True,)
-    veg_level = models.IntegerField(choices=VEG_LEVELS, 
-                                    blank=True, null=True,)
-    food_rating = models.IntegerField(choices=RATINGS, 
-                                      blank=True, null=True, )
-    atmosphere_rating = models.IntegerField(choices=RATINGS, 
-                                            blank=True, null=True,)
     latitude = models.FloatField(default=None, blank=True, null=True)
     longitude = models.FloatField(default=None, blank=True, null=True)
+
+    # ADMINISTRATIVE FIELDS
+    entry_date = models.DateTimeField(auto_now_add=True)
     approved = models.BooleanField(default=False)
-    cuisine_tags = models.ManyToManyField(CuisineTag, null=True, blank=True)
-    feature_tags = models.ManyToManyField(FeatureTag, null=True, blank=True)
     objects = VendorManager()
 
+    # DESCRIPTIVE FIELDS
+    notes = models.TextField(blank=True, null=True,)
+    veg_level = models.IntegerField(
+        "How vegan friendly is this place?  See documentation for guildelines.",
+        choices=VEG_LEVELS, 
+        blank=True, null=True,)
+    food_rating = models.IntegerField(choices=RATINGS, 
+                                      blank=True, null=True,)
+    atmosphere_rating = models.IntegerField(choices=RATINGS, 
+                                            blank=True, null=True,)
+    cuisine_tags = models.ManyToManyField(CuisineTag, null=True, blank=True)
+    feature_tags = models.ManyToManyField(FeatureTag, null=True, blank=True)
+
     def save(self, *args, **kwargs):
+        """Steps to take before/after saving to db.
+
+        Before saving, see if the vendor has been geocoded.
+        If not, geocode."""
         if self.address and not (self.latitude and self.longitude):
             geocode_result = geocode.geocode_address(self.address)
             if geocode_result:
@@ -212,12 +252,10 @@ class Vendor(NamedModel):
         super(Vendor, self).save(*args, **kwargs)
 
     def best_vegan_dish(self):
+        "Returns the best vegan dish for the vendor"
         dishes = VeganDish.objects.filter(vendor=self)
         print dishes
         if dishes:
             return max(dishes, key=lambda d: Review.objects.filter(best_vegan_dish=d).count())
         else:
             return None
-
-
-    
