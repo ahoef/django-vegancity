@@ -114,15 +114,36 @@ class VendorManager(models.Manager):
     def address_search(self, query):
         """ Search vendors by address.
 
-THIS WILL BE CHANGED SO NOT WRITING DOCUMENTATION."""
-        tokens = shlex.split(query)
-        q_builder = Q()
-        for token in tokens:
-            q_builder |= Q(address__icontains=token)
-        vendors = self.filter(q_builder)
-        vendor_count = vendors.count()
-        summary_string = ('Found %d results where address contains "%s".' 
-                          % (vendor_count, " or ".join(tokens)))
+        THIS WILL BE CHANGED SO NOT WRITING DOCUMENTATION."""
+
+
+        point_a = geocode.geocode_address(query)
+
+        # TODO test this with a reasonable number of latitudes and longitudes
+        lat_flr, lat_ceil, lng_flr, lng_ceil = geocode.bounding_box_offsets(point_a, 0.75)
+
+        vendors_in_box = Vendor.objects.filter(latitude__gte=lat_flr,
+                                                latitude__lte=lat_ceil,
+                                                longitude__gte=lng_flr,
+                                                longitude__lte=lng_ceil,)
+
+
+        vendor_distances = geocode.distances(point_a, 
+                                             [(vendor.latitude, vendor.longitude)
+                                              for vendor in vendors_in_box])
+
+        vendor_pairs = zip(vendors_in_box, vendor_distances)
+
+        sorted_vendor_pairs = sorted(vendor_pairs, key=lambda pair: pair[1][1])
+
+        vendor_matches = filter(lambda pair: geocode.meters_to_miles(pair[1][1]) <= 0.75,
+                                 sorted_vendor_pairs)
+
+        vendors = map(lambda x: x[0], vendor_matches)
+            
+        vendor_count = len(vendors)
+        summary_string = ('Found %d results where address is near "%s".' 
+                          % (vendor_count, query))
         return {
             'count' : vendor_count, 
             'summary_statement' : summary_string, 
