@@ -14,28 +14,23 @@ CUISINE_TAGS = (
     ('chinese', 'Chinese'),
     ('thai', 'Thai'),
     ('mexican', 'Mexican'),
-<<<<<<< HEAD
     ('pizza', 'Pizza'),
     ('italian', 'Italian'),
-=======
->>>>>>> 32ac2ea2f41d279e8f691effd17366985c37f9d8
     ('middle_eastern', 'Middle Eastern'),
     ('southern', 'Southern'),
     ('soul_food', 'Soul Food'),
     ('vietnamese', 'Vietnamese'),
     ('indian', 'Indian'),
-<<<<<<< HEAD
     ('ethiopian', 'Ethiopian'),
-=======
     ('pizza', 'Pizza'),
-    )
-
-FEATURE_TAGS = (
->>>>>>> 32ac2ea2f41d279e8f691effd17366985c37f9d8
     ('bar_food', 'Bar Food'),
     ('fast_food', 'Fast Food'),
     ('pan_asian', 'Pan-Asian'),
     ('sushi', 'Sushi'),
+    )
+
+FEATURE_TAGS = (
+
     ('halal', 'Halal'),
     ('kosher', 'Kosher'),
     ('gluten_free_options', 'Gluten Free Options'),
