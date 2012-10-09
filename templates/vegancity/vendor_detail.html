@@ -19,8 +19,9 @@ n
 {% if vendor.website %}Website: <a href="http://{{ vendor.website }}">{{ vendor.website }}</a><br/>{% endif %}
 {% if veg_level %}Veg Level:{{ vendor.veg_level }}<br/>{% endif %}
 {% if vendor.best_vegan_dish %}<br/>Best Vegan Dish:{{ vendor.best_vegan_dish }}<br/>{% endif %}
+{% if vendor.cuisine_tags.all %}Cuisine(s): {% for tag in vendor.cuisine_tags.all %}<strong>{{ tag }}</strong>{% if not forloop.last %}, {% endif %}{% endfor %}<br/>{% endif %}
+{% if vendor.feature_tags.all %}Features: {% for tag in vendor.feature_tags.all %}<strong>{{ tag }}</strong>, {% endfor %}<br/>{% endif %}
 {% if vendor.notes %}{{ vendor.notes }}<br/>{% endif %}
-
 </p>
 
 {% block map %}

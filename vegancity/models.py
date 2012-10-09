@@ -2,17 +2,21 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Q
 
+import itertools
 import geocode
 import shlex
 
-TAG_LIST = (
+CUISINE_TAGS = (
     ('chinese', 'Chinese'),
     ('thai', 'Thai'),
     ('mexican', 'Mexican'),
-    ('pizza', 'Pizza'),
     ('middle_eastern', 'Middle Eastern'),
     ('southern', 'Southern'),
     ('indian', 'Indian'),
+    ('pizza', 'Pizza'),
+    )
+
+FEATURE_TAGS = (
     ('bar_food', 'Bar Food'),
     ('fast_food', 'Fast Food'),
     ('cheese_steaks', 'Cheese Steaks'),
@@ -35,6 +39,19 @@ VEG_LEVELS = (
 RATINGS = tuple((i, i) for i in range(1, 5))
 
 
+class NamedModel(models.Model):
+    name = models.CharField(max_length=150)
+    
+    def __unicode__(self):
+        return self.name
+
+class CuisineTag(NamedModel):
+    description = models.CharField(max_length=255)
+
+class FeatureTag(NamedModel):
+    description = models.CharField(max_length=255)
+
+
 class BlogEntry(models.Model):
     title = models.CharField(max_length=255)
     entry_date = models.DateTimeField(auto_now=True)
@@ -54,12 +71,6 @@ class QueryString(models.Model):
 
     def __unicode__(self):
         return self.value
-
-class Tag(models.Model):
-    name = models.CharField(max_length=30)
-
-    def __unicode__(self):
-        return self.name
 
 class VendorManager(models.Manager):
     "Manager class for handling searches by vendor."
@@ -82,16 +93,17 @@ class VendorManager(models.Manager):
     def tags_search(self, query):
         """Search vendors by tag.
 
-Takes a query, breaks it into tokens, searches for tags
-that contain the token.  If any of the tokens match any
-tags, return all the orgs with that tag."""
+        Takes a query, breaks it into tokens, searches for tags
+        that contain the token.  If any of the tokens match any
+        tags, return all the orgs with that tag."""
         tokens = shlex.split(query)
         q_builder = Q()
         for token in tokens:
             q_builder = q_builder | Q(name__icontains=token)
-        tag_matches = Tag.objects.filter(q_builder)
+        cuisine_tag_matches = CuisineTag.objects.filter(q_builder)
+        feature_tag_matches = FeatureTag.objects.filter(q_builder)
         vendors = set()
-        for tag in tag_matches:
+        for tag in itertools.chain(cuisine_tag_matches, feature_tag_matches):
             for vendor in tag.vendor_set.all():
                 vendors.add(vendor)
         vendor_count = len(vendors)
@@ -106,9 +118,9 @@ tags, return all the orgs with that tag."""
     def name_search(self, query):
         """Search vendors by name.
 
-Takes a query, breaks it into tokens, searches for names
-that contain the token.  If any of the tokens match any
-names, return all the orgs with that name."""
+        Takes a query, breaks it into tokens, searches for names
+        that contain the token.  If any of the tokens match any
+        names, return all the orgs with that name."""
         tokens = shlex.split(query)
         q_builder = Q()
         for token in tokens:
@@ -179,7 +191,8 @@ class Vendor(models.Model):
     latitude = models.FloatField(default=None, blank=True, null=True)
     longitude = models.FloatField(default=None, blank=True, null=True)
     approved = models.BooleanField(default=False)
-    tags = models.ManyToManyField(Tag, null=True, blank=True)
+    cuisine_tags = models.ManyToManyField(CuisineTag, null=True, blank=True)
+    feature_tags = models.ManyToManyField(FeatureTag, null=True, blank=True)
     objects = VendorManager()
 
     def __unicode__(self):
