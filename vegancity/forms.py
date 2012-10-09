@@ -48,6 +48,17 @@ class ReviewForm(forms.ModelForm):
             # TODO: this feels like a hack.
             self.fields['vendor'].widget = forms.HiddenInput()
 
+    def clean(self):
+        cleaned_data = super(ReviewForm, self).clean()
+        chose_best = cleaned_data.get("best_vegan_dish")
+        entered_unlisted = cleaned_data.get("unlisted_vegan_dish")
+
+        if chose_best and entered_unlisted:
+            raise forms.ValidationError(
+                "can't have both \"Best vegan dish\" and \"Favorite Vegan Dish\". Please choose one.")
+
+        return cleaned_data
+
 
     class Meta:
         model = Review
