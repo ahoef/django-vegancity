@@ -142,10 +142,30 @@ THIS WILL BE CHANGED SO NOT WRITING DOCUMENTATION."""
             'vendors':vendors
             }
         
+class VeganDish(models.Model):
+    name = models.CharField(max_length=50)
+    vendor = models.ForeignKey('Vendor')
+    
+    def __unicode__(self):
+        return self.name
+
+class Review(models.Model):
+    entry_date = models.DateTimeField(auto_now_add=True)
+    vendor = models.ForeignKey('Vendor')
+    entered_by = models.ForeignKey(User, blank=True, null=True)
+    approved = models.BooleanField(default=False)
+    best_vegan_dish = models.ForeignKey(VeganDish, blank=True, null=True)
+    unlisted_vegan_dish = models.CharField("Favorite Dish (if not listed)", max_length=100,
+                                           help_text="We'll work on getting it in the database so others know about it!")
+    content = models.TextField()
+
+    def __unicode__(self):
+        return "%s -- %s" % (self.vendor.name, str(self.entry_date))
 
 class Vendor(models.Model):
     "The main class for this application"
     name = models.CharField(max_length=200)
+    entry_date = models.DateTimeField(auto_now_add=True)
     address = models.TextField(blank=True, null=True)
     phone = models.CharField(max_length=50, blank=True, null=True)
     website = models.URLField(blank=True, null=True)
@@ -172,14 +192,13 @@ class Vendor(models.Model):
                 self.latitude, self.longitude = geocode_result
         super(Vendor, self).save(*args, **kwargs)
 
+    def best_vegan_dish(self):
+        dishes = VeganDish.objects.filter(vendor=self)
+        print dishes
+        if dishes:
+            return max(dishes, key=lambda d: Review.objects.filter(best_vegan_dish=d).count())
+        else:
+            return None
+
 
     
-class Review(models.Model):
-    entry_date = models.DateTimeField(auto_now_add=True)
-    vendor = models.ForeignKey(Vendor)
-    entered_by = models.ForeignKey(User, blank=True, null=True)
-    approved = models.BooleanField(default=False)
-    content = models.TextField()
-
-    def __unicode__(self):
-        return "%s -- %s" % (self.vendor.name, str(self.entry_date))
