@@ -30,7 +30,6 @@ CUISINE_TAGS = (
     )
 
 FEATURE_TAGS = (
-
     ('halal', 'Halal'),
     ('kosher', 'Kosher'),
     ('gluten_free_options', 'Gluten Free Options'),
