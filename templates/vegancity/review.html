@@ -3,6 +3,7 @@
 {% block headline %}Write a review!{% endblock %}
 
 {% block content %}
+<h3>{{ vendor.name }}</h3>
   <form action="" method="post">
     {% csrf_token %}
       {{ form.as_p }}
