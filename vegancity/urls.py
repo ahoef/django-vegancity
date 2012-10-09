@@ -9,16 +9,24 @@ admin.autodiscover()
 
 # CUSTOM VIEWS
 urlpatterns = patterns('vegancity.views',
+
+    # vendors
     url(r'^vendors/$', 'vendors', name="vendors"),
     url(r'^vendors/add/$', 'new_vendor', name="new_vendor"),
     url(r'^vendors/(?P<vendor_id>\d+)/$', 'vendor_detail', name="vendor_detail"),
-    url(r'^vendors/review/(?P<vendor_id>\d+)/$', 'review', name="review"),
+
+    # reviews
+    url(r'^vendors/review/(?P<vendor_id>\d+)/$', 'new_review', name="new_review"),
+
+    # blog
     url(r'^blog/$', 'blog', name="blog"),
     url(r'^blog/(?P<blog_entry_id>\d+)/$', 'blog_detail', name="blog_detail"),
     )
 
 # GENERIC VIEWS
 urlpatterns += patterns('django.views.generic.simple',
+    
+    # static pages
     url(r'^$', 'direct_to_template', {'template': 'vegancity/home.html'}, name='home'),
     url(r'^about/$', 'direct_to_template', {'template': 'vegancity/about.html'}, name='about'),
     )                        
