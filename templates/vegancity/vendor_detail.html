@@ -18,6 +18,9 @@ n
 {% if vendor.phone %}Phone:{{ vendor.phone }}<br/>{% endif %}
 {% if vendor.website %}Website: <a href="http://{{ vendor.website }}">{{ vendor.website }}</a><br/>{% endif %}
 {% if veg_level %}Veg Level:{{ vendor.veg_level }}<br/>{% endif %}
+{% if vendor.best_vegan_dish %}<br/>Best Vegan Dish:{{ vendor.best_vegan_dish }}<br/>{% endif %}
+{% if vendor.cuisine_tags.all %}Cuisine(s): {% for tag in vendor.cuisine_tags.all %}<strong>{{ tag }}</strong>{% if not forloop.last %}, {% endif %}{% endfor %}<br/>{% endif %}
+{% if vendor.feature_tags.all %}Features: {% for tag in vendor.feature_tags.all %}<strong>{{ tag }}</strong>, {% endfor %}<br/>{% endif %}
 {% if vendor.notes %}{{ vendor.notes }}<br/>{% endif %}
 </p>
 
@@ -36,15 +39,17 @@ jQuery("body").ready(createMap(vendor_singleton));
 
 {% endblock %}
 
-<a href="{% url 'review' vendor_id=vendor.id %}">Write a review!</a>
+<a href="{% url 'new_review' vendor_id=vendor.id %}">Write a review!</a>
 {% if reviews %}
 <hr/>
 <div class="container">
 <h2>{{ reviews.count }} Review{% if reviews.count != 1 %}s{% endif %}:</h2>
 
 {% for review in reviews %}
-<h3>entered by: {% if review.entered_by %}{{ review.entered_by }}{% else %}anonymous{% endif %}</h3>
+<h3>entered by: {{ review.entered_by }}</h3>
+<h6>best vegan dish: {{ review.best_vegan_dish }}</h6>
 <p>{{ review.content }}</p>
+
 {% endfor %}
 </div>
 {% endif %}

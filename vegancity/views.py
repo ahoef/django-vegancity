@@ -109,6 +109,11 @@ def register(request):
     return render_to_response("vegancity/register.html", {'form': form},
                               context_instance=RequestContext(request))
 
+
+###########################
+## data entry views
+###########################
+
 @login_required
 def new_vendor(request):
     if request.method == 'POST':
@@ -122,13 +127,28 @@ def new_vendor(request):
                               context_instance=RequestContext(request))
 
 @login_required
-def review(request, vendor_id):
+def new_review(request, vendor_id):
+    
+    vendor = models.Vendor.objects.get(id=vendor_id)
+
     if request.method == 'POST':
-        form = forms.ReviewForm(request.POST)
-        if form.is_valid():
-            review = form.save()
+        review_form = forms.ReviewForm(vendor, request.POST)
+        if review_form.is_valid():
+            review = models.Review()
+            review.vendor = review_form.cleaned_data['vendor']
+            review.entered_by = request.user
+            review.content = review_form.cleaned_data['content']
+            review.best_vegan_dish = review_form.cleaned_data['best_vegan_dish']
+            review.save()
             return HttpResponseRedirect(reverse("vendors"))
     else:
-        form = forms.ReviewForm()
-    return render_to_response("vegancity/review.html", {'form': form},
+        review_form = forms.ReviewForm(vendor_id,
+            initial={'vendor': vendor})
+
+    ctx = {
+        'vendor' : vendor,
+        'form' : review_form,
+        }
+
+    return render_to_response("vegancity/review.html", ctx,
                               context_instance=RequestContext(request))

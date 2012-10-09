@@ -90,24 +90,43 @@ def t_error(t):
   t.lexer.skip(1) 
 
 def process_raw_data():
+    "Takes raw data from .txt and lexes into python data structures"
+
+    # read to file to string
     try:
         f = open(sys.argv[1], 'r')
     except IOError as e:
         print 'FILE NOT FOUND.'
-        sys.exit()
-    
+        return None
     raw_string = f.read()
+
+
+    # lex string into tokens collection
     lexer = lex.lex() 
     lexer.input(raw_string)
-    result = [ ] 
-    while True:
-        tok = lexer.token()
-        if not tok: break
-        result = result + [(tok.type, tok.value)]
 
-    name_indices = [i for i, v in enumerate(result) if v[0] == 'NAME']
-    ranges = [range(name_indices[i], name_indices[i+1]) for i in range(len(name_indices) - 1)] + [range(name_indices[-1], len(result))]
-    tuples_lists = (map(lambda x: map(lambda y: result[y], x), ranges))
+    # do i really have to use a while loop?
+    # forloop failed, lexer.token() not iterable
+    tokens = []
+    while True:
+        token = lexer.token()
+        if not token:
+            break
+        tokens += [(token.type, token.value)]
+
+    # all_tags = set()
+    # for tags in (token[1] for token in tokens if token[0] == 'TAGS'):
+    #     for tag in tags:
+    #         print tag
+    #         all_tags.add(tag)
+
+    # for tag in all_tags:
+    #     print "    ('" + tag.replace(" ","_") + "','" + tag + "'),"
+
+    # process tokens into hashes
+    name_indices = [i for i, v in enumerate(tokens) if v[0] == 'NAME']
+    ranges = [range(name_indices[i], name_indices[i+1]) for i in range(len(name_indices) - 1)] + [range(name_indices[-1], len(tokens))]
+    tuples_lists = (map(lambda x: map(lambda y: tokens[y], x), ranges))
     hashes = map(dict, tuples_lists)
     return hashes
 
@@ -145,11 +164,30 @@ def write_hashes(hashes):
         vendor.approved = True
         vendor.save()
 
+def write_tags():
+    for tag in models.CUISINE_TAGS:
+        t = models.CuisineTag()
+        t.name = tag[0]
+        t.description = tag[1]
+        t.save()
+
+    for tag in models.FEATURE_TAGS:
+        t = models.FeatureTag()
+        t.name = tag[0]
+        t.description = tag[1]
+        t.save()
+
+
+def assign_tags():
+    bb = models.Vendor.objects.get(name__icontains="blackbird")
+    pizza = models.CuisineTag.objects.get(name__icontains="pizza")
+    bb.cuisine_tags.add(pizza)
 
 def main():
     hashes = process_raw_data()
     write_hashes(hashes)
-    
+    write_tags()
+    assign_tags()
     
     
 if __name__ == '__main__':
