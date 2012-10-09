@@ -6,6 +6,10 @@ import itertools
 import geocode
 import shlex
 
+##########################################
+# STATIC DATA
+##########################################
+
 CUISINE_TAGS = (
     ('chinese', 'Chinese'),
     ('thai', 'Thai'),
@@ -39,38 +43,9 @@ VEG_LEVELS = (
 RATINGS = tuple((i, i) for i in range(1, 5))
 
 
-class NamedModel(models.Model):
-    name = models.CharField(max_length=150)
-    
-    def __unicode__(self):
-        return self.name
-
-class CuisineTag(NamedModel):
-    description = models.CharField(max_length=255)
-
-class FeatureTag(NamedModel):
-    description = models.CharField(max_length=255)
-
-
-class BlogEntry(models.Model):
-    title = models.CharField(max_length=255)
-    entry_date = models.DateTimeField(auto_now=True)
-    author = models.ForeignKey(User)
-    text = models.TextField()
-
-    class Meta:
-        ordering = ('entry_date',)
-
-    def __unicode__(self):
-        return self.title
-
-class QueryString(models.Model):
-    value = models.CharField(max_length=255)
-    entry_date = models.DateTimeField(auto_now_add=True)
-    rank_results = models.CharField(max_length=100, null=True, blank=True)
-
-    def __unicode__(self):
-        return self.value
+##########################################
+# HELPERS / MANAGERS
+##########################################
 
 class VendorManager(models.Manager):
     "Manager class for handling searches by vendor."
@@ -153,13 +128,48 @@ THIS WILL BE CHANGED SO NOT WRITING DOCUMENTATION."""
             'summary_statement' : summary_string, 
             'vendors':vendors
             }
-        
-class VeganDish(models.Model):
-    name = models.CharField(max_length=50)
-    vendor = models.ForeignKey('Vendor')
+
+class NamedModel(models.Model):
+    name = models.CharField(max_length=150)
     
     def __unicode__(self):
         return self.name
+
+
+##########################################
+# BASIC MODELS
+##########################################
+
+class CuisineTag(NamedModel):
+    description = models.CharField(max_length=255)
+
+class FeatureTag(NamedModel):
+    description = models.CharField(max_length=255)
+
+
+class BlogEntry(models.Model):
+    title = models.CharField(max_length=255)
+    entry_date = models.DateTimeField(auto_now=True)
+    author = models.ForeignKey(User)
+    text = models.TextField()
+
+    class Meta:
+        ordering = ('entry_date',)
+
+    def __unicode__(self):
+        return self.title
+
+class QueryString(models.Model):
+    value = models.CharField(max_length=255)
+    entry_date = models.DateTimeField(auto_now_add=True)
+    rank_results = models.CharField(max_length=100, null=True, blank=True)
+
+    def __unicode__(self):
+        return self.value
+
+        
+class VeganDish(NamedModel):
+    vendor = models.ForeignKey('Vendor')
 
 class Review(models.Model):
     entry_date = models.DateTimeField(auto_now_add=True)
@@ -174,9 +184,8 @@ class Review(models.Model):
     def __unicode__(self):
         return "%s -- %s" % (self.vendor.name, str(self.entry_date))
 
-class Vendor(models.Model):
+class Vendor(NamedModel):
     "The main class for this application"
-    name = models.CharField(max_length=200)
     entry_date = models.DateTimeField(auto_now_add=True)
     address = models.TextField(blank=True, null=True)
     phone = models.CharField(max_length=50, blank=True, null=True)
@@ -194,9 +203,6 @@ class Vendor(models.Model):
     cuisine_tags = models.ManyToManyField(CuisineTag, null=True, blank=True)
     feature_tags = models.ManyToManyField(FeatureTag, null=True, blank=True)
     objects = VendorManager()
-
-    def __unicode__(self):
-        return self.name
 
     def save(self, *args, **kwargs):
         if self.address and not (self.latitude and self.longitude):
