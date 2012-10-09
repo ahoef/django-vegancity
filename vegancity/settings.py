@@ -19,6 +19,16 @@ DATABASES = {
     }
 }
 
+# In order to simplify bounding box calculations,
+# please enter the latitude of the region that this
+# site will be implemented for.  Default is
+# Philadelphia, PA, where this software was produced.
+# All simple address searches will have the following
+# appended to it.  This should suffice to enable google
+# to correctly geocode.
+LOCATION_LATITUDE = 39.952335
+LOCATION_CITY_STATE = "Philadelphia, PA"
+LOCATION_VIEWPORT = None
 
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 TIME_ZONE = None
