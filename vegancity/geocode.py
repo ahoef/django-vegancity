@@ -1,6 +1,5 @@
 # module for performing various sorts of geocoding related tasks
 
-import pprint
 import math
 import urllib
 import json
@@ -42,7 +41,6 @@ def distances(origin, points):
 
     destinations_tokens = ["%f,%f" % point for point in points]
     destinations_string = "|".join(destinations_tokens)
-    print destinations_string
     destinations_param = "destinations=" + destinations_string
 
     sensor_param = "sensor=false"
