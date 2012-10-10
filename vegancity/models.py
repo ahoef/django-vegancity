@@ -14,7 +14,6 @@ CUISINE_TAGS = (
     ('chinese', 'Chinese'),
     ('thai', 'Thai'),
     ('mexican', 'Mexican'),
-    ('pizza', 'Pizza'),
     ('italian', 'Italian'),
     ('middle_eastern', 'Middle Eastern'),
     ('southern', 'Southern'),
@@ -48,7 +47,7 @@ FEATURE_TAGS = (
     ('full_bar', 'Full Bar'),
     ('cheap', 'Cheap'),
     ('expensive', 'Expensive'),
-    ('open_late', 'Open after 10pm')
+    ('open_late', 'Open after 10pm'),
     )
 
 VEG_LEVELS = (
@@ -169,12 +168,6 @@ class VendorManager(models.Manager):
             'vendors':vendors
             }
 
-class NamedModel(models.Model):
-    name = models.CharField(max_length=150)
-    
-    def __unicode__(self):
-        return self.name
-
 ##########################################
 # SITE MODELS
 ##########################################
@@ -209,24 +202,28 @@ class BlogEntry(models.Model):
 # VENDOR-RELATED MODELS
 ##########################################
 
-class CuisineTag(NamedModel):
+class CuisineTag(models.Model):
+
     """Tags that describe vendor features.
    
     Example tags could be traditional ethnic cuisines
     like "mexican" or "french".  They could also
     be less traditional ones like "pizza" or
     "comfort" or "junk"."""
+    name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
 
-class FeatureTag(NamedModel):
+class FeatureTag(models.Model):
     """Tags that describe vendor features.
    
     Example tags would be "open late" or
     "offers delivery"."""
+    name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
 
 
-class VeganDish(NamedModel):
+class VeganDish(models.Model):
+    name = models.CharField(max_length=255)
     vendor = models.ForeignKey('Vendor')
 
 class Review(models.Model):
@@ -252,10 +249,11 @@ class Review(models.Model):
     def __unicode__(self):
         return "%s -- %s" % (self.vendor.name, str(self.entry_date))
 
-class Vendor(NamedModel):
+class Vendor(models.Model):
     "The main class for this application"
 
     # CORE FIELDS
+    name = models.CharField(max_length=255)
     address = models.TextField(blank=True, null=True)
     phone = models.CharField(max_length=50, blank=True, null=True)
     website = models.URLField(blank=True, null=True)
