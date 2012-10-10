@@ -1,0 +1,1358 @@
+(lp0
+(dp1
+S'CATEGORY'
+p2
+S'Category: Restaurants - Kosher/Kosher-Style, Vegan'
+p3
+sS'NAME'
+p4
+S'Mi Lah Vegetarian'
+p5
+sS'TAGS'
+p6
+(lp7
+S'mixed green salad'
+p8
+aS'fruit plate'
+p9
+aS'veggie sausage'
+p10
+aS'potato home fries'
+p11
+aS'sweet potato fries'
+p12
+asS'URL'
+p13
+S'milahvegetarian.com'
+p14
+sS'PHONE'
+p15
+S'(215) 732-8888'
+p16
+sS'ADDRESS'
+p17
+S'218 South 16th Street, Philadelphia, PA'
+p18
+sa(dp19
+g13
+S'govindasvegetarian.com'
+p20
+sg15
+S'(215) 985-9303'
+p21
+sg6
+(lp22
+S'chicken cheese steak'
+p23
+aS'philly cheese steak'
+p24
+aS'vegan ice cream'
+p25
+aS'vegan desserts'
+p26
+aS'comfort food'
+p27
+asg4
+S'Gourmet To Go Vegetarian'
+p28
+sg17
+S'1408 South Street, Philadelphia, PA'
+p29
+sa(dp30
+g13
+S'maozusa.com'
+p31
+sg15
+S'(215) 922-3409'
+p32
+sg6
+(lp33
+S'own falafel sandwich'
+p34
+aS'belgian fries'
+p35
+aS'salad bar'
+p36
+aS'middle eastern'
+p37
+aS'pickled'
+p38
+asg4
+S'Maoz Vegetarian'
+p39
+sg17
+S'1115 Walnut Street, Philadelphia, PA'
+p40
+sa(dp41
+g2
+S'Category: Vegan Restaurant'
+p42
+sg4
+S"Mama's Vegetarian"
+p43
+sg6
+(lp44
+S'latkes'
+p45
+aS'pitas'
+p46
+aS'hummus'
+p47
+aS'veggies'
+p48
+aS'eggplant'
+p49
+asg13
+S'mamasvegetarian.com'
+p50
+sg15
+S'(215) 751-0477'
+p51
+sg17
+S'18 South 20th Street, Philadelphia, PA'
+p52
+sa(dp53
+g15
+S'(215) 627-4520'
+p54
+sg6
+(lp55
+S'scallion pancakes'
+p56
+aS'hot and sour soup'
+p57
+aS"general tso's chicken"
+p58
+aS'fried whole fish'
+p59
+aS'all you can eat'
+p60
+asg4
+S'New Harmony Vegetarian Restaurant'
+p61
+sg17
+S'135 North 9th Street, Philadelphia, PA'
+p62
+sa(dp63
+g2
+S'Category: Vegan Restaurant'
+p64
+sg4
+S'Blackbird Pizzeria'
+p65
+sg6
+(lp66
+S'vegan cheesesteaks'
+p67
+aS'vegan pizza place'
+p68
+aS'slice of pizza'
+p69
+aS'hand cut fries'
+p70
+aS'sandwiches and salads'
+p71
+asg13
+S'blackbirdpizzeria.com'
+p72
+sg15
+S'(215) 625-6660'
+p73
+sg17
+S'507 South 6th Street, Philadelphia, PA'
+p74
+sa(dp75
+g4
+S'Basic 4 Vegetarian Cafe'
+p76
+sg17
+S'12th & Arch Street, Philadelphia, PA'
+p77
+sa(dp78
+g13
+S'mybasic4.tumblr.com'
+p79
+sg15
+S'(215) 440-0991'
+p80
+sg4
+S"Delilah's Southern Cuisine: Reading Terminal Market"
+p81
+sg6
+(lp82
+S'philly cheese steak'
+p83
+aS'sweet potato pie'
+p84
+aS'whole wheat roll'
+p85
+aS'the hoagie'
+p86
+aS'the veggie burger'
+p87
+asa(dp88
+g13
+S'thebelgiancafe.com'
+p89
+sg15
+S'(215) 235-3500'
+p90
+sg6
+(lp91
+S'mussels were great'
+p92
+aS'sweet potato hummus'
+p93
+aS'the art museum area'
+p94
+aS'great neighborhood'
+p95
+aS'bottles beer'
+p96
+asg4
+S'The Belgian Cafe'
+p97
+sg17
+S'601 North 21st Street, Philadelphia, PA'
+p98
+sa(dp99
+g2
+S'Category: Vegan Restaurant'
+p100
+sg4
+S'Vedge'
+p101
+sg6
+(lp102
+S'small plates'
+p103
+aS'dining experience'
+p104
+aS'cheesecake'
+p105
+aS'tapas'
+p106
+aS'foodies'
+p107
+asg13
+S'vedgerestaurant.com'
+p108
+sg15
+S'(215) 320-7500'
+p109
+sg17
+S'1221 Locust Street, Philadelphia, PA'
+p110
+sa(dp111
+g13
+S'singaporevegetarian.com'
+p112
+sg15
+S'(215) 922-3288'
+p113
+sg6
+(lp114
+S"general tso's chicken"
+p115
+aS'absolutely amazing'
+p116
+aS'orange beef'
+p117
+aS'scallion pancakes'
+p118
+aS'fake meat'
+p119
+asg4
+S'Singapore Kosher Vegetarian Restaurant'
+p120
+sg17
+S'1006 Race Street, Philadelphia, PA'
+p121
+sa(dp122
+g13
+S'sweetfreedombakery.com'
+p123
+sg15
+S'(215) 545-1899'
+p124
+sg6
+(lp125
+S'chocolate chip cookie'
+p126
+aS'banana chocolate chip'
+p127
+aS'cookie sandwich'
+p128
+aS'gluten free baked goods'
+p129
+aS'refined sugars'
+p130
+asg4
+S'Sweet Freedom Bakery'
+p131
+sg17
+S'1424 South Street, Philadelphia, PA'
+p132
+sa(dp133
+g13
+S'suxinghouse.com'
+p134
+sg15
+S'(215) 564-1419'
+p135
+sg6
+(lp136
+S"general tso's tofu"
+p137
+aS'vegetarian chinese'
+p138
+aS'cold sesame noodle'
+p139
+aS'hot and sour soup'
+p140
+aS'vegetable fried'
+p141
+asg4
+S'Su Xing House'
+p142
+sg17
+S'1508 Sansom Street, Philadelphia, PA'
+p143
+sa(dp144
+g13
+S'kingdomofvegetarians.com'
+p145
+sg15
+S'(215) 413-2290'
+p146
+sg6
+(lp147
+S'mock meat'
+p148
+aS'all you can eat'
+p149
+aS'meat dishes'
+p150
+aS'hot and sour soup'
+p151
+aS"general tso's chicken"
+p152
+asg4
+S'Kingdom of Vegetarians Restaurant'
+p153
+sg17
+S'129 North 11th Street #1, Philadelphia, PA'
+p154
+sa(dp155
+g13
+S'maozusa.com'
+p156
+sg15
+S'(215) 625-3500'
+p157
+sg6
+(lp158
+S'sweet potato fries'
+p159
+aS'salad bar'
+p160
+aS'belgian fries'
+p161
+aS'garlic sauce'
+p162
+aS'the eggplant'
+p163
+asg4
+S'Maoz Falafel'
+p164
+sg17
+S'248 South Street, Philadelphia, PA'
+p165
+sa(dp166
+g2
+S"Category: Restaurants - Eclectic / Int'l, Vegan"
+p167
+sg4
+S'A Full Plate, Cafe & Catering'
+p168
+sg6
+(lp169
+S'mac and cheese'
+p170
+aS'chicken and waffles'
+p171
+aS'fried green tomatoes'
+p172
+aS'great comfort'
+p173
+aS'biscuits with gravy'
+p174
+asg13
+S'afullplate.com'
+p175
+sg15
+S'(215) 627-4068'
+p176
+sg17
+S'1040 North American Street, Philadelphia, PA'
+p177
+sa(dp178
+g13
+S'mugshotscoffeehouse.com'
+p179
+sg15
+S'(267) 514-7145'
+p180
+sg6
+(lp181
+S'fair trade coffee'
+p182
+aS'vegan friendly'
+p183
+aS'bonnie '
+p184
+asg4
+S'Mugshots Coffeehouse & Cafe'
+p185
+sg17
+S'1925 Fairmount Avenue, Philadelphia, PA'
+p186
+sa(dp187
+g4
+S'& clyde'
+p188
+sg6
+(lp189
+S'vegan treats'
+p190
+aS'environmentally friendly'
+p191
+asa(dp192
+g2
+S'Category: Vegan Restaurant'
+p193
+sg4
+S'Grindcore House'
+p194
+sg6
+(lp195
+S'vegan coffee shop'
+p196
+aS'vegan treats'
+p197
+aS'book signings'
+p198
+aS'cream cheese'
+p199
+aS'coffee tea'
+p200
+asg13
+S'grindcorehouse.com'
+p201
+sg15
+S'(215) 839-3333'
+p202
+sg17
+S'1515 South 4th Street, Philadelphia, PA'
+p203
+sa(dp204
+g13
+S'royaltavern.com'
+p205
+sg15
+S'(215) 389-6694'
+p206
+sg6
+(lp207
+S'angus burger'
+p208
+aS'good bar food'
+p209
+aS'meatloaf sandwich'
+p210
+aS'caramelized onions'
+p211
+aS'smoked gouda'
+p212
+asg4
+S'Royal Tavern'
+p213
+sg17
+S'937 East Passyunk Avenue, Philadelphia, PA'
+p214
+sa(dp215
+g13
+S'sketch-burger.com'
+p216
+sg15
+S'(215) 634-3466'
+p217
+sg6
+(lp218
+S'pulled pork'
+p219
+aS'truffle butter'
+p220
+aS'the turkey burgers'
+p221
+aS'kobe beef burger'
+p222
+aS'mac and cheese'
+p223
+asg4
+S'Sketch'
+p224
+sg17
+S'413 East Girard Avenue, Philadelphia, PA'
+p225
+sa(dp226
+g13
+S'essenemarket.com'
+p227
+sg15
+S'(215) 922-1146'
+p228
+sg6
+(lp229
+S'vegan food'
+p230
+aS'prepared foods'
+p231
+aS'macrobiotic'
+p232
+aS'veggies'
+p233
+aS'vitamins'
+p234
+asg4
+S'Essene Market & Cafe'
+p235
+sg17
+S'719 South 4th Street, Philadelphia, PA'
+p236
+sa(dp237
+g13
+S'memphistaproom.com'
+p238
+sg15
+S'(215) 425-4460'
+p239
+sg6
+(lp240
+S'fried pickles'
+p241
+aS'craft beer'
+p242
+aS'mac and cheese'
+p243
+aS'vegetarian and vegan'
+p244
+aS'diners drive ins and dives'
+p245
+asg4
+S'Memphis Taproom'
+p246
+sg17
+S'2331 East Cumberland Street, Philadelphia, PA'
+p247
+sa(dp248
+g13
+S'sansamosa.com'
+p249
+sg15
+S'(215) 546-2009'
+p250
+sg6
+(lp251
+S'buffet style'
+p252
+aS'chicken wing great'
+p253
+aS'saag paneer'
+p254
+aS'salad bar'
+p255
+aS'chicken tikka masala'
+p256
+asg4
+S'San Samosa'
+p257
+sg17
+S'1214 Walnut Street, Philadelphia, PA'
+p258
+sa(dp259
+g2
+S'Category: Vegan Restaurant'
+p260
+sg4
+S'Black N Brew'
+p261
+sg6
+(lp262
+S'protein'
+p263
+aS'blueberries'
+p264
+aS'smoothies'
+p265
+aS'lattes'
+p266
+aS'tofu'
+p267
+asg13
+S'blackbrew.net'
+p268
+sg15
+S'(267) 639-6070'
+p269
+sg17
+S'1523 East Passyunk Avenue, Philadelphia, PA'
+p270
+sa(dp271
+g15
+S'(215) 829-4383'
+p272
+sg6
+(lp273
+S'hot and sour soup'
+p274
+aS'steamed chicken dumplings'
+p275
+aS'ton soup'
+p276
+aS'vegetarian chinese'
+p277
+aS'black bean sauce'
+p278
+asg4
+S'Charles Plaza'
+p279
+sg17
+S'234 North 10th Street, Philadelphia, PA'
+p280
+sa(dp281
+g2
+S'Category: Vegan Restaurant'
+p282
+sg15
+S'(215) 939-3298'
+p283
+sg6
+(lp284
+S'vegan desserts'
+p285
+aS'plantain'
+p286
+aS'potatoes'
+p287
+aS'slice'
+p288
+asg4
+S"Atiya Ola's Spirit First Foods"
+p289
+sg17
+S'4505 Baltimore Avenue, Philadelphia, PA'
+p290
+sa(dp291
+g2
+S'Category: Vegan Restaurant'
+p292
+sg4
+S'White Dog Cafe'
+p293
+sg6
+(lp294
+S'lamb bolognese'
+p295
+aS'neighborhood gem'
+p296
+aS'farm to table'
+p297
+aS'the tuna tartar'
+p298
+aS'the turkey salad'
+p299
+asg13
+S'whitedog.com'
+p300
+sg15
+S'(215) 386-9224'
+p301
+sg17
+S'3420 Sansom Street, Philadelphia, PA'
+p302
+sa(dp303
+g13
+S'wholefoodsmarket.com'
+p304
+sg15
+S'(215) 733-9788'
+p305
+sg4
+S'Whole Foods Market'
+p306
+sg17
+S'929 South Street, Philadelphia, PA'
+p307
+sa(dp308
+g15
+S'(215) 922-1003'
+p309
+sg6
+(lp310
+S'peach banana'
+p311
+aS'steamed buns'
+p312
+aS'the turkey avocado'
+p313
+aS'miso soup'
+p314
+aS'smoothies'
+p315
+asg4
+S'Soy Cafe'
+p316
+sg17
+S'630 North 2nd Street, Philadelphia, PA'
+p317
+sa(dp318
+g2
+S'Category: Vegan Restaurant'
+p319
+sg4
+S'Hamifgash Restaurant'
+p320
+sg6
+(lp321
+S'glatt kosher'
+p322
+aS'special of the day'
+p323
+aS'ground lamb'
+p324
+aS'baba ghanoush'
+p325
+aS'roasted eggplant'
+p326
+asg13
+S'hamifgashkosherrestaurant.com'
+p327
+sg15
+S'(215) 925-3550'
+p328
+sg17
+S'811 Sansom Street, Philadelphia, PA'
+p329
+sa(dp330
+g13
+S'khyberpasspub.com'
+p331
+sg15
+S'(215) 238-5888'
+p332
+sg6
+(lp333
+S'bacon grease'
+p334
+aS"po' boy"
+p335
+aS'pulled pork sandwich'
+p336
+aS'mac and cheese'
+p337
+aS'live music venue'
+p338
+asg4
+S'Khyber Pass Pub'
+p339
+sg17
+S'56 South 2nd Street, Philadelphia, PA'
+p340
+sa(dp341
+g13
+S'veggieloversphilly.com'
+p342
+sg15
+S'(215) 226-6688'
+p343
+sg2
+S'Category: Vegan Restaurant'
+p344
+sg4
+S'Veggie Lovers'
+p345
+sg17
+S'225 North 11th Street, Philadelphia, PA'
+p346
+sa(dp347
+g2
+S'Category: Vegan Restaurant'
+p348
+sg4
+S'Maru Global Takoyaki'
+p349
+sg6
+(lp350
+S'street food'
+p351
+aS'bento box'
+p352
+aS'the burrito'
+p353
+aS'caramelized onions'
+p354
+aS'yakisoba'
+p355
+asg13
+S'maruglobalphilly.com'
+p356
+sg15
+S'(267) 273-0567'
+p357
+sg17
+S'255 South 10th Street, Philadelphia, PA'
+p358
+sa(dp359
+g13
+S'puresweets.com'
+p360
+sg15
+S'(215) 518-9007'
+p361
+sg2
+S'Category: Vegan Bakery'
+p362
+sg4
+S'Pure Sweets'
+p363
+sg17
+S'3580 Indian Queen Lane, Philadelphia, PA'
+p364
+sa(dp365
+g13
+S'southphiladelphiataproom.com'
+p366
+sg15
+S'(215) 271-7787'
+p367
+sg6
+(lp368
+S'great beer selection'
+p369
+aS'grilled cheese sandwiches'
+p370
+aS'grilled cheese and tomato'
+p371
+aS'tomato soup'
+p372
+aS'brewing company'
+p373
+asg4
+S'South Philadelphia Tap Room'
+p374
+sg17
+S'1509 Mifflin Street, Philadelphia, PA'
+p375
+sa(dp376
+g13
+S'goldenempressgarden.com'
+p377
+sg15
+S'(215) 627-7666'
+p378
+sg6
+(lp379
+S'hot and sour soup'
+p380
+aS'chicken sweet and sour'
+p381
+aS'chinese vegetarian'
+p382
+aS'house special wonton soup'
+p383
+aS'fried noodles'
+p384
+asg4
+S'Golden Empress Garden'
+p385
+sg17
+S'610 South 5th Street, Philadelphia, PA'
+p386
+sa(dp387
+g13
+S'nicksvegan.com'
+p388
+sg15
+S'(215) 235-1111'
+p389
+sg6
+(lp390
+S'tofu scramble'
+p391
+aS'thulsa doom'
+p392
+aS'hardcore'
+p393
+aS'toasted'
+p394
+aS'wraps'
+p395
+asg4
+S"Nick's Vegan"
+p396
+sg17
+S'1507 North 33rd Street, Philadelphia, PA'
+p397
+sa(dp398
+g13
+S'hipcityveg.com'
+p399
+sg15
+S'(215) 278-7605'
+p400
+sg2
+S'Category: Vegan Restaurant'
+p401
+sg4
+S'HipCityVeg'
+p402
+sg17
+S'127 South 18th Street, Philadelphia, PA'
+p403
+sa(dp404
+g15
+S'(215) 238-9880'
+p405
+sg6
+(lp406
+S'the veggie burger'
+p407
+aS'cheap drinks'
+p408
+aS'taco tuesday'
+p409
+aS'tater tots'
+p410
+aS'draft beers'
+p411
+asg4
+S'Tattooed Mom'
+p412
+sg17
+S'530 South Street, Philadelphia, PA'
+p413
+sa(dp414
+g13
+S'tea-lightenment.com'
+p415
+sg15
+S'(312) 451-6707'
+p416
+sg2
+S'Category: Vegan Restaurant'
+p417
+sg4
+S'TeA-lightenment'
+p418
+sg17
+S'1030 North American Street, Philadelphia, PA'
+p419
+sa(dp420
+g4
+S'Kind Cafe'
+p421
+sg17
+S'724 North 3rd Street, Philadelphia, PA'
+p422
+sa(dp423
+g13
+S'adobecafephilly.com'
+p424
+sg15
+S'(215) 551-2243'
+p425
+sg6
+(lp426
+S'vegetarian options'
+p427
+aS'the taco salad'
+p428
+aS'sour cream'
+p429
+aS'margaritas'
+p430
+aS'the burrito'
+p431
+asg4
+S'Adobe Cafe'
+p432
+sg17
+S'1919 East Passyunk Avenue, Philadelphia, PA'
+p433
+sa(dp434
+g13
+S'pubonpassyunkeast.com'
+p435
+sg15
+S'(215) 755-5125'
+p436
+sg6
+(lp437
+S'good selection of beer'
+p438
+aS'neighborhood bar'
+p439
+aS'beers on tap'
+p440
+aS'bottle list'
+p441
+aS'hair of the dog'
+p442
+asg4
+S'Pub On Passyunk East'
+p443
+sg17
+S'1501 East Passyunk Avenue, Philadelphia, PA'
+p444
+sa(dp445
+g13
+S'finospizzeria.com'
+p446
+sg15
+S'(215) 844-1188'
+p447
+sg4
+S"Fino's Pizzeria & Restaurant"
+p448
+sg17
+S'6784 Germantown Avenue, Philadelphia, PA'
+p449
+sa(dp450
+g13
+S'mumbaibistro.com'
+p451
+sg15
+S'(215) 418-0444'
+p452
+sg6
+(lp453
+S'gluten free'
+p454
+aS'online ordering'
+p455
+aS'free options'
+p456
+aS'chicken tikka masala'
+p457
+aS'the veggie'
+p458
+asg4
+S'Mumbai Bistro'
+p459
+sg17
+S'930 Locust Street, Philadelphia, PA'
+p460
+sa(dp461
+g15
+S'(215) 843-6453'
+p462
+sg6
+(lp463
+S'brown rice'
+p464
+aS'roast duck'
+p465
+aS'spicy fish'
+p466
+aS'the veggie'
+p467
+aS'sweet potatoes'
+p468
+asg4
+S'The Nile Cafe'
+p469
+sg17
+S'6008 Germantown Avenue, Philadelphia, PA'
+p470
+sa(dp471
+g13
+S'thelastdropcoffeehouse.com'
+p472
+sg6
+(lp473
+S'free internet'
+p474
+aS'bagels'
+p475
+aS'basement'
+p476
+asg4
+S'The Last Drop Coffee House'
+p477
+sg17
+S'1300 Pine Street, Philadelphia, PA'
+p478
+sa(dp479
+g15
+S'(215) 546-0316'
+p480
+sg6
+(lp481
+S'neighborhood bar'
+p482
+aS'board games'
+p483
+aS'dive bar'
+p484
+aS'jukebox'
+p485
+aS'bartender'
+p486
+asg4
+S"Doobie's"
+p487
+sg17
+S'2201 Lombard Street, Philadelphia, PA'
+p488
+sa(dp489
+g13
+S'jarbarphilly.com'
+p490
+sg15
+S'(215) 923-1600'
+p491
+sg2
+S'Category: Vegan Restaurant'
+p492
+sg4
+S'Jar Bar'
+p493
+sg17
+S'113 South 12th Street, Philadelphia, PA'
+p494
+sa(dp495
+g13
+S'wholefoodsmarket.com'
+p496
+sg15
+S'(215) 557-0015'
+p497
+sg6
+(lp498
+S'natural and organic'
+p499
+aS'baked goods'
+p500
+asg4
+S'Whole Foods Market'
+p501
+sg17
+S'2001 Pennsylvania Avenue, Philadelphia, PA'
+p502
+sa(dp503
+g13
+S'local44beerbar.com'
+p504
+sg15
+S'(215) 222-2337'
+p505
+sg6
+(lp506
+S'beer selection'
+p507
+aS'the rueben'
+p508
+aS'beer bar'
+p509
+aS'russian river'
+p510
+aS'bottle shop'
+p511
+asg4
+S'Local 44'
+p512
+sg17
+S'4333 Spruce Street, Philadelphia, PA'
+p513
+sa(dp514
+g4
+S'Flying Monkey Bakery'
+p515
+sg17
+S'N 12th St, Philadelphia, Pennsylvania'
+p516
+sa(dp517
+g15
+S'(215) 928-0340'
+p518
+sg4
+S"Delilah's Southern Cuisine: Reading Terminal Market"
+p519
+sa(dp520
+g13
+S'flyingmonkeyphilly.com'
+p521
+sg4
+S'Mobile'
+p522
+sg6
+(lp523
+S'chocolate and vanilla'
+p524
+aS'whoopie pies'
+p525
+aS'pumpple cake'
+p526
+aS'apple pie'
+p527
+aS'red velvet'
+p528
+asa(dp529
+g15
+S'(215) 991-6514'
+p530
+sg4
+S"Flower Cafe At Linda's"
+p531
+sg17
+S'48 West Maplewood Mall, Philadelphia, PA'
+p532
+sa(dp533
+g13
+S'thehotdiggity.com'
+p534
+sg15
+S'(267) 886-9253'
+p535
+sg6
+(lp536
+S'dipping sauces'
+p537
+aS'the southern comfort'
+p538
+aS'bronx bomber'
+p539
+aS'big kahuna'
+p540
+aS'hand cut fries'
+p541
+asg4
+S'Hot Diggity'
+p542
+sg17
+S'630 South Street, Philadelphia, PA'
+p543
+sa(dp544
+g13
+S'giannasgrille.com'
+p545
+sg4
+S"Gianna's Grille"
+p546
+sg17
+S'507 South 6th Street, Philadelphia, PA'
+p547
+sa(dp548
+g13
+S'burgerorg.net'
+p549
+sg15
+S'(267) 639-3425'
+p550
+sg17
+S'326 South Street, Philadelphia, PA'
+p551
+sg4
+S'This place is permanently closed'
+p552
+sg6
+(lp553
+S'sweet potatoe fries'
+p554
+aS'the veggie'
+p555
+aS'guacamole'
+p556
+aS'patties'
+p557
+aS'smoothie'
+p558
+asa(dp559
+g15
+S'(215) 922-8957'
+p560
+sg4
+S'Cherry Street Chinese Restaurant'
+p561
+sg17
+S'1010 Cherry Street, Philadelphia, PA'
+p562
+sa(dp563
+g4
+S'This place is permanently closed'
+p564
+sg6
+(lp565
+S'wheat gluten'
+p566
+aS'chinatown'
+p567
+aS'kosher'
+p568
+aS'soy'
+p569
+aS'tofu'
+p570
+asa(dp571
+g13
+S'saladworks.com'
+p572
+sg15
+S'(215) 676-0320'
+p573
+sg4
+S'Saladworks'
+p574
+sg17
+S'2508 Welsh Road, Philadelphia, PA'
+p575
+sa(dp576
+g13
+S'eatatcrisp.com'
+p577
+sg15
+S'(267) 324-3840'
+p578
+sg4
+S'CRISP'
+p579
+sg17
+S'32 South 18th Street, Philadelphia, PA'
+p580
+sa(dp581
+g13
+S'qdoba.com'
+p582
+sg15
+S'(215) 222-2887'
+p583
+sg6
+(lp584
+S'lunch or dinner'
+p585
+aS'fresh ingredients'
+p586
+aS'quick service'
+p587
+aS'taco bell'
+p588
+aS'naked'
+p589
+asg4
+S'Qdoba Mexican Grill'
+p590
+sg17
+S'230 South 40th Street, Philadelphia, PA'
+p591
+sa.
