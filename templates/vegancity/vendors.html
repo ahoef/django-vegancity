@@ -14,7 +14,8 @@
 
 {% block content %}
 <div class="row">
-{% block map %}
+{% block map %}  
+<!-- TODO what is this?? -->  
 {% if result_set.0.vendors %}
 <div class="span6">
 <br/>
@@ -37,13 +38,44 @@ var vendors = [
 jQuery("body").ready(createMap(vendors));
 </script>
 <hr/>
-<h4>something missing? <a href="{% url 'new_vendor' %}">Add a food vendor!"</a></h4>
+
+
+<h6>Filter:<form action="{% url 'vendors' %}" method="get" name="clear_filters" id="clear_filters">
+<input type="hidden" name="query" value="{{ query }}">
+  <button type="submit" class="btn">clear filters</button>
+</form></h6>
+<form action="{% url 'vendors' %}" method="get" name="filters" id="filters">
+<input type="hidden" name="query" value="{{ query }}">
+<div class="span3">
+<ul>
+    {% for filter in feature_filters %}
+      <li><input type="checkbox" name="{{ filter.name }}" value="true" onclick="this.form.submit()" {% if filter in checked_filters %}checked="1"{% endif %}> {{ filter.description }}</li>
+    {% endfor %}
+  </ul>
+</div>
+  <ul>
+    {% for filter in cuisine_filters %}
+      <li><input type="checkbox" name="{{ filter.name }}" value="true" onclick="this.form.submit()" {% if filter in checked_filters %}checked="1"{% endif %}> {{ filter.description }}</li>
+    {% endfor %}
+</ul>
+</form>
+</p>
+<div class="span6">
+<h4>something missing? <a href="{% url 'new_vendor' %}">Add a food vendor!</a></h4>
+</div>
 </div>
 {% endif %}
 {% endblock %}
 
 {% block table %}
 <div class="span6">
+<form action="{% url 'vendors' %}" method="get" name="clear_search" id="clear_search">
+  {% for filter in checked_filters %}  
+    <input type="hidden" name="{{ filter }}" value="true">
+  {% endfor %}  
+  <button type="submit" class="btn">clear search</button>
+</form>
+
 {% for result in result_set %}
 <h4>{{ result.summary_statement }}</h4><br/>
 

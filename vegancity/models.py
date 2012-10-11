@@ -102,7 +102,7 @@ class VendorManager(models.Manager):
         return pending
         
 
-    def tags_search(self, query):
+    def tags_search(self, query, initial_queryset=None):
         """Search vendors by tag.
 
         Takes a query, breaks it into tokens, searches for tags
@@ -116,7 +116,10 @@ class VendorManager(models.Manager):
         feature_tag_matches = FeatureTag.objects.filter(q_builder)
         vendors = set()
         for tag in itertools.chain(cuisine_tag_matches, feature_tag_matches):
-            for vendor in tag.vendor_set.all():
+            qs = tag.vendor_set.all()
+            if initial_queryset:
+                qs = qs.filter(id__in=initial_queryset)
+            for vendor in qs:
                 vendors.add(vendor)
         vendor_count = len(vendors)
         summary_string = ('Found %d results with tags matching "%s".' 
@@ -127,7 +130,7 @@ class VendorManager(models.Manager):
             'vendors':vendors
             }
 
-    def name_search(self, query):
+    def name_search(self, query, initial_queryset=None):
         """Search vendors by name.
 
         Takes a query, breaks it into tokens, searches for names
@@ -138,6 +141,8 @@ class VendorManager(models.Manager):
         for token in tokens:
             q_builder |= Q(name__icontains=token)
         vendors = self.filter(q_builder)
+        if initial_queryset:
+            vendors = vendors.filter(id__in=initial_queryset)
         vendor_count = vendors.count()
         summary_string = ('Found %d results where name contains "%s".' 
                           % (vendor_count, " or ".join(tokens)))
@@ -148,27 +153,31 @@ class VendorManager(models.Manager):
             }
 
     #TODO - replace with something better!
-    def address_search(self, query):
+    def address_search(self, query, initial_queryset=None):
         """ Search vendors by address.
 
         THIS WILL BE CHANGED SO NOT WRITING DOCUMENTATION."""
-
+        
+        if initial_queryset:
+            vendors = self.filter(id__in=initial_queryset)
 
         point_a = geocode.geocode_address(query)
 
         # TODO test this with a reasonable number of latitudes and longitudes
         lat_flr, lat_ceil, lng_flr, lng_ceil = geocode.bounding_box_offsets(point_a, 0.75)
 
-        vendors_in_box = Vendor.objects.filter(latitude__gte=lat_flr,
-                                                latitude__lte=lat_ceil,
-                                                longitude__gte=lng_flr,
-                                                longitude__lte=lng_ceil,)
+        vendors_in_box = vendors.filter(latitude__gte=lat_flr,
+                                     latitude__lte=lat_ceil,
+                                     longitude__gte=lng_flr,
+                                     longitude__lte=lng_ceil,)
 
 
         vendor_distances = geocode.distances(point_a, 
                                              [(vendor.latitude, vendor.longitude)
                                               for vendor in vendors_in_box])
 
+
+        print vendors_in_box, vendor_distances
         vendor_pairs = zip(vendors_in_box, vendor_distances)
 
         sorted_vendor_pairs = sorted(vendor_pairs, key=lambda pair: pair[1][1])
@@ -212,7 +221,7 @@ class BlogEntry(models.Model):
     text = models.TextField()
 
     class Meta:
-        ordering = ('entry_date',)
+        ordering = ('-entry_date',)
 
     def __unicode__(self):
         return self.title
@@ -232,6 +241,9 @@ class CuisineTag(models.Model):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
 
+    def __unicode__(self):
+        return self.description
+
 class FeatureTag(models.Model):
     """Tags that describe vendor features.
    
@@ -240,6 +252,8 @@ class FeatureTag(models.Model):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
 
+    def __unicode__(self):
+        return self.description
 
 class VeganDish(models.Model):
     name = models.CharField(max_length=255)
