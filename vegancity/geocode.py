@@ -69,7 +69,7 @@ def distances(origin, points):
     raw_response = urllib.urlopen(full_url).read()
     json_response = json.loads(raw_response)
     if not json_response['status'] == 'OK':
-        return None
+        return []
     else:
         # return a list of distance descriptions and values in feet
         return [(hash['distance']['text'], hash['distance']['value']) 
