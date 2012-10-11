@@ -17,7 +17,7 @@
 
 import os
 
-SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
+APP_ROOT = os.path.dirname(os.path.realpath(__file__))
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
 
 DEBUG = True
@@ -32,7 +32,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(SITE_ROOT, 'db'),
+        'NAME': os.path.join(APP_ROOT, 'db'),
     }
 }
 
@@ -133,7 +133,7 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.sites',
+    #'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
