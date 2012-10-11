@@ -15,17 +15,57 @@ import tracking
 def vendors(request):
     """Display table level data about vendors.
 
-If this view has a get param called query, then we trigger
-the search runmode.  Otherwise, we just return all vendors
-in our database.
+    If this view has a get param called query, then we trigger
+    the search runmode.  Otherwise, we just return all vendors
+    in our database.
 
-Most of the complexity in this view is due to the ordering
-of results.  This view tries to decide what type of search
-the user is executing and display results accordingly."""
+    Most of the complexity in this view is due to the ordering
+    of results.  This view tries to decide what type of search
+    the user is executing and display results accordingly."""
+
+    ############################
+    ## FILTERS
+    ############################
+
+    # get all the tags in the db.  we'll use this multiple.
+    # times.
+    all_cuisine_tags =  models.CuisineTag.objects.all()
+    all_feature_tags = models.FeatureTag.objects.all()
+
+
+    # figure out which filters have been checked
+    checked_cuisine_filters = [f for f in all_cuisine_tags
+               if request.GET.get(f.name)]
+    checked_feature_filters = [f for f in all_feature_tags
+               if request.GET.get(f.name)]
+    checked_filters = checked_cuisine_filters + checked_feature_filters
+
+
+
+    # Filter the set of vendors that can be displayed
+    # based on what is in the checked filters.
+    vendors = models.Vendor.objects.all()
+    for f in checked_cuisine_filters:
+        vendors = vendors.filter(cuisine_tags__id__exact=f.id)
+    for f in checked_feature_filters:
+        vendors = vendors.filter(feature_tags__id__exact=f.id)
+
+
+
+    # determine which filters can be presented on the page
+    # based on whether they apply to any of the remaining
+    # vendors
+    available_cuisine_filters = [tag for tag in all_cuisine_tags if 
+                       tag.vendor_set.filter(id__in=vendors)]
+    available_feature_filters = [tag for tag in all_feature_tags if 
+                       tag.vendor_set.filter(id__in=vendors)]
+
+
+    ############################
+    ## SEARCHES
+    ############################
 
     query = request.GET.get('query', '')
-    
-    vendors = models.Vendor.objects.all()
 
     if query:
 
@@ -38,9 +78,9 @@ the user is executing and display results accordingly."""
 
         # execute searches and store them in a hash
         searches = {
-            'name' : models.Vendor.objects.name_search(query),
-            'address' : models.Vendor.objects.address_search(query),
-            'tags' : models.Vendor.objects.tags_search(query),
+            'name' : models.Vendor.objects.name_search(query, vendors),
+            'address' : models.Vendor.objects.address_search(query, vendors),
+            'tags' : models.Vendor.objects.tags_search(query, vendors),
             }
 
         # compute the set of all vendors found in the 3 searches
@@ -62,6 +102,11 @@ the user is executing and display results accordingly."""
     ctx = {
         'vendors' : vendors,
         'result_set' : result_set,
+        'query': query,
+        'cuisine_filters' : available_cuisine_filters,
+        'feature_filters' : available_feature_filters,
+        'checked_filters' : checked_filters,
+
         }
     return render_to_response('vegancity/vendors.html', ctx,
                               context_instance=RequestContext(request))
