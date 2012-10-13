@@ -40,7 +40,8 @@ def geocode_address(address):
     else:
         latitude = json_response['results'][0]['geometry']['location']['lat']
         longitude = json_response['results'][0]['geometry']['location']['lng']
-    return latitude, longitude
+        neighborhood = json_response['results'][0]['address_components'][2]['long_name']
+    return latitude, longitude, neighborhood
 
 
 def sign_multiple(num):
