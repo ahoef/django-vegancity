@@ -45,6 +45,25 @@ CUISINE_TAGS = (
     ('fast_food', 'Fast Food'),
     ('pan_asian', 'Pan-Asian'),
     ('sushi', 'Sushi'),
+    ('japanese', 'Japanese'),
+    ('asian_fusion', 'Asian Fusion'),
+    ('barbecue', 'Barbecue'),
+    ('bakery', 'Bakery'),
+    ('diner', 'Diner'),
+    ('dim_sum', 'Dim Sum'),
+    ('gastropub', 'Gastropub'),
+    ('moroccan', 'Moroccan'),
+    ('pakistani', 'Pakistani'),
+    ('salads', 'Salads'),
+    ('tapas', 'Tapas'),
+    ('greek', 'Greek'),
+    ('korean', 'Korean'),
+    ('turkish', 'Turkish'),
+    ('american', 'American'),
+    ('african', 'African'),
+    ('caribbean', 'Caribbean'),
+    ('cajun', 'Cajun'),
+    ('burgers', 'Burgers'),
     )
 
 FEATURE_TAGS = (
@@ -55,7 +74,7 @@ FEATURE_TAGS = (
     ('gluten_free_desserts', 'Gluten Free Desserts'),
     ('vegan_desserts', 'Vegan Desserts'),
     ('fake_meat', 'Fake Meat'),
-    ('cheese_steaks', 'Cheese Steaks'),
+    ('cheese_steaks', 'Vegan Cheese Steaks'),
     ('sandwiches', 'Sandwiches'),
     ('coffeehouse', 'Coffeehouse'),
     ('food_cart', 'Food Cart'),
@@ -67,6 +86,9 @@ FEATURE_TAGS = (
     ('cheap', 'Cheap'),
     ('expensive', 'Expensive'),
     ('open_late', 'Open after 10pm'),
+    ('smoothies', 'Smoothies/Juice Bar'),
+    ('great_tea', 'Great Tea Selection'),
+    ('byob', 'BYOB'),
     )
 
 VEG_LEVELS = (
