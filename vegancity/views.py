@@ -147,7 +147,9 @@ def register(request):
     if request.method == 'POST':
         form = forms.VegUserCreationForm(request.POST)
         if form.is_valid():
-            new_user = form.save()
+            new_user = form.save(commit=False)
+            new_user.email = form.cleaned_data['email']
+            new_user.save()
             return HttpResponseRedirect(reverse("home"))
     else:
         form = forms.VegUserCreationForm()
