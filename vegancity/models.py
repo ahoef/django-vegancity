@@ -161,7 +161,10 @@ class VendorManager(models.Manager):
         if initial_queryset:
             vendors = self.filter(id__in=initial_queryset)
 
-        point_a = geocode.geocode_address(query)
+        # todo this is a mess!
+        geocode_result = geocode.geocode_address(query)
+        latitude, longitude, neighborhood = geocode_result
+        point_a = (latitude, longitude)
 
         # TODO test this with a reasonable number of latitudes and longitudes
         lat_flr, lat_ceil, lng_flr, lng_ceil = geocode.bounding_box_offsets(point_a, 0.75)
@@ -199,6 +202,11 @@ class VendorManager(models.Manager):
 ##########################################
 # SITE MODELS
 ##########################################
+
+class Neighborhood(models.Model):
+    """Used for tracking what neighborhood a vendor is in."""
+    name = models.CharField(max_length=255)
+
 
 class QueryString(models.Model):
     """All raw queries that users search by.
@@ -259,6 +267,9 @@ class VeganDish(models.Model):
     name = models.CharField(max_length=255)
     vendor = models.ForeignKey('Vendor')
 
+    def __unicode__(self):
+        return self.name
+
 class Review(models.Model):
     "The main class for handling reviews.  More or less requires a vendor."
     
@@ -288,6 +299,8 @@ class Vendor(models.Model):
     # CORE FIELDS
     name = models.CharField(max_length=255)
     address = models.TextField(blank=True, null=True)
+    #neighborhood = models.CharField(max_length=100, blank=True, null=True)
+    neighborhood = models.ForeignKey(Neighborhood)
     phone = models.CharField(max_length=50, blank=True, null=True)
     website = models.URLField(blank=True, null=True)
     latitude = models.FloatField(default=None, blank=True, null=True)
@@ -317,9 +330,10 @@ class Vendor(models.Model):
         Before saving, see if the vendor has been geocoded.
         If not, geocode."""
         if self.address and not (self.latitude and self.longitude):
-            geocode_result = geocode.geocode_address(self.address)
+            geocode_result  = geocode.geocode_address(self.address)
             if geocode_result:
-                self.latitude, self.longitude = geocode_result
+                self.latitude, self.longitude, self.neighborhood = geocode_result
+                
         super(Vendor, self).save(*args, **kwargs)
 
     def best_vegan_dish(self):
@@ -330,3 +344,6 @@ class Vendor(models.Model):
             return max(dishes, key=lambda d: Review.objects.filter(best_vegan_dish=d).count())
         else:
             return None
+
+    def __unicode__(self):
+        return self.name

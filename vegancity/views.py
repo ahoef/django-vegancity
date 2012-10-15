@@ -181,7 +181,7 @@ def new_review(request, vendor_id):
         if review_form.is_valid():
             review = models.Review()
             review.vendor = review_form.cleaned_data['vendor']
-            review.entered_by = request.user
+            review.author = request.user
             review.content = review_form.cleaned_data['content']
             review.best_vegan_dish = review_form.cleaned_data['best_vegan_dish']
             review.save()

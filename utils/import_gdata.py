@@ -110,6 +110,18 @@ def assign_tags():
         feature_tags.append(models.FeatureTag.objects.get(name__exact=feature_tag))
     vendor.feature_tags.add(*feature_tags)
 
+    vendor = models.Vendor.objects.get(name__icontains="gourmet to go")
+    cuisine_tags = []
+    for cuisine_tag in ['fast_food']:
+        cuisine_tags.append(models.CuisineTag.objects.get(name__exact=cuisine_tag))
+    vendor.cuisine_tags.add(*cuisine_tags)
+
+    feature_tags = []
+    for feature_tag in ['kosher', 'open_late', 'cheap']:
+        feature_tags.append(models.FeatureTag.objects.get(name__exact=feature_tag))
+    vendor.feature_tags.add(*feature_tags)
+
+
 
 def write_blog():
     blog = models.BlogEntry()
@@ -121,9 +133,9 @@ def write_blog():
 
 
 def main():
-    #hashes = unpickle_hashes('data.pickle')
-    #write_hashes(hashes)
-    #write_tags()
+    hashes = unpickle_hashes('data.pickle')
+    write_hashes(hashes)
+    write_tags()
     assign_tags()
     write_blog()
     
