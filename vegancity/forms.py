@@ -26,7 +26,8 @@ from django.contrib.auth.models import User
 class VegUserCreationForm(UserCreationForm):
     "Form used for creating new users."
     email = forms.EmailField(max_length=10, label="Email (optional)", 
-                             help_text="for password restoration ONLY.")
+                             help_text="for password restoration ONLY.",
+                             required=False)
 
 
 class NewVendorForm(forms.ModelForm):
