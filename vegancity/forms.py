@@ -81,6 +81,6 @@ class ReviewForm(forms.ModelForm):
 
     class Meta:
         model = Review
-        exclude = ('latitude','longitude','approved', 'entered_by')
+        exclude = ('latitude','longitude','approved', 'author')
 
     

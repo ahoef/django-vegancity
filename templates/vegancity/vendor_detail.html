@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block headline %}{{ vendor.name }}{% endblock %}
-n
+
 {% block summary %}
 {% endblock %}
 
@@ -15,6 +15,7 @@ n
 
 <p>{{ vendor.name }}<br/>
 {% if vendor.address %}Address:{{ vendor.address }}<br/>{% endif %}
+{% if vendor.neighborhood %}Neighborhood: {{ vendor.neighborhood }}<br/>{% endif %}
 {% if vendor.phone %}Phone:{{ vendor.phone }}<br/>{% endif %}
 {% if vendor.website %}Website: <a href="http://{{ vendor.website }}">{{ vendor.website }}</a><br/>{% endif %}
 {% if veg_level %}Veg Level:{{ vendor.veg_level }}<br/>{% endif %}
@@ -46,8 +47,8 @@ jQuery("body").ready(createMap(vendor_singleton));
 <h2>{{ reviews.count }} Review{% if reviews.count != 1 %}s{% endif %}:</h2>
 
 {% for review in reviews %}
-<h3>entered by: {{ review.entered_by }}</h3>
-<h6>best vegan dish: {{ review.best_vegan_dish }}</h6>
+<h3>entered by: {{ review.author }}</h3>
+<h6>{% if review.best_vegan_dish %}best vegan dish: {{ review.best_vegan_dish }}{% endif %}</h6>
 <p>{{ review.content }}</p>
 
 {% endfor %}
