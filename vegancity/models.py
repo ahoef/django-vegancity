@@ -361,7 +361,8 @@ class Vendor(models.Model):
                     neighborhood.name = geocode_result[2]
                     neighborhood.save()
 
-                self.latitude, self.longitude, self.neighborhood = geocode_result
+                self.latitude, self.longitude = geocode_result[:2]
+                self.neighborhood = neighborhood
         
         
                 
