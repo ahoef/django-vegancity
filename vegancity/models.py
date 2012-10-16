@@ -356,7 +356,7 @@ class Vendor(models.Model):
             if geocode_result:
                 try:
                     neighborhood = Neighborhood.objects.get(name=geocode_result[2])
-                except DoesNotExist:
+                except Neighborhood.DoesNotExist:
                     neighborhood = Neighborhood()
                     neighborhood.name = geocode_result[2]
                     neighborhood.save()
