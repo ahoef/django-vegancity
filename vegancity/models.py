@@ -354,7 +354,16 @@ class Vendor(models.Model):
         if self.address and not (self.latitude and self.longitude):
             geocode_result  = geocode.geocode_address(self.address)
             if geocode_result:
+                try:
+                    neighborhood = Neighborhood.objects.get(name=geocode_result[2])
+                except DoesNotExist:
+                    neighborhood = Neighborhood()
+                    neighborhood.name = geocode_result[2]
+                    neighborhood.save()
+
                 self.latitude, self.longitude, self.neighborhood = geocode_result
+        
+        
                 
         super(Vendor, self).save(*args, **kwargs)
 
