@@ -423,32 +423,36 @@ class Vendor(models.Model):
         "How vegan friendly is this place?  See documentation for guildelines.",
         choices=VEG_LEVELS, 
         blank=True, null=True,)
-    food_rating = models.IntegerField(choices=RATINGS, 
-                                      blank=True, null=True,)
-    atmosphere_rating = models.IntegerField(choices=RATINGS, 
-                                            blank=True, null=True,)
+    # delete later.  These are calculated dynamically now
+    # food_rating = models.IntegerField(choices=RATINGS, 
+    #                                   blank=True, null=True,)
+    # atmosphere_rating = models.IntegerField(choices=RATINGS, 
+    #                                         blank=True, null=True,)
     cuisine_tags = models.ManyToManyField(CuisineTag, null=True, blank=True)
     feature_tags = models.ManyToManyField(FeatureTag, null=True, blank=True)
+
+    def apply_geocoding(self):
+        geocode_result  = geocode.geocode_address(self.address)
+        if geocode_result:
+            try:
+                neighborhood = Neighborhood.objects.get(name=geocode_result[2])
+            except:
+                if geocode_result[2]:
+                    neighborhood = Neighborhood()
+                    neighborhood.name = geocode_result[2]
+                    neighborhood.save()
+                    self.neighborhood = neighborhood
+                    
+            self.latitude, self.longitude = geocode_result[:2]
+
 
     def save(self, *args, **kwargs):
         """Steps to take before/after saving to db.
 
         Before saving, see if the vendor has been geocoded.
         If not, geocode."""
-        if self.address and not (self.latitude and self.longitude):
-            geocode_result  = geocode.geocode_address(self.address)
-            if geocode_result:
-                try:
-                    neighborhood = Neighborhood.objects.get(name=geocode_result[2])
-                except:
-                    if geocode_result[2]:
-                        neighborhood = Neighborhood()
-                        neighborhood.name = geocode_result[2]
-                        neighborhood.save()
-                        self.neighborhood = neighborhood
-
-                self.latitude, self.longitude = geocode_result[:2]
-
+        if self.address and not (self.latitude and self.longitude and self.neighborhood):
+            self.apply_geocoding()
         super(Vendor, self).save(*args, **kwargs)
 
     def best_vegan_dish(self):
@@ -456,6 +460,14 @@ class Vendor(models.Model):
         dishes = VeganDish.objects.filter(vendor=self)
         if dishes:
             return max(dishes, key=lambda d: Review.objects.filter(best_vegan_dish=d).count())
+        else:
+            return None
+
+    def food_rating(self):
+        reviews = Review.objects.filter(vendor=self)
+        food_ratings = [review.food_rating for review in reviews if review.food_rating]
+        if food_ratings:
+            return sum(food_ratings) / len(food_ratings)
         else:
             return None
 
