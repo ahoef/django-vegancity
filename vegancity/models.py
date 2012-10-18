@@ -471,6 +471,14 @@ class Vendor(models.Model):
         else:
             return None
 
+    def atmosphere_rating(self):
+        reviews = Review.objects.filter(vendor=self)
+        atmosphere_ratings = [review.atmosphere_rating for review in reviews if review.atmosphere_rating]
+        if atmosphere_ratings:
+            return sum(atmosphere_ratings) / len(atmosphere_ratings)
+        else:
+            return None
+
     def __unicode__(self):
         return self.name
 
