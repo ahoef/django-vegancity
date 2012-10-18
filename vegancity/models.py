@@ -16,7 +16,6 @@
 # along with Vegancity.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -28,6 +27,21 @@ import shlex
 ##########################################
 # STATIC DATA
 ##########################################
+
+# The following global tuples are not used
+# in any place within the project that is
+# executed at runtime.
+#
+# Rather, these fields are written into the
+# database using import scripts.
+#
+# This data is kept here because it is related
+# contextually to models.
+#
+# TODO: When the testing suite is complete,
+# write a test to make sure that every one
+# of these fields is in the database, and
+# every record in the database is listed here.
 
 CUISINE_TAGS = (
     ('chinese', 'Chinese'),
@@ -229,6 +243,12 @@ class Neighborhood(models.Model):
     """Used for tracking what neighborhood a vendor is in."""
     name = models.CharField(max_length=255)
 
+    class Meta:
+        verbose_name = "neighborhood"
+        verbose_name_plural = "neighborhoods"
+
+    def __unicode__(self):
+        return self.name
 
 class QueryString(models.Model):
     """All raw queries that users search by.
@@ -239,6 +259,10 @@ class QueryString(models.Model):
     value = models.CharField(max_length=255)
     entry_date = models.DateTimeField(auto_now_add=True)
     rank_results = models.CharField(max_length=100, null=True, blank=True)
+
+    class Meta:
+        ordering = ('entry_date',)
+        get_latest_by = "entry_date"
 
     def __unicode__(self):
         return self.value
@@ -252,6 +276,9 @@ class BlogEntry(models.Model):
 
     class Meta:
         ordering = ('-entry_date',)
+        verbose_name = "Blog Entry"
+        verbose_name_plural = "Blog Entries"
+        get_latest_by = "entry_date"
 
     def __unicode__(self):
         return self.title
@@ -314,6 +341,10 @@ class Review(models.Model):
 
     def __unicode__(self):
         return "%s -- %s" % (self.vendor.name, str(self.entry_date))
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('vegancity.views.vendor_detail', (str(self.vendor.id),))
 
 class Vendor(models.Model):
     "The main class for this application"
@@ -379,3 +410,10 @@ class Vendor(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('vegancity.views.vendor_detail', (str(self.id),))
+
+
+
