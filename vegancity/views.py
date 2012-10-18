@@ -193,6 +193,8 @@ def new_review(request, vendor_id):
             review.author = request.user
             review.content = review_form.cleaned_data['content']
             review.best_vegan_dish = review_form.cleaned_data['best_vegan_dish']
+            review.food_rating = review_form.cleaned_data['food_rating']
+            review.atmosphere_rating = review_form.cleaned_data['atmosphere_rating']
             review.save()
             return HttpResponseRedirect(reverse("vendors"))
     else:
