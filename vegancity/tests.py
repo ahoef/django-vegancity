@@ -1,6 +1,10 @@
-from django.test.client import Client
+from django.test import client
 from django.utils import unittest
 import models
+
+####################################
+# UNIT TESTS
+####################################
 
 class VendorCase(unittest.TestCase):
     def setUp(self):
@@ -20,94 +24,90 @@ class VendorCase(unittest.TestCase):
                 self.assertEqual(self.test_vendor.best_vegan_dish(), None)
 
 
+#####################################
+# INTEGRATED TESTS
+#####################################
+
+def test_url(url, desired_code):
+    """Tests a url using the built-in django browser.
+
+    See if the url returns a reasonable status code.
+    Check if the response has any double-moustaches in
+    it, implying a template misfired.
+
+    [Add description of upcoming test here]"""
+    c = client.Client()
+    response = c.post(url)
+    response_string = str(response)
+    assert not response_string.count("{{")
+    assert not response_string.count("}}")
+    assert response.status_code == desired_code
+    return "tested url: '%s' for code '%d'" % (url, desired_code)
+
 def browser_tests():
-    c = Client()
+    """Test every known url on the site."""
 
     reviews = models.Review.objects.all()
     vendors = models.Vendor.objects.all()
     vendor_count = vendors.count()
     
-
     ################################
     # Test Vendor IDs sequentially
     ################################
     for i in range(1, vendor_count + 1):
         # test the detail page for every vendor
         url = '/vendors/%d/' % i
-        print "testing url:", url
-        response = c.post(url)
-        assert response.status_code == 200
+        print test_url(url, 200)
 
         # test the review page for every vendor
         url = '/vendors/review/%d/' % i
-        print "testing url:", url
-        response = c.post(url)
-        assert response.status_code == 302
-
+        print test_url(url, 302)
 
     ################################
     # Test Vendors pages using ORM
     ################################
     for vendor in vendors:
         url = vendor.get_absolute_url()
-        print "testing url:", url
-        response = c.post(url)
-        assert response.status_code == 200
-
+        print test_url(url, 200)
 
     ################################
     # Test review pages using ORM
     ################################
     for review in reviews:
         url = review.get_absolute_url()
-        print "testing url:", url
-        response = c.post(url)
-        assert response.status_code == 200
+        print test_url(url, 200)
 
     ################################
     # Test other pages
     ################################
 
-    # vendor summary page
-    response = c.post('/vendors/')
-    assert response.status_code == 200
+    PAGES_RETURNING_302 = [
+        '/vendors/add/',
+        '/accounts/logout/',
+        ]
 
-    # new vendor page
-    response = c.post('/vendors/add/')
-    assert response.status_code == 302
+    PAGES_RETURNING_200 = [
+        '/',
+        '/vendors/',
+        '/blog/',
+        '/about/',
+        '/accounts/login/',
+        '/accounts/register/',
+        '/admin/',
+        ]
 
-    # blog page
-    response = c.post('/blog/')
-    assert response.status_code == 200
+    for url in PAGES_RETURNING_302:
+        print test_url(url, 302)
 
-    # home page
-    response = c.post('/')
-    assert response.status_code == 200
-
-    # about page
-    response = c.post('/about/')
-    assert response.status_code == 200
-
-    # login page
-    response = c.post('/accounts/login/')
-    assert response.status_code == 200
-
-    # logout page
-    response = c.post('/accounts/logout/')
-    assert response.status_code == 302
-
-    # register page
-    response = c.post('/accounts/register/')
-    assert response.status_code == 200
-
-    # admin portal
-    response = c.post('/admin/')
-    assert response.status_code == 200
+    for url in PAGES_RETURNING_200:
+        print test_url(url, 200)
 
     print
     print "#################################"
     print "# Tested every known url!"
     print "#################################"
     print
+
+    
 
 browser_tests()
