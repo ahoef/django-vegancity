@@ -15,9 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Vegancity.  If not, see <http://www.gnu.org/licenses/>.
 
-
 from django.contrib import admin
-from models import Vendor, Review, QueryString, BlogEntry, VeganDish, CuisineTag, FeatureTag
+import models
 
 # vendors
 class VendorAdmin(admin.ModelAdmin):
@@ -25,7 +24,7 @@ class VendorAdmin(admin.ModelAdmin):
     list_display = ('id','approved', 'name', 'entry_date')
     list_filter = ('approved',)
 
-admin.site.register(Vendor, VendorAdmin)
+admin.site.register(models.Vendor, VendorAdmin)
 
 # reviews
 class ReviewAdmin(admin.ModelAdmin):
@@ -33,13 +32,13 @@ class ReviewAdmin(admin.ModelAdmin):
     list_display = ('id', 'approved', 'vendor',)
     list_filter = ('approved', 'best_vegan_dish', 'unlisted_vegan_dish')
 
-admin.site.register(Review, ReviewAdmin)
+admin.site.register(models.Review, ReviewAdmin)
 
 # other
-admin.site.register(QueryString)
-admin.site.register(BlogEntry)
-admin.site.register(VeganDish)
-admin.site.register(CuisineTag)
-admin.site.register(FeatureTag)
-
+admin.site.register(models.QueryString)
+admin.site.register(models.BlogEntry)
+admin.site.register(models.VeganDish)
+admin.site.register(models.CuisineTag)
+admin.site.register(models.FeatureTag)
+admin.site.register(models.Neighborhood)
 
