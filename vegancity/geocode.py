@@ -40,7 +40,12 @@ def geocode_address(address):
     else:
         latitude = json_response['results'][0]['geometry']['location']['lat']
         longitude = json_response['results'][0]['geometry']['location']['lng']
-        neighborhood = json_response['results'][0]['address_components'][2]['long_name']
+        neighborhood_hashes = [hash for hash in json_response['results'][0]['address_components']
+                               if 'neighborhood' in hash['types']]
+        if neighborhood_hashes:
+            neighborhood = neighborhood_hashes[0]['long_name']
+        else:
+            neighborhood = None
     return latitude, longitude, neighborhood
 
 

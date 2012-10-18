@@ -58,6 +58,11 @@ jQuery("body").ready(createMap(vendors));
       <li><input type="checkbox" name="{{ filter.name }}" value="true" onclick="this.form.submit()" {% if filter in checked_filters %}checked="1"{% endif %}> {{ filter.description }}</li>
     {% endfor %}
 </ul>
+  <ul>
+    {% for neighborhood in neighborhoods %}
+      <li><input type="checkbox" name="{{ neighborhood.name }}" value="true" onclick="this.form.submit()" {% if neighborhood in checked_filters %}checked="1"{% endif %}> {{ neighborhood.name }}</li>
+    {% endfor %}
+</ul>
 </form>
 </p>
 <div class="span6">

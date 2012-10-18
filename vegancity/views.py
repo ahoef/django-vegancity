@@ -31,6 +31,7 @@ def vendors(request):
     # times.
     all_cuisine_tags =  models.CuisineTag.objects.all()
     all_feature_tags = models.FeatureTag.objects.all()
+    all_neighborhoods = models.Neighborhood.objects.all()
 
 
     # figure out which filters have been checked
@@ -38,7 +39,9 @@ def vendors(request):
                if request.GET.get(f.name)]
     checked_feature_filters = [f for f in all_feature_tags
                if request.GET.get(f.name)]
-    checked_filters = checked_cuisine_filters + checked_feature_filters
+    checked_neighborhoods = [f for f in all_neighborhoods
+               if request.GET.get(f.name)]
+    checked_filters = checked_cuisine_filters + checked_feature_filters + checked_neighborhoods
 
 
 
@@ -49,6 +52,8 @@ def vendors(request):
         vendors = vendors.filter(cuisine_tags__id__exact=f.id)
     for f in checked_feature_filters:
         vendors = vendors.filter(feature_tags__id__exact=f.id)
+    for f in checked_neighborhoods:
+        vendors = vendors.filter(neighborhood__id__exact=f.id)
 
 
 
@@ -59,6 +64,8 @@ def vendors(request):
                        tag.vendor_set.filter(id__in=vendors)]
     available_feature_filters = [tag for tag in all_feature_tags if 
                        tag.vendor_set.filter(id__in=vendors)]
+    available_neighborhoods = [n for n in all_neighborhoods if 
+                       n.vendor_set.filter(id__in=vendors)]
 
 
     ############################
@@ -105,8 +112,8 @@ def vendors(request):
         'query': query,
         'cuisine_filters' : available_cuisine_filters,
         'feature_filters' : available_feature_filters,
+        'neighborhoods' : available_neighborhoods,
         'checked_filters' : checked_filters,
-
         }
     return render_to_response('vegancity/vendors.html', ctx,
                               context_instance=RequestContext(request))
