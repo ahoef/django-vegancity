@@ -29,7 +29,7 @@ import models
 def log_query(query, ranks):
     "takes a query and saves it as a querystring object."
     querystring = models.QueryString()
-    querystring.value = query
-    querystring.rank_results = str(ranks)
+    querystring.body = query
+    querystring.ranking_summary = str(ranks)
     querystring.save()
     

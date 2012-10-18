@@ -20,6 +20,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Q
 
+from django.contrib import admin
+
 import itertools
 import geocode
 import shlex
@@ -240,11 +242,14 @@ class VendorManager(models.Manager):
 
 class Neighborhood(models.Model):
     """Used for tracking what neighborhood a vendor is in."""
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
+    created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = "neighborhood"
-        verbose_name_plural = "neighborhoods"
+        verbose_name = "Neighborhood"
+        verbose_name_plural = "Neighborhoods"
+        get_latest_by = "created"
+        ordering = ('name',)
 
     def __unicode__(self):
         return self.name
@@ -255,39 +260,43 @@ class QueryString(models.Model):
     Store the query and how it was ranked.  This
     is for researching how well the ranking algorithm
     is doing in predicting search types."""
-    value = models.CharField(max_length=255)
-    entry_date = models.DateTimeField(auto_now_add=True)
-    rank_results = models.CharField(max_length=100, null=True, blank=True)
+    body = models.CharField(max_length=255)
+    created = models.DateTimeField(auto_now_add=True)
+    ranking_summary = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
-        ordering = ('entry_date',)
-        get_latest_by = "entry_date"
+        ordering = ('created',)
+        get_latest_by = "created"
 
     def __unicode__(self):
-        return self.value
+        return self.body
 
 class BlogEntry(models.Model):
-    "Blog entries.  They get entered in the admin."
+    "Blog entries. They get entered in the admin."
     title = models.CharField(max_length=255)
-    entry_date = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User)
-    text = models.TextField()
+    body = models.TextField()
 
     class Meta:
-        ordering = ('-entry_date',)
+        ordering = ('-created',)
         verbose_name = "Blog Entry"
         verbose_name_plural = "Blog Entries"
-        get_latest_by = "entry_date"
+        get_latest_by = "created"
 
     def __unicode__(self):
         return self.title
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('vegancity.views.blog_detail', (str(self.id),))
 
 ##########################################
 # VENDOR-RELATED MODELS
 ##########################################
 
 class CuisineTag(models.Model):
-
     """Tags that describe vendor features.
    
     Example tags could be traditional ethnic cuisines
@@ -296,10 +305,17 @@ class CuisineTag(models.Model):
     "comfort" or "junk"."""
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
+    created = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
         return self.description
-
+    
+    class Meta:
+        get_latest_by = "created"
+        ordering = ('name',)
+        verbose_name = "Cuisine Tag"
+        verbose_name_plural = "Cuisine Tags"
+        
 class FeatureTag(models.Model):
     """Tags that describe vendor features.
    
@@ -307,43 +323,81 @@ class FeatureTag(models.Model):
     "offers delivery"."""
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
+    created = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
         return self.description
 
+    class Meta:
+        get_latest_by = "created"
+        ordering = ('name',)
+        verbose_name = "Feature Tag"
+        verbose_name_plural = "Feature Tags"
+
+
 class VeganDish(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     vendor = models.ForeignKey('Vendor')
+    created = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
         return self.name
+
+    class Meta:
+        get_latest_by = "created"
+        ordering = ('name',)
+        verbose_name = "Vegan Dish"
+        verbose_name_plural = "Vegan Dishes"
+
+
 
 class Review(models.Model):
     "The main class for handling reviews.  More or less requires a vendor."
     
     # CORE FIELDS
     vendor = models.ForeignKey('Vendor')
-    author = models.ForeignKey(User, blank=True, null=True)
+    author = models.ForeignKey(User)
 
     # ADMINISTRATIVE FIELDS
-    entry_date = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
     approved = models.BooleanField(default=False)
 
     # DESCRIPTIVE FIELDS
+    title = models.CharField(max_length=255, null=True, blank=True)
+    food_rating = models.IntegerField(
+        "How would you rate the food, overall?",
+        choices=RATINGS, 
+        blank=True, null=True,)
+    atmosphere_rating = models.IntegerField(
+        "How would you rate the atmosphere?",
+        choices=RATINGS, 
+        blank=True, null=True,)
     best_vegan_dish = models.ForeignKey(VeganDish, blank=True, null=True)
     unlisted_vegan_dish = models.CharField(
-        "Favorite Vegan Dish (if not listed)", 
+        "Favorite Vegan Dish (if not listed)",
         max_length=100,
         help_text="We'll work on getting it in the database so others know about it!",
         blank=True, null=True)
     content = models.TextField()
 
     def __unicode__(self):
-        return "%s -- %s" % (self.vendor.name, str(self.entry_date))
+        return "%s -- %s" % (self.vendor.name, str(self.created))
 
     @models.permalink
     def get_absolute_url(self):
         return ('vegancity.views.vendor_detail', (str(self.vendor.id),))
+
+    class Admin(admin.ModelAdmin):
+        "Make it easier to admin the reviews"
+        list_display = ('id', 'approved', 'vendor',)
+        list_filter = ('approved', 'best_vegan_dish', 'unlisted_vegan_dish')
+
+    class Meta:
+        get_latest_by = "created"
+        ordering = ('created',)
+        verbose_name = "Review"
+        verbose_name_plural = "Reviews"
 
 class Vendor(models.Model):
     "The main class for this application"
@@ -351,7 +405,6 @@ class Vendor(models.Model):
     # CORE FIELDS
     name = models.CharField(max_length=255)
     address = models.TextField(blank=True, null=True)
-    #neighborhood = models.CharField(max_length=100, blank=True, null=True)
     neighborhood = models.ForeignKey(Neighborhood, blank=True, null=True)
     phone = models.CharField(max_length=50, blank=True, null=True)
     website = models.URLField(blank=True, null=True)
@@ -359,7 +412,8 @@ class Vendor(models.Model):
     longitude = models.FloatField(default=None, blank=True, null=True)
 
     # ADMINISTRATIVE FIELDS
-    entry_date = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
     approved = models.BooleanField(default=False)
     objects = VendorManager()
 
@@ -395,9 +449,6 @@ class Vendor(models.Model):
 
                 self.latitude, self.longitude = geocode_result[:2]
 
-        
-        
-                
         super(Vendor, self).save(*args, **kwargs)
 
     def best_vegan_dish(self):
@@ -415,5 +466,27 @@ class Vendor(models.Model):
     def get_absolute_url(self):
         return ('vegancity.views.vendor_detail', (str(self.id),))
 
+    class Admin(admin.ModelAdmin):
+        "Make it easier to admin the vendors"
+        list_display = ('id','approved', 'name', 'created')
+        list_filter = ('approved',)
+
+    class Meta:
+        get_latest_by = "created"
+        ordering = ('created',)
+        verbose_name = "Vendor"
+        verbose_name_plural = "Vendors"
 
 
+#####################################
+## ADMIN REGISTRATION
+#####################################
+
+admin.site.register(Vendor, Vendor.Admin)
+admin.site.register(Review, Review.Admin)
+admin.site.register(QueryString)
+admin.site.register(BlogEntry)
+admin.site.register(VeganDish)
+admin.site.register(CuisineTag)
+admin.site.register(FeatureTag)
+admin.site.register(Neighborhood)
