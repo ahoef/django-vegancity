@@ -1,0 +1,17 @@
+* CODING STANDARDS
+
+** SUMMARY
+This file contains information about coding standards for this project.  Hopefully this will grow into separate documentation for how, and how not to, dig into this project.
+
+** STANDARDS
+
+*** MODELS
+
+**** Field Names
+***** name
+This field should exist for every model as the primary field unless there is a good reason not to.
+
+Query Strings do not have names, only values.
+Blog Entries don't have a name. They have a title and body.
+Reviews don't have a name. They have a title and body.
+***** 
