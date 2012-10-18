@@ -60,6 +60,7 @@ def write_hashes(hashes):
             vendor.website = url
         
         vendor.approved = True
+        
         vendor.save()
 
 def write_tags():

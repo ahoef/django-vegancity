@@ -216,7 +216,6 @@ class VendorManager(models.Manager):
                                               for vendor in vendors_in_box])
 
 
-        print vendors_in_box, vendor_distances
         vendor_pairs = zip(vendors_in_box, vendor_distances)
 
         sorted_vendor_pairs = sorted(vendor_pairs, key=lambda pair: pair[1][1])
@@ -353,7 +352,7 @@ class Vendor(models.Model):
     name = models.CharField(max_length=255)
     address = models.TextField(blank=True, null=True)
     #neighborhood = models.CharField(max_length=100, blank=True, null=True)
-    neighborhood = models.ForeignKey(Neighborhood)
+    neighborhood = models.ForeignKey(Neighborhood, blank=True, null=True)
     phone = models.CharField(max_length=50, blank=True, null=True)
     website = models.URLField(blank=True, null=True)
     latitude = models.FloatField(default=None, blank=True, null=True)
@@ -387,13 +386,15 @@ class Vendor(models.Model):
             if geocode_result:
                 try:
                     neighborhood = Neighborhood.objects.get(name=geocode_result[2])
-                except Neighborhood.DoesNotExist:
-                    neighborhood = Neighborhood()
-                    neighborhood.name = geocode_result[2]
-                    neighborhood.save()
+                except:
+                    if geocode_result[2]:
+                        neighborhood = Neighborhood()
+                        neighborhood.name = geocode_result[2]
+                        neighborhood.save()
+                        self.neighborhood = neighborhood
 
                 self.latitude, self.longitude = geocode_result[:2]
-                self.neighborhood = neighborhood
+
         
         
                 
@@ -402,7 +403,6 @@ class Vendor(models.Model):
     def best_vegan_dish(self):
         "Returns the best vegan dish for the vendor"
         dishes = VeganDish.objects.filter(vendor=self)
-        print dishes
         if dishes:
             return max(dishes, key=lambda d: Review.objects.filter(best_vegan_dish=d).count())
         else:
