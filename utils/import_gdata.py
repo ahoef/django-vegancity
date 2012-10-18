@@ -128,7 +128,7 @@ def write_blog():
     blog = models.BlogEntry()
     blog.title = "Writing a test entry for the vegancity blog"
     blog.author = User.objects.get(id=1)
-    blog.text = """Basically, you just have to create an import script and hack it out there.
+    blog.body = """Basically, you just have to create an import script and hack it out there.
                    You can try to get fancier than that, but I don't recommend it."""
     blog.save()
 
