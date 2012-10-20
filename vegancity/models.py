@@ -122,15 +122,11 @@ RATINGS = tuple((i, i) for i in range(1, 5))
 # HELPERS / MANAGERS
 ##########################################
 
+
+
 class VendorManager(models.Manager):
     "Manager class for handling searches by vendor."
 
-    def get_query_set(self):
-        "Changing initial queryset to ignore approved."
-        # TODO - explore bugs this could cause!
-        normal_qs = super(VendorManager, self).get_query_set()
-        new_qs = normal_qs.filter(approved=True)
-        return new_qs
 
     def pending_approval(self):
         """returns all vendors that are not approved, which are
@@ -235,6 +231,15 @@ class VendorManager(models.Manager):
             'summary_statement' : summary_string, 
             'vendors':vendors
             }
+
+class ApprovedVendorManager(VendorManager):
+    def get_query_set(self):
+        "Changing initial queryset to ignore approved."
+        # TODO - explore bugs this could cause!
+        normal_qs = super(VendorManager, self).get_query_set()
+        new_qs = normal_qs.filter(approved=True)
+        return new_qs
+
 
 ##########################################
 # SITE MODELS
@@ -379,7 +384,9 @@ class Review(models.Model):
         max_length=100,
         help_text="We'll work on getting it in the database so others know about it!",
         blank=True, null=True)
-    content = models.TextField()
+    content = models.TextField(
+        "Review", 
+        help_text="NOTE: All slanderous reviews will be scrutinized. No trolling!")
 
     def __unicode__(self):
         return "%s -- %s" % (self.vendor.name, str(self.created))
@@ -405,7 +412,7 @@ class Vendor(models.Model):
     # CORE FIELDS
     name = models.CharField(max_length=255)
     address = models.TextField(blank=True, null=True)
-    neighborhood = models.ForeignKey(Neighborhood, blank=True, null=True)
+    neighborhood = models.ForeignKey(Neighborhood, blank=True, null=True, editable=False)
     phone = models.CharField(max_length=50, blank=True, null=True)
     website = models.URLField(blank=True, null=True)
     latitude = models.FloatField(default=None, blank=True, null=True)
@@ -416,6 +423,7 @@ class Vendor(models.Model):
     modified = models.DateTimeField(auto_now=True)
     approved = models.BooleanField(default=False)
     objects = VendorManager()
+    approved_objects = ApprovedVendorManager()
 
     # DESCRIPTIVE FIELDS
     notes = models.TextField(blank=True, null=True,)
