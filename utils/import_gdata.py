@@ -78,17 +78,17 @@ def write_tags():
 
 
 def assign_tags():
-    bb = models.Vendor.objects.get(name__icontains="blackbird")
+    bb = models.Vendor.approved_objects.get(name__icontains="blackbird")
     pizza = models.CuisineTag.objects.get(name__exact="pizza")
     bb.cuisine_tags.add(pizza)
 
-    vendor = models.Vendor.objects.get(name__icontains="mi lah")
+    vendor = models.Vendor.approved_objects.get(name__icontains="mi lah")
     cuisine = models.CuisineTag.objects.get(name__exact="chinese")
     vendor.cuisine_tags.add(cuisine)
 
 
 
-    vendor = models.Vendor.objects.get(name__icontains="Vedge")
+    vendor = models.Vendor.approved_objects.get(name__icontains="Vedge")
     cuisine_tags = []
     for cuisine_tag in ['chinese','pan_asian', 'soul_food']:
         cuisine_tags.append(models.CuisineTag.objects.get(name__exact=cuisine_tag))
@@ -100,7 +100,7 @@ def assign_tags():
     vendor.feature_tags.add(*feature_tags)
 
 
-    vendor = models.Vendor.objects.get(name__icontains="maoz veg")
+    vendor = models.Vendor.approved_objects.get(name__icontains="maoz veg")
     cuisine_tags = []
     for cuisine_tag in ['middle_eastern', 'fast_food']:
         cuisine_tags.append(models.CuisineTag.objects.get(name__exact=cuisine_tag))
@@ -111,7 +111,7 @@ def assign_tags():
         feature_tags.append(models.FeatureTag.objects.get(name__exact=feature_tag))
     vendor.feature_tags.add(*feature_tags)
 
-    vendor = models.Vendor.objects.get(name__icontains="gourmet to go")
+    vendor = models.Vendor.approved_objects.get(name__icontains="gourmet to go")
     cuisine_tags = []
     for cuisine_tag in ['fast_food']:
         cuisine_tags.append(models.CuisineTag.objects.get(name__exact=cuisine_tag))
