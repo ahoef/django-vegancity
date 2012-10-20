@@ -52,6 +52,7 @@ urlpatterns += patterns('django.views.generic.simple',
 # ADMIN VIEWS
 if 'django.contrib.admin' in INSTALLED_APPS:
     urlpatterns += patterns('',
+        url(r'^admin/pending_approval/', 'vegancity.admin_views.pending_approval', name="pending_approval"),
         url(r'^admin/', include(admin.site.urls)),
     )
 
