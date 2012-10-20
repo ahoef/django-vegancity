@@ -28,6 +28,8 @@ class VendorCase(unittest.TestCase):
 # INTEGRATED TESTS
 #####################################
 
+
+
 def test_url(url, desired_code):
     """Tests a url using the built-in django browser.
 
@@ -108,6 +110,34 @@ def browser_tests():
     print "#################################"
     print
 
+def feature_tag_test():
+    """Test that all tags are in the database,
+    and vice versa."""
+    feature_tags = models.FeatureTag.objects.all()
+    static_short_names = [tag[0] for tag in models.FEATURE_TAGS]
+    static_long_names = [tag[1] for tag in models.FEATURE_TAGS]
+    model_short_names = [tag.name for tag in feature_tags]
+    model_long_names = [tag.description for tag in feature_tags]
+    print "feature_tags are synced up"
+    
+    assert set(static_short_names) == set(model_short_names)
+    assert set(static_long_names) == set(model_long_names)
+        
+def cuisine_tag_test():
+    """Test that all tags are in the database,
+    and vice versa."""
+    cuisine_tags = models.CuisineTag.objects.all()
+    static_short_names = [tag[0] for tag in models.CUISINE_TAGS]
+    static_long_names = [tag[1] for tag in models.CUISINE_TAGS]
+    model_short_names = [tag.name for tag in cuisine_tags]
+    model_long_names = [tag.description for tag in cuisine_tags]
+    
+    assert set(static_short_names) == set(model_short_names)
+    assert set(static_long_names) == set(model_long_names)
+    print "cuisine_tags are synced up"
+        
     
 
 browser_tests()
+feature_tag_test()
+cuisine_tag_test()
