@@ -1,3 +1,20 @@
+# Copyright (C) 2012 Steve Lamb
+
+# This file is part of Vegancity.
+
+# Vegancity is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# Vegancity is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with Vegancity.  If not, see <http://www.gnu.org/licenses/>.
+
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render
 from django.template import RequestContext
@@ -47,7 +64,7 @@ def vendors(request):
 
     # Filter the set of vendors that can be displayed
     # based on what is in the checked filters.
-    vendors = models.Vendor.objects.all()
+    vendors = models.Vendor.approved_objects.all()
     for f in checked_cuisine_filters:
         vendors = vendors.filter(cuisine_tags__id__exact=f.id)
     for f in checked_feature_filters:
@@ -85,9 +102,9 @@ def vendors(request):
 
         # execute searches and store them in a hash
         searches = {
-            'name' : models.Vendor.objects.name_search(query, vendors),
-            'address' : models.Vendor.objects.address_search(query, vendors),
-            'tags' : models.Vendor.objects.tags_search(query, vendors),
+            'name' : models.Vendor.approved_objects.name_search(query, vendors),
+            'address' : models.Vendor.approved_objects.address_search(query, vendors),
+            'tags' : models.Vendor.approved_objects.tags_search(query, vendors),
             }
 
         # compute the set of all vendors found in the 3 searches
@@ -123,7 +140,7 @@ def vendor_detail(request, vendor_id):
     """Display record level detail about a vendor.
 
 Also grabs reviews and sends them to the template."""
-    vendor = models.Vendor.objects.get(id=vendor_id)
+    vendor = models.Vendor.approved_objects.get(id=vendor_id)
     reviews = models.Review.objects.filter(vendor__id=vendor_id)
     ctx = {
         'vendor' : vendor,
@@ -183,7 +200,7 @@ def new_vendor(request):
 @login_required
 def new_review(request, vendor_id):
     
-    vendor = models.Vendor.objects.get(id=vendor_id)
+    vendor = models.Vendor.approved_objects.get(id=vendor_id)
 
     if request.method == 'POST':
         review_form = forms.ReviewForm(vendor, request.POST)
