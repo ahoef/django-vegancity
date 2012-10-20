@@ -1,0 +1,46 @@
+{% extends "admin/base_site.html" %}
+
+{% block title %}Items pending approval{% endblock %}
+
+{% block content %}
+<h3>Items pending approval</h3>
+<br/>
+  {% if pending_vendors %}
+    <div class="results">
+      <table>
+        <thead>
+          <tr><th><div class="text"><span>Pending Vendors</span></div></th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            {% for vendor in pending_vendors %}          
+              <th><a href="/admin/vegancity/vendor/{{ vendor.id }}/">{{ vendor.name }}</a></th>
+            {% endfor %}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p>There are no pending vendors!</p>
+  {% endif %}
+  <br/>
+  {% if pending_reviews %}
+    <div class="results">
+      <table>
+        <thead>
+          <tr><th><div class="text"><span>Pending Reviews</span></div></th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            {% for review in pending_reviews %}
+              <th><a href="/admin/vegancity/review/{{ review.id }}/">{{ review }}</a></th>
+            {% endfor %}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p>There are no pending reviews!</p>
+  {% endif %}
+
+{% endblock %}
