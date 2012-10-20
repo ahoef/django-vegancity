@@ -18,7 +18,7 @@
 
 from django import forms
 
-from models import Vendor, Review, VeganDish
+import models
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -33,7 +33,7 @@ class VegUserCreationForm(UserCreationForm):
 class NewVendorForm(forms.ModelForm):
     "Form used for adding new vendors."
     class Meta:
-        model = Vendor
+        model = models.Vendor
         exclude = ('latitude','longitude','approved',)
 
 
@@ -43,6 +43,19 @@ class ReviewForm(forms.ModelForm):
     Takes an optional constructor for creating
     a vendor specific review.  This is the standard
     use case."""
+
+    # TODO: This has gotten really hacky.
+    # For one, there is some code redundancy between
+    # what happens here and what happens in the view
+    # that uses this form.  This should be worked into
+    # the save() method of this class.
+
+    suggested_feature_tags = forms.ModelMultipleChoiceField(help_text="Suggest a feature-tag to add",
+                                                            queryset=models.FeatureTag.objects.all())
+
+    suggested_cuisine_tags = forms.ModelMultipleChoiceField(help_text="Suggest a cuisine-tag to add",
+                                                            queryset=models.CuisineTag.objects.all())
+
 
     def __init__(self, vendor=None, *args, **kwargs):
         """Add some steps after instantiation
@@ -57,7 +70,7 @@ class ReviewForm(forms.ModelForm):
         
         if vendor:
             # can select dish if there are elements for vendor
-            dishes = VeganDish.objects.filter(vendor=vendor)
+            dishes = models.VeganDish.objects.filter(vendor=vendor)
             if dishes:
                 self.fields['best_vegan_dish'].queryset = dishes
             else:
@@ -78,9 +91,6 @@ class ReviewForm(forms.ModelForm):
 
         return cleaned_data
 
-
     class Meta:
-        model = Review
+        model = models.Review
         exclude = ('latitude','longitude','approved', 'author')
-
-    
