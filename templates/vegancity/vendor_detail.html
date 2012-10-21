@@ -18,7 +18,8 @@
 {% if vendor.neighborhood %}Neighborhood: {{ vendor.neighborhood }}<br/>{% endif %}
 {% if vendor.phone %}Phone:{{ vendor.phone }}<br/>{% endif %}
 {% if vendor.website %}Website: <a href="http://{{ vendor.website }}">{{ vendor.website }}</a><br/>{% endif %}
-{% if veg_level %}Veg Level:{{ vendor.veg_level }}<br/>{% endif %}
+{% if vendor.veg_level %}Veg Level:{{ vendor.veg_level }}<br/>{% endif %}
+{% if vendor.veg_level %}Simple Veg Level:{{ vendor.veg_level.super_category }}<br/>{% endif %}
 {% if vendor.food_rating %}Food Rating:{{ vendor.food_rating }}<br/>{% endif %}
 {% if vendor.atmosphere_rating %}Atmosphere Rating:{{ vendor.atmosphere_rating }}<br/>{% endif %}
 {% if vendor.best_vegan_dish %}Best Vegan Dish:{{ vendor.best_vegan_dish }}<br/>{% endif %}
