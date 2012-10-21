@@ -22,132 +22,8 @@ from django.db.models import Q
 
 import itertools
 import geocode
-import shlex
 
-##########################################
-# HELPERS / MANAGERS
-##########################################
-
-class VendorManager(models.Manager):
-    "Manager class for handling searches by vendor."
-
-
-    def pending_approval(self):
-        """returns all vendors that are not approved, which are
-        otherwise impossible to get in a normal query (for now)."""
-        normal_qs = super(VendorManager, self).get_query_set()
-        pending = normal_qs.filter(approved=False)
-        return pending
-        
-
-    def tags_search(self, query, initial_queryset=None):
-        """Search vendors by tag.
-
-        Takes a query, breaks it into tokens, searches for tags
-        that contain the token.  If any of the tokens match any
-        tags, return all the orgs with that tag."""
-        tokens = shlex.split(query)
-        q_builder = Q()
-        for token in tokens:
-            q_builder = q_builder | Q(name__icontains=token)
-        cuisine_tag_matches = CuisineTag.objects.filter(q_builder)
-        feature_tag_matches = FeatureTag.objects.filter(q_builder)
-        vendors = set()
-        for tag in itertools.chain(cuisine_tag_matches, feature_tag_matches):
-            qs = tag.vendor_set.all()
-            if initial_queryset:
-                qs = qs.filter(id__in=initial_queryset)
-            for vendor in qs:
-                vendors.add(vendor)
-        vendor_count = len(vendors)
-        summary_string = ('Found %d results with tags matching "%s".' 
-                          % (vendor_count, ", ".join(tokens)))
-        return {
-            'count' : vendor_count, 
-            'summary_statement' : summary_string, 
-            'vendors':vendors
-            }
-
-    def name_search(self, query, initial_queryset=None):
-        """Search vendors by name.
-
-        Takes a query, breaks it into tokens, searches for names
-        that contain the token.  If any of the tokens match any
-        names, return all the orgs with that name."""
-        tokens = shlex.split(query)
-        q_builder = Q()
-        for token in tokens:
-            q_builder |= Q(name__icontains=token)
-        vendors = self.filter(q_builder)
-        if initial_queryset:
-            vendors = vendors.filter(id__in=initial_queryset)
-        vendor_count = vendors.count()
-        summary_string = ('Found %d results where name contains "%s".' 
-                          % (vendor_count, " or ".join(tokens)))
-        return {
-            'count' : vendor_count,
-            'summary_statement' : summary_string, 
-            'vendors' : vendors
-            }
-
-    #TODO - replace with something better!
-    def address_search(self, query, initial_queryset=None):
-        """ Search vendors by address.
-
-        THIS WILL BE CHANGED SO NOT WRITING DOCUMENTATION."""
-        
-        if initial_queryset:
-            vendors = self.filter(id__in=initial_queryset)
-
-        # todo this is a mess!
-        geocode_result = geocode.geocode_address(query)
-        latitude, longitude, neighborhood = geocode_result
-        point_a = (latitude, longitude)
-
-        # TODO test this with a reasonable number of latitudes and longitudes
-        lat_flr, lat_ceil, lng_flr, lng_ceil = geocode.bounding_box_offsets(point_a, 0.75)
-
-        vendors_in_box = vendors.filter(latitude__gte=lat_flr,
-                                     latitude__lte=lat_ceil,
-                                     longitude__gte=lng_flr,
-                                     longitude__lte=lng_ceil,)
-
-
-        vendor_distances = geocode.distances(point_a, 
-                                             [(vendor.latitude, vendor.longitude)
-                                              for vendor in vendors_in_box])
-
-
-        vendor_pairs = zip(vendors_in_box, vendor_distances)
-
-        sorted_vendor_pairs = sorted(vendor_pairs, key=lambda pair: pair[1][1])
-
-        vendor_matches = filter(lambda pair: geocode.meters_to_miles(pair[1][1]) <= 0.75,
-                                 sorted_vendor_pairs)
-
-        vendors = map(lambda x: x[0], vendor_matches)
-            
-        vendor_count = len(vendors)
-        summary_string = ('Found %d results where address is near "%s".' 
-                          % (vendor_count, query))
-        return {
-            'count' : vendor_count, 
-            'summary_statement' : summary_string, 
-            'vendors':vendors
-            }
-
-class ApprovedVendorManager(VendorManager):
-    def get_query_set(self):
-        "Changing initial queryset to ignore approved."
-        # TODO - explore bugs this could cause!
-        normal_qs = super(VendorManager, self).get_query_set()
-        new_qs = normal_qs.filter(approved=True)
-        return new_qs
-
-
-##########################################
-# SITE MODELS
-##########################################
+import managers
 
 class VegLevel(models.Model):
     name = models.CharField(max_length=255, unique=True)
@@ -336,8 +212,8 @@ class Vendor(models.Model):
     created = models.DateTimeField(auto_now_add=True, null=True)
     modified = models.DateTimeField(auto_now=True, null=True)
     approved = models.BooleanField(default=False)
-    objects = VendorManager()
-    approved_objects = ApprovedVendorManager()
+    objects = managers.VendorManager()
+    approved_objects = managers.ApprovedVendorManager()
 
     # DESCRIPTIVE FIELDS
     notes = models.TextField(blank=True, null=True,)
@@ -348,11 +224,24 @@ class Vendor(models.Model):
     feature_tags = models.ManyToManyField(FeatureTag, null=True, blank=True)
 
 
+    def needs_geocoding(self):
+        """Returns true if the vendor is eligible for geocoding,
+        but is missing geocoding data."""
+        if self.latitude or self.longitude or self.neighborhood:
+            return False
+
+        elif not self.address:
+            return False
+
+        else:
+            return True
+
     def apply_geocoding(self):
+
         geocode_result  = geocode.geocode_address(self.address)
         latitude, longitude, neighborhood = geocode_result
 
-        if geocode_result:
+        if neighborhood:
             neighborhood_obj = None
             try:
                 neighborhood_obj = Neighborhood.objects.get(name=neighborhood)
@@ -364,16 +253,18 @@ class Vendor(models.Model):
                     neighborhood_obj.name = neighborhood
                     neighborhood_obj.save()
 
-            self.latitude = latitude
-            self.longitude = longitude
             self.neighborhood = neighborhood_obj
+
+        self.latitude = latitude
+        self.longitude = longitude
+
 
     def save(self, *args, **kwargs):
         """Steps to take before/after saving to db.
 
         Before saving, see if the vendor has been geocoded.
         If not, geocode."""
-        if self.address and not (self.latitude and self.longitude and self.neighborhood):
+        if self.needs_geocoding():
             self.apply_geocoding()
         super(Vendor, self).save(*args, **kwargs)
 
