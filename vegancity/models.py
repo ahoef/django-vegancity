@@ -160,6 +160,8 @@ class Review(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     approved = models.BooleanField(default=False)
+    objects = models.Manager()
+    approved_objects = managers.ApprovedReviewManager()
 
     # DESCRIPTIVE FIELDS
     title = models.CharField(max_length=255, null=True, blank=True)

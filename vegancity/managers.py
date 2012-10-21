@@ -129,10 +129,23 @@ class VendorManager(django_models.Manager):
             }
 
 class ApprovedVendorManager(VendorManager):
+    """Manager for approved vendors only.
+
+    Inherits the normal vendor manager."""
     def get_query_set(self):
-        "Changing initial queryset to ignore approved."
-        # TODO - explore bugs this could cause!
         normal_qs = super(VendorManager, self).get_query_set()
         new_qs = normal_qs.filter(approved=True)
         return new_qs
+
+
+class ApprovedReviewManager(django_models.Manager):
+    "Manager for approved reviews only."
+
+    def get_query_set(self):
+        "Changing initial queryset to ignore approved."
+        # TODO - explore bugs this could cause!
+        normal_qs = super(ApprovedReviewManager, self).get_query_set()
+        new_qs = normal_qs.filter(approved=True)
+        return new_qs
+
 
