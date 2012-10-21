@@ -20,8 +20,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Q
 
-from django.contrib import admin
-
 import itertools
 import geocode
 import shlex
@@ -314,11 +312,6 @@ class Review(models.Model):
     def get_absolute_url(self):
         return ('vegancity.views.vendor_detail', (str(self.vendor.id),))
 
-    class Admin(admin.ModelAdmin):
-        "Make it easier to admin the reviews"
-        list_display = ('vendor', 'approved',)
-        list_filter = ('approved', 'best_vegan_dish', 'unlisted_vegan_dish')
-
     class Meta:
         get_latest_by = "created"
         ordering = ('created',)
@@ -413,27 +406,8 @@ class Vendor(models.Model):
     def get_absolute_url(self):
         return ('vegancity.views.vendor_detail', (str(self.id),))
 
-    class Admin(admin.ModelAdmin):
-        "Make it easier to admin the vendors"
-        list_display = ('id','approved', 'name', 'created', 'neighborhood')
-        list_filter = ('approved',)
-
     class Meta:
         get_latest_by = "created"
         ordering = ('created',)
         verbose_name = "Vendor"
         verbose_name_plural = "Vendors"
-
-
-#####################################
-## ADMIN REGISTRATION
-#####################################
-
-admin.site.register(Vendor, Vendor.Admin)
-admin.site.register(Review, Review.Admin)
-admin.site.register(QueryString)
-admin.site.register(BlogEntry)
-admin.site.register(VeganDish)
-admin.site.register(CuisineTag)
-admin.site.register(FeatureTag)
-admin.site.register(Neighborhood)
