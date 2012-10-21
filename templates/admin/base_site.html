@@ -1,10 +1,11 @@
 {% extends "admin/base.html" %}
+{% load url from future %}
 {% load i18n %}
 
 {% block title %}{{ title }} | {% trans 'Django site admin' %}{% endblock %}
 
 {% block branding %}
-<h1 id="site-name">{% trans 'vegancity' %}</h1>
+<h1 id="site-name"><a href="{% url 'home' %}">{% trans 'vegancity' %}</a></h1>
 {% endblock %}
 
 {% block nav-global %}{% endblock %}
