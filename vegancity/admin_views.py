@@ -27,6 +27,7 @@ import forms
 import models
 import itertools
 
+@staff_member_required
 def pending_approval(request):
     pending_vendors = models.Vendor.approved_objects.pending_approval()
     pending_reviews = models.Review.objects.filter(approved=False)
@@ -36,3 +37,13 @@ def pending_approval(request):
         }
     return render_to_response("admin/pending_approval.html", ctx,
                               context_instance=RequestContext(request))
+
+
+@staff_member_required
+def geocode_all(request):
+    "Scan all vendors to determine if geocoding is needed and apply where needed."
+    for vendor in models.Vendor.approved_objects.all():
+        if vendor.needs_geocoding():
+            vendor.apply_geocoding()
+            vendor.save()
+    return HttpResponseRedirect("/admin/")
