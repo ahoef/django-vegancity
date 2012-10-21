@@ -301,6 +301,8 @@ class Review(models.Model):
         max_length=100,
         help_text="We'll work on getting it in the database so others know about it!",
         blank=True, null=True)
+    suggested_feature_tags = models.TextField()
+    suggested_cuisine_tags = models.TextField()
     content = models.TextField(
         "Review", 
         help_text="NOTE: All slanderous reviews will be scrutinized. No trolling!")
@@ -331,8 +333,8 @@ class Vendor(models.Model):
     longitude = models.FloatField(default=None, blank=True, null=True, editable=False)
 
     # ADMINISTRATIVE FIELDS
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    modified = models.DateTimeField(auto_now=True, null=True)
     approved = models.BooleanField(default=False)
     objects = VendorManager()
     approved_objects = ApprovedVendorManager()
