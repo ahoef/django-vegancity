@@ -19,6 +19,10 @@
 from django.contrib import admin
 import models
 
+#####################################
+## MODEL ADMIN CLASSES
+#####################################
+
 class ReviewAdmin(admin.ModelAdmin):
         list_display = ('vendor', 'approved',)
         list_filter = ('approved', 'best_vegan_dish', 'unlisted_vegan_dish')
