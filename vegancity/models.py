@@ -27,102 +27,8 @@ import geocode
 import shlex
 
 ##########################################
-# STATIC DATA
-##########################################
-
-# The following global tuples are not used
-# in any place within the project that is
-# executed at runtime.
-#
-# Rather, these fields are written into the
-# database using import scripts.
-#
-# This data is kept here because it is related
-# contextually to models.
-#
-# TODO: When the testing suite is complete,
-# write a test to make sure that every one
-# of these fields is in the database, and
-# every record in the database is listed here.
-
-CUISINE_TAGS = (
-    ('chinese', 'Chinese'),
-    ('thai', 'Thai'),
-    ('mexican', 'Mexican'),
-    ('italian', 'Italian'),
-    ('middle_eastern', 'Middle Eastern'),
-    ('southern', 'Southern'),
-    ('soul_food', 'Soul Food'),
-    ('vietnamese', 'Vietnamese'),
-    ('indian', 'Indian'),
-    ('ethiopian', 'Ethiopian'),
-    ('pizza', 'Pizza'),
-    ('bar_food', 'Bar Food'),
-    ('fast_food', 'Fast Food'),
-    ('pan_asian', 'Pan-Asian'),
-    ('sushi', 'Sushi'),
-    ('japanese', 'Japanese'),
-    ('asian_fusion', 'Asian Fusion'),
-    ('barbecue', 'Barbecue'),
-    ('bakery', 'Bakery'),
-    ('diner', 'Diner'),
-    ('dim_sum', 'Dim Sum'),
-    ('gastropub', 'Gastropub'),
-    ('moroccan', 'Moroccan'),
-    ('pakistani', 'Pakistani'),
-    ('salads', 'Salads'),
-    ('tapas', 'Tapas'),
-    ('greek', 'Greek'),
-    ('korean', 'Korean'),
-    ('turkish', 'Turkish'),
-    ('american', 'American'),
-    ('african', 'African'),
-    ('caribbean', 'Caribbean'),
-    ('cajun', 'Cajun'),
-    ('burgers', 'Burgers'),
-    )
-
-FEATURE_TAGS = (
-    ('halal', 'Halal'),
-    ('kosher', 'Kosher'),
-    ('gluten_free_options', 'Gluten Free Options'),
-    ('all_gluten_free', '100% Gluten Free'),
-    ('gluten_free_desserts', 'Gluten Free Desserts'),
-    ('vegan_desserts', 'Vegan Desserts'),
-    ('fake_meat', 'Fake Meat'),
-    ('cheese_steaks', 'Vegan Cheese Steaks'),
-    ('sandwiches', 'Sandwiches'),
-    ('coffeehouse', 'Coffeehouse'),
-    ('food_cart', 'Food Cart'),
-    ('cash_only', 'Cash Only'),
-    ('delivery','Offers Delivery'),
-    ('beer', 'Beer'),
-    ('wine', 'Wine'),
-    ('full_bar', 'Full Bar'),
-    ('cheap', 'Cheap'),
-    ('expensive', 'Expensive'),
-    ('open_late', 'Open after 10pm'),
-    ('smoothies', 'Smoothies/Juice Bar'),
-    ('great_tea', 'Great Tea Selection'),
-    ('byob', 'BYOB'),
-    )
-
-VEG_LEVELS = (
-    (1, "100% Vegan"),
-    (2, "Vegetarian - Mostly Vegan"),
-    (3, "Vegetarian - Hardly Vegan"),
-    (4, "Not Vegetarian"),
-    (5, "Beware!"),
-    )
-    
-RATINGS = tuple((i, i) for i in range(1, 5))
-
-
-##########################################
 # HELPERS / MANAGERS
 ##########################################
-
-
 
 class VendorManager(models.Manager):
     "Manager class for handling searches by vendor."
@@ -245,6 +151,19 @@ class ApprovedVendorManager(VendorManager):
 # SITE MODELS
 ##########################################
 
+class VegLevel(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    description = models.TextField()
+    super_category = models.CharField(max_length=30,
+        choices=(
+            ('vegan','Vegan'),
+            ('vegetarian','Vegetarian'),
+            ('not_veg', 'Not Vegetarian'),
+            ('beware','Beware!')))
+
+    def __unicode__(self):
+        return "(%s) %s" % (self.super_category, self.description)
+
 class Neighborhood(models.Model):
     """Used for tracking what neighborhood a vendor is in."""
     name = models.CharField(max_length=255, unique=True)
@@ -308,9 +227,9 @@ class CuisineTag(models.Model):
     like "mexican" or "french".  They could also
     be less traditional ones like "pizza" or
     "comfort" or "junk"."""
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     description = models.CharField(max_length=255)
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
 
     def __unicode__(self):
         return self.description
@@ -326,9 +245,9 @@ class FeatureTag(models.Model):
    
     Example tags would be "open late" or
     "offers delivery"."""
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     description = models.CharField(max_length=255)
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
 
     def __unicode__(self):
         return self.description
@@ -372,11 +291,11 @@ class Review(models.Model):
     title = models.CharField(max_length=255, null=True, blank=True)
     food_rating = models.IntegerField(
         "How would you rate the food, overall?",
-        choices=RATINGS, 
+        choices=tuple((i, i) for i in range(1, 5)), 
         blank=True, null=True,)
     atmosphere_rating = models.IntegerField(
         "How would you rate the atmosphere?",
-        choices=RATINGS, 
+        choices=tuple((i, i) for i in range(1, 5)), 
         blank=True, null=True,)
     best_vegan_dish = models.ForeignKey(VeganDish, blank=True, null=True)
     unlisted_vegan_dish = models.CharField(
@@ -397,7 +316,7 @@ class Review(models.Model):
 
     class Admin(admin.ModelAdmin):
         "Make it easier to admin the reviews"
-        list_display = ('id', 'approved', 'vendor',)
+        list_display = ('vendor', 'approved',)
         list_filter = ('approved', 'best_vegan_dish', 'unlisted_vegan_dish')
 
     class Meta:
@@ -410,13 +329,13 @@ class Vendor(models.Model):
     "The main class for this application"
 
     # CORE FIELDS
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     address = models.TextField(blank=True, null=True)
     neighborhood = models.ForeignKey(Neighborhood, blank=True, null=True, editable=False)
     phone = models.CharField(max_length=50, blank=True, null=True)
     website = models.URLField(blank=True, null=True)
-    latitude = models.FloatField(default=None, blank=True, null=True)
-    longitude = models.FloatField(default=None, blank=True, null=True)
+    latitude = models.FloatField(default=None, blank=True, null=True, editable=False)
+    longitude = models.FloatField(default=None, blank=True, null=True, editable=False)
 
     # ADMINISTRATIVE FIELDS
     created = models.DateTimeField(auto_now_add=True)
@@ -427,32 +346,32 @@ class Vendor(models.Model):
 
     # DESCRIPTIVE FIELDS
     notes = models.TextField(blank=True, null=True,)
-    veg_level = models.IntegerField(
-        "How vegan friendly is this place?  See documentation for guildelines.",
-        choices=VEG_LEVELS, 
+    veg_level = models.ForeignKey(VegLevel,
+        help_text="How vegan friendly is this place?  See documentation for guildelines.",
         blank=True, null=True,)
-    # delete later.  These are calculated dynamically now
-    # food_rating = models.IntegerField(choices=RATINGS, 
-    #                                   blank=True, null=True,)
-    # atmosphere_rating = models.IntegerField(choices=RATINGS, 
-    #                                         blank=True, null=True,)
     cuisine_tags = models.ManyToManyField(CuisineTag, null=True, blank=True)
     feature_tags = models.ManyToManyField(FeatureTag, null=True, blank=True)
 
+
     def apply_geocoding(self):
         geocode_result  = geocode.geocode_address(self.address)
-        if geocode_result:
-            try:
-                neighborhood = Neighborhood.objects.get(name=geocode_result[2])
-            except:
-                if geocode_result[2]:
-                    neighborhood = Neighborhood()
-                    neighborhood.name = geocode_result[2]
-                    neighborhood.save()
-                    self.neighborhood = neighborhood
-                    
-            self.latitude, self.longitude = geocode_result[:2]
+        latitude, longitude, neighborhood = geocode_result
 
+        if geocode_result:
+            neighborhood_obj = None
+            try:
+                neighborhood_obj = Neighborhood.objects.get(name=neighborhood)
+            except:
+                pass
+
+            if not neighborhood_obj:
+                    neighborhood_obj = Neighborhood()
+                    neighborhood_obj.name = neighborhood
+                    neighborhood_obj.save()
+
+            self.latitude = latitude
+            self.longitude = longitude
+            self.neighborhood = neighborhood_obj
 
     def save(self, *args, **kwargs):
         """Steps to take before/after saving to db.
@@ -496,7 +415,7 @@ class Vendor(models.Model):
 
     class Admin(admin.ModelAdmin):
         "Make it easier to admin the vendors"
-        list_display = ('id','approved', 'name', 'created')
+        list_display = ('id','approved', 'name', 'created', 'neighborhood')
         list_filter = ('approved',)
 
     class Meta:
