@@ -141,7 +141,7 @@ def vendor_detail(request, vendor_id):
 
 Also grabs reviews and sends them to the template."""
     vendor = models.Vendor.approved_objects.get(id=vendor_id)
-    reviews = models.Review.objects.filter(vendor__id=vendor_id)
+    reviews = models.Review.approved_objects.filter(vendor__id=vendor_id)
     ctx = {
         'vendor' : vendor,
         'reviews' : reviews,
@@ -212,8 +212,10 @@ def new_review(request, vendor_id):
             review.best_vegan_dish = review_form.cleaned_data['best_vegan_dish']
             review.food_rating = review_form.cleaned_data['food_rating']
             review.atmosphere_rating = review_form.cleaned_data['atmosphere_rating']
+            review.suggested_feature_tags = review_form.cleaned_data['suggested_feature_tags']
+            review.suggested_cuisine_tags = review_form.cleaned_data['suggested_cuisine_tags']
             review.save()
-            return HttpResponseRedirect(reverse("vendors"))
+            return HttpResponseRedirect(reverse("vendor_detail", args=[review.vendor.id]))
     else:
         review_form = forms.ReviewForm(vendor_id,
             initial={'vendor': vendor})
