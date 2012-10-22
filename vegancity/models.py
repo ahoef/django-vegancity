@@ -101,8 +101,14 @@ class CuisineTag(models.Model):
     like "mexican" or "french".  They could also
     be less traditional ones like "pizza" or
     "comfort" or "junk"."""
-    name = models.CharField(max_length=255, unique=True)
-    description = models.CharField(max_length=255)
+    name = models.CharField(
+        help_text="short name, all lowercase alphas, underscores for spaces",
+        max_length=255, unique=True
+        )
+    description = models.CharField(
+        help_text="Nicely formatted text.  About a sentence.",
+        max_length=255
+        )
     created = models.DateTimeField(auto_now_add=True, null=True)
 
     def __unicode__(self):
@@ -179,8 +185,8 @@ class Review(models.Model):
         max_length=100,
         help_text="We'll work on getting it in the database so others know about it!",
         blank=True, null=True)
-    suggested_feature_tags = models.TextField()
-    suggested_cuisine_tags = models.TextField()
+    suggested_feature_tags = models.CharField(max_length=255, blank=True, null=True)
+    suggested_cuisine_tags = models.CharField(max_length=255, blank=True, null=True)
     content = models.TextField(
         "Review", 
         help_text="NOTE: All slanderous reviews will be scrutinized. No trolling!")
