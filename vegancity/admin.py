@@ -18,18 +18,47 @@
 
 from django.contrib import admin
 import models
+import forms
 
 #####################################
 ## MODEL ADMIN CLASSES
 #####################################
 
 class ReviewAdmin(admin.ModelAdmin):
-        list_display = ('vendor', 'approved',)
-        list_filter = ('approved', 'best_vegan_dish', 'unlisted_vegan_dish')
+    list_display = ('vendor', 'approved',)
+    list_filter = ('approved', 'best_vegan_dish', 'unlisted_vegan_dish')
 
+
+class VeganDishInline(admin.TabularInline):
+    model = models.VeganDish
+    extra = 0
+   
 class VendorAdmin(admin.ModelAdmin):
-        list_display = ('id','approved', 'name', 'created', 'neighborhood')
-        list_filter = ('approved',)
+    inlines = (VeganDishInline,)
+    readonly_fields = ('latitude', 'longitude', 'neighborhood')
+    list_display = ('id','approved', 'name', 'created', 'neighborhood')
+    list_display_links = ('name','id')
+    list_editable = ('approved',)
+    list_filter = ('approved',)
+    filter_vertical = ('cuisine_tags','feature_tags',)
+
+
+class BlogEntryAdmin(admin.ModelAdmin):
+
+    # this will work for now
+    exclude = ('author',)
+    readonly_fields = ('author',)
+    list_display = ('title','author','body')
+
+    def save_model(self, request, blog_entry, form, change):
+        blog_entry.author = request.user
+        blog_entry.save()
+
+    def queryset(self, request):
+        qs = super(BlogEntryAdmin, self).queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(author=request.user)
 
 #####################################
 ## ADMIN REGISTRATION
@@ -38,7 +67,7 @@ class VendorAdmin(admin.ModelAdmin):
 admin.site.register(models.Vendor, VendorAdmin)
 admin.site.register(models.Review, ReviewAdmin)
 admin.site.register(models.QueryString)
-admin.site.register(models.BlogEntry)
+admin.site.register(models.BlogEntry, BlogEntryAdmin)
 admin.site.register(models.VeganDish)
 admin.site.register(models.CuisineTag)
 admin.site.register(models.FeatureTag)
