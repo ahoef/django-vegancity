@@ -50,13 +50,6 @@ class ReviewForm(forms.ModelForm):
     # that uses this form.  This should be worked into
     # the save() method of this class.
 
-    suggested_feature_tags = forms.ModelMultipleChoiceField(help_text="Suggest a feature-tag to add",
-                                                            queryset=models.FeatureTag.objects.all())
-
-    suggested_cuisine_tags = forms.ModelMultipleChoiceField(help_text="Suggest a cuisine-tag to add",
-                                                            queryset=models.CuisineTag.objects.all())
-
-
     def __init__(self, vendor=None, *args, **kwargs):
         """Add some steps after instantiation
 
@@ -93,4 +86,4 @@ class ReviewForm(forms.ModelForm):
 
     class Meta:
         model = models.Review
-        exclude = ('latitude','longitude','approved', 'author')
+        exclude = ('approved', 'author')
