@@ -7,10 +7,10 @@
 
 {% block content %}
 <h4>welcome to the vegancity blog!</h4>
-{% if blog_entries %}
-{{ blog_entries.count }} entries.
+{% if object_list %}
+{{ object_list.count }} entries.
 <hr/>
-{% for entry in blog_entries %}
+{% for entry in object_list %}
 <h5>{{ entry.title }}</h5>
 <h6>by {{ entry.author }}</h6>
 <p>{{ entry.body }}</p>

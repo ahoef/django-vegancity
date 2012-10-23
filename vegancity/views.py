@@ -150,21 +150,22 @@ Also grabs reviews and sends them to the template."""
                               context_instance=RequestContext(request))
 
 
-def blog(request):
-    blog_entries = models.BlogEntry.objects.all()
-    ctx = {
-        'blog_entries' : blog_entries,
-        }
-    return render_to_response('vegancity/blog.html', ctx,
-                              context_instance=RequestContext(request))
+# replaced by generic view
+# def blog(request):
+#     blog_entries = models.BlogEntry.objects.all()
+#     ctx = {
+#         'blog_entries' : blog_entries,
+#         }
+#     return render_to_response('vegancity/blog.html', ctx,
+#                               context_instance=RequestContext(request))
 
-def blog_detail(request, blog_entry_id):
-    blog_entry = models.BlogEntry.objects.get(id=blog_entry_id)
-    ctx = {
-        'blog_entry' : blog_entry,
-        }
-    return render_to_response('vegancity/blog_detail.html', ctx,
-                              context_instance=RequestContext(request))
+# def blog_detail(request, blog_entry_id):
+#     blog_entry = models.BlogEntry.objects.get(id=blog_entry_id)
+#     ctx = {
+#         'blog_entry' : blog_entry,
+#         }
+#     return render_to_response('vegancity/blog_detail.html', ctx,
+#                               context_instance=RequestContext(request))
     
 
 def register(request):
