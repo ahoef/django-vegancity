@@ -25,17 +25,36 @@ from django.contrib.auth.models import User
 
 class VegUserCreationForm(UserCreationForm):
     "Form used for creating new users."
-    email = forms.EmailField(max_length=70, label="Email (optional)", 
+    email = forms.EmailField(max_length=70, label="Email (STRONGLY recommended)", 
                              help_text="for password restoration ONLY.",
                              required=False)
 
+##############################
+### Vendor Forms
+##############################
 
-class NewVendorForm(forms.ModelForm):
-    "Form used for adding new vendors."
+class _BaseVendorForm(forms.ModelForm):
+
     class Meta:
         model = models.Vendor
-        exclude = ('latitude','longitude','approved',)
 
+class AdminVendorForm(_BaseVendorForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(AdminVendorForm, self).__init__(*args, **kwargs)
+        if not self.instance.created:
+            self.fields['approved'].initial = True
+
+
+class NewVendorForm(_BaseVendorForm):
+    "Form used for adding new vendors."
+
+    class Meta(_BaseVendorForm.Meta):
+        exclude = ('approved',)
+
+##############################
+### Review Forms
+##############################
 
 class _BaseReviewForm(forms.ModelForm):
     """Base Class for making Review forms.
