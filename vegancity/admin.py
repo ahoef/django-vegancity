@@ -20,6 +20,8 @@ from django.contrib import admin
 import models
 import forms
 
+
+
 #####################################
 ## MODEL ADMIN CLASSES
 #####################################
@@ -45,7 +47,16 @@ class VendorAdmin(admin.ModelAdmin):
     list_editable = ('approved',)
     list_filter = ('approved',)
     filter_vertical = ('cuisine_tags','feature_tags',)
+    form = forms.AdminVendorForm
 
+    # def save_model(self, request, vendor, form, change):
+    #     # this basically says
+    #     # "if this is a new object,
+    #     # created right now by an admin,
+    #     # automatically approve it."
+    #     if not vendor.created:
+    #          vendor.approved = True
+    #     vendor.save()
 
 class BlogEntryAdmin(admin.ModelAdmin):
 
@@ -69,9 +80,10 @@ class BlogEntryAdmin(admin.ModelAdmin):
 
 admin.site.register(models.Vendor, VendorAdmin)
 admin.site.register(models.Review, ReviewAdmin)
-admin.site.register(models.QueryString)
+#admin.site.register(models.QueryString)
 admin.site.register(models.BlogEntry, BlogEntryAdmin)
 admin.site.register(models.VeganDish)
 admin.site.register(models.CuisineTag)
 admin.site.register(models.FeatureTag)
-admin.site.register(models.Neighborhood)
+#admin.site.register(models.Neighborhood)
+#admin.site.register(models.VegLevel)

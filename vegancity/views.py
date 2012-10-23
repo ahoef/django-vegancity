@@ -187,10 +187,15 @@ def register(request):
 
 @login_required
 def new_vendor(request):
+
     if request.method == 'POST':
         form = forms.NewVendorForm(request.POST)
         if form.is_valid():
-            new_vendor = form.save()
+            vendor = form.save(commit=False)
+            
+            if request.user.is_staff:
+                vendor.approved = True
+
             return HttpResponseRedirect(reverse("vendors"))
     else:
         form = forms.NewVendorForm()
@@ -220,5 +225,5 @@ def new_review(request, vendor_id):
         'form' : review_form,
         }
 
-    return render_to_response("vegancity/review.html", ctx,
+    return render_to_response("vegancity/new_review.html", ctx,
                               context_instance=RequestContext(request))
