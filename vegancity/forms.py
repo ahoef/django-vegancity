@@ -37,44 +37,13 @@ class NewVendorForm(forms.ModelForm):
         exclude = ('latitude','longitude','approved',)
 
 
-class ReviewForm(forms.ModelForm):
-    """Form for writing a review of a vendor.
+class _BaseReviewForm(forms.ModelForm):
+    """Base Class for making Review forms.
 
-    Takes an optional constructor for creating
-    a vendor specific review.  This is the standard
-    use case."""
-
-    # TODO: This has gotten really hacky.
-    # For one, there is some code redundancy between
-    # what happens here and what happens in the view
-    # that uses this form.  This should be worked into
-    # the save() method of this class.
-
-    def __init__(self, vendor=None, *args, **kwargs):
-        """Add some steps after instantiation
-
-        Follows the normal process of instantiation
-        and filters down the list of selectable 'best
-        vegan dishes' by vendor.  If there are none,
-        the user cannot select a value at all."""
-        
-        # call the normal constructor
-        super(ReviewForm, self).__init__(*args, **kwargs)
-        
-        if vendor:
-            # can select dish if there are elements for vendor
-            dishes = models.VeganDish.objects.filter(vendor=vendor)
-            if dishes:
-                self.fields['best_vegan_dish'].queryset = dishes
-            else:
-                self.fields['best_vegan_dish'].widget = forms.HiddenInput()
-
-            # make vendor hidden.
-            # TODO: this feels like a hack.
-            self.fields['vendor'].widget = forms.HiddenInput()
+    This class should not be instantiated directly."""
 
     def clean(self):
-        cleaned_data = super(ReviewForm, self).clean()
+        cleaned_data = super(_BaseReviewForm, self).clean()
         chose_best = cleaned_data.get("best_vegan_dish")
         entered_unlisted = cleaned_data.get("unlisted_vegan_dish")
 
@@ -84,6 +53,28 @@ class ReviewForm(forms.ModelForm):
 
         return cleaned_data
 
+    def filter_dishes(self, vendor):
+        dishes = models.VeganDish.objects.filter(vendor=vendor)
+        if dishes:
+            self.fields['best_vegan_dish'].queryset = dishes
+        else:
+            self.fields['best_vegan_dish'].widget = forms.HiddenInput()
+
     class Meta:
         model = models.Review
-        exclude = ('approved', 'author')
+
+class AdminEditReviewForm(_BaseReviewForm):
+
+    def __init__(self, *args, **kwargs):
+        super(AdminEditReviewForm, self).__init__(*args, **kwargs)
+        self.filter_dishes(self.instance.vendor)
+
+class NewReviewForm(_BaseReviewForm):
+
+    def __init__(self, vendor, *args, **kwargs):
+        super(NewReviewForm, self).__init__(*args, **kwargs)
+        self.fields['vendor'].widget = forms.HiddenInput()
+        self.filter_dishes(vendor)
+
+    class Meta(_BaseReviewForm.Meta):
+        exclude = ('approved', 'author',)

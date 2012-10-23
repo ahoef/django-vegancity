@@ -25,19 +25,23 @@ import forms
 #####################################
 
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('vendor', 'approved',)
-    list_filter = ('approved', 'best_vegan_dish', 'unlisted_vegan_dish')
-
+    readonly_fields = ('author','vendor',)
+    list_display = ('vendor', 'author','approved',
+                    'suggested_feature_tags', 'suggested_cuisine_tags',
+                    
+                    )
+    list_filter = ('approved', 'unlisted_vegan_dish')
+    form = forms.AdminEditReviewForm
 
 class VeganDishInline(admin.TabularInline):
     model = models.VeganDish
     extra = 0
-   
+
 class VendorAdmin(admin.ModelAdmin):
     inlines = (VeganDishInline,)
     readonly_fields = ('latitude', 'longitude', 'neighborhood')
-    list_display = ('id','approved', 'name', 'created', 'neighborhood')
-    list_display_links = ('name','id')
+    list_display = ('approved', 'name', 'created', 'neighborhood')
+    list_display_links = ('name',)
     list_editable = ('approved',)
     list_filter = ('approved',)
     filter_vertical = ('cuisine_tags','feature_tags',)
@@ -45,7 +49,6 @@ class VendorAdmin(admin.ModelAdmin):
 
 class BlogEntryAdmin(admin.ModelAdmin):
 
-    # this will work for now
     exclude = ('author',)
     readonly_fields = ('author',)
     list_display = ('title','author','body')
