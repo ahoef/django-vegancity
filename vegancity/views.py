@@ -203,21 +203,16 @@ def new_review(request, vendor_id):
     vendor = models.Vendor.approved_objects.get(id=vendor_id)
 
     if request.method == 'POST':
-        review_form = forms.ReviewForm(vendor, request.POST)
+        review_form = forms.NewReviewForm(vendor, request.POST)
         if review_form.is_valid():
-            review = models.Review()
-            review.vendor = review_form.cleaned_data['vendor']
+            review = review_form.save(commit=False)
             review.author = request.user
-            review.content = review_form.cleaned_data['content']
-            review.best_vegan_dish = review_form.cleaned_data['best_vegan_dish']
-            review.food_rating = review_form.cleaned_data['food_rating']
-            review.atmosphere_rating = review_form.cleaned_data['atmosphere_rating']
-            review.suggested_feature_tags = review_form.cleaned_data['suggested_feature_tags']
-            review.suggested_cuisine_tags = review_form.cleaned_data['suggested_cuisine_tags']
+            if request.user.is_staff:
+                review.approved = True
             review.save()
             return HttpResponseRedirect(reverse("vendor_detail", args=[review.vendor.id]))
     else:
-        review_form = forms.ReviewForm(vendor_id,
+        review_form = forms.NewReviewForm(vendor_id,
             initial={'vendor': vendor})
 
     ctx = {

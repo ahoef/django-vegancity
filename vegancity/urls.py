@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Vegancity.  If not, see <http://www.gnu.org/licenses/>.
 
-
+from django.core.urlresolvers import reverse
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
@@ -54,6 +54,7 @@ if 'django.contrib.admin' in INSTALLED_APPS:
     urlpatterns += patterns('',
         url(r'^admin/pending_approval/', 'vegancity.admin_views.pending_approval', name="pending_approval"),
         url(r'^admin/geocode_all/', 'vegancity.admin_views.geocode_all', name="geocode_all"),
+        url(r'^admin/vegancity/review/add/$', 'django.views.generic.simple.redirect_to', {'url' : None}),
         url(r'^admin/', include(admin.site.urls)),
     )
 
