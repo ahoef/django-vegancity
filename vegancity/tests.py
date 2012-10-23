@@ -21,8 +21,8 @@ def test_url(url, desired_code):
 def browser_tests():
     """Test every known url on the site."""
 
-    reviews = models.Review.objects.all()
-    vendors = models.Vendor.objects.all()
+    reviews = models.Review.approved_objects.all()
+    vendors = models.Vendor.approved_objects.all()
     vendor_count = vendors.count()
     
     ################################
@@ -49,6 +49,7 @@ def browser_tests():
     ################################
     for vendor in vendors:
         url = vendor.get_absolute_url()
+        print url
         print test_url(url, 200)
 
     ################################
