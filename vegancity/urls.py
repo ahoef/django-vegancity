@@ -23,6 +23,8 @@ from settings import INSTALLED_APPS
 
 from vegancity.views import vendor_detail
 
+import models
+
 admin.autodiscover()
 
 # CUSTOM VIEWS
@@ -37,16 +39,25 @@ urlpatterns = patterns('vegancity.views',
     url(r'^vendors/review/(?P<vendor_id>\d+)/$', 'new_review', name="new_review"),
 
     # blog
-    url(r'^blog/$', 'blog', name="blog"),
-    url(r'^blog/(?P<blog_entry_id>\d+)/$', 'blog_detail', name="blog_detail"),
+    #url(r'^blog/$', 'blog', name="blog"),
+    #url(r'^blog/(?P<blog_entry_id>\d+)/$', 'blog_detail', name="blog_detail"),
     )
 
 # GENERIC VIEWS
-urlpatterns += patterns('django.views.generic.simple',
+urlpatterns += patterns('django.views.generic',
     
+    url(r'^blog/$', 'list_detail.object_list', 
+        {'queryset' : models.BlogEntry.objects.all(), 'template_name' : 'vegancity/blog.html' }, 
+        name="blog"),
+
+    # TODO: create template and uncomment
+    # url(r'^blog/(?P<object_id>\d+)/$', 'list_detail.object_detail',
+    #     {'queryset' : models.BlogEntry.objects.all(), 'template_name' : 'vegancity/blog_detail.html'}, 
+    #     name="blog_detail"),
+
     # static pages
-    url(r'^$', 'direct_to_template', {'template': 'vegancity/home.html'}, name='home'),
-    url(r'^about/$', 'direct_to_template', {'template': 'vegancity/about.html'}, name='about'),
+    url(r'^$', 'simple.direct_to_template', {'template': 'vegancity/home.html'}, name='home'),
+    url(r'^about/$', 'simple.direct_to_template', {'template': 'vegancity/about.html'}, name='about'),
     )                        
 
 # ADMIN VIEWS
