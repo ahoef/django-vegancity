@@ -124,7 +124,7 @@ class BlogEntry(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('vegancity.views.blog_detail', (str(self.id),))
+        return (reverse('blog_detail'), (str(self.id),))
 
 ##########################################
 # VENDOR-RELATED MODELS
@@ -193,9 +193,8 @@ class Review(models.Model):
     def __unicode__(self):
         return "%s -- %s" % (self.vendor.name, str(self.created))
 
-    @models.permalink
     def get_absolute_url(self):
-        return ('vegancity.views.vendor_detail', (str(self.vendor.id),))
+        return "/vendors/%d/" % self.vendor.id
 
     class Meta:
         get_latest_by = "created"
@@ -298,9 +297,8 @@ class Vendor(NamedCreatedModel):
         else:
             return None
 
-    @models.permalink
     def get_absolute_url(self):
-        return ('vegancity.views.vendor_detail', (str(self.id),))
+        return "/vendors/%d/" % self.id
 
     class Meta:
         get_latest_by = "created"
