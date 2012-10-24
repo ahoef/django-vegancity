@@ -29,6 +29,8 @@ import itertools
 import rank
 import tracking
 
+import functools
+
 def vendors(request):
     """Display table level data about vendors.
 
@@ -136,63 +138,105 @@ def vendors(request):
                               context_instance=RequestContext(request))
 
 
-def register(request):
-    if request.method == 'POST':
-        form = forms.VegUserCreationForm(request.POST)
-        if form.is_valid():
-            new_user = form.save(commit=False)
-            new_user.email = form.cleaned_data['email']
-            new_user.save()
-            return HttpResponseRedirect(reverse("home"))
-    else:
-        form = forms.VegUserCreationForm()
-    return render_to_response("vegancity/register.html", {'form': form},
-                              context_instance=RequestContext(request))
-
 
 ###########################
 ## data entry views
 ###########################
 
-@login_required
-def new_vendor(request):
+def data_entry_manager(request, closed_form, redirect_url, 
+                       template_name, form_init={}, ctx={}, apply_author=False):
 
     if request.method == 'POST':
-        form = forms.NewVendorForm(request.POST)
+        form = closed_form(request.POST)
+        
         if form.is_valid():
-            vendor = form.save(commit=False)
+            obj = form.save(commit=False)
             
-            if request.user.is_staff:
-                vendor.approved = True
+            if apply_author:
+                obj.author = request.user
 
-            return HttpResponseRedirect(reverse("vendors"))
+            if request.user.is_staff:
+                if 'approved' in dir(obj):
+                    obj.approved = True
+            obj.save()
+            return HttpResponseRedirect(redirect_url)
+        
     else:
-        form = forms.NewVendorForm()
-    return render_to_response("vegancity/new_vendor.html", {'form': form},
+        form = closed_form(initial=form_init)
+
+    ctx['form'] = form
+    return render_to_response(template_name, ctx,
                               context_instance=RequestContext(request))
+
+
+def register(request):
+    return data_entry_manager(request, forms.VegUserCreationForm, reverse("home"), "vegancity/register.html")
+
+@login_required
+def new_vendor(request):
+    return data_entry_manager(request, forms.NewVendorForm, reverse("vendors"), "vegancity/new_vendor.html")
 
 @login_required
 def new_review(request, vendor_id):
+     vendor = models.Vendor.approved_objects.get(id=vendor_id)
+     closed_form = functools.partial(forms.NewReviewForm, vendor)
+     ctx = {'vendor': vendor}
+     
+     return data_entry_manager(
+         request, closed_form, reverse("vendor_detail", args=[vendor.id]),
+         "vegancity/new_review.html", {'vendor':vendor}, ctx, True)
+     
+# @login_required
+# def new_review(request, vendor_id):
     
-    vendor = models.Vendor.approved_objects.get(id=vendor_id)
+#     vendor = models.Vendor.approved_objects.get(id=vendor_id)
 
-    if request.method == 'POST':
-        review_form = forms.NewReviewForm(vendor, request.POST)
-        if review_form.is_valid():
-            review = review_form.save(commit=False)
-            review.author = request.user
-            if request.user.is_staff:
-                review.approved = True
-            review.save()
-            return HttpResponseRedirect(reverse("vendor_detail", args=[review.vendor.id]))
-    else:
-        review_form = forms.NewReviewForm(vendor_id,
-            initial={'vendor': vendor})
+#     if request.method == 'POST':
+#         review_form = forms.NewReviewForm(vendor, request.POST)
+#         if review_form.is_valid():
+#             review = review_form.save(commit=False)
+#             review.author = request.user
+#             if request.user.is_staff:
+#                 review.approved = True
+#             review.save()
+#             return HttpResponseRedirect(reverse("vendor_detail", args=[review.vendor.id]))
+#     else:
+#         review_form = forms.NewReviewForm(vendor_id,
+#             initial={'vendor': vendor})
 
-    ctx = {
-        'vendor' : vendor,
-        'form' : review_form,
-        }
+#     ctx = {
+#         'vendor' : vendor,
+#         'form' : review_form,
+#         }
 
-    return render_to_response("vegancity/new_review.html", ctx,
-                              context_instance=RequestContext(request))
+#     return render_to_response("vegancity/new_review.html", ctx,
+#                               context_instance=RequestContext(request))
+
+# @login_required
+# def new_vendor(request):
+
+#     if request.method == 'POST':
+#         form = forms.NewVendorForm(request.POST)
+#         if form.is_valid():
+#             vendor = form.save(commit=False)
+#             if request.user.is_staff:
+#                 vendor.approved = True
+#             vendor.save()
+#             return HttpResponseRedirect(reverse("vendors"))
+#     else:
+#         form = forms.NewVendorForm()
+#     return render_to_response("vegancity/new_vendor.html", {'form': form},
+#                               context_instance=RequestContext(request))
+
+# def register(request):
+#     if request.method == 'POST':
+#         form = forms.VegUserCreationForm(request.POST)
+#         if form.is_valid():
+#             new_user = form.save(commit=False)
+#             new_user.save()
+#             return HttpResponseRedirect(reverse("home"))
+#     else:
+#         form = forms.VegUserCreationForm()
+#     return render_to_response("vegancity/register.html", {'form': form},
+#                               context_instance=RequestContext(request))
+
