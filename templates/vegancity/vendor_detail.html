@@ -44,12 +44,12 @@ jQuery("body").ready(createMap(vendor_singleton));
 {% endblock %}
 
 <a href="{% url 'new_review' vendor_id=vendor.id %}">Write a review!</a>
-{% if reviews %}
+{% if vendor.review_set.all %}
 <hr/>
 <div class="container">
 <h2>{{ reviews.count }} Review{% if reviews.count != 1 %}s{% endif %}:</h2>
 
-{% for review in reviews %}
+{% for review in vendor.review_set.all %}
 <h3>entered by: {{ review.author }}</h3>
 <h6>{% if review.best_vegan_dish %}best vegan dish: {{ review.best_vegan_dish }}{% endif %}</h6>
 <p>{{ review.content }}</p>

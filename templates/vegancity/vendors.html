@@ -29,7 +29,7 @@ var vendors = [
 {% for vendor in vendors  %}{% if vendor.latitude %}
   [{{ vendor.latitude }}, {{vendor.longitude }}, 
    '\
-    <strong><a href="{%url 'vendor_detail' vendor_id=vendor.id %}">{{vendor.name}}</a></strong><br/>\
+    <strong><a href="{%url 'vendor_detail' object_id=vendor.id %}">{{vendor.name}}</a></strong><br/>\
     {{vendor.address}}<br/>\
     {{vendor.phone}}<br/>\
     '],
@@ -98,7 +98,7 @@ jQuery("body").ready(createMap(vendors));
   <tbody>
     {% for vendor in result.vendors %}
     <tr>
-      <td><a href="{% url 'vendor_detail' vendor_id=vendor.id %}">{{ vendor.name }}</a></td>
+      <td><a href="{% url 'vendor_detail' object_id=vendor.id %}">{{ vendor.name }}</a></td>
       <!-- <td>{{ vendor.veg_level }}</td> -->
       <td>{{ vendor.address }}</td>
       <!-- <td>{{ vendor.phone }}</td> -->
