@@ -29,6 +29,15 @@ class VegUserCreationForm(UserCreationForm):
                              help_text="for password restoration ONLY.",
                              required=False)
 
+    def save(self, *args, **kwargs):
+        user = super(VegUserCreationForm, self).save(*args, **kwargs)
+        user.email = self.cleaned_data['email']
+        if kwargs.get('commit', False):
+            user.save()
+        return user
+        
+        
+
 ##############################
 ### Vendor Forms
 ##############################
