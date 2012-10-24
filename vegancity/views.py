@@ -136,37 +136,20 @@ def vendors(request):
                               context_instance=RequestContext(request))
 
 
-def vendor_detail(request, vendor_id):
-    """Display record level detail about a vendor.
-
-Also grabs reviews and sends them to the template."""
-    vendor = models.Vendor.approved_objects.get(id=vendor_id)
-    reviews = models.Review.approved_objects.filter(vendor__id=vendor_id)
-    ctx = {
-        'vendor' : vendor,
-        'reviews' : reviews,
-        }
-    return render_to_response('vegancity/vendor_detail.html', ctx, 
-                              context_instance=RequestContext(request))
-
-
 # replaced by generic view
-# def blog(request):
-#     blog_entries = models.BlogEntry.objects.all()
+# def vendor_detail(request, vendor_id):
+#     """Display record level detail about a vendor.
+
+# Also grabs reviews and sends them to the template."""
+#     vendor = models.Vendor.approved_objects.get(id=vendor_id)
+#     reviews = models.Review.approved_objects.filter(vendor__id=vendor_id)
 #     ctx = {
-#         'blog_entries' : blog_entries,
+#         'vendor' : vendor,
+#         'reviews' : reviews,
 #         }
-#     return render_to_response('vegancity/blog.html', ctx,
+#     return render_to_response('vegancity/vendor_detail.html', ctx, 
 #                               context_instance=RequestContext(request))
 
-# def blog_detail(request, blog_entry_id):
-#     blog_entry = models.BlogEntry.objects.get(id=blog_entry_id)
-#     ctx = {
-#         'blog_entry' : blog_entry,
-#         }
-#     return render_to_response('vegancity/blog_detail.html', ctx,
-#                               context_instance=RequestContext(request))
-    
 
 def register(request):
     if request.method == 'POST':
