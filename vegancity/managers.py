@@ -18,6 +18,7 @@
 import django.db.models as django_models
 import shlex
 
+from django.db.models import Q
 import models
 
 class VendorManager(django_models.Manager):
