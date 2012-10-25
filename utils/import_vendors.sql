@@ -58,7 +58,7 @@ VALUES
 ('Cherry Street Chinese Restaurant', '1010 Cherry Street, Philadelphia, PA', '(215) 922-8957', '', 't'),
 ('Saladworks', '2508 Welsh Road, Philadelphia, PA', '(215) 676-0320', 'saladworks.com', 't'),
 ('CRISP', '32 South 18th Street, Philadelphia, PA', '(267) 324-3840', 'eatatcrisp.com', 't'),
-('Qdoba Mexican Grill', '230 South 40th Street, Philadelphia, PA', '(215) 222-2887', 'qdoba.com', 't')
+('Qdoba Mexican Grill', '230 South 40th Street, Philadelphia, PA', '(215) 222-2887', 'qdoba.com', 't'),
 ('Sabrina''s Cafe: Italian Market', '910 Christian Street, Philadelphia, PA 19147', '(215) 574-1599', 'sabrinascafe.com', 't'),
 ('Sabrina''s Cafe: Fairmount', '1804 Callowhill Street, Philadelphia, PA 19130', '(215) 636-9061', 'sabrinascafe.com', 't'),
 ('Sam''s Morning Glory Diner', '735 S 10th St, Philadelphia PA, 19147', '(215) 413-3999', 'www.themorningglorydiner.com', 't')
