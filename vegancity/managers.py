@@ -20,6 +20,8 @@ import shlex
 
 from django.db.models import Q
 import models
+import geocode
+import itertools
 
 class VendorManager(django_models.Manager):
     "Manager class for handling searches by vendor."
@@ -43,8 +45,8 @@ class VendorManager(django_models.Manager):
         q_builder = Q()
         for token in tokens:
             q_builder = q_builder | Q(name__icontains=token)
-        cuisine_tag_matches = CuisineTag.objects.filter(q_builder)
-        feature_tag_matches = FeatureTag.objects.filter(q_builder)
+        cuisine_tag_matches = models.CuisineTag.objects.filter(q_builder)
+        feature_tag_matches = models.FeatureTag.objects.filter(q_builder)
         vendors = set()
         for tag in itertools.chain(cuisine_tag_matches, feature_tag_matches):
             qs = tag.vendor_set.all()
