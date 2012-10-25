@@ -10,22 +10,34 @@ function address_magic(){
 
     var ts_request = {
         location: new google.maps.LatLng(39.9491679, -75.1677507),
-        radius: '1000',
+        radius: '10000',
         query: name_field.value,
     };
 
 
     function detail_callback(place, status) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
+            var filled_fields = false;
+            summary = "Found google result matching your query.\n\n" + "Auto-Filling:\n"
             
             if (!address_field.value) {
                 address_field.value = place.formatted_address;
+                summary += "Address\n";
+                filled_fields=true;
             };
             if (!phone_field.value) {
                 phone_field.value = place.formatted_phone_number;
+                summary +="Phone Number\n";
+                filled_fields=true;
             };
             if (!website_field.value) {
                 website_field.value = place.website;
+                summary += "Website\n";
+                filled_fields=true;
+            };
+            summary += "\nPlease Verify these values.";
+            if (filled_fields) {
+                alert(summary);
             };
         };
     }
