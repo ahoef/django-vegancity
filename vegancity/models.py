@@ -206,7 +206,7 @@ class Vendor(NamedCreatedModel):
     "The main class for this application"
 
     # CORE FIELDS
-    address = models.TextField(blank=True, null=True)
+    address = models.TextField(null=True)
     neighborhood = models.ForeignKey(Neighborhood, blank=True, null=True, editable=False)
     phone = models.CharField(max_length=50, blank=True, null=True,
                              validators = [validators.validate_phone_number])
