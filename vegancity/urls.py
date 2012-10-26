@@ -22,7 +22,7 @@ from django.contrib import admin
 from settings import INSTALLED_APPS
 
 import models
-import api
+#import api
 
 admin.autodiscover()
 
