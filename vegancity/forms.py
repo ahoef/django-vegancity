@@ -48,7 +48,6 @@ class _BaseVendorForm(forms.ModelForm):
         model = models.Vendor
 
 class AdminVendorForm(_BaseVendorForm):
-    
     def __init__(self, *args, **kwargs):
         super(AdminVendorForm, self).__init__(*args, **kwargs)
         if not self.instance.created:
@@ -60,6 +59,10 @@ class NewVendorForm(_BaseVendorForm):
 
     class Meta(_BaseVendorForm.Meta):
         exclude = ('approved',)
+        widgets = {
+            'cuisine_tags' : forms.CheckboxSelectMultiple,
+            'feature_tags' : forms.CheckboxSelectMultiple,
+            }
 
 ##############################
 ### Review Forms
@@ -95,14 +98,18 @@ class AdminEditReviewForm(_BaseReviewForm):
 
     def __init__(self, *args, **kwargs):
         super(AdminEditReviewForm, self).__init__(*args, **kwargs)
-        self.filter_dishes(self.instance.vendor)
+        if self.instance:
+            self.filter_dishes(self.instance.vendor)
 
 class NewReviewForm(_BaseReviewForm):
 
     def __init__(self, vendor, *args, **kwargs):
         super(NewReviewForm, self).__init__(*args, **kwargs)
-        self.fields['vendor'].widget = forms.HiddenInput()
         self.filter_dishes(vendor)
 
     class Meta(_BaseReviewForm.Meta):
         exclude = ('approved', 'author',)
+        widgets = {
+            'vendor' : forms.HiddenInput,
+            }
+        

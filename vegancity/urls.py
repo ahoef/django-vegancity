@@ -21,11 +21,11 @@ from django.contrib import admin
 
 from settings import INSTALLED_APPS
 
-#from vegancity.views import vendor_detail
-
 import models
+import api
 
 admin.autodiscover()
+
 
 # CUSTOM VIEWS
 urlpatterns = patterns('vegancity.views',
@@ -62,9 +62,15 @@ urlpatterns += patterns('django.views.generic',
 # ADMIN VIEWS
 if 'django.contrib.admin' in INSTALLED_APPS:
     urlpatterns += patterns('',
-        url(r'^admin/pending_approval/', 'vegancity.admin_views.pending_approval', name="pending_approval"),
+        url(r'^admin/pending_approval/$', 'vegancity.admin_views.pending_approval', name="pending_approval"),
+        url(r'^admin/pending_approval/count/$', 'vegancity.admin_views.pending_approval_count', name="pending_approval_count"),
         url(r'^admin/geocode_all/', 'vegancity.admin_views.geocode_all', name="geocode_all"),
-        url(r'^admin/vegancity/review/add/$', 'django.views.generic.simple.redirect_to', {'url' : None}),
+        # TODO this is a hack.
+        # after overriding this url with a 410, i'm getting 'view does not exist' messages.
+        # can't tell why.  For now, we'll just direct this url to a dummy view to avoid crashes.
+        # Note that in the default setting for the site, review-add is disabled for all users.
+        # however, if we ship this app, we can't take that for granted.
+        url(r'^admin/vegancity/review/add/$', 'vegancity.admin_views.pending_approval'),
         url(r'^admin/', include(admin.site.urls)),
     )
 
@@ -74,3 +80,11 @@ urlpatterns += patterns('',
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page' : '/'},  name='logout'),
     url(r'^accounts/register/$', 'vegancity.views.register', name='register'),
 )
+
+
+# vendor_resource = api.VendorResource()
+
+# # API VIEWS
+# urlpatterns += patterns('',
+#     (r'^api/', include(vendor_resource.urls)),
+#     )

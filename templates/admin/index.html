@@ -12,14 +12,24 @@
 
 {% block content %}
 <br/><br/>
-<hr/>
 Welcome to the vegancity admin page!<br/>
 <br/>
 From this page, you can modify individual objects to administer the site.<br/>
 <br/>
-Please visit the <a href="{% url 'pending_approval' %}">Pending Approval</a> page!<br/>
-It is important to keep this queue moving.
-<hr/>
+<div id="please_visit">Please visit the <a href="{% url 'pending_approval' %}">Pending Approval</a> page!<br/><br/></div>
+<div id="pending_approval_summary"></div>
+<script type="text/javascript">
+    xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", "{% url 'pending_approval_count' %}", false);
+    xmlHttp.send(null);
+    var count = xmlHttp.responseText;
+    var summary_div = document.getElementById("pending_approval_summary");
+    summary_div.textContent += "There are " + count + " items pending approval.";
+    if (count <= 0) {
+        document.getElementById("please_visit").textContent = "";
+    }  
+</script>
+
 <br/><br/>
 <div id="content-main">
 

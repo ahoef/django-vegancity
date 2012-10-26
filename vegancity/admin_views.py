@@ -28,9 +28,15 @@ import models
 import itertools
 
 @staff_member_required
+def pending_approval_count(request):
+    pending_approval_count = (models.Vendor.objects.pending_approval().count() +
+                              models.Review.objects.pending_approval().count())
+    return HttpResponse(str(pending_approval_count))
+
+@staff_member_required
 def pending_approval(request):
-    pending_vendors = models.Vendor.approved_objects.pending_approval()
-    pending_reviews = models.Review.objects.filter(approved=False)
+    pending_vendors = models.Vendor.objects.pending_approval()
+    pending_reviews = models.Review.objects.pending_approval()
     ctx = {
         'pending_vendors' : pending_vendors,
         'pending_reviews' : pending_reviews,
