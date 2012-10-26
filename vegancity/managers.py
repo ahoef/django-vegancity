@@ -141,12 +141,23 @@ class ApprovedVendorManager(VendorManager):
         return new_qs
 
 
-class ApprovedReviewManager(django_models.Manager):
+class ReviewManager(django_models.Manager):
+    "Manager class for handling searches by review."
+
+
+    def pending_approval(self):
+        """returns all reviews that are not approved, which are
+        otherwise impossible to get in a normal query (for now)."""
+        normal_qs = self.get_query_set()
+        pending = normal_qs.filter(approved=False)
+        return pending
+
+
+class ApprovedReviewManager(ReviewManager):
     "Manager for approved reviews only."
 
     def get_query_set(self):
         "Changing initial queryset to ignore approved."
-        # TODO - explore bugs this could cause!
         normal_qs = super(ApprovedReviewManager, self).get_query_set()
         new_qs = normal_qs.filter(approved=True)
         return new_qs
