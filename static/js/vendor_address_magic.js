@@ -55,5 +55,8 @@ function address_magic(){
     service.textSearch(ts_request, ts_callback);
 }
 
+$(document).ready(function() {
+    $('div.form-row.field-name').append('<button type="button" id="magic_button">Prefill data from Google Places (based on name)</button>');
 
-document.getElementById("id_name").onblur = address_magic;
+    document.getElementById("magic_button").onclick = address_magic;
+});
