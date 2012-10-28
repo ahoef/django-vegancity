@@ -87,23 +87,6 @@ class Neighborhood(NamedCreatedModel):
         get_latest_by = "created"
         ordering = ('name',)
 
-class QueryString(models.Model):
-    """All raw queries that users search by.
-
-    Store the query and how it was ranked.  This
-    is for researching how well the ranking algorithm
-    is doing in predicting search types."""
-    body = models.CharField(max_length=255)
-    created = models.DateTimeField(auto_now_add=True)
-    ranking_summary = models.CharField(max_length=255, null=True, blank=True)
-
-    class Meta:
-        ordering = ('created',)
-        get_latest_by = "created"
-
-    def __unicode__(self):
-        return self.body
-
 class BlogEntry(models.Model):
     "Blog entries. They get entered in the admin."
     title = models.CharField(max_length=255)
