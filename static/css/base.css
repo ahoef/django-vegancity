@@ -1,0 +1,17 @@
+.navbar-inverse .navbar-inner {
+   background: #101c35 !important; 
+}
+
+.brand {
+    padding-top: 26px; 
+    padding-left: 15px;
+}
+
+p.nav-item {
+    color: white;
+    padding-top: 30px;
+}
+
+body {
+    padding-top: 100px; 
+}

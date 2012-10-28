@@ -17,5 +17,5 @@ table#vendorList tr:nth-child(even) {
 
 div#map_canvas {
     width: 500px;
-    height: 500px;
+    height: 425px;
 }
