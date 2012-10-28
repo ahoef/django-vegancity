@@ -3,114 +3,137 @@
 {% load url from future %}
 
 {% block header_extra %}
-<link href="{{ STATIC_URL }}css/vegancity.css" rel="stylesheet"/>
-<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+  <link href="{{ STATIC_URL }}css/vegancity.css" rel="stylesheet"/>
+  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 {% endblock %}
 
 {% block headline %}search{% endblock %}
 
 {% block summary %}
-{% endblock %}
+{% endblock summary %}
 
 {% block content %}
-<div class="row">
-{% block map %}  
-<!-- TODO what is this?? -->  
-{% if result_set.0.vendors %}
-<div class="span6">
-<br/>
-<div id="map_canvas" ></div>
 
-<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}/js/map.js"></script>
-<script type="text/javascript">
+  <!-- FIRST ROW -->  
+  <div class="row">
+    {% block map %}  
+      <!-- TODO what is this?? -->  
+      <div class="span5">
+        {% if vendors %}
 
-var vendors = [
-{% for vendor in vendors  %}{% if vendor.latitude %}
-  [{{ vendor.latitude }}, {{vendor.longitude }}, 
-   '\
-    <strong><a href="{%url 'vendor_detail' object_id=vendor.id %}">{{vendor.name}}</a></strong><br/>\
-    {{vendor.address}}<br/>\
-    {{vendor.phone}}<br/>\
-    '],
-{% endif %}{% endfor %}
-];
-jQuery("body").ready(createMap(vendors));
-</script>
-<hr/>
+          <br/>
+          <div id="map_canvas" ></div>
+
+          <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
+          <script type="text/javascript" src="{{ STATIC_URL }}/js/map.js"></script>
+          <script type="text/javascript">
+
+            var vendors = [
+            {% for vendor in vendors  %}{% if vendor.latitude %}
+              [{{ vendor.latitude }}, {{vendor.longitude }}, 
+              '\
+              <strong><a href="{%url 'vendor_detail' object_id=vendor.id %}">{{vendor.name}}</a></strong><br/>\
+              {{vendor.address}}<br/>\
+              {{vendor.phone}}<br/>\
+              '],
+            {% endif %}{% endfor %}
+            ];
+            jQuery("body").ready(createMap(vendors));
+          </script>
+          <hr/>
+        {% endif %}          
 
 
-<h6>Filter:<form action="{% url 'vendors' %}" method="get" name="clear_filters" id="clear_filters">
-<input type="hidden" name="query" value="{{ query }}">
-  <button type="submit" class="btn">clear filters</button>
-</form></h6>
-<form action="{% url 'vendors' %}" method="get" name="filters" id="filters">
-<input type="hidden" name="query" value="{{ query }}">
-<div class="span3">
-<ul>
+      </div>
+
+      <form action="{% url 'vendors' %}" method="get" name="filters" id="filters">
+        <input type="hidden" name="query" value="{{ query }}">
+        
+        {% if vendors %}
+          <div class="span3">
+
+            <table id="vendorList">
+              <thead>
+                <tr>
+                  <th>Map</th>
+                  <th>Results ({{ vendors.count }})</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                {% for vendor in vendors %}
+                  <tr>
+                    <td>?</td>              
+                    <td><a href="{% url 'vendor_detail' object_id=vendor.id %}">{{ vendor.name }}</a></td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+
+
+          </div>
+
+{% endif %}
+
+<div class="span4">
+
+  <h4>Features:</h4>        
+  <ul>
     {% for filter in feature_filters %}
-      <li><input type="checkbox" name="{{ filter.name }}" value="true" onclick="this.form.submit()" {% if filter in checked_filters %}checked="1"{% endif %}> {{ filter.description }}</li>
+      <li><input type="checkbox" name="{{ filter.name }}" value="true" onchange="this.form.submit()" {% if filter in checked_feature_filters %}checked="1"{% endif %}> {{ filter.description }}</li>
     {% endfor %}
   </ul>
-</div>
-  <ul>
-    {% for filter in cuisine_filters %}
-      <li><input type="checkbox" name="{{ filter.name }}" value="true" onclick="this.form.submit()" {% if filter in checked_filters %}checked="1"{% endif %}> {{ filter.description }}</li>
+  <br/>
+
+  <h4>Cuisine: </h4>
+  <select name="cuisine" onchange="this.form.submit()">
+    <option value="" selected="selected">---------</option>
+    {% for cuisine in cuisines %}
+      {{cuisine.name}}              
+      <option value="{{cuisine.name}}" {% if cuisine.name == selected_cuisine %}selected="selected"{% endif %}>{{ cuisine.description }}</option>
     {% endfor %}
-</ul>
-  <ul>
+  </select>
+
+  <h4>Neighborhood:</h4>
+  <select name="neighborhood" onchange="this.form.submit()">
+    <option value="" selected="selected">---------</option>
     {% for neighborhood in neighborhoods %}
-      <li><input type="checkbox" name="{{ neighborhood.name }}" value="true" onclick="this.form.submit()" {% if neighborhood in checked_filters %}checked="1"{% endif %}> {{ neighborhood.name }}</li>
+      <option value="{{neighborhood.name}}" {% if neighborhood.name == selected_neighborhood %}selected="selected"{% endif %}>{{ neighborhood.name }}</option>
     {% endfor %}
-</ul>
-</form>
-</p>
-<div class="span6">
-<h4>something missing? <a href="{% url 'new_vendor' %}">Add a food vendor!</a></h4>
-</div>
-</div>
-{% endif %}
-{% endblock %}
+  </select>
+      </form>
 
-{% block table %}
-<div class="span6">
-<form action="{% url 'vendors' %}" method="get" name="clear_search" id="clear_search">
-  {% for filter in checked_filters %}  
-    <input type="hidden" name="{{ filter }}" value="true">
-  {% endfor %}  
-  <button type="submit" class="btn">clear search</button>
-</form>
+      <!-- CLEAR FILTERS FORM -->      
+      <form action="{% url 'vendors' %}" method="get" name="clear_filters" id="clear_filters">
+        <input type="hidden" name="query" value="{{ query }}">
+        <button type="submit" class="btn">clear filters</button>
+      </form>
 
-{% for result in result_set %}
-<h4>{{ result.summary_statement }}</h4><br/>
+      <!-- CLEAR SEARCH FORM -->      
+      <form action="{% url 'vendors' %}" method="get" name="clear_search" id="clear_search">
+        {% for filter in checked_feature_filters %}
+          <input type="hidden" name="{{ filter }}" value="true">
+        {% endfor %}
+        <input type="hidden" name="neighborhood" value="{{ selected_neighborhood }}">
+        <input type="hidden" name="cuisine" value="{{ selected_cuisine }}">
+        <button type="submit" class="btn">clear search</button>
+      </form>
 
-{% if result.vendors %}
-<table id="vendorList">
-  <thead>
-    <tr>
-      <th>name</th>
-      <!-- <th>veg_level</th> -->
-      <th>address</th>
-      <!-- <th>phone</th> -->
-      <!-- <th>website</th> -->
-    </tr>
-  </thead>
-  <tbody>
-    {% for vendor in result.vendors %}
-    <tr>
-      <td><a href="{% url 'vendor_detail' object_id=vendor.id %}">{{ vendor.name }}</a></td>
-      <!-- <td>{{ vendor.veg_level }}</td> -->
-      <td>{{ vendor.address }}</td>
-      <!-- <td>{{ vendor.phone }}</td> -->
-      <!-- <td>{{ vendor.website }}</td> -->
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-{% endif %}
-{% endfor %}
+
+      <h4>something missing?</h4>
+      <h4><a href="{% url 'new_vendor' %}">Add a food vendor!</a></h4>
+      </div>
+  </div>
+{% endblock map %}
+
+<!-- END FIRST ROW --> 
+
+<hr/>
+
+<div class="row">
+  <div class="span12">
+  </div>
 </div>
-{% endblock %}
 
-</div>
-{% endblock %}
+{% endblock content %}
