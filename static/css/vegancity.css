@@ -1,21 +1,21 @@
-table#vendorList {
-  margin-bottom: 3px;
-  width: 500px;
-}
+/* table#vendorList { */
+/*   margin-bottom: 3px; */
+/*   width: 500px; */
+/* } */
 
-table#vendorList td {
-  padding: 3px 20px 3px 5px;
-}
+/* table#vendorList td { */
+/*   padding: 3px 20px 3px 5px; */
+/* } */
 
-table#vendorList th {
-  min-width: 100px;
-}
+/* table#vendorList th { */
+/*   min-width: 100px; */
+/* } */
 
 table#vendorList tr:nth-child(even) {
   background-color: #eeeeee;
 }
 
 div#map_canvas {
-    width: 500px;
-    height: 425px;
+    width: 475px;
+    height: 700px;
 }

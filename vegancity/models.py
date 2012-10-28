@@ -21,7 +21,7 @@ from django.contrib.auth.models import User
 import itertools
 import geocode
 
-import managers
+from managers import ReviewManager, ApprovedReviewManager, VendorManager, ApprovedVendorManager, TagManager
 import validators
 
 
@@ -54,6 +54,7 @@ class _TagModel(models.Model):
         max_length=255
         )
     created = models.DateTimeField(auto_now_add=True, null=True)
+    objects = TagManager()
 
     def __unicode__(self):
         return self.description
@@ -114,7 +115,7 @@ class BlogEntry(models.Model):
 
     
 class CuisineTag(_TagModel):
-    
+
     class Meta(_TagModel.Meta):
         verbose_name = "Cuisine Tag"
         verbose_name_plural = "Cuisine Tags"
@@ -147,8 +148,8 @@ class Review(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     approved = models.BooleanField(default=False)
-    objects = managers.ReviewManager()
-    approved_objects = managers.ApprovedReviewManager()
+    objects = ReviewManager()
+    approved_objects = ApprovedReviewManager()
 
     # DESCRIPTIVE FIELDS
     title = models.CharField(max_length=255, null=True, blank=True)
@@ -199,8 +200,8 @@ class Vendor(NamedCreatedModel):
     # ADMINISTRATIVE FIELDS
     modified = models.DateTimeField(auto_now=True, null=True)
     approved = models.BooleanField(default=False)
-    objects = managers.VendorManager()
-    approved_objects = managers.ApprovedVendorManager()
+    objects = VendorManager()
+    approved_objects = ApprovedVendorManager()
 
     # DESCRIPTIVE FIELDS
     notes = models.TextField(blank=True, null=True,)

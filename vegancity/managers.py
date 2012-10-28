@@ -15,17 +15,27 @@
 # You should have received a copy of the GNU General Public License
 # along with Vegancity.  If not, see <http://www.gnu.org/licenses/>.
 
-import django.db.models as django_models
+import itertools
 import shlex
 
+import django.db.models as django_models
 from django.db.models import Q
-import models
-import geocode
-import itertools
+from django.db.models import Count
 
+import models
+from vegancity import rank
+from vegancity import tracking
+from vegancity import geocode
+
+class TagManager(django_models.Manager):
+    
+    def with_vendors(self):
+        annotated = self.annotate(num_vendors=Count('vendor'))
+        qs = annotated.filter(num_vendors__gte=1)
+        return qs
+        
 class VendorManager(django_models.Manager):
     "Manager class for handling searches by vendor."
-
 
     def pending_approval(self):
         """returns all vendors that are not approved, which are
@@ -93,6 +103,8 @@ class VendorManager(django_models.Manager):
         
         if initial_queryset:
             vendors = self.filter(id__in=initial_queryset)
+        else:
+            vendors = self
 
         # todo this is a mess!
         geocode_result = geocode.geocode_address(query)
@@ -130,6 +142,32 @@ class VendorManager(django_models.Manager):
             'summary_statement' : summary_string, 
             'vendors':vendors
             }
+    
+    def search(self, query, initial_queryset=None):
+        # rank the likelihood of different search times
+        ranks = rank.get_ranks(query)
+        presentation_order = (rank[1] for rank in ranks)
+
+        # log the query in the db
+        tracking.log_query(query, ranks)
+
+        # execute searches and store them in a hash
+        searches = {
+            'name' : models.Vendor.approved_objects.name_search(query, initial_queryset),
+            'address' : models.Vendor.approved_objects.address_search(query, initial_queryset),
+            'tags' : models.Vendor.approved_objects.tags_search(query, initial_queryset),
+            }
+
+        # compute the set of all vendors found in the 3 searches
+        # todo - optimize?
+        vendors = [vendor for vendor in initial_queryset if vendor in 
+                   itertools.chain(searches['name']['vendors'], 
+                                   searches['address']['vendors'], 
+                                   searches['tags']['vendors'])]
+
+        result_set = map(lambda x: searches[x], presentation_order)
+        return vendors
+    
 
 class ApprovedVendorManager(VendorManager):
     """Manager for approved vendors only.
