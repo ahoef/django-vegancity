@@ -45,6 +45,9 @@ DATABASES = {
     }
 
 
+REDIS_SERVER = "localhost"
+REDIS_APPNAME = "vegancity"
+
 # In order to simplify bounding box calculations,
 # please enter the latitude of the region that this
 # site will be implemented for.  Default is
