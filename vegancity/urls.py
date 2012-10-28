@@ -63,6 +63,7 @@ urlpatterns += patterns('django.views.generic',
 if 'django.contrib.admin' in INSTALLED_APPS:
     urlpatterns += patterns('',
         url(r'^admin/pending_approval/$', 'vegancity.admin_views.pending_approval', name="pending_approval"),
+        url(r'^admin/search_log/$', 'vegancity.admin_views.search_log', name="search_log"),
         url(r'^admin/pending_approval/count/$', 'vegancity.admin_views.pending_approval_count', name="pending_approval_count"),
         url(r'^admin/geocode_all/', 'vegancity.admin_views.geocode_all', name="geocode_all"),
         # TODO this is a hack.
