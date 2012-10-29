@@ -18,9 +18,32 @@
   <div class="row">
     {% block map %}  
       <div class="span5">
-        {% if vendors %}
+        <div class="row">
+          <div class="span4">          
+            <form action="{% url 'vendors' %}" method="get">
+              <input id="search-input" type="text" class="stext" placeholder="e.g., south and broad, blackbird pizza, burritos" autofocus="autofocus" name="query" {% if query %}value="{{ query }}"{% endif %}>
+              <input type="submit" class="btn"/>
+            </form>
+          </div>
+          <div class="span1">
+            <!-- CLEAR SEARCH FORM -->      
+            <form action="{% url 'vendors' %}" method="get" name="clear_search" id="clear_search">
 
-          <br/>
+              {% for filter in checked_feature_filters %}
+                <input type="hidden" name="{{ filter }}" value="true">
+              {% endfor %}
+              {% if selected_neighborhood %}              
+              <input type="hidden" name="neighborhood" value="{{ selected_neighborhood }}">
+            {% endif %}
+              {% if selected_cuisine %}              
+              <input type="hidden" name="cuisine" value="{{ selected_cuisine }}">
+            {% endif %}
+              <button type="submit" class="btn">Clear</button>
+            </form>
+          </div>
+        </div>
+
+        {% if vendors %}
           <div id="map_canvas" ></div>
 
           <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
@@ -109,15 +132,6 @@
         <button type="submit" class="btn">clear filters</button>
       </form>
 
-      <!-- CLEAR SEARCH FORM -->      
-      <form action="{% url 'vendors' %}" method="get" name="clear_search" id="clear_search">
-        {% for filter in checked_feature_filters %}
-          <input type="hidden" name="{{ filter }}" value="true">
-        {% endfor %}
-        <input type="hidden" name="neighborhood" value="{{ selected_neighborhood }}">
-        <input type="hidden" name="cuisine" value="{{ selected_cuisine }}">
-        <button type="submit" class="btn">clear search</button>
-      </form>
 
 
       <h4>something missing?</h4>

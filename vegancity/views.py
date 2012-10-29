@@ -23,9 +23,28 @@ from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
+from django.contrib.auth import authenticate, login
 
 from vegancity import forms
 from vegancity import models
+
+
+def home(request):
+    vendors = models.Vendor.approved_objects.all()
+    top_5 = vendors.annotate(score=Sum('review__food_rating')).order_by('score')[:5]
+    recent_activity = models.Review.approved_objects.order_by("created")[:5]
+    print recent_activity
+    neighborhoods = models.Neighborhood.objects.all()
+
+    ctx = {
+        'top_5': top_5,
+        'recent_activity' : recent_activity,
+        'neighborhoods': neighborhoods,
+        }
+
+    return render_to_response("vegancity/home.html", ctx,
+                              context_instance=RequestContext(request))
 
 def vendors(request):
     """Display table level data about vendors.
@@ -90,45 +109,62 @@ def vendors(request):
 ## data entry views
 ###########################
 
-def _generic_data_entry_view(request, closed_form, redirect_url, 
-                       template_name, form_init={}, ctx={}, apply_author=False):
+def _generic_data_entry_view(request, form_obj, redirect_url, 
+                             template_name, before_save_fns=[],
+                             form_init={}, ctx={}, apply_author=False):
 
     if request.method == 'POST':
-        form = closed_form(request.POST)
+        form = form_obj(request.POST)
+        obj = None
         
         if form.is_valid():
             obj = form.save(commit=False)
             
-            if apply_author:
-                obj.author = request.user
+            for fn in before_save_fns:
+                fn(obj)
 
             if request.user.is_staff:
                 if 'approved' in dir(obj):
                     obj.approved = True
+
             obj.save()
-            return HttpResponseRedirect(redirect_url)
+            return HttpResponseRedirect(redirect_url), obj
         
     else:
-        form = closed_form(initial=form_init)
+        form = form_obj(initial=form_init)
+        obj = None
 
     ctx['form'] = form
-    return render_to_response(template_name, ctx,
-                              context_instance=RequestContext(request))
+    return render_to_response(template_name, ctx, context_instance=RequestContext(request)), obj
 
 
 def register(request):
-    return _generic_data_entry_view(request, forms.VegUserCreationForm, reverse("home"), "vegancity/register.html")
+    response, obj =  _generic_data_entry_view(request, forms.VegUserCreationForm, reverse("home"), "vegancity/register.html")
+    if obj:
+        new_user = authenticate(username=request.POST.get("username"), password=request.POST.get("password1"))
+        login(request, new_user)
+    return response
+    
 
 @login_required
 def new_vendor(request):
-    return _generic_data_entry_view(request, forms.NewVendorForm, reverse("vendors"), "vegancity/new_vendor.html")
+    response, obj =  _generic_data_entry_view(request, forms.NewVendorForm, reverse("vendors"), "vegancity/new_vendor.html")
+    return response
 
 @login_required
 def new_review(request, vendor_id):
      vendor = models.Vendor.approved_objects.get(id=vendor_id)
      closed_form = functools.partial(forms.NewReviewForm, vendor)
      ctx = {'vendor': vendor}
+
+     def apply_author(request, obj):
+         obj.author = request.user
      
-     return _generic_data_entry_view(
+     apply_author = functools.partial(apply_author, request)
+     
+     response, obj =  _generic_data_entry_view(
          request, closed_form, reverse("vendor_detail", args=[vendor.id]),
-         "vegancity/new_review.html", {'vendor':vendor}, ctx, True)
+         "vegancity/new_review.html", [apply_author], [], 
+         {'vendor':vendor}, ctx, True)
+
+     return response

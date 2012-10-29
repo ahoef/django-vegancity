@@ -33,6 +33,7 @@ urlpatterns = patterns('vegancity.views',
     # vendors
     url(r'^vendors/$', 'vendors', name="vendors"),
     url(r'^vendors/add/$', 'new_vendor', name="new_vendor"),
+    url(r'^$', 'home', name='home'),
  
     # reviews
     url(r'^vendors/review/(?P<vendor_id>\d+)/$', 'new_review', name="new_review"),
@@ -55,7 +56,7 @@ urlpatterns += patterns('django.views.generic',
          'template_object_name' : 'vendor' }, name="vendor_detail"),
 
     # static pages
-    url(r'^$', 'simple.direct_to_template', {'template': 'vegancity/home.html'}, name='home'),
+
     url(r'^about/$', 'simple.direct_to_template', {'template': 'vegancity/about.html'}, name='about'),
     )                        
 
