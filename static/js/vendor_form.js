@@ -55,8 +55,28 @@ function address_magic(){
     service.textSearch(ts_request, ts_callback);
 }
 
-$(document).ready(function() {
-    $('div.form-row.field-name').append('<button type="button" id="magic_button">Prefill data from Google Places (based on name)</button>');
+function convert_phone_number(phone_field){
 
-    document.getElementById("magic_button").onclick = address_magic;
+    var pattern = /[0-9]{10}/;
+
+    if (pattern.test(phone_field.value)) {
+        var area_code = phone_field.value.slice(0, 3);
+        var prefix = phone_field.value.slice(3, 6);
+        var suffix = phone_field.value.slice(6, 10);
+        phone_field.value = "(" + area_code + ") " + prefix + "-" + suffix;
+    }
+}
+
+$(document).ready(function() {
+    var admin_container = $('div.form-row.field-name');
+    if (admin_container[0]) {
+        admin_container.append('<button type="button" id="magic_button">Prefill data from Google Places (based on name)</button>');
+        admin_container.append('<div id="address_magic"></div>');
+        document.getElementById("magic_button").onclick = address_magic;
+    }
+
+    var phone_field = document.getElementById("id_phone");
+    phone_field.onblur = function(){ convert_phone_number(this) };
+
+
 });

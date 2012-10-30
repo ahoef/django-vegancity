@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block header_extra %}
+{{ form.media }}
+{% endblock %}
+
 {% block headline %}Add a Vendor!{% endblock %}
 
 {% block content %}
@@ -8,5 +12,7 @@
       {{ form.as_p }}
       <input type="submit" value="Submit">
   </form>
+
 {% endblock %}
+
 

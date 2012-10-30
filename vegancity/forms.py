@@ -62,15 +62,28 @@ class VegUserCreationForm(UserCreationForm):
 
 class _BaseVendorForm(forms.ModelForm):
 
+    class Media:
+        js = (
+            '//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js',
+            'js/vendor_form.js',
+            )
+
     class Meta:
         model = models.Vendor
 
 class AdminVendorForm(_BaseVendorForm):
+
+    class Media:
+        js = (
+            '//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js',
+            'http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false',
+            'js/vendor_form.js',
+            )
+
     def __init__(self, *args, **kwargs):
         super(AdminVendorForm, self).__init__(*args, **kwargs)
         if not self.instance.created:
             self.fields['approved'].initial = True
-
 
 class NewVendorForm(_BaseVendorForm):
     "Form used for adding new vendors."
