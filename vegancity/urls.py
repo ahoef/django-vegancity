@@ -21,7 +21,7 @@ from django.contrib import admin
 
 from settings import INSTALLED_APPS
 
-import models
+from vegancity import models
 #import api
 
 admin.autodiscover()
@@ -30,13 +30,17 @@ admin.autodiscover()
 # CUSTOM VIEWS
 urlpatterns = patterns('vegancity.views',
 
+
+    url(r'^$', 'home', name='home'),
+
     # vendors
     url(r'^vendors/$', 'vendors', name="vendors"),
     url(r'^vendors/add/$', 'new_vendor', name="new_vendor"),
-    url(r'^$', 'home', name='home'),
+    url(r'^vendors/add/thanks/$', 'vendor_thanks', name="vendor_thanks"),
  
     # reviews
     url(r'^vendors/review/(?P<vendor_id>\d+)/$', 'new_review', name="new_review"),
+    url(r'^vendors/review/(?P<vendor_id>\d+)/thanks/$', 'review_thanks', name="review_thanks"),
     )
 
 # GENERIC VIEWS
@@ -46,16 +50,9 @@ urlpatterns += patterns('django.views.generic',
         {'queryset' : models.BlogEntry.objects.all(), 'template_name' : 'vegancity/blog.html' }, 
         name="blog"),
 
-    # TODO: create template and uncomment
-    # url(r'^blog/(?P<object_id>\d+)/$', 'list_detail.object_detail',
-    #     {'queryset' : models.BlogEntry.objects.all(), 'template_name' : 'vegancity/blog_detail.html'}, 
-    #     name="blog_detail"),
-
     url(r'^vendors/(?P<object_id>\d+)/$', 'list_detail.object_detail',
         {'queryset' : models.Vendor.approved_objects.all(), 'template_name' : 'vegancity/vendor_detail.html',
          'template_object_name' : 'vendor' }, name="vendor_detail"),
-
-    # static pages
 
     url(r'^about/$', 'simple.direct_to_template', {'template': 'vegancity/about.html'}, name='about'),
     )                        
@@ -81,6 +78,7 @@ urlpatterns += patterns('',
     url(r'^accounts/login/$',  'django.contrib.auth.views.login', name='login'),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page' : '/'},  name='logout'),
     url(r'^accounts/register/$', 'vegancity.views.register', name='register'),
+    url(r'^accounts/register/thanks/$', 'vegancity.views.register_thanks', name='register_thanks'),
 )
 
 

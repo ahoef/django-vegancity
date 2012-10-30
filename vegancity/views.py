@@ -30,11 +30,41 @@ from vegancity import forms
 from vegancity import models
 
 
+#################################################################################
+# THANKS VIEWS:
+#################################################################################
+
+# TODO: REFACTOR
+# ALL 3 can be generic views
+
+def review_thanks(request, vendor_id):
+    vendor = models.Vendor.approved_objects.get(id=vendor_id)
+    ctx = {
+        'vendor': vendor,
+        'warning': True,
+        }
+    return render_to_response("vegancity/review_thanks.html", ctx,
+                              context_instance=RequestContext(request))
+
+def vendor_thanks(request):
+    ctx = {
+        'warning': True,
+        }
+    return render_to_response("vegancity/vendor_thanks.html", ctx,
+                              context_instance=RequestContext(request))
+
+def register_thanks(request):
+    return render_to_response("vegancity/register_thanks.html",
+                              context_instance=RequestContext(request))
+
+
+#################################################################################
+
+
 def home(request):
     vendors = models.Vendor.approved_objects.all()
     top_5 = vendors.annotate(score=Sum('review__food_rating')).order_by('score')[:5]
     recent_activity = models.Review.approved_objects.order_by("created")[:5]
-    print recent_activity
     neighborhoods = models.Neighborhood.objects.all()
 
     ctx = {
@@ -111,7 +141,7 @@ def vendors(request):
 
 def _generic_data_entry_view(request, form_obj, redirect_url, 
                              template_name, before_save_fns=[],
-                             form_init={}, ctx={}, apply_author=False):
+                             form_init={}, ctx={}):
 
     if request.method == 'POST':
         form = form_obj(request.POST)
@@ -139,7 +169,7 @@ def _generic_data_entry_view(request, form_obj, redirect_url,
 
 
 def register(request):
-    response, obj =  _generic_data_entry_view(request, forms.VegUserCreationForm, reverse("home"), "vegancity/register.html")
+    response, obj =  _generic_data_entry_view(request, forms.VegUserCreationForm, reverse("register_thanks"), "vegancity/register.html")
     if obj:
         new_user = authenticate(username=request.POST.get("username"), password=request.POST.get("password1"))
         login(request, new_user)
@@ -148,7 +178,7 @@ def register(request):
 
 @login_required
 def new_vendor(request):
-    response, obj =  _generic_data_entry_view(request, forms.NewVendorForm, reverse("vendors"), "vegancity/new_vendor.html")
+    response, obj =  _generic_data_entry_view(request, forms.NewVendorForm, reverse("vendor_thanks"), "vegancity/new_vendor.html")
     return response
 
 @login_required
@@ -163,8 +193,8 @@ def new_review(request, vendor_id):
      apply_author = functools.partial(apply_author, request)
      
      response, obj =  _generic_data_entry_view(
-         request, closed_form, reverse("vendor_detail", args=[vendor.id]),
-         "vegancity/new_review.html", [apply_author], [], 
-         {'vendor':vendor}, ctx, True)
+         request, closed_form, reverse("review_thanks", args=[vendor.id]),
+         "vegancity/new_review.html", [apply_author], 
+         {'vendor':vendor}, ctx)
 
      return response

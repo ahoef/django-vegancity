@@ -1,0 +1,19 @@
+{% extends "vegancity/thanks.html" %}
+
+{% load url from future %}
+
+{% block action %}
+  submitting a review of {{ vendor.name }}
+{% endblock %}
+
+{% block initial_thanks %}
+  Thanks for writing a review! We value your input.
+{% endblock %}
+
+{% block links_ul %}
+<ul>
+  <li><a href="{{ vendor.get_absolute_url }}">Return to Vendor Page</a></li>
+  <li><a href="{% url 'vendors' %}">View all vendors</a></li>
+  <li><a href="{% url 'home' %}"  >Go to our homepage</a></li>
+</ul>
+{% endblock %}
