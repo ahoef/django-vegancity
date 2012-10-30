@@ -36,6 +36,24 @@ class VegUserCreationForm(UserCreationForm):
             user.save()
         return user
         
+    def clean(self):
+        cleaned_data = super(VegUserCreationForm, self).clean()
+        username = cleaned_data.get("username", "")
+
+        # TODO: username-specific validation should be stored at the field level.
+        # this can be done by adding validators to the field instance(?) at form
+        # instantiation time.
+
+        if len(username) < 3:
+            raise forms.ValidationError(
+                "Username must be at least 3 characters.")
+
+            
+        if username != username.lower():
+            raise forms.ValidationError(
+                "Cannot have capital letters in username at this time. Please correct.")
+
+        return cleaned_data
         
 
 ##############################
