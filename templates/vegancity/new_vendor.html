@@ -1,16 +1,83 @@
 {% extends "base.html" %}
 
 {% block header_extra %}
-{{ form.media }}
+  {{ form.media }}
 {% endblock %}
 
 {% block headline %}Add a Vendor!{% endblock %}
 
 {% block content %}
   <form action="" method="post">
+    {{ form.non_field_errors }}    
     {% csrf_token %}
-      {{ form.as_p }}
-      <input type="submit" value="Submit">
+
+    <div class="row">
+      <div class="span6">
+        <div class="fieldWrapper">
+          {{ form.name.errors }}
+          {{ form.name.label_tag }}        
+          {{ form.name }}
+        </div>
+
+        <div class="fieldWrapper">
+          {{ form.address.errors }}
+          {{ form.address.label_tag }}
+          {{ form.address }}
+        </div>
+
+        <div class="fieldWrapper">
+          {{ form.veg_level.errors }}
+          {{ form.veg_level.label_tag }}
+          {{ form.veg_level }}
+        </div>
+
+      </div>
+      <div class="span6">
+
+        <div class="fieldWrapper">
+          {{ form.phone.errors }}
+          {{ form.phone.label_tag }}
+          {{ form.phone }}
+        </div>
+
+
+        <div class="fieldWrapper">
+          {{ form.website.errors }}
+          {{ form.website.label_tag }}
+          {{ form.website }}
+        </div>
+
+        <div class="fieldWrapper">
+          {{ form.notes.errors }}
+          {{ form.notes.label_tag }}
+          {{ form.notes }}
+        </div>
+
+      </div>
+    </div>
+
+<hr/>
+
+    <div class="row">
+      <div class="span6">
+        <div class="fieldWrapper">
+          {{ form.cuisine_tags.errors }}
+          {{ form.cuisine_tags.label_tag }}
+          {{ form.cuisine_tags }}
+        </div>
+      </div>
+      <div class="span6">
+        <div class="fieldWrapper">
+          {{ form.feature_tags.errors }}
+          {{ form.feature_tags.label_tag }}
+          {{ form.feature_tags }}
+        </div>
+
+      </div>
+    </div>
+    <hr/>
+    <input type="submit" value="Submit">
+
   </form>
 
 {% endblock %}
