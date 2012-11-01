@@ -22,7 +22,6 @@ from django.contrib import admin
 from settings import INSTALLED_APPS
 
 from vegancity import models
-#import api
 
 admin.autodiscover()
 
@@ -80,11 +79,3 @@ urlpatterns += patterns('',
     url(r'^accounts/register/$', 'vegancity.views.register', name='register'),
     url(r'^accounts/register/thanks/$', 'vegancity.views.register_thanks', name='register_thanks'),
 )
-
-
-# vendor_resource = api.VendorResource()
-
-# # API VIEWS
-# urlpatterns += patterns('',
-#     (r'^api/', include(vendor_resource.urls)),
-#     )
