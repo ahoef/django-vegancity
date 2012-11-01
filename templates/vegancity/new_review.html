@@ -2,12 +2,16 @@
 
 {% block headline %}Write a review!{% endblock %}
 
+{% block header_extra %}
+{{ form.media }}
+{% endblock %}
+
 {% block content %}
 <h3>{{ vendor.name }}</h3>
   <form action="" method="post">
     {% csrf_token %}
       {{ form.as_p }}
-      <input type="submit" value="Submit">
+      <input type="submit" value="Submit" id="id_submit">
   </form>
 {% endblock %}
 

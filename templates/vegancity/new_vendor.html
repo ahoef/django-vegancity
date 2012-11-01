@@ -12,7 +12,7 @@
     {% csrf_token %}
 
     <div class="row">
-      <div class="span6">
+      <div class="span4">
         <div class="fieldWrapper">
           {{ form.name.errors }}
           {{ form.name.label_tag }}        
@@ -32,7 +32,7 @@
         </div>
 
       </div>
-      <div class="span6">
+      <div class="span4">
 
         <div class="fieldWrapper">
           {{ form.phone.errors }}
@@ -52,28 +52,31 @@
           {{ form.notes.label_tag }}
           {{ form.notes }}
         </div>
-
+        <div class="span2"></div>
+        <div class="span2"></div>
       </div>
     </div>
 
-<hr/>
+    <hr/>
 
     <div class="row">
-      <div class="span6">
+      <div class="span4">
         <div class="fieldWrapper">
           {{ form.cuisine_tags.errors }}
           {{ form.cuisine_tags.label_tag }}
           {{ form.cuisine_tags }}
         </div>
       </div>
-      <div class="span6">
+      <div class="span4">
         <div class="fieldWrapper">
           {{ form.feature_tags.errors }}
           {{ form.feature_tags.label_tag }}
           {{ form.feature_tags }}
         </div>
-
       </div>
+      <div class="span2"></div>
+      <div class="span2"></div>
+
     </div>
     <hr/>
     <input type="submit" value="Submit">
