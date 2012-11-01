@@ -58,10 +58,10 @@
               <strong><a href="{%url 'vendor_detail' object_id=vendor.id %}">{{vendor.name}}</a></strong><br/>\
               {{vendor.address}}<br/>\
               {{vendor.phone}}<br/>\
-              '],
+              (<a href="http://maps.google.com/maps?q={{ vendor.address }}">jump to Google Maps</a>)<br/>\
+              ', {{ vendor.id }}],
             {% endif %}{% endfor %}
             ];
-            jQuery("body").ready(createMap(vendors));
           </script>
           <hr/>
         {% endif %}          
@@ -86,7 +86,7 @@
               <tbody>
                 {% for vendor in vendors %}
                   <tr>
-                    <td>?</td>              
+                    <td><img src="//www.google.com/mapfiles/marker.png" class="marker-link vendor-{{vendor.id}}"></td>
                     <td><a href="{% url 'vendor_detail' object_id=vendor.id %}">{{ vendor.name }}</a></td>
                   </tr>
                 {% endfor %}

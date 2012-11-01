@@ -3,6 +3,7 @@ function vendorMap(map_container_id, bounds) {
     var map_parameters = { zoom: 15, maxZoom:17, minZoom: 11,
                            center: this.center, mapTypeId: google.maps.MapTypeId.ROADMAP };
     this.map = new google.maps.Map(document.getElementById(map_container_id), map_parameters);
+    this.markers = new Object;
     this.infowindow = new google.maps.InfoWindow();
     this.map.fitBounds(bounds);
 };
@@ -50,6 +51,19 @@ function createMap(vendors) {
     for (var i = 0; i < vendors.length; i++) {
         var vendor = vendors[i];
         var LatLng = new google.maps.LatLng(vendor[0], vendor[1]);
-        map.place(LatLng, marker, vendor[2]);
+        map.markers[vendor[3]] = map.place(LatLng, marker, vendor[2]);
     }
 }; 
+
+
+$(document).ready(function() {
+
+    $("body").ready(createMap(vendors));
+
+
+    $(".marker-link").click(function(event) {
+        var vendor_id = $(event.currentTarget).attr('class').match(/\d+/);
+        google.maps.event.trigger(map.markers[vendor_id], 'click');
+        $(window).scrollTop($('div#map_canvas').position().top)
+    });
+});
