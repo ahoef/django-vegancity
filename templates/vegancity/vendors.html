@@ -55,10 +55,11 @@
             {% for vendor in vendors  %}{% if vendor.latitude %}
               [{{ vendor.latitude }}, {{vendor.longitude }}, 
               '\
-              <strong><a href="{%url 'vendor_detail' object_id=vendor.id %}">{{vendor.name}}</a></strong><br/>\
+              <strong>{{vendor.name}}</strong><br/>\
               {{vendor.address}}<br/>\
               {{vendor.phone}}<br/>\
-              (<a href="http://maps.google.com/maps?q={{ vendor.address }}">jump to Google Maps</a>)<br/>\
+              <a href="{%url 'vendor_detail' object_id=vendor.id %}">More Info</a> | \
+              <a href="http://maps.google.com/maps?q={{ vendor.address }}">jump to Google Maps</a><br/>\
               ', {{ vendor.id }}],
             {% endif %}{% endfor %}
             ];

@@ -64,6 +64,6 @@ $(document).ready(function() {
     $(".marker-link").click(function(event) {
         var vendor_id = $(event.currentTarget).attr('class').match(/\d+/);
         google.maps.event.trigger(map.markers[vendor_id], 'click');
-        $(window).scrollTop($('div#map_canvas').position().top)
+        $('html, body').animate({ scrollTop: 100 }, 'slow');
     });
 });
