@@ -2,26 +2,27 @@
 
 {% load url from future %}
 
-{% block headline %}Find Delicious Vegan Food in Philly{% endblock %}
+{% block headline %}{% endblock %}
 
 {% block summary %}
 {% endblock %}
 
-{% block content %}
+{% block content_flexible %}
 
-
+<div class="container">
   <div class="row">
-    <div id="searchbox">	
-      <div id="searchbg">
-        <div id="search">
-		  <div id="searchField">
-            <form action="{% url 'vendors' %}" method="get">
-              <input id="search-input" type="text" class="stext" placeholder="e.g., south and broad, blackbird pizza, burritos" autofocus="autofocus" name="query" style="width: 60%;">
-            </form>
-		  </div>
-		</div>
+
+
+    <h1>Find delicious vegan food in Philly</h1>
+
+    <form action="{% url 'vendors' %}" method="get">
+      <div id="vc-search-borderbox">
+        <div id="vc-searchbox">
+          
+          <input id="vc-search-input" type="text" class="" placeholder="e.g., south and broad, blackbird pizza, burritos" autofocus="autofocus" name="query">
+        </div>
       </div>
-    </div>
+    </form>
   </div>
 
   <br/>
@@ -31,23 +32,21 @@
       <img src="http://frankl.org/vc/images/linedrawings.jpg" alt="Illustration of Pizza, Sushi, and Coffee">
     </div>
     <div class="span5">
-	  <div id="hpcopy">
 		<em>Hungry?</em> Search for something to eat by location, restaurant, or type of food. Read and post vegan-specific reviews. Get involved in our open, free software website to improve vegan resources in Philadelphia.
-	  </div>
     </div>
     <div class="span5">
-	  <div id="hpdiscover">
-		<div>Discover the Best Vegan Spots</div>
-	  </div>
+	  <div>Discover the Best Vegan Spots</div>
       <hr/>
       <p>Coming Soon...</p>
-      <a href="{% url 'vendors' %}">View all...</a>      
-    </div>    
+      <a href="{% url 'vendors' %}">View all...</a>
+    </div>
   </div>
 
   <br/>
-  <div class="row" style="background-color: #F6F6F6;"> 
-	<!-- <h2>On VegPhilly</h2> -->
+</div>
+<div style="background-color: #F6F6F6;">
+<div class="container">
+  <div class="row"> 
 	<div class="span3">
 	  <h3>Neighborhoods</h3>
       <ul>
@@ -75,13 +74,7 @@
       <p>Coming Soon...</p>
     </div>
   </div>
-
-  <div class="row">
-    <hr/>
-    <p>Interested in helping out?  Take a look at our <a href="{% url 'about' %}">about</a> page for more info.</p>
-    <ul>
-      <li>use the <a href="admin">admin</a> interface</li>
-    </ul>  
-  </div>
+</div>
+</div>
 {% endblock %}
 

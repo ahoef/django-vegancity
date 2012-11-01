@@ -1,17 +1,62 @@
-.navbar-inverse .navbar-inner {
+
+.navbar-inner {
    background: #101c35 !important; 
 }
 
 .brand {
     padding-top: 26px; 
-    padding-left: 15px;
 }
 
-p.nav-item {
+p.vc-nav-item {
     color: white;
+    /* Must override text shadow or
+     Bootstrap will do what it wants*/
+    text-shadow: 0.2pt 0px 0pt white;
     padding-top: 30px;
 }
 
 body {
     padding-top: 100px; 
+}
+
+div#map_canvas {
+    width: 100%;
+    height: 700px;
+}
+
+/* TODO : there's a "bootstrap" way to do this.  use it. */
+table#vendorList tr:nth-child(even) {
+  background-color: #eeeeee;
+}
+
+
+/* TODO: Some of these should be #101c35 */
+h1, h2, h3, h4, h5, h6, th {
+    color: rgb(210, 93, 7);
+}
+
+h6 {
+    color: #101c35;
+}
+
+div#vc-search-borderbox {
+    margin-top:21px;
+    margin-left:8px;
+    margin-right:8px;
+    margin-bottom: 21px;
+    background-color: rgb(199, 224, 227);
+    width: 100%;
+}
+
+div#vc-searchbox {
+    width: 100%;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+
+/* TODO : this is a quickfix.  Do this the right way */
+input#vc-search-input {
+    width: 95%;
 }
