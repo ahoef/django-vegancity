@@ -18,7 +18,7 @@
       {{vendor.address}}<br/>\
       {{vendor.phone}}<br/>\
       <a href="{%url 'vendor_detail' object_id=vendor.id %}">More Info</a> | \
-      <a href="http://maps.google.com/maps?q={{ vendor.address }}">jump to Google Maps</a><br/>\
+      <a href="http://maps.google.com/maps?q={{ vendor.address }}" target="_BLANK">jump to Google Maps</a><br/>\
       ', {{ vendor.id }}],
     {% endif %}{% endfor %}
     ];
@@ -51,27 +51,44 @@
       {% endif %}
     </div>
 
-  <div class="span6">
+    <div class="span6">
       <div class="row">
         <div class="span3">
           <form action="{% url 'vendors' %}" method="get" name="filters" id="filters">
             <input type="hidden" name="query" value="{{ query }}">
-            <h4>Features:</h4>        
-            <ul>
-              {% for filter in feature_filters %}
-                <li><input type="checkbox" name="{{ filter.name }}" value="true" onchange="this.form.submit()" {% if filter in checked_feature_filters %}checked="1"{% endif %}> {{ filter.description }}</li>
-              {% endfor %}
-            </ul>
-            <br/>
 
-            <h4>Cuisine: </h4>
-            <select name="cuisine" onchange="this.form.submit()">
-              <option value="" selected="selected">---------</option>
-              {% for cuisine in cuisines %}
-                {{cuisine.name}}              
-                <option value="{{cuisine.name}}" {% if cuisine.name == selected_cuisine %}selected="selected"{% endif %}>{{ cuisine.description }}</option>
-              {% endfor %}
-            </select>
+            {% if feature_filters or checked_feature_filters %}
+              <h4>Features:</h4>
+              {% if checked_feature_filters %}
+                {% for filter in checked_feature_filters %}
+                  <label class="checkbox"><input type="checkbox" name="{{ filter.name }}" value="true" onchange="this.form.submit()" checked="1">{{ filter.description }}</label>
+                {% endfor %}
+                <br>
+              {% endif %}
+
+              {% if feature_filters %}            
+                <select name="feature" onchange="this.form.submit()">
+                  <option value="" selected="selected">---------</option>
+                  {% for feature in feature_filters %}
+                    {% if feature not in checked_feature_filters %}
+                      {{feature.name}}              
+                      <option value="{{feature.name}}" {% if feature.name == selected_feature %}selected="selected"{% endif %}>{{ feature.description }}</option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+              {% endif %}
+            {% endif %}
+
+            {% if cuisines %}
+              <h4>Cuisine: </h4>
+              <select name="cuisine" onchange="this.form.submit()">
+                <option value="" selected="selected">---------</option>
+                {% for cuisine in cuisines %}
+                  {{cuisine.name}}              
+                  <option value="{{cuisine.name}}" {% if cuisine.name == selected_cuisine %}selected="selected"{% endif %}>{{ cuisine.description }}</option>
+                {% endfor %}
+              </select>
+            {% endif %}
 
             <h4>Neighborhood:</h4>
             <select name="neighborhood" onchange="this.form.submit()">
