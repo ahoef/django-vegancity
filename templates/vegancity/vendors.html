@@ -5,9 +5,28 @@
 {% block header_extra %}
   <!-- TODO: REMOVE -->  
   <!-- <link href="{{ STATIC_URL }}css/vegancity.css" rel="stylesheet"/> -->
+
+  <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}/js/map.js"></script>
+  <script type="text/javascript">
+
+    var vendors = [
+    {% for vendor in vendors %}{% if vendor.latitude %}
+      [{{ vendor.latitude }}, {{vendor.longitude }}, 
+      '\
+      <strong>{{vendor.name}}</strong><br/>\
+      {{vendor.address}}<br/>\
+      {{vendor.phone}}<br/>\
+      <a href="{%url 'vendor_detail' object_id=vendor.id %}">More Info</a> | \
+      <a href="http://maps.google.com/maps?q={{ vendor.address }}">jump to Google Maps</a><br/>\
+      ', {{ vendor.id }}],
+    {% endif %}{% endfor %}
+    ];
+  </script>
+
 {% endblock %}
 
-{% block headline %}search{% endblock %}
+{% block headline %}{% endblock %}
 
 {% block summary %}
 {% endblock summary %}
@@ -16,138 +35,88 @@
 
   <!-- FIRST ROW -->  
   <div class="row">
-    {% block map %}  
-      <div class="span5">
-        <div class="row">
-          <div class="span3">
-            <form action="{% url 'vendors' %}" method="get">
-              <div class="input-append">
-                <input id="search-input" type="text" placeholder="e.g., south and broad, blackbird pizza, burritos" autofocus="autofocus" name="query" {% if query %}value="{{ query }}"{% endif %}>
-                <button type="submit" class="btn">Submit</button>
-              </div>
-            </form>
-          </div>
-          <div class="span2">
-            <!-- CLEAR SEARCH FORM -->      
-            <form action="{% url 'vendors' %}" method="get" name="clear_search" id="clear_search">
+    <div class="span6">
+      <form action="{% url 'vendors' %}" method="get" class="form-search">
+        <input type="hidden" name="cuisine" {% if selected_cuisine %}value="{{ selected_cuisine }}"{% endif %}>
+        <input type="hidden" name="neighborhood" {% if selected_neighborhood %}value="{{ selected_neighborhood }}"{% endif %}>
+        {% for f in checked_feature_filters %}
+          <input type="hidden" name="{{ f.name }}" value="true">
+        {% endfor %}
+        <input id="search-input" type="text" class="input-large" placeholder="e.g., south and broad, blackbird pizza, burritos" autofocus="autofocus" name="query" {% if query %}value="{{ query }}"{% endif %}>
+        <button type="submit" class="btn btn-primary">Search</button>
+        <button class="btn btn-warning" type="reset">Reset</button>
+      </form>
+      {% if vendors %}
+        <div id="map_canvas"></div>
+      {% endif %}
+    </div>
 
-              {% for filter in checked_feature_filters %}
-                <input type="hidden" name="{{ filter }}" value="true">
+  <div class="span6">
+      <div class="row">
+        <div class="span3">
+          <form action="{% url 'vendors' %}" method="get" name="filters" id="filters">
+            <input type="hidden" name="query" value="{{ query }}">
+            <h4>Features:</h4>        
+            <ul>
+              {% for filter in feature_filters %}
+                <li><input type="checkbox" name="{{ filter.name }}" value="true" onchange="this.form.submit()" {% if filter in checked_feature_filters %}checked="1"{% endif %}> {{ filter.description }}</li>
               {% endfor %}
-              {% if selected_neighborhood %}              
-              <input type="hidden" name="neighborhood" value="{{ selected_neighborhood }}">
-            {% endif %}
-              {% if selected_cuisine %}              
-              <input type="hidden" name="cuisine" value="{{ selected_cuisine }}">
-            {% endif %}
-              <button type="submit" class="btn">Show All</button>
-            </form>
-          </div>
+            </ul>
+            <br/>
+
+            <h4>Cuisine: </h4>
+            <select name="cuisine" onchange="this.form.submit()">
+              <option value="" selected="selected">---------</option>
+              {% for cuisine in cuisines %}
+                {{cuisine.name}}              
+                <option value="{{cuisine.name}}" {% if cuisine.name == selected_cuisine %}selected="selected"{% endif %}>{{ cuisine.description }}</option>
+              {% endfor %}
+            </select>
+
+            <h4>Neighborhood:</h4>
+            <select name="neighborhood" onchange="this.form.submit()">
+              <option value="" selected="selected">---------</option>
+              {% for neighborhood in neighborhoods %}
+                <option value="{{neighborhood.name}}" {% if neighborhood.name == selected_neighborhood %}selected="selected"{% endif %}>{{ neighborhood.name }}</option>
+              {% endfor %}
+            </select>
+          </form>
+
+          <!-- CLEAR FILTERS FORM -->      
+          <form action="{% url 'vendors' %}" method="get" name="clear_filters" id="clear_filters">
+            <input type="hidden" name="query" value="{{ query }}">
+            <button type="submit" class="btn btn-warning">clear filters</button>
+          </form>
+
+          <h4>something missing?</h4>
+          <h4><a href="{% url 'new_vendor' %}">Add a food vendor!</a></h4>
         </div>
 
-        {% if vendors %}
-          <div id="map_canvas"></div>
-          <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
-          <script type="text/javascript" src="{{ STATIC_URL }}/js/map.js"></script>
-          <script type="text/javascript">
 
-            var vendors = [
-            {% for vendor in vendors  %}{% if vendor.latitude %}
-              [{{ vendor.latitude }}, {{vendor.longitude }}, 
-              '\
-              <strong>{{vendor.name}}</strong><br/>\
-              {{vendor.address}}<br/>\
-              {{vendor.phone}}<br/>\
-              <a href="{%url 'vendor_detail' object_id=vendor.id %}">More Info</a> | \
-              <a href="http://maps.google.com/maps?q={{ vendor.address }}">jump to Google Maps</a><br/>\
-              ', {{ vendor.id }}],
-            {% endif %}{% endfor %}
-            ];
-          </script>
-          <hr/>
-        {% endif %}          
-
-
-      </div>
-
-      <form action="{% url 'vendors' %}" method="get" name="filters" id="filters">
-        <input type="hidden" name="query" value="{{ query }}">
-        
-        {% if vendors %}
-          <div class="span3">
-
-            <table id="vendorList">
-              <thead>
+        <div class="span3">
+          <table id="vendorList" class="table-striped">
+            <thead>
+              <tr>
+                <th>Map</th>
+                <th>Results ({{ vendors.count }})</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for vendor in vendors %}
                 <tr>
-                  <th>Map</th>
-                  <th>Results ({{ vendors.count }})</th>
-
+                  <td><img src="//www.google.com/mapfiles/marker.png" class="marker-link vendor-{{vendor.id}}"></td>
+                  <td><a href="{% url 'vendor_detail' object_id=vendor.id %}">{{ vendor.name }}</a></td>
                 </tr>
-              </thead>
-              <tbody>
-                {% for vendor in vendors %}
-                  <tr>
-                    <td><img src="//www.google.com/mapfiles/marker.png" class="marker-link vendor-{{vendor.id}}"></td>
-                    <td><a href="{% url 'vendor_detail' object_id=vendor.id %}">{{ vendor.name }}</a></td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        
 
 
-
-          </div>
-
-{% endif %}
-
-<div class="span4">
-
-  <h4>Features:</h4>        
-  <ul>
-    {% for filter in feature_filters %}
-      <li><input type="checkbox" name="{{ filter.name }}" value="true" onchange="this.form.submit()" {% if filter in checked_feature_filters %}checked="1"{% endif %}> {{ filter.description }}</li>
-    {% endfor %}
-  </ul>
-  <br/>
-
-  <h4>Cuisine: </h4>
-  <select name="cuisine" onchange="this.form.submit()">
-    <option value="" selected="selected">---------</option>
-    {% for cuisine in cuisines %}
-      {{cuisine.name}}              
-      <option value="{{cuisine.name}}" {% if cuisine.name == selected_cuisine %}selected="selected"{% endif %}>{{ cuisine.description }}</option>
-    {% endfor %}
-  </select>
-
-  <h4>Neighborhood:</h4>
-  <select name="neighborhood" onchange="this.form.submit()">
-    <option value="" selected="selected">---------</option>
-    {% for neighborhood in neighborhoods %}
-      <option value="{{neighborhood.name}}" {% if neighborhood.name == selected_neighborhood %}selected="selected"{% endif %}>{{ neighborhood.name }}</option>
-    {% endfor %}
-  </select>
-      </form>
-
-      <!-- CLEAR FILTERS FORM -->      
-      <form action="{% url 'vendors' %}" method="get" name="clear_filters" id="clear_filters">
-        <input type="hidden" name="query" value="{{ query }}">
-        <button type="submit" class="btn">clear filters</button>
-      </form>
-
-
-
-      <h4>something missing?</h4>
-      <h4><a href="{% url 'new_vendor' %}">Add a food vendor!</a></h4>
       </div>
-  </div>
-{% endblock map %}
-
-<!-- END FIRST ROW --> 
-
-<hr/>
-
-<div class="row">
-  <div class="span12">
+    </div>
   </div>
 </div>
 

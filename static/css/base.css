@@ -1,4 +1,3 @@
-
 .navbar-inner {
    background: #101c35 !important; 
 }
@@ -19,12 +18,6 @@ div#map_canvas {
     width: 100%;
     height: 700px;
 }
-
-/* TODO : there's a "bootstrap" way to do this.  use it. */
-table#vendorList tr:nth-child(even) {
-  background-color: #eeeeee;
-}
-
 
 /* TODO: Some of these should be #101c35 */
 h1, h2, h3, h4, h5, h6, th {
