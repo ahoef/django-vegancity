@@ -132,11 +132,19 @@ class AdminEditReviewForm(_BaseReviewForm):
         if self.instance:
             self.filter_dishes(self.instance.vendor)
 
+
 class NewReviewForm(_BaseReviewForm):
 
     def __init__(self, vendor, *args, **kwargs):
         super(NewReviewForm, self).__init__(*args, **kwargs)
         self.filter_dishes(vendor)
+
+    class Media:
+        js = (
+            '//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js',
+            'js/review_form.js',
+            )
+
 
     class Meta(_BaseReviewForm.Meta):
         exclude = ('approved', 'author',)
