@@ -25,7 +25,7 @@ import shlex
 import itertools
 import geocode
 import validators
-import rank
+import search
 import tracking
 
 #####################################
@@ -299,7 +299,7 @@ class VendorManager(models.Manager):
     
     def search(self, query, initial_queryset=None):
         # rank the likelihood of different search times
-        ranks = rank.get_ranks(query)
+        ranks = search.get_ranks(query)
         presentation_order = (rank[1] for rank in ranks)
 
         # log the query in the db

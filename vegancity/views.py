@@ -28,7 +28,7 @@ from django.contrib.auth import authenticate, login
 
 from vegancity import forms
 from vegancity import models
-from vegancity import rank
+from vegancity import search
 
 
 #################################################################################
@@ -123,7 +123,7 @@ def vendors(request):
 
     if query:
         # vendors = models.Vendor.objects.search(query, vendors)
-        vendors = rank.master_search(query, vendors)
+        vendors = search.master_search(query, vendors)
 
     ctx = {
         'vendors' : vendors,
