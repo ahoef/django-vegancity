@@ -57,6 +57,26 @@
           <form action="{% url 'vendors' %}" method="get" name="filters" id="filters">
             <input type="hidden" name="query" value="{{ query }}">
 
+            <h4>Neighborhood:</h4>
+            <select name="neighborhood" onchange="this.form.submit()">
+              <option value="" selected="selected">---------</option>
+              {% for neighborhood in neighborhoods %}
+                <option value="{{neighborhood.name}}" {% if neighborhood.name == selected_neighborhood %}selected="selected"{% endif %}>{{ neighborhood.name }}</option>
+              {% endfor %}
+            </select>
+          </form>
+
+            {% if cuisines %}
+              <h4>Cuisine: </h4>
+              <select name="cuisine" onchange="this.form.submit()">
+                <option value="" selected="selected">---------</option>
+                {% for cuisine in cuisines %}
+                  {{cuisine.name}}              
+                  <option value="{{cuisine.name}}" {% if cuisine.name == selected_cuisine %}selected="selected"{% endif %}>{{ cuisine.description }}</option>
+                {% endfor %}
+              </select>
+            {% endif %}
+
             {% if feature_filters or checked_feature_filters %}
               <h4>Features:</h4>
               {% if checked_feature_filters %}
@@ -78,26 +98,6 @@
                 </select>
               {% endif %}
             {% endif %}
-
-            {% if cuisines %}
-              <h4>Cuisine: </h4>
-              <select name="cuisine" onchange="this.form.submit()">
-                <option value="" selected="selected">---------</option>
-                {% for cuisine in cuisines %}
-                  {{cuisine.name}}              
-                  <option value="{{cuisine.name}}" {% if cuisine.name == selected_cuisine %}selected="selected"{% endif %}>{{ cuisine.description }}</option>
-                {% endfor %}
-              </select>
-            {% endif %}
-
-            <h4>Neighborhood:</h4>
-            <select name="neighborhood" onchange="this.form.submit()">
-              <option value="" selected="selected">---------</option>
-              {% for neighborhood in neighborhoods %}
-                <option value="{{neighborhood.name}}" {% if neighborhood.name == selected_neighborhood %}selected="selected"{% endif %}>{{ neighborhood.name }}</option>
-              {% endfor %}
-            </select>
-          </form>
 
           <!-- CLEAR FILTERS FORM -->      
           <form action="{% url 'vendors' %}" method="get" name="clear_filters" id="clear_filters">
