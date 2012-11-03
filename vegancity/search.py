@@ -30,6 +30,7 @@
 
 import sys
 import re
+import shlex
 
 # DIFFERENTIAL
 # IF ONE SCORE IS HIGHER THAN ANOTHER SCORE BY THE DIFFERENTIAL
@@ -137,57 +138,79 @@ def master_search(query, initial_queryset=None):
 
     for word in real_words:
         name_hits = Vendor.approved_objects.filter(name__icontains=word)
+        print "name_hits:", name_hits, "\n"
+
         if name_hits:
             name_words.add(word)
             name_vendors = name_vendors.union(name_hits)
             name_rank += 1
 
         ft_hits = FeatureTag.objects.word_search(word)
+        print "ft_hits:", ft_hits, "\n"
         ft_hits_vendors = FeatureTag.objects.get_vendors(ft_hits)
+        print "ft_hits_vendors:", ft_hits_vendors, "\n"
         if ft_hits:
             tag_words.add(word)
             tag_vendors = tag_vendors.union(ft_hits_vendors)
             tag_rank += 1
 
         ct_hits = CuisineTag.objects.word_search(word)
+        print "ct_hits:", ct_hits, "\n"
         ct_hits_vendors = CuisineTag.objects.get_vendors(ft_hits)
+        print "ct_hits_vendors:", ct_hits_vendors, "\n"
         if ct_hits:
             tag_words.add(word)
             tag_vendors = tag_vendors.union(ct_hits_vendors)
             tag_rank += 1
 
 
-        tag_word_density = float(len(tag_words)) / len(real_words)
-        tag_rank += tag_word_density * 10
+    tag_word_density = float(len(tag_words)) / len(real_words)
+    tag_rank += tag_word_density * 10
 
-        name_word_density = float(len(name_words)) / len(real_words)
-        name_rank += name_word_density * 10
-        
-        address_rank = 5 
-        address_rank += _address_rank(query)
-        # insert more statements that bump up the address rank.
-        # might be nice to have a cache of street names.
+    name_word_density = float(len(name_words)) / len(real_words)
+    name_rank += name_word_density * 10
 
-        # THis will be the big block
-        # where we go ahead and compare  
-        # the namesearch, tagsearch, 
-        # and address_presearch
-        # STANDIN:
-        rank_differential_test = (name_rank + tag_rank) / address_rank > 2
+    print "query:", query, "\n"
+    tokens = shlex.split(query)
+    print "tokens:", tokens, "\n"
+    address_tokens = [token for token in tokens if token not in tag_words]
+    print "address_tokens:", address_tokens, "\n"
 
-        master_results = []
+    address_rank = 5 
+    address_rank += _address_rank(query)
+    # insert more statements that bump up the address rank.
+    # might be nice to have a cache of street names.
 
-        # always put name vendors at the top.
-        # there won't be many!
-        master_results.extend(name_vendors) 
-        
-        lower_half_results = []
-        if not rank_differential_test:
-            master_results.extend(Vendor.approved_objects.address_search(query))
-        for name in tag_vendors:
-            if name not in results:
-                master_results.append(name)
-        return master_results
+    # THis will be the big block
+    # where we go ahead and compare  
+    # the namesearch, tagsearch, 
+    # and address_presearch
+    # STANDIN:
+    rank_differential_test = (name_rank + tag_rank) / address_rank > 2
+    print "rank_differential_test:", rank_differential_test
+    
+    master_results = []
+
+    # always put name vendors at the top.
+    # there won't be many!
+    master_results.extend(name_vendors) 
+    print "master_results:", master_results, "\n"
+    
+    lower_half_results = []
+    if not rank_differential_test:
+        address_search = Vendor.approved_objects.address_search(query)
+        print "address_search:", address_search
+        master_results.extend(address_search)
+
+    print "master_results:", master_results, "\n"
+
+    for name in tag_vendors:
+        print "name:", name
+        if name not in master_results:
+            master_results.append(name)
+
+    print "master_results:", master_results, "\n"
+    return master_results
 
 
             

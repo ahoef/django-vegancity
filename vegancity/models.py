@@ -445,6 +445,7 @@ class TagManager(models.Manager):
 
     def word_search(self, word):
         "takes a word and searches all tag names for that word"
+        print "word:", word, "\n"
         qs = self.filter(name__icontains=word)
         return qs
 
