@@ -31,13 +31,30 @@
 import sys
 import re
 
+# DIFFERENTIAL
+# IF ONE SCORE IS HIGHER THAN ANOTHER SCORE BY THE DIFFERENTIAL
+# THEN WE DON'T EVEN USE THAT TYPE OF SEARCH.
+DIFF = 5
+
+# THRESHOLD
+# IF THE SCORE OF ANY SEARCH TYPE IS BELOW THE THRESHOLD,
+# DON'T DO THAT SEARCH AT ALL
+THRESHOLD = 5
+
+FLUFF_WORDS = ("and", "or", "&", "the", "best")
+
+def fluff_split(query):
+    "takes a query and returns a list of non-fluff tokens"
+    tokens = [token for token in query.split() if token not in FLUFF_WORDS]
+    return tokens
+
 
 #######################
 # STATIC CONTENT
 #######################
 
 # should we store this in the db?
-_ADDRESS_PATTERNS = [
+_ADDRESS_PATTERNS = (
     (3, "\dth"), 
     (3, "\dst"), 
     (3, "\dnd"), 
@@ -46,18 +63,7 @@ _ADDRESS_PATTERNS = [
     (2, " by "),
     (1, " and "), 
     (1, " & "),
-    ]
-
-# eventually we'll replace this with just the list of tags and a value of 5
-_TAGS_PATTERNS = [
-    (5, "mexican"),
-    (5, "italian"),
-    (5, "chinese"),
-    (5, "french"),
-    (5, "comfort"),
-    (5, "soul"),
-    (5, "pizza"),
-    ]
+    )
 
 #######################
 # PRIVATE FUNCTIONS
@@ -73,19 +79,22 @@ def _calculate_rank(query, patterns):
         rank += score * len(hits)
     return rank
     
+# def _address_rank(query):
+#     return (_calculate_rank(query, _ADDRESS_PATTERNS), 'address')
+
+# def _tags_rank(query):
+#     return (_calculate_rank(query, _TAGS_PATTERNS), 'tags')
+
+# def _name_rank(query):
+#     return (3, 'name')
+
 def _address_rank(query):
-    return (_calculate_rank(query, _ADDRESS_PATTERNS), 'address')
-
-def _tags_rank(query):
-    return (_calculate_rank(query, _TAGS_PATTERNS), 'tags')
-
-def _name_rank(query):
-    return (3, 'name')
+    return _calculate_rank(query, _ADDRESS_PATTERNS)
 
 
-#######################
-# PUBLIC / RUNMODES
-#######################
+#########################################
+# PUBLIC / RUNMODES (CURRENTLY UNUSED)
+#########################################
 
 def get_ranks(query):
     "The primary external function.  Builds a rank summary."
@@ -93,7 +102,6 @@ def get_ranks(query):
     name = _name_rank(query)
     tags = _tags_rank(query)
     return sorted([address, name, tags], reverse=True)
-
 
 def tests():
     # todo :  write tome tests
@@ -111,3 +119,77 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+def master_search(query, initial_queryset=None):
+    from vegancity.models import FeatureTag, CuisineTag, Vendor
+
+    # take the query and do a featuretag and cuisine search on each word.
+    real_words = fluff_split(query)
+
+    name_words = set()
+    name_vendors = set()
+    name_rank = 0 # name gets no love initially
+
+    tag_words = set()
+    tag_vendors = set()
+    tag_rank = 2 # tag is more likely, give it 2 for now
+
+    for word in real_words:
+        name_hits = Vendor.approved_objects.filter(name__icontains=word)
+        if name_hits:
+            name_words.add(word)
+            name_vendors = name_vendors.union(name_hits)
+            name_rank += 1
+
+        ft_hits = FeatureTag.objects.word_search(word)
+        ft_hits_vendors = FeatureTag.objects.get_vendors(ft_hits)
+        if ft_hits:
+            tag_words.add(word)
+            tag_vendors = tag_vendors.union(ft_hits_vendors)
+            tag_rank += 1
+
+        ct_hits = CuisineTag.objects.word_search(word)
+        ct_hits_vendors = CuisineTag.objects.get_vendors(ft_hits)
+        if ct_hits:
+            tag_words.add(word)
+            tag_vendors = tag_vendors.union(ct_hits_vendors)
+            tag_rank += 1
+
+
+        tag_word_density = float(len(tag_words)) / len(real_words)
+        tag_rank += tag_word_density * 10
+
+        name_word_density = float(len(name_words)) / len(real_words)
+        name_rank += name_word_density * 10
+        
+        address_rank = 5 
+        address_rank += _address_rank(query)
+        # insert more statements that bump up the address rank.
+        # might be nice to have a cache of street names.
+
+        # THis will be the big block
+        # where we go ahead and compare  
+        # the namesearch, tagsearch, 
+        # and address_presearch
+        # STANDIN:
+        rank_differential_test = (name_rank + tag_rank) / address_rank > 2
+
+        master_results = []
+
+        # always put name vendors at the top.
+        # there won't be many!
+        master_results.extend(name_vendors) 
+        
+        lower_half_results = []
+        if not rank_differential_test:
+            master_results.extend(Vendor.approved_objects.address_search(query))
+        for name in tag_vendors:
+            if name not in results:
+                master_results.append(name)
+        return master_results
+
+
+            
+
+        

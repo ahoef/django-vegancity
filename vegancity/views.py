@@ -28,6 +28,7 @@ from django.contrib.auth import authenticate, login
 
 from vegancity import forms
 from vegancity import models
+from vegancity import rank
 
 
 #################################################################################
@@ -93,6 +94,12 @@ def vendors(request):
     selected_cuisine = request.GET.get('cuisine', None)
     selected_neighborhood = request.GET.get('neighborhood', None)
 
+    selected_feature = request.GET.get('feature', None)
+    selected_feature_obj_list = filter(lambda f: f.name == selected_feature, all_feature_tags)
+    
+    if selected_feature_obj_list:
+        checked_feature_filters.append(selected_feature_obj_list[0])
+
     # Filter the set of vendors that can be displayed
     # based on what is in the checked filters.
     vendors = models.Vendor.approved_objects.all()
@@ -115,7 +122,8 @@ def vendors(request):
     query = request.GET.get('query', '')
 
     if query:
-        vendors = models.Vendor.objects.search(query, vendors)
+        # vendors = models.Vendor.objects.search(query, vendors)
+        vendors = rank.master_search(query, vendors)
 
     ctx = {
         'vendors' : vendors,
