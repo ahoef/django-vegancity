@@ -9,74 +9,104 @@
 
 {% block content_flexible %}
 
-<div class="container">
-  <div class="row">
+  <div class="container">
+
+    <div class="hero-unit" style="background-color: #F6F6F6;">
+      <h1>Find delicious vegan food in Philly</h1>
+      <form action="{% url 'vendors' %}" method="get">
+        <!-- <div id="vc-search-borderbox"> -->
+        <!--   <div id="vc-searchbox"> -->
+        <!--     <input id="vc-search-input" type="text" class="" placeholder="e.g., south and broad, blackbird pizza, burritos" autofocus="autofocus" name="query"> -->
+        <!--   </div> -->
+        <!-- </div> -->
+      </form>
+
+      <br/>
+      <div class="row">
+		<p>
+          <em>Hungry?</em> Search for something to eat by location, restaurant, or type of food. Read and post vegan-specific reviews. Get involved in our open, free software website to improve vegan resources in Philadelphia.<br>
+<hr>
+<center>          
+          <a class="btn btn-primary btn-large float-up" href="{% url 'vendors' %}">Search for a restaurant!</a>
+          <a class="btn btn-primary btn-large" href="{% url 'new_vendor' %}">Add a restaurant!</a>
+          <a class="btn btn-primary btn-large" href="#reviewModal" data-toggle="modal">Write a Review!</a>
+          <a class="btn btn-primary btn-large" href="{% url 'about' %}">Learn More!</a>
+</center>
+        </p>
+      </div>
+    </div>
+
+    <div id="reviewModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="reviewModalLabel">Write a Review!</h3>
+      </div>
+      <div class="modal-body">
+        <p>Please visit the detail page for a vendor on the site. From there, click "Write a Review".</p>
+        <p>Or, why not write a review of our featured vendor, <a href="/vendors/review/6/">Blackbird Pizza</a>?</p>
+      </div>
+    </div>
 
 
-    <h1>Find delicious vegan food in Philly</h1>
+    <div class="row">
+      <div class="span6">
+        <h3>Featured - Blackbird Pizza</h3>
+        <p>Blackbird pizza is awesome. They've been bringing awesome vegan pizza to Philly for years. (insert a better writeup of blackbird pizza here).</p>
+        <p><a href="vendors/6/">Read more...</a></p>
+      </div>
+      <div class="span6">
+        <a href="vendors/6/"><img src="{{ STATIC_URL }}images/haymaker.jpg" style="width: 500px" class="img-polaroid"></a>
+      </div>
+    </div>
+  </div>
 
-    <form action="{% url 'vendors' %}" method="get">
-      <div id="vc-search-borderbox">
-        <div id="vc-searchbox">
-          
-          <input id="vc-search-input" type="text" class="" placeholder="e.g., south and broad, blackbird pizza, burritos" autofocus="autofocus" name="query">
+<br>
+
+
+
+    <div style="background-color: #F6F6F6;">
+      <div class="container">
+        <div class="row"> 
+	      <div class="span3">
+	        <h3>Neighborhoods</h3>
+            <ul>
+              {% for neighborhood in neighborhoods %}
+                <li><a href="/vendors/?neighborhood={{ neighborhood.name }}">{{ neighborhood.name }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div class="span3">
+            <h3>Top Five</h3>
+            <ul>
+              {% for vendor in top_5 %}
+                <li><a href="{{ vendor.get_absolute_url }}">{{ vendor.name }}</a></li>
+              {% endfor %}
+            </ul>
+            <h3>Recent Activity</h3>
+            <ul>
+              {% for review in recent_activity %}
+                <li><a href="{{ review.vendor.get_absolute_url }}">{{ review.vendor.name }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div class="span3">
+	        <h3>Cuisines</h3>
+            <ul>
+              {% for cuisine in cuisine_tags %}
+                <li><a href="/vendors/?cuisine={{ cuisine.name }}">{{ cuisine.description }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div class="span3">
+	        <h3>Features</h3>
+            <ul>
+              {% for feature in feature_tags %}
+                <li><a href="/vendors/?feature={{ feature.name }}">{{ feature.description }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
         </div>
       </div>
-    </form>
-  </div>
-
-  <br/>
-
-  <div class="row">
-    <div class="span1">
-      <img src="http://frankl.org/vc/images/linedrawings.jpg" alt="Illustration of Pizza, Sushi, and Coffee">
     </div>
-    <div class="span6">
-		<em>Hungry?</em> Search for something to eat by location, restaurant, or type of food. Read and post vegan-specific reviews. Get involved in our open, free software website to improve vegan resources in Philadelphia.
-    </div>
-    <div class="span5">
-	  <div>Discover the Best Vegan Spots</div>
-      <hr/>
-      <p>Coming Soon...</p>
-      <a href="{% url 'vendors' %}">View all...</a>
-    </div>
-  </div>
-
-  <br/>
-</div>
-<div style="background-color: #F6F6F6;">
-<div class="container">
-  <div class="row"> 
-	<div class="span3">
-	  <h3>Neighborhoods</h3>
-      <ul>
-        {% for neighborhood in neighborhoods %}
-          <li><a href="/vendors/?neighborhood={{ neighborhood.name }}">{{ neighborhood.name }}</a></li>
-        {% endfor %}
-      </ul>
-    </div>
-    <div class="span3">
-      <h3>Top Five</h3>
-      <ul>
-        {% for vendor in top_5 %}
-          <li><a href="{{ vendor.get_absolute_url }}">{{ vendor.name }}</a></li>
-        {% endfor %}
-      </ul>
-      <h3>Recent Activity</h3>
-      <ul>
-        {% for review in recent_activity %}
-          <li><a href="{{ review.vendor.get_absolute_url }}">{{ review.vendor.name }}</a></li>
-        {% endfor %}
-      </ul>
-    </div>
-    <div class="span6">
-      <h3>Featured</h3>
-      <p>Coming Soon...</p>
-      <p>This section will be longer. It will feature several sentences and a picture. This section will be longer. It will feature several sentences and a picture. This section will be longer. It will feature several sentences and a picture. </p>
-      <p>Adding some filler text to make it look better for now.</p>
-    </div>
-  </div>
-</div>
-</div>
-{% endblock %}
+  {% endblock %}
 

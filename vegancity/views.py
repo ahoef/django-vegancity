@@ -67,11 +67,15 @@ def home(request):
     top_5 = vendors.annotate(score=Sum('review__food_rating')).order_by('score')[:5]
     recent_activity = models.Review.approved_objects.order_by("created")[:5]
     neighborhoods = models.Neighborhood.objects.all()
+    cuisine_tags = models.CuisineTag.objects.with_vendors()
+    feature_tags = models.FeatureTag.objects.with_vendors()
 
     ctx = {
         'top_5': top_5,
         'recent_activity' : recent_activity,
         'neighborhoods': neighborhoods,
+        'cuisine_tags' : cuisine_tags,
+        'feature_tags' : feature_tags,
         }
 
     return render_to_response("vegancity/home.html", ctx,

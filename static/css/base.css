@@ -49,3 +49,7 @@ div#vc-searchbox {
 input#vc-search-input {
     width: 95%;
 }
+
+.hero-unit h1 {
+    color: rgb(210, 93, 7);
+}
