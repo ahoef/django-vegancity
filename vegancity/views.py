@@ -31,37 +31,6 @@ from vegancity import models
 from vegancity import search
 
 
-#################################################################################
-# THANKS VIEWS:
-#################################################################################
-
-# TODO: REFACTOR
-# ALL 3 can be generic views
-
-# def review_thanks(request, vendor_id):
-#     vendor = models.Vendor.approved_objects.get(id=vendor_id)
-#     ctx = {
-#         'vendor': vendor,
-#         'warning': True,
-#         }
-#     return render_to_response("vegancity/review_thanks.html", ctx,
-#                               context_instance=RequestContext(request))
-
-# def vendor_thanks(request):
-#     ctx = {
-#         'warning': True,
-#         }
-#     return render_to_response("vegancity/vendor_thanks.html", ctx,
-#                               context_instance=RequestContext(request))
-
-# def register_thanks(request):
-#     return render_to_response("vegancity/register_thanks.html",
-#                               context_instance=RequestContext(request))
-
-
-#################################################################################
-
-
 def home(request):
     vendors = models.Vendor.approved_objects.all()
     top_5 = vendors.annotate(score=Sum('review__food_rating')).order_by('score')[:5]

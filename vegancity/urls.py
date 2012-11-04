@@ -28,18 +28,10 @@ admin.autodiscover()
 
 # CUSTOM VIEWS
 urlpatterns = patterns('vegancity.views',
-
-
     url(r'^$', 'home', name='home'),
-
-    # vendors
     url(r'^vendors/$', 'vendors', name="vendors"),
     url(r'^vendors/add/$', 'new_vendor', name="new_vendor"),
-    url(r'^vendors/add/thanks/$', 'vendor_thanks', name="vendor_thanks"),
- 
-    # reviews
     url(r'^vendors/review/(?P<vendor_id>\d+)/$', 'new_review', name="new_review"),
-    url(r'^vendors/review/(?P<vendor_id>\d+)/thanks/$', 'review_thanks', name="review_thanks"),
     )
 
 # GENERIC VIEWS
@@ -54,7 +46,21 @@ urlpatterns += patterns('django.views.generic',
          'template_object_name' : 'vendor' }, name="vendor_detail"),
 
     url(r'^about/$', 'simple.direct_to_template', {'template': 'vegancity/about.html'}, name='about'),
+    url(r'^vendors/review/(?P<object_id>\d+)/thanks/$', 'list_detail.object_detail', 
+        {'queryset' : models.Vendor.approved_objects.all(), 'template_name' : 'vegancity/review_thanks.html',
+         'template_object_name' : 'vendor', 'extra_context' : {'warning' : True }}, name="review_thanks"),
+    url(r'^vendors/add/thanks/$', 'simple.direct_to_template', 
+        {'template' : 'vegancity/vendor_thanks.html', 'extra_context' : {'warning' : True} }, name="vendor_thanks"),
+    url(r'^accounts/register/thanks/$', 'simple.direct_to_template', 
+        {'template' : 'vegancity/register_thanks.html'}, name='register_thanks'),
     )                        
+
+# AUTH VIEWS
+urlpatterns += patterns('',
+    url(r'^accounts/login/$',  'django.contrib.auth.views.login', name='login'),
+    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page' : '/'},  name='logout'),
+    url(r'^accounts/register/$', 'vegancity.views.register', name='register'),
+)
 
 # ADMIN VIEWS
 if 'django.contrib.admin' in INSTALLED_APPS:
@@ -72,10 +78,3 @@ if 'django.contrib.admin' in INSTALLED_APPS:
         url(r'^admin/', include(admin.site.urls)),
     )
 
-# AUTH VIEWS
-urlpatterns += patterns('',
-    url(r'^accounts/login/$',  'django.contrib.auth.views.login', name='login'),
-    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page' : '/'},  name='logout'),
-    url(r'^accounts/register/$', 'vegancity.views.register', name='register'),
-    url(r'^accounts/register/thanks/$', 'vegancity.views.register_thanks', name='register_thanks'),
-)
