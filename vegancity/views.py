@@ -38,25 +38,25 @@ from vegancity import search
 # TODO: REFACTOR
 # ALL 3 can be generic views
 
-def review_thanks(request, vendor_id):
-    vendor = models.Vendor.approved_objects.get(id=vendor_id)
-    ctx = {
-        'vendor': vendor,
-        'warning': True,
-        }
-    return render_to_response("vegancity/review_thanks.html", ctx,
-                              context_instance=RequestContext(request))
+# def review_thanks(request, vendor_id):
+#     vendor = models.Vendor.approved_objects.get(id=vendor_id)
+#     ctx = {
+#         'vendor': vendor,
+#         'warning': True,
+#         }
+#     return render_to_response("vegancity/review_thanks.html", ctx,
+#                               context_instance=RequestContext(request))
 
-def vendor_thanks(request):
-    ctx = {
-        'warning': True,
-        }
-    return render_to_response("vegancity/vendor_thanks.html", ctx,
-                              context_instance=RequestContext(request))
+# def vendor_thanks(request):
+#     ctx = {
+#         'warning': True,
+#         }
+#     return render_to_response("vegancity/vendor_thanks.html", ctx,
+#                               context_instance=RequestContext(request))
 
-def register_thanks(request):
-    return render_to_response("vegancity/register_thanks.html",
-                              context_instance=RequestContext(request))
+# def register_thanks(request):
+#     return render_to_response("vegancity/register_thanks.html",
+#                               context_instance=RequestContext(request))
 
 
 #################################################################################
@@ -88,11 +88,9 @@ def vendors(request):
     the search runmode.  Otherwise, we just return all vendors
     in our database."""
 
-    # TODO: this view is a mess. Most of this stuff should be moved
-    # to model managers.
-
     # figure out which filters have been checked
     all_feature_tags = models.FeatureTag.objects.with_vendors()
+
     checked_feature_filters = [f for f in all_feature_tags
                                if request.GET.get(f.name)]
     selected_cuisine = request.GET.get('cuisine', None)
@@ -117,25 +115,27 @@ def vendors(request):
     if selected_cuisine:
         vendors = vendors.filter(cuisine_tags__name=selected_cuisine)
 
-    # determine which filters can be presented on the page
-    # based on whether they apply to any of the remaining
-    # vendors
-    available_feature_filters = [tag for tag in all_feature_tags if 
-                       tag.vendor_set.filter(id__in=vendors)]
 
     query = request.GET.get('query', '')
 
     if query:
         # vendors = models.Vendor.objects.search(query, vendors)
+        print "vendors1:", type(vendors), "\n"
         vendors = search.master_search(query, vendors)
+        print "vendors2:", type(vendors), "\n"
 
+    # determine which filters can be presented on the page
+    # based on whether they apply to any of the remaining
+    # vendors
+    available_feature_filters = [tag for tag in all_feature_tags if 
+                       tag.vendor_set.filter(id__in=[vendor.id for vendor in vendors])]
     ctx = {
         'vendors' : vendors,
         'query': query,
 
         'feature_filters' : available_feature_filters,
-        'cuisines' : models.CuisineTag.objects.with_vendors(),
-        'neighborhoods' : models.Neighborhood.objects.all(),
+        'cuisines' : models.CuisineTag.objects.with_vendors(vendors),
+        'neighborhoods' : models.Neighborhood.objects.filter(vendor__in=vendors).distinct('name'),
 
         'checked_feature_filters' : checked_feature_filters,
         'selected_neighborhood' : selected_neighborhood,
