@@ -100,12 +100,8 @@
             {% endif %}
           </form>
 
-          <!-- CLEAR FILTERS FORM -->      
-          <form action="{% url 'vendors' %}" method="get" name="clear_filters" id="clear_filters">
-            <input type="hidden" name="query" value="{{ query }}">
-            <button type="submit" class="btn btn-warning">clear filters</button>
-          </form>
-
+          <a href="{% url 'vendors' %}" class="btn btn-warning">Clear All Filters</a>          
+          
           <h4>something missing?</h4>
           <h4><a href="{% url 'new_vendor' %}">Add a food vendor!</a></h4>
         </div>
