@@ -3,61 +3,134 @@
 {% load url from future %}
 
 {% block header_extra %}
-<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-{% endblock %}
+  <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
+  <script type="text/javascript">
+    var vendors = [
+    [{{ vendor.latitude }}, {{vendor.longitude }}],
+    ];
+  </script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/map.js"></script>
 
-{% block headline %}{{ vendor.name }}
-{% if user.is_staff %} - <a href="/admin/vegancity/vendor/{{ vendor.id }}/">Edit</a>{% endif %}{% endblock %}
+
+{% endblock %}
 
 {% block summary %}
 {% endblock %}
 
-{% block content %}
+{% block content_flexible %}
+  <div class="container">
+    <br/>
+    <div class="row">
+      <div class="span6">
+        <div id="map_canvas"></div>
+        <br/>
+      </div>
+      <div class="span6">
+        {% if vendor.notes %}
+          <h3>
+            {{vendor.name}}
+            {% if user.is_staff %}
+              - <a href="/admin/vegancity/vendor/{{ vendor.id }}/">Edit</a>
+            {% endif %}
+          </h3>          
+          <h5>{{ vendor.notes }}</h5>
+        {% endif %}
 
-<p>{{ vendor.name }}<br/>
-{% if vendor.address %}Address:{{ vendor.address }}<br/>{% endif %}
-{% if vendor.neighborhood %}Neighborhood: {{ vendor.neighborhood }}<br/>{% endif %}
-{% if vendor.phone %}Phone:{{ vendor.phone }}<br/>{% endif %}
-{% if vendor.website %}Website: <a href="http://{{ vendor.website }}">{{ vendor.website }}</a><br/>{% endif %}
-{% if vendor.veg_level %}Veg Level:{{ vendor.veg_level }}<br/>{% endif %}
-{% if vendor.veg_level %}Simple Veg Level:{{ vendor.veg_level.super_category }}<br/>{% endif %}
-{% if vendor.food_rating %}Food Rating:{{ vendor.food_rating }}<br/>{% endif %}
-{% if vendor.atmosphere_rating %}Atmosphere Rating:{{ vendor.atmosphere_rating }}<br/>{% endif %}
-{% if vendor.best_vegan_dish %}Best Vegan Dish:{{ vendor.best_vegan_dish }}<br/>{% endif %}
-{% if vendor.cuisine_tags.all %}Cuisine(s): {% for tag in vendor.cuisine_tags.all %}<strong>{{ tag }}</strong>{% if not forloop.last %}, {% endif %}{% endfor %}<br/>{% endif %}
-{% if vendor.feature_tags.all %}Features: {% for tag in vendor.feature_tags.all %}<strong>{{ tag }}</strong>, {% endfor %}<br/>{% endif %}
-{% if vendor.notes %}{{ vendor.notes }}<br/>{% endif %}
-</p>
+        <table class="table table-hover">
+          {% if vendor.address %}
+            <tr>
+              <td>Address:</td>
+              <td>{{ vendor.address }}</td>
+            </tr>
+          {% endif %}
+          {% if vendor.neighborhood %}
+            <tr>
+              <td>Neighborhood:</td>
+              <td> {{ vendor.neighborhood }}</td>
+            </tr>
+          {% endif %}
+          {% if vendor.phone %}
+            <tr>
+              <td>Phone:</td>
+              <td>{{ vendor.phone }}</td>
+            </tr>
+          {% endif %}
+          {% if vendor.website %}
+            <tr>
+              <td>Website:</td>
+              <td> <a href="{{ vendor.website }}">{{ vendor.website }}</a></td>
+            </tr>
+          {% endif %}
+          {% if vendor.veg_level %}
+            <tr>
+              <td>Veg Level:</td>
+              <td>{{ vendor.veg_level }}</td>
+            </tr>
+          {% endif %}
+          {% if vendor.food_rating %}
+            <tr>
+              <td>Food Rating:</td>
+              <td><h3>{{ vendor.food_rating }}</h3></td>
+            </tr>
+          {% endif %}
+          {% if vendor.atmosphere_rating %}
+            <tr>
+              <td>Atmosphere Rating:</td>
+              <td><h3>{{ vendor.atmosphere_rating }}</h3></td>
+            </tr>
+          {% endif %}
+          {% if vendor.best_vegan_dish %}
+            <tr>
+              <td>Best Vegan Dish:{{ vendor.best_vegan_dish }}</td>
+            </tr>
+          {% endif %}
+          {% if vendor.cuisine_tags.all %}
+            <tr>
+              <td>Cuisine(s): </td>
+              <td>{% for tag in vendor.cuisine_tags.all %}<strong>{{ tag }}</strong>{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+            </tr>
+          {% endif %}
+          {% if vendor.feature_tags.all %}
+            <tr>
+              <td>Features: </td>
+              <td>{% for tag in vendor.feature_tags.all %}<strong>{{ tag }}</strong>, {% endfor %}</td>
+            </tr>
+          {% endif %}
+        </table>
 
-{% block map %}
-<div id="map_canvas" style="width: 400px; height: 400px"></div>
+        <h5><a href="{% url 'new_review' vendor_id=vendor.id %}" class="btn btn-primary">Write a review!</a></h5>
+      </div>
+    </div>
+  </div>
 
-<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}/js/map.js"></script>
-<script type="text/javascript">
+  {% if vendor.review_set.all %}
+    <div style="background-color: #F6F6F6">
+      <div class="container">
+        <div class="row">
+          <div class="span6">
+            <hr/>
+            <h2>{{ reviews.count }} Review{% if reviews.count != 1 %}s{% endif %}</h2>
+            <hr>
+            {% for review in vendor.review_set.all %}
+              <h4>{{review.title }}</h4>
+              <h5>entered by: {{ review.author }}</h5>
+              <h6>{{ review.created }}</h6>
+              {% if review.best_vegan_dish %}
+                <h6>best vegan dish: {{ review.best_vegan_dish }}</h6>
+              {% endif %}
+              <p>{{ review.content }}</p>
+              <br>          
+            {% endfor %}
+          </div>
+          <div class="span6 hidden-phone" style="text-align: center">
+            <br><br>
+            <img src="{{ STATIC_URL }}images/tomato.png">
+          </div>        
+        </div>
+      </div>
+    </div>
+  {% endif %}
 
-var vendor_singleton = [
-  [{{ vendor.latitude }}, {{vendor.longitude }}],
-];
-jQuery("body").ready(createMap(vendor_singleton));
-</script>
-<br/>
-{% endblock %}
-
-<h5><a href="{% url 'new_review' vendor_id=vendor.id %}">Write a review!</a></h5>
-{% if vendor.review_set.all %}
-<hr/>
-<div class="container">
-<h2>{{ reviews.count }} Review{% if reviews.count != 1 %}s{% endif %}:</h2>
-
-{% for review in vendor.review_set.all %}
-<h3>entered by: {{ review.author }}</h3>
-<h6>{% if review.best_vegan_dish %}best vegan dish: {{ review.best_vegan_dish }}{% endif %}</h6>
-<p>{{ review.content }}</p>
-
-{% endfor %}
-</div>
-{% endif %}
 {% endblock %}
 
 

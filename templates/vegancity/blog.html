@@ -6,18 +6,26 @@
 {% endblock %}
 
 {% block content %}
-<h4>welcome to the vegancity blog!</h4>
-{% if object_list %}
-{{ object_list.count }} entries.
-<hr/>
-{% for entry in object_list %}
-<h5>{{ entry.title }}</h5>
-<h6>by {{ entry.author }}</h6>
-<p>{{ entry.body }}</p>
-<hr/>
-{% endfor %}
-{% else %}
-<h4>no blog entries.</h4>  
-{% endif %}
+  <div class="row">
+    <div class="span6">
+      <h4>welcome to the vegancity blog!</h4>
+      {% if object_list %}
+        {{ object_list.count }} entries.
+        <hr/>
+        {% for entry in object_list %}
+          <h5>{{ entry.title }}</h5>
+          <h6>by {{ entry.author }}</h6>
+      <p>{{ entry.body }}</p>
+      <hr/>
+    {% endfor %}
+  {% else %}
+    <h4>no blog entries.</h4>  
+  {% endif %}
+    </div>
+    <div class="span6 hidden-phone">
+      <img src="{{ STATIC_URL }}images/cat.png">
+    </div>
+  </div>
+
 {% endblock %}
 
