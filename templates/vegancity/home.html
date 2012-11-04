@@ -22,16 +22,14 @@
       </form>
 
       <br/>
-      <div class="row">
+      <div class="row" style="text-align: center;">
 		<p>
           <em>Hungry?</em> Search for something to eat by location, restaurant, or type of food. Read and post vegan-specific reviews. Get involved in our open, free software website to improve vegan resources in Philadelphia.<br>
 <hr>
-<center>          
           <a class="btn btn-primary btn-large float-up" href="{% url 'vendors' %}">Search for a restaurant!</a>
           <a class="btn btn-primary btn-large" href="{% url 'new_vendor' %}">Add a restaurant!</a>
-          <a class="btn btn-primary btn-large" href="#reviewModal" data-toggle="modal">Write a Review!</a>
+          <a class="btn btn-primary btn-large hidden-phone" href="#reviewModal" data-toggle="modal">Write a Review!</a>
           <a class="btn btn-primary btn-large" href="{% url 'about' %}">Learn More!</a>
-</center>
         </p>
       </div>
     </div>

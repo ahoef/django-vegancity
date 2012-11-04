@@ -50,6 +50,13 @@ input#vc-search-input {
     width: 95%;
 }
 
+.hero-unit {
+    background: -moz-linear-gradient(45deg, #EEEEEE 0%,
+                                     #F6F6F6 100%)
+    repeat scroll 0% 0% transparent;
+}
+
 .hero-unit h1 {
     color: rgb(210, 93, 7);
+
 }
