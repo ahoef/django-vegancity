@@ -44,7 +44,8 @@
         {% endfor %}
         <input id="search-input" type="text" class="input-large" placeholder="e.g., south and broad, blackbird pizza, burritos" autofocus="autofocus" name="query" {% if query %}value="{{ query }}"{% endif %}>
         <button type="submit" class="btn btn-primary">Search</button>
-        <button class="btn btn-warning" type="reset">Reset</button>
+        <!-- TODO : make this button work with jquery and stop filter -->        
+        <!-- <button class="btn btn-warning" type="reset" id="vc-search-reset">Reset</button> -->
       </form>
       {% if vendors %}
         <div id="map_canvas"></div>

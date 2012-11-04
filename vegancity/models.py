@@ -25,11 +25,11 @@ import shlex
 import itertools
 import geocode
 import validators
-import search
+#import search
 import tracking
 
 #####################################
-## HELPER CLASSES
+## ABSTRACT CLASSES
 #####################################
 
 class NamedModel(models.Model):
@@ -46,6 +46,56 @@ class NamedCreatedModel(NamedModel):
 
     class Meta:
         abstract = True
+
+class TagManager(models.Manager):
+
+    def word_search(self, word):
+        "takes a word and searches all tag names for that word"
+        print "word:", word, "\n"
+        qs = self.filter(name__icontains=word)
+        if not qs and word[-1] == 's':
+            qs = self.filter(name__icontains=word[:-1])
+        return qs
+
+    def with_vendors(self, vendors=None):
+        "filters tags to tags that actually have vendors"
+        qs = self.all()
+        if vendors:
+            qs = qs.filter(vendor__in=vendors).distinct('name')
+        else:
+            annotated = self.annotate(num_vendors=Count('vendor'))
+            qs = annotated.filter(num_vendors__gte=1)
+        return qs
+
+    def get_vendors(self, qs):
+        results = set()
+        for tag in qs:
+            results = results.union(tag.vendor_set.all())
+        return results
+        
+class _TagModel(models.Model):
+    name = models.CharField(
+        help_text="short name, all lowercase alphas, underscores for spaces",
+        max_length=255, unique=True
+        )
+    description = models.CharField(
+        help_text="Nicely formatted text.  About a sentence.",
+        max_length=255
+        )
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    objects = TagManager()
+
+    def __unicode__(self):
+        return self.description
+
+    def get_vendors(self):
+        "returns all the vendors that are tagged with this tag."
+        return self.vendor_set.all()
+   
+    class Meta:
+        abstract = True
+        get_latest_by = "created"
+        ordering = ('name',)
 
 #######################################
 # SITE CLASSES
@@ -297,30 +347,30 @@ class VendorManager(models.Manager):
 
         return vendors
     
-    def search(self, query, initial_queryset=None):
-        # rank the likelihood of different search times
-        ranks = search.get_ranks(query)
-        presentation_order = (rank[1] for rank in ranks)
+    # def search(self, query, initial_queryset=None):
+    #     # rank the likelihood of different search times
+    #     ranks = search.get_ranks(query)
+    #     presentation_order = (rank[1] for rank in ranks)
 
-        # log the query in the db
-        tracking.log_query(query, ranks)
+    #     # log the query in the db
+    #     tracking.log_query(query, ranks)
 
-        # execute searches and store them in a hash
-        searches = {
-            'name' : self.name_search(query, initial_queryset),
-            'address' : self.address_search(query, initial_queryset),
-            'tags' : self.tags_search(query, initial_queryset),
-            }
+    #     # execute searches and store them in a hash
+    #     searches = {
+    #         'name' : self.name_search(query, initial_queryset),
+    #         'address' : self.address_search(query, initial_queryset),
+    #         'tags' : self.tags_search(query, initial_queryset),
+    #         }
 
-        # compute the set of all vendors found in the 3 searches
-        # todo - optimize?
-        vendors = [vendor for vendor in initial_queryset if vendor in 
-                   itertools.chain(searches['name']['vendors'], 
-                                   searches['address']['vendors'], 
-                                   searches['tags']['vendors'])]
+    #     # compute the set of all vendors found in the 3 searches
+    #     # todo - optimize?
+    #     vendors = [vendor for vendor in initial_queryset if vendor in 
+    #                itertools.chain(searches['name']['vendors'], 
+    #                                searches['address']['vendors'], 
+    #                                searches['tags']['vendors'])]
 
-        result_set = map(lambda x: searches[x], presentation_order)
-        return vendors
+    #     result_set = map(lambda x: searches[x], presentation_order)
+    #     return vendors
     
 
 class ApprovedVendorManager(VendorManager):
@@ -402,6 +452,8 @@ class Vendor(NamedCreatedModel):
         If not, geocode."""
         if self.pk is not None:
             orig_address = Vendor.objects.get(pk=self.pk).address
+            print "orig_address:", orig_address, "\n"
+
         else:
             orig_address = None
         if (orig_address != self.address) or self.needs_geocoding():
@@ -442,52 +494,8 @@ class Vendor(NamedCreatedModel):
         verbose_name_plural = "Vendors"
 
 #######################################
-# TAG MODEL CLASSES
+# TAGS
 #######################################
-
-class TagManager(models.Manager):
-
-    def word_search(self, word):
-        "takes a word and searches all tag names for that word"
-        print "word:", word, "\n"
-        qs = self.filter(name__icontains=word)
-        return qs
-
-    def with_vendors(self):
-        "filters tags to tags that actually have vendors"
-        annotated = self.annotate(num_vendors=Count('vendor'))
-        qs = annotated.filter(num_vendors__gte=1)
-        return qs
-
-    def get_vendors(self, qs):
-        results = set()
-        for tag in qs:
-            results = results.union(tag.vendor_set.all())
-        return results
-        
-class _TagModel(models.Model):
-    name = models.CharField(
-        help_text="short name, all lowercase alphas, underscores for spaces",
-        max_length=255, unique=True
-        )
-    description = models.CharField(
-        help_text="Nicely formatted text.  About a sentence.",
-        max_length=255
-        )
-    created = models.DateTimeField(auto_now_add=True, null=True)
-    objects = TagManager()
-
-    def __unicode__(self):
-        return self.description
-
-    def get_vendors(self):
-        "returns all the vendors that are tagged with this tag."
-        return self.vendor_set.all()
-   
-    class Meta:
-        abstract = True
-        get_latest_by = "created"
-        ordering = ('name',)
 
 class CuisineTag(_TagModel):
 

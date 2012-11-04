@@ -28,9 +28,10 @@
 #     ((score, type_string), (score, type_string))
 # ex. ((7, 'address'), (4, 'name'), (0, 'tags'))
 
-import sys
 import re
 import shlex
+
+from vegancity.models import FeatureTag, CuisineTag, Vendor
 
 # DIFFERENTIAL
 # IF ONE SCORE IS HIGHER THAN ANOTHER SCORE BY THE DIFFERENTIAL
@@ -49,12 +50,6 @@ def fluff_split(query):
     tokens = [token for token in query.split() if token not in FLUFF_WORDS]
     return tokens
 
-
-#######################
-# STATIC CONTENT
-#######################
-
-# should we store this in the db?
 _ADDRESS_PATTERNS = (
     (3, "\dth"), 
     (3, "\dst"), 
@@ -80,15 +75,6 @@ def _calculate_rank(query, patterns):
         rank += score * len(hits)
     return rank
     
-# def _address_rank(query):
-#     return (_calculate_rank(query, _ADDRESS_PATTERNS), 'address')
-
-# def _tags_rank(query):
-#     return (_calculate_rank(query, _TAGS_PATTERNS), 'tags')
-
-# def _name_rank(query):
-#     return (3, 'name')
-
 def _address_rank(query):
     return _calculate_rank(query, _ADDRESS_PATTERNS)
 
@@ -104,26 +90,16 @@ def get_ranks(query):
     tags = _tags_rank(query)
     return sorted([address, name, tags], reverse=True)
 
-def tests():
-    # todo :  write tome tests
-    pass
-
-def main():
-    tests()
-    if len(sys.argv) > 1:
-        results = ((query, get_ranks(query)) for query in sys.argv[1:])
-        for result in results:
-            query, ranks = result
-            print query
-            print result
-            print
-
-if __name__ == '__main__':
-    main()
-
-
 def master_search(query, initial_queryset=None):
-    from vegancity.models import FeatureTag, CuisineTag, Vendor
+    """Master Search for vegancity.
+
+    Takes a query string and searches for it using a complicated
+    series of operations. (Tries to decide how best to serve results)
+
+    Finally, if a queryset or list was passed as initial_queryset,
+    all results not in that queryset will be removed."""
+
+
 
     # take the query and do a featuretag and cuisine search on each word.
     real_words = fluff_split(query)
@@ -199,7 +175,6 @@ def master_search(query, initial_queryset=None):
     master_results.extend(name_vendors) 
     print "master_results:", master_results, "\n"
     
-    lower_half_results = []
     if rank_differential_test:
         address_search = Vendor.approved_objects.address_search(query)
         print "address_search:", address_search
@@ -212,6 +187,8 @@ def master_search(query, initial_queryset=None):
         if name not in master_results:
             master_results.append(name)
 
+    if initial_queryset:
+        master_results = [vendor for vendor in master_results if vendor in initial_queryset]
     print "master_results:", master_results, "\n"
     return master_results
 

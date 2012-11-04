@@ -88,10 +88,7 @@ def vendors(request):
     query = request.GET.get('query', '')
 
     if query:
-        # vendors = models.Vendor.objects.search(query, vendors)
-        print "vendors1:", type(vendors), "\n"
         vendors = search.master_search(query, vendors)
-        print "vendors2:", type(vendors), "\n"
 
     # determine which filters can be presented on the page
     # based on whether they apply to any of the remaining
