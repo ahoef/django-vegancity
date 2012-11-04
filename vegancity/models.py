@@ -400,7 +400,11 @@ class Vendor(NamedCreatedModel):
 
         Before saving, see if the vendor has been geocoded.
         If not, geocode."""
-        if self.needs_geocoding():
+        if self.pk is not None:
+            orig_address = Vendor.objects.get(pk=self.pk).address
+        else:
+            orig_address = None
+        if (orig_address != self.address) or self.needs_geocoding():
             self.apply_geocoding()
         super(Vendor, self).save(*args, **kwargs)
 
