@@ -156,7 +156,7 @@ def master_search(query, initial_queryset=None):
 
         ct_hits = CuisineTag.objects.word_search(word)
         print "ct_hits:", ct_hits, "\n"
-        ct_hits_vendors = CuisineTag.objects.get_vendors(ft_hits)
+        ct_hits_vendors = CuisineTag.objects.get_vendors(ct_hits)
         print "ct_hits_vendors:", ct_hits_vendors, "\n"
         if ct_hits:
             tag_words.add(word)
@@ -186,7 +186,10 @@ def master_search(query, initial_queryset=None):
     # the namesearch, tagsearch, 
     # and address_presearch
     # STANDIN:
-    rank_differential_test = (name_rank + tag_rank) / address_rank > 2
+    rank_differential_test = (
+        (name_rank + tag_rank) / address_rank < 2 and
+        len(address_tokens) > 2
+        )
     print "rank_differential_test:", rank_differential_test
     
     master_results = []
@@ -197,7 +200,7 @@ def master_search(query, initial_queryset=None):
     print "master_results:", master_results, "\n"
     
     lower_half_results = []
-    if not rank_differential_test:
+    if rank_differential_test:
         address_search = Vendor.approved_objects.address_search(query)
         print "address_search:", address_search
         master_results.extend(address_search)
