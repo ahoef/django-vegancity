@@ -94,6 +94,8 @@ def master_search(query, initial_queryset=None):
 
     # take the query and do a featuretag and cuisine search on each word.
     real_words = fluff_split(query)
+    if len(real_words) == 0:
+        return []
 
     name_words = set()
     name_vendors = set()
