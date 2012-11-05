@@ -250,6 +250,9 @@ class VendorManager(models.Manager):
 
         # todo this is a mess!
         geocode_result = geocode.geocode_address(query)
+
+        if geocode_result == None:
+            return []
         latitude, longitude, neighborhood = geocode_result
 
         if neighborhood == None:

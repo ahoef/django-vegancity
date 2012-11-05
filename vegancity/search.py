@@ -132,7 +132,6 @@ def master_search(query, initial_queryset=None):
             tag_vendors = tag_vendors.union(ct_hits_vendors)
             tag_rank += 1
 
-
     tag_word_density = float(len(tag_words)) / len(real_words)
     tag_rank += tag_word_density * 10
 
