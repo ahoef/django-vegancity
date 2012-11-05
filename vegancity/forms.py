@@ -136,6 +136,7 @@ class AdminEditReviewForm(_BaseReviewForm):
 class NewReviewForm(_BaseReviewForm):
 
     def __init__(self, vendor, *args, **kwargs):
+        print kwargs
         super(NewReviewForm, self).__init__(*args, **kwargs)
         self.filter_dishes(vendor)
 
@@ -152,3 +153,50 @@ class NewReviewForm(_BaseReviewForm):
             'vendor' : forms.HiddenInput,
             }
         
+
+
+class FilterForm(forms.Form):
+    neighborhood = forms.ModelChoiceField(queryset=models.Neighborhood.objects.distinct(),
+                                          required=False)
+    cuisine = forms.ModelChoiceField(queryset=models.CuisineTag.objects.with_vendors().distinct(),
+                                     required=False)
+    feature = forms.ModelChoiceField(queryset=models.FeatureTag.objects.with_vendors().distinct(),
+                                     required=False)
+    
+    def __init__(self, *args, **kwargs):
+        super(FilterForm, self).__init__(*args, **kwargs)
+
+        # initialize extra values
+        self.selected_neighborhood = self.data.get('neighborhood', None)
+        self.selected_cuisine = self.data.get('cuisine', None)
+        self.selected_feature = self.data.get('feature', None)
+        self.query = self.data.get('query', None)
+
+        self.checked_feature_filters = []
+        for f in models.FeatureTag.objects.with_vendors():
+            if self.data.get(f.name) or self.selected_feature == str(f.id):
+                self.checked_feature_filters.append(f)
+
+    def filter_selections_by_vendors(self, vendors):
+        ids = [vendor.id for vendor in vendors]
+        self.fields['neighborhood'].queryset = models.Neighborhood.objects.filter(vendor__in=ids).distinct()
+        self.fields['cuisine'].queryset = models.CuisineTag.objects.filter(vendor__in=ids).distinct()
+        self.fields['feature'].queryset = models.FeatureTag.objects.filter(vendor__in=ids).distinct()
+
+    def get_pre_filtered_vendors(self):
+        vendors = models.Vendor.approved_objects.all()
+
+        for f in self.checked_feature_filters:
+            vendors = vendors.filter(feature_tags__id__exact=f.id)
+
+        if self.selected_neighborhood:
+            vendors = vendors.filter(neighborhood__id=self.selected_neighborhood)
+
+        if self.selected_cuisine:
+            vendors = vendors.filter(cuisine_tags__id=self.selected_cuisine)
+
+        if self.selected_feature:
+            vendors = vendors.filter(feature_tags__id=self.selected_feature)
+        return vendors
+
+

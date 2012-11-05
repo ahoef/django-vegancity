@@ -57,60 +57,24 @@ def vendors(request):
     the search runmode.  Otherwise, we just return all vendors
     in our database."""
 
-    # figure out which filters have been checked
-    all_feature_tags = models.FeatureTag.objects.with_vendors()
-
-    checked_feature_filters = [f for f in all_feature_tags
-                               if request.GET.get(f.name)]
-    selected_cuisine = request.GET.get('cuisine', None)
-    selected_neighborhood = request.GET.get('neighborhood', None)
-
-    selected_feature = request.GET.get('feature', None)
-    selected_feature_obj_list = filter(lambda f: f.name == selected_feature, all_feature_tags)
+    filter_form = forms.FilterForm(request.GET)
     
-    if selected_feature_obj_list:
-        checked_feature_filters.append(selected_feature_obj_list[0])
-
-    # Filter the set of vendors that can be displayed
-    # based on what is in the checked filters.
-    vendors = models.Vendor.approved_objects.all()
-
-    for f in checked_feature_filters:
-        vendors = vendors.filter(feature_tags__id__exact=f.id)
-
-    if selected_neighborhood:
-        vendors = vendors.filter(neighborhood__name=selected_neighborhood)
-
-    if selected_cuisine:
-        vendors = vendors.filter(cuisine_tags__name=selected_cuisine)
-
-
-    query = request.GET.get('query', '')
+    if filter_form.is_valid():
+        vendors = filter_form.get_pre_filtered_vendors()
+        query = filter_form.query
 
     if query:
         vendors = search.master_search(query, vendors)
 
-    # determine which filters can be presented on the page
-    # based on whether they apply to any of the remaining
-    # vendors
-    available_feature_filters = [tag for tag in all_feature_tags if 
-                       tag.vendor_set.filter(id__in=[vendor.id for vendor in vendors])]
+    filter_form.filter_selections_by_vendors(vendors)
+
     ctx = {
         'vendors' : vendors,
-        'query': query,
-
-        'feature_filters' : available_feature_filters,
-        'cuisines' : models.CuisineTag.objects.with_vendors(vendors),
-        'neighborhoods' : models.Neighborhood.objects.filter(vendor__in=vendors).distinct('name'),
-
-        'checked_feature_filters' : checked_feature_filters,
-        'selected_neighborhood' : selected_neighborhood,
-        'selected_cuisine' : selected_cuisine,
+        'filter_form' : filter_form,
         }
 
     return render_to_response('vegancity/vendors.html', ctx,
                               context_instance=RequestContext(request))
-
 
 
 ###########################

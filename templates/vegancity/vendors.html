@@ -3,9 +3,6 @@
 {% load url from future %}
 
 {% block header_extra %}
-  <!-- TODO: REMOVE -->  
-  <!-- <link href="{{ STATIC_URL }}css/vegancity.css" rel="stylesheet"/> -->
-
   <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}/js/map.js"></script>
   <script type="text/javascript">
@@ -36,17 +33,10 @@
   <!-- FIRST ROW -->  
   <div class="row">
     <div class="span6">
-      <form action="{% url 'vendors' %}" method="get" class="form-search">
-        <input type="hidden" name="cuisine" {% if selected_cuisine %}value="{{ selected_cuisine }}"{% endif %}>
-        <input type="hidden" name="neighborhood" {% if selected_neighborhood %}value="{{ selected_neighborhood }}"{% endif %}>
-        {% for f in checked_feature_filters %}
-          <input type="hidden" name="{{ f.name }}" value="true">
-        {% endfor %}
-        <input id="search-input" type="text" class="input-large" placeholder="e.g., south and broad, blackbird pizza, burritos" autofocus="autofocus" name="query" {% if query %}value="{{ query }}"{% endif %}>
+      <form action="{% url 'vendors' %}" method="get" name="filters" id="filters" class="form-search">
+        <input id="search-input" type="text" class="input-large" placeholder="e.g., south and broad, blackbird pizza, burritos" autofocus="autofocus" name="query" {% if filter_form.query %}value="{{ filter_form.query }}"{% endif %}>
         <button type="submit" class="btn btn-primary">Search</button>
-        <!-- TODO : make this button work with jquery and stop filter -->        
-        <!-- <button class="btn btn-warning" type="reset" id="vc-search-reset">Reset</button> -->
-      </form>
+        <br><br>
       {% if vendors %}
         <div id="map_canvas"></div>
       {% endif %}
@@ -55,49 +45,21 @@
     <div class="span6">
       <div class="row">
         <div class="span3">
-          <form action="{% url 'vendors' %}" method="get" name="filters" id="filters">
-            <input type="hidden" name="query" value="{{ query }}">
 
             <h4>Neighborhood:</h4>
-            <select name="neighborhood" onchange="this.form.submit()">
-              <option value="" selected="selected">---------</option>
-              {% for neighborhood in neighborhoods %}
-                <option value="{{neighborhood.name}}" {% if neighborhood.name == selected_neighborhood %}selected="selected"{% endif %}>{{ neighborhood.name }}</option>
-              {% endfor %}
-            </select>
+            {{ filter_form.neighborhood }}
+            <h4>Cuisine:</h4>
+            {{ filter_form.cuisine }}
+            <h4>Features:</h4>
+            {{ filter_form.checked_features }}
+            {% for checked in filter_form.checked_feature_filters %}
+              <label class="checkbox">
+                <input type="checkbox" name="{{ checked.name }}" value="True" checked="checked" onchange="this.form.submit()">
+                {{ checked }}
+              </label>
+            {% endfor %}         
+            {{ filter_form.feature }}
 
-            {% if cuisines %}
-              <h4>Cuisine: </h4>
-              <select name="cuisine" onchange="this.form.submit()">
-                <option value="" selected="selected">---------</option>
-                {% for cuisine in cuisines %}
-                  {{cuisine.name}}              
-                  <option value="{{cuisine.name}}" {% if cuisine.name == selected_cuisine %}selected="selected"{% endif %}>{{ cuisine.description }}</option>
-                {% endfor %}
-              </select>
-            {% endif %}
-
-            {% if feature_filters or checked_feature_filters %}
-              <h4>Features:</h4>
-              {% if checked_feature_filters %}
-                {% for filter in checked_feature_filters %}
-                  <label class="checkbox"><input type="checkbox" name="{{ filter.name }}" value="true" onchange="this.form.submit()" checked="1">{{ filter.description }}</label>
-                {% endfor %}
-                <br>
-              {% endif %}
-
-              {% if feature_filters %}            
-                <select name="feature" onchange="this.form.submit()">
-                  <option value="" selected="selected">---------</option>
-                  {% for feature in feature_filters %}
-                    {% if feature not in checked_feature_filters %}
-                      {{feature.name}}              
-                      <option value="{{feature.name}}" {% if feature.name == selected_feature %}selected="selected"{% endif %}>{{ feature.description }}</option>
-                    {% endif %}
-                  {% endfor %}
-                </select>
-              {% endif %}
-            {% endif %}
           </form>
 
           <p><a href="{% url 'vendors' %}" class="btn btn-warning">Clear All Filters</a></p>
