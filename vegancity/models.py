@@ -240,77 +240,21 @@ class VendorManager(models.Manager):
         return pending
         
 
-    # This may prove useful later.
-
-    # def tags_search(self, query, initial_queryset=None):
-    #     """Search vendors by tag.
-
-    #     Takes a query, breaks it into tokens, searches for tags
-    #     that contain the token.  If any of the tokens match any
-    #     tags, return all the orgs with that tag."""
-    #     tokens = shlex.split(query)
-    #     q_builder = Q()
-    #     for token in tokens:
-    #         q_builder = q_builder | Q(name__icontains=token)
-    #     cuisine_tag_matches = CuisineTag.objects.filter(q_builder)
-    #     feature_tag_matches = FeatureTag.objects.filter(q_builder)
-    #     vendors = set()
-    #     for tag in itertools.chain(cuisine_tag_matches, feature_tag_matches):
-    #         qs = tag.vendor_set.all()
-    #         if initial_queryset:
-    #             qs = qs.filter(id__in=initial_queryset)
-    #         for vendor in qs:
-    #             vendors.add(vendor)
-    #     vendor_count = len(vendors)
-    #     summary_string = ('Found %d results with tags matching "%s".' 
-    #                       % (vendor_count, ", ".join(tokens)))
-    #     return {
-    #         'count' : vendor_count, 
-    #         'summary_statement' : summary_string, 
-    #         'vendors':vendors
-    #         }
-
-
-    # This, sadly, had to be done away with.
-    # Unfortunately, we don't do name searches
-    # in a vacuum, so this code is not so usable.
-
-    # def name_search(self, query, initial_queryset=None):
-    #     """Search vendors by name.
-
-    #     Takes a query, breaks it into tokens, searches for names
-    #     that contain the token.  If any of the tokens match any
-    #     names, return all the orgs with that name."""
-    #     tokens = shlex.split(query)
-    #     q_builder = Q()
-    #     for token in tokens:
-    #         q_builder |= Q(name__icontains=token)
-    #     vendors = self.filter(q_builder)
-    #     if initial_queryset:
-    #         vendors = vendors.filter(id__in=initial_queryset)
-    #     vendor_count = vendors.count()
-    #     summary_string = ('Found %d results where name contains "%s".' 
-    #                       % (vendor_count, " or ".join(tokens)))
-    #     return {
-    #         'count' : vendor_count,
-    #         'summary_statement' : summary_string, 
-    #         'vendors' : vendors
-    #         }
-
     #TODO - replace with something better!
-    def address_search(self, query, initial_queryset=None):
+    def address_search(self, query):
         """ Search vendors by address.
 
         THIS WILL BE CHANGED SO NOT WRITING DOCUMENTATION."""
         
-        if initial_queryset:
-            vendors = self.filter(id__in=initial_queryset)
-        else:
-            vendors = self
+        vendors = self
 
         # todo this is a mess!
         geocode_result = geocode.geocode_address(query)
         latitude, longitude, neighborhood = geocode_result
+
+        if neighborhood == None:
+            return []
+
         point_a = (latitude, longitude)
 
         # TODO test this with a reasonable number of latitudes and longitudes
@@ -336,41 +280,7 @@ class VendorManager(models.Manager):
 
         vendors = map(lambda x: x[0], vendor_matches)
             
-        vendor_count = len(vendors)
-        summary_string = ('Found %d results where address is near "%s".' 
-                          % (vendor_count, query))
-        # return {
-        #     'count' : vendor_count, 
-        #     'summary_statement' : summary_string, 
-        #     'vendors':vendors
-        #     }
-
         return vendors
-    
-    # def search(self, query, initial_queryset=None):
-    #     # rank the likelihood of different search times
-    #     ranks = search.get_ranks(query)
-    #     presentation_order = (rank[1] for rank in ranks)
-
-    #     # log the query in the db
-    #     tracking.log_query(query, ranks)
-
-    #     # execute searches and store them in a hash
-    #     searches = {
-    #         'name' : self.name_search(query, initial_queryset),
-    #         'address' : self.address_search(query, initial_queryset),
-    #         'tags' : self.tags_search(query, initial_queryset),
-    #         }
-
-    #     # compute the set of all vendors found in the 3 searches
-    #     # todo - optimize?
-    #     vendors = [vendor for vendor in initial_queryset if vendor in 
-    #                itertools.chain(searches['name']['vendors'], 
-    #                                searches['address']['vendors'], 
-    #                                searches['tags']['vendors'])]
-
-    #     result_set = map(lambda x: searches[x], presentation_order)
-    #     return vendors
     
 
 class ApprovedVendorManager(VendorManager):

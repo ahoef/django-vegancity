@@ -23,16 +23,17 @@ import math
 import urllib
 import json
 
-from settings import LOCATION_LATITUDE, LOCATION_CITY_STATE
+from settings import LOCATION_LATITUDE, LOCATION_CITY_STATE, LOCATION_BOUNDS, LOCATION_COMPONENTS
 
 def geocode_address(address):
     "takes an address as a string and returns a tuple of latitude and longitude in float format"
-
-    address = address + " " + LOCATION_CITY_STATE
     base_url = "http://maps.googleapis.com/maps/api/geocode/json?"
     address_param = "address=" + urllib.quote_plus(address)
     sensor_param = "sensor=false"
-    full_url = base_url + address_param + "&" + sensor_param
+    bounds_param = "bounds=" + LOCATION_BOUNDS
+    components_param = "components=" + LOCATION_COMPONENTS
+    
+    full_url = base_url + "&".join([address_param, sensor_param, bounds_param, components_param])
     raw_response = urllib.urlopen(full_url).read()
     json_response = json.loads(raw_response)
     if not json_response['status'] == 'OK':

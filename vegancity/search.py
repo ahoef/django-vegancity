@@ -47,7 +47,7 @@ FLUFF_WORDS = ("and", "or", "&", "the", "best")
 
 def fluff_split(query):
     "takes a query and returns a list of non-fluff tokens"
-    tokens = [token for token in query.split() if token not in FLUFF_WORDS]
+    tokens = [token for token in query.split() if token not in FLUFF_WORDS and len(token) > 2]
     return tokens
 
 _ADDRESS_PATTERNS = (
@@ -83,13 +83,6 @@ def _address_rank(query):
 # PUBLIC / RUNMODES (CURRENTLY UNUSED)
 #########################################
 
-def get_ranks(query):
-    "The primary external function.  Builds a rank summary."
-    address = _address_rank(query)
-    name = _name_rank(query)
-    tags = _tags_rank(query)
-    return sorted([address, name, tags], reverse=True)
-
 def master_search(query, initial_queryset=None):
     """Master Search for vegancity.
 
@@ -98,8 +91,6 @@ def master_search(query, initial_queryset=None):
 
     Finally, if a queryset or list was passed as initial_queryset,
     all results not in that queryset will be removed."""
-
-
 
     # take the query and do a featuretag and cuisine search on each word.
     real_words = fluff_split(query)
@@ -191,8 +182,3 @@ def master_search(query, initial_queryset=None):
         master_results = [vendor for vendor in master_results if vendor in initial_queryset]
     print "master_results:", master_results, "\n"
     return master_results
-
-
-            
-
-        

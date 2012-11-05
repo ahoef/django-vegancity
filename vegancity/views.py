@@ -70,6 +70,7 @@ def vendors(request):
 
     ctx = {
         'vendors' : vendors,
+        'vendor_count' : len(vendors),
         'filter_form' : filter_form,
         }
 
