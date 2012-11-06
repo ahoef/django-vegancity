@@ -19,8 +19,14 @@
       ', {{ vendor.id }}],
     {% endif %}{% endfor %}
     ];
-  </script>
 
+    var typeahead_values = [
+    "West Philly",
+    "North Philly",
+    ]    
+
+  </script>
+    {{ filter_form.media }}
 {% endblock %}
 
 {% block headline %}{% endblock %}
@@ -34,9 +40,16 @@
   <div class="row">
     <div class="span6">
       <form action="{% url 'vendors' %}" method="get" name="filters" id="filters" class="form-search">
-        <input id="search-input" type="text" class="input-large" placeholder="e.g., south and broad, blackbird pizza, burritos" autofocus="autofocus" name="query" {% if filter_form.query %}value="{{ filter_form.query }}"{% endif %}>
+        <input id="search-input" type="text" class="input-large" 
+               autofocus="autofocus" autocomplete="off" name="query" 
+               {% if filter_form.query %}value="{{ filter_form.query }}"{% endif %}
+               data-provide="typeahead" data-source='[
+               "West Philly",
+               "North Philly",               
+               ]'>
         <button type="submit" class="btn btn-primary">Search</button>
         <br><br>
+
       {% if vendors %}
         <div id="map_canvas"></div>
       {% endif %}
