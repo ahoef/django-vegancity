@@ -58,12 +58,6 @@ function createMap(vendors) {
 $(document).ready(function() {
 
     $("body").ready(createMap(vendors));
-    //TODO: this is a hack, should be able to fix this in django.
-    //TODO: change the feature modelchoicefield to a choicefield
-    $("#id_feature").val("");
-    $("#id_neighborhood, #id_cuisine, #id_checked_features, #id_feature").change(function(event) {
-        this.form.submit();
-    });
     $(".marker-link").click(function(event) {
         var vendor_id = $(event.currentTarget).attr('class').match(/\d+/);
         google.maps.event.trigger(map.markers[vendor_id], 'click');

@@ -19,6 +19,7 @@
 from django import forms
 
 import models
+import search
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -64,7 +65,6 @@ class _BaseVendorForm(forms.ModelForm):
 
     class Media:
         js = (
-            '//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js',
             'js/vendor_form.js',
             )
 
@@ -75,7 +75,6 @@ class AdminVendorForm(_BaseVendorForm):
 
     class Media:
         js = (
-            '//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js',
             'http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false',
             'js/vendor_form.js',
             )
@@ -163,6 +162,11 @@ class FilterForm(forms.Form):
     feature = forms.ModelChoiceField(queryset=models.FeatureTag.objects.with_vendors().distinct(),
                                      required=False)
     
+    class Media:
+        js = (
+            'js/filter_form.js',
+            )
+
     def __init__(self, *args, **kwargs):
         super(FilterForm, self).__init__(*args, **kwargs)
 
@@ -171,11 +175,19 @@ class FilterForm(forms.Form):
         self.selected_cuisine = self.data.get('cuisine', None)
         self.selected_feature = self.data.get('feature', None)
         self.query = self.data.get('query', None)
+        self.vendors = None
 
         self.checked_feature_filters = []
         for f in models.FeatureTag.objects.with_vendors():
             if self.data.get(f.name) or self.selected_feature == str(f.id):
                 self.checked_feature_filters.append(f)
+
+    def apply_search(self):
+        if self.query:
+            self.vendors = search.master_search(self.query, self.get_pre_filtered_vendors())
+        else:
+            self.vendors = self.get_pre_filtered_vendors()
+    
 
     def filter_selections_by_vendors(self, vendors):
         ids = [vendor.id for vendor in vendors]

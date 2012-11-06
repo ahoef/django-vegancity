@@ -60,17 +60,12 @@ def vendors(request):
     filter_form = forms.FilterForm(request.GET)
     
     if filter_form.is_valid():
-        vendors = filter_form.get_pre_filtered_vendors()
-        query = filter_form.query
-
-    if query:
-        vendors = search.master_search(query, vendors)
-
-    filter_form.filter_selections_by_vendors(vendors)
+        filter_form.apply_search()
+        filter_form.filter_selections_by_vendors(filter_form.vendors)
 
     ctx = {
-        'vendors' : vendors,
-        'vendor_count' : len(vendors),
+        'vendors' : filter_form.vendors,
+        'vendor_count' : len(filter_form.vendors),
         'filter_form' : filter_form,
         }
 
