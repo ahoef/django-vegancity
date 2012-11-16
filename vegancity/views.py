@@ -51,6 +51,7 @@ def home(request):
     return render_to_response("vegancity/home.html", ctx,
                               context_instance=RequestContext(request))
 
+
 def vendors(request):
     """Display table level data about vendors.
 
@@ -113,6 +114,7 @@ def _generic_form_processing_view(request, form_obj, redirect_url,
     ctx: a context dictionary to be rendered into the template. The main
     form object will be placed in this dict with the name 'form'.
     """
+
     if request.method == 'POST':
         form = form_obj(request.POST)
         obj = None
@@ -168,11 +170,13 @@ def new_vendor(request):
     "Create a new vendor."
 
     response, obj =  _generic_form_processing_view(
-        request, forms.NewVendorForm, 
+        request, 
+        forms.NewVendorForm, 
         reverse("vendor_thanks"), 
         "vegancity/new_vendor.html")
 
     return response
+
 
 @login_required
 def new_review(request, vendor_id):
@@ -199,7 +203,7 @@ def new_review(request, vendor_id):
         
     response, obj =  _generic_form_processing_view(
             request, 
-            closed_form, 
+            form, 
             reverse("review_thanks", args=[vendor.id]),
             "vegancity/new_review.html", 
             [apply_author],
