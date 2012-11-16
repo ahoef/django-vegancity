@@ -16,10 +16,9 @@
 # along with Vegancity.  If not, see <http://www.gnu.org/licenses/>.
 
 import functools
-import itertools
 
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response, render
+from django.http import HttpResponseRedirect
+from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
@@ -32,6 +31,8 @@ from vegancity import search
 
 
 def home(request):
+    "The view for the homepage."
+
     vendors = models.Vendor.approved_objects.all()
     top_5 = vendors.annotate(score=Sum('review__food_rating')).order_by('score')[:5]
     recent_activity = models.Review.approved_objects.order_by("created")[:5]
@@ -77,10 +78,41 @@ def vendors(request):
 ## data entry views
 ###########################
 
-def _generic_data_entry_view(request, form_obj, redirect_url, 
-                             template_name, before_save_fns=[],
-                             form_init={}, ctx={}):
+def _generic_form_processing_view(request, form_obj, redirect_url, 
+                                  template_name, pre_save_functions=[],
+                                  form_init={}, ctx={}):
+    """Generic view for form processing.
 
+    Takes a number of arguments pertaining to the form processing
+    and data entry process. Returns an HttpResponse and a model
+    object.
+
+    Call this function using another form processing view and return
+    the HttpResponse.
+
+    request: The HttpRequest that was received by the calling view.
+
+    form_obj: A callable that returns a form object when called with
+    no arguments or with a dictionary of POST data.
+
+    redirect_url: A url object pointing to the redirection page in the
+    event that the form processing is successful (valid).
+
+    template_name: a string with the name of a template to render the
+    form to.
+
+    OPTIONAL:
+    
+    pre_save_functions: A list of callables that will be called, in order,
+    with the model object, before saving to the database. Defaults to the
+    empty list.
+
+    form_init: a dictionary of initial data to be sent to the form if
+    validation fails. Defaults to an empty dict.
+
+    ctx: a context dictionary to be rendered into the template. The main
+    form object will be placed in this dict with the name 'form'.
+    """
     if request.method == 'POST':
         form = form_obj(request.POST)
         obj = None
@@ -88,12 +120,17 @@ def _generic_data_entry_view(request, form_obj, redirect_url,
         if form.is_valid():
             obj = form.save(commit=False)
             
-            for fn in before_save_fns:
+            for fn in pre_save_functions:
                 fn(obj)
 
+            # If the object being edited has an approved attribute(field),
+            # set approved to true for staff users
             if request.user.is_staff:
-                if 'approved' in dir(obj):
-                    obj.approved = True
+                try:
+                    approved = obj.__getattribute__('approved')
+                    approved = True
+                except AttributeError:
+                    print "approved is not an attribute of %s" % obj
 
             obj.save()
             return HttpResponseRedirect(redirect_url), obj
@@ -103,36 +140,70 @@ def _generic_data_entry_view(request, form_obj, redirect_url,
         obj = None
 
     ctx['form'] = form
-    return render_to_response(template_name, ctx, context_instance=RequestContext(request)), obj
+    
+    return render_to_response(template_name, ctx, 
+                              context_instance=RequestContext(request)), obj
 
 
 def register(request):
-    response, obj =  _generic_data_entry_view(request, forms.VegUserCreationForm, reverse("register_thanks"), "vegancity/register.html")
+    "Register a new user and log them in."
+
+    response, obj =  _generic_form_processing_view(
+        request, forms.VegUserCreationForm, 
+        reverse("register_thanks"), 
+        "vegancity/register.html")
+
+    # if the registration was successful, log the user in
     if obj:
-        new_user = authenticate(username=request.POST.get("username"), password=request.POST.get("password1"))
+        new_user = authenticate(
+            username=request.POST.get("username"), 
+            password=request.POST.get("password1"))
         login(request, new_user)
+
     return response
-    
+
 
 @login_required
 def new_vendor(request):
-    response, obj =  _generic_data_entry_view(request, forms.NewVendorForm, reverse("vendor_thanks"), "vegancity/new_vendor.html")
+    "Create a new vendor."
+
+    response, obj =  _generic_form_processing_view(
+        request, forms.NewVendorForm, 
+        reverse("vendor_thanks"), 
+        "vegancity/new_vendor.html")
+
     return response
 
 @login_required
 def new_review(request, vendor_id):
-     vendor = models.Vendor.approved_objects.get(id=vendor_id)
-     closed_form = functools.partial(forms.NewReviewForm, vendor)
-     ctx = {'vendor': vendor}
+    "Create a new vendor-specific review."
 
-     def apply_author(request, obj):
-         obj.author = request.user
-     
-     apply_author = functools.partial(apply_author, request)
-     
-     response, obj =  _generic_data_entry_view(
-         request, closed_form, reverse("review_thanks", args=[vendor.id]),
-         "vegancity/new_review.html", [apply_author], 
-         {'vendor':vendor}, ctx)
+    # get vendor, place in ctx dict for the template
+    vendor = models.Vendor.approved_objects.get(id=vendor_id)
+    ctx = {'vendor': vendor}
 
-     return response
+    # Apply the vendor as an argument to the form constructor.
+    # This is done so that the form can be instantiated with
+    # a single argument like a normal form constructor.
+    form = functools.partial(forms.NewReviewForm, vendor)
+
+    # a function for setting the author based on session data
+    def apply_author(request, obj):
+        obj.author = request.user
+        return None
+
+    # Apply the request as an argument to apply_author.
+    # As above, this is done so the function can be callable
+    # as apply_author(obj)
+    apply_author = functools.partial(apply_author, request)
+        
+    response, obj =  _generic_form_processing_view(
+            request, 
+            closed_form, 
+            reverse("review_thanks", args=[vendor.id]),
+            "vegancity/new_review.html", 
+            [apply_author],
+            {'vendor':vendor}, 
+            ctx)
+
+    return response
