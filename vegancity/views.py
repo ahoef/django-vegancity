@@ -35,6 +35,8 @@ def home(request):
 
     vendors = models.Vendor.approved_objects.all()
     top_5 = vendors.annotate(score=Sum('review__food_rating')).order_by('score')[:5]
+    # TODO: add "distinct('vendor')
+    # doesn't work right now because of initial order_by clause
     recent_activity = models.Review.approved_objects.order_by("created")[:5]
     neighborhoods = models.Neighborhood.objects.all()
     cuisine_tags = models.CuisineTag.objects.with_vendors()
@@ -67,7 +69,7 @@ def vendors(request):
 
     ctx = {
         'vendors' : filter_form.vendors,
-        'vendor_count' : len(filter_form.vendors),
+        'vendor_count' : (len(filter_form.vendors) if filter_form.vendors else 0),
         'filter_form' : filter_form,
         }
 
@@ -127,12 +129,8 @@ def _generic_form_processing_view(request, form_obj, redirect_url,
 
             # If the object being edited has an approved attribute(field),
             # set approved to true for staff users
-            if request.user.is_staff:
-                try:
-                    approved = obj.__getattribute__('approved')
-                    approved = True
-                except AttributeError:
-                    print "approved is not an attribute of %s" % obj
+            if request.user.is_staff and 'approved' in dir(obj):
+                setattr(obj, 'approved', True)
 
             obj.save()
             return HttpResponseRedirect(redirect_url), obj
