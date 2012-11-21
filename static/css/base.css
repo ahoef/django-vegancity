@@ -1,3 +1,11 @@
+html, body {
+height: 100%;
+}
+
+body {
+    font-family: 'Average Sans', serif;
+}
+
 .navbar-inner {
    background: #101c35 !important; 
 }
@@ -7,11 +15,13 @@
 }
 
 p.vc-nav-item {
+    padding-top: 30px;
     color: white;
+    font-weight: bold;
     /* Must override text shadow or
      Bootstrap will do what it wants*/
-    text-shadow: 0.2pt 0px 0pt white;
-    padding-top: 30px;
+    text-shadow: 0pt 0px 0pt white;
+
 }
 
 div#map_canvas {
@@ -21,6 +31,7 @@ div#map_canvas {
 
 /* TODO: Some of these should be #101c35 */
 h1, h2, h3, h4, h5, h6, th {
+    font-family: 'Sanchez', serif;
     color: rgb(210, 93, 7);
 }
 
@@ -44,19 +55,57 @@ div#vc-searchbox {
     padding-right: 10px;
 }
 
-
-/* TODO : this is a quickfix.  Do this the right way */
-input#vc-search-input {
-    width: 95%;
-}
-
 .hero-unit {
     background: -moz-linear-gradient(45deg, #EEEEEE 0%,
                                      #F6F6F6 100%)
-    repeat scroll 0% 0% transparent;
 }
 
 .hero-unit h1 {
     color: rgb(210, 93, 7);
+    font-size: 55px;
+}
 
+footer#vc-footer {
+    background-color: rgb(210, 93, 7);
+    opacity: .7;
+    text-align: center;
+    height: 5em;
+}
+
+.vc-wrapper {
+min-height: 100%;
+height: auto !important;
+height: 100%;
+margin: 0 auto -5em;
+}
+.push {
+height: 5em;
+}
+
+a {
+    color: rgb(16, 28, 53);
+}
+
+input#vc-search-input, input#search-input {
+    /* TODO : match all shades of green */
+    box-shadow: green;
+    border-color: green;
+}
+
+.btn-custom { 
+    /* TODO : match all shades of green */
+    background-color: hsl(141, 43%, 19%) !important;
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#327f4d", endColorstr="#1b452a");
+    background-image: -khtml-gradient(linear, left top, left bottom, from(#327f4d), to(#1b452a));
+    background-image: -moz-linear-gradient(top, #327f4d, #1b452a);
+    background-image: -ms-linear-gradient(top, #327f4d, #1b452a);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #327f4d), color-stop(100%, #1b452a));
+    background-image: -webkit-linear-gradient(top, #327f4d, #1b452a);
+    background-image: -o-linear-gradient(top, #327f4d, #1b452a);
+    background-image: linear-gradient(#327f4d, #1b452a);
+    border-color: #1b452a #1b452a hsl(141, 43%, 15%);
+    color: #fff !important;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.26);
+    -webkit-font-smoothing: antialiased;
 }

@@ -17,6 +17,8 @@
     </style>
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap-combined.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="{{ STATIC_URL }}css/base.css">
+    <link href='http://fonts.googleapis.com/css?family=Sanchez' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Average+Sans' rel='stylesheet' type='text/css'>
 
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
@@ -29,7 +31,7 @@
   </head>
   <body data-spy="scroll">
 
-
+<div class="vc-wrapper">
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
@@ -48,9 +50,9 @@
               <li><a href="{% url 'about' %}"><p class="vc-nav-item">About</p></a></li>
               <li><a href="{% url 'blog' %}"><p class="vc-nav-item">Blog</p></a></li>
               {% if user.is_authenticated %}
-                <li><a href="{% url 'logout' %}"><p class="vc-nav-item">Logout ({{user}})</p></a></li>
+                <li><a href="{% url 'logout' %}"><p class="vc-nav-item">Logout (<u>{{user}}</u>)</p></a></li>
               {% else %}
-                <li><a href="{% url 'login' %}"><p class="vc-nav-item">Please login!</p></a></li>
+                <li><a href="{% url 'login' %}"><p class="vc-nav-item">Login</p></a></li>
               {% endif %}
             </ul>
             
@@ -73,7 +75,17 @@
         {% endblock content %}
       </div>
     {% endblock content_flexible %}
+<br>
+<div class="push"></div>
+</div>
+    <footer class="footer" id="vc-footer">
+<br>
+      <div class="container">
+      <p>VegPhilly</p>
+      </div>
 
+
+    </footer>
 
   </body>
 </html>

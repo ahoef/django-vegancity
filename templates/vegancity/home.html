@@ -10,26 +10,28 @@
 {% block content_flexible %}
 
   <div class="container">
-
-    <div class="hero-unit" style="background-color: #F6F6F6;">
+    <div class="hero-unit">
       <h1>Find delicious vegan food in Philly</h1>
+      <br>
       <form action="{% url 'vendors' %}" method="get">
-        <!-- <div id="vc-search-borderbox"> -->
-        <!--   <div id="vc-searchbox"> -->
-        <!--     <input id="vc-search-input" type="text" class="" placeholder="e.g., south and broad, blackbird pizza, burritos" autofocus="autofocus" name="query"> -->
-        <!--   </div> -->
-        <!-- </div> -->
+            <input id="vc-search-input" class="input-block-level" type="text" autocomplete="off" placeholder="e.g., south and broad, blackbird pizza, burritos" autofocus="autofocus" name="query">
       </form>
+      <p>
+        <em>Hungry?</em> Search for something to eat by location, restaurant, or type of food. Read and post vegan-specific reviews. Get involved in our open, free software website to improve vegan resources in Philadelphia.
 
-      <br/>
+      </p>
+      <br>
+<p>
+          Or, explore how you can make VegPhilly better:
+</p>
+<br>
       <div class="row" style="text-align: center;">
 		<p>
-          <em>Hungry?</em> Search for something to eat by location, restaurant, or type of food. Read and post vegan-specific reviews. Get involved in our open, free software website to improve vegan resources in Philadelphia.<br>
-<hr>
-          <a class="btn btn-primary btn-large float-up" href="{% url 'vendors' %}">Search for a restaurant!</a>
-          <a class="btn btn-primary btn-large" href="{% url 'new_vendor' %}">Add a restaurant!</a>
-          <a class="btn btn-primary btn-large hidden-phone" href="#reviewModal" data-toggle="modal">Write a Review!</a>
-          <a class="btn btn-primary btn-large" href="{% url 'about' %}">Learn More!</a>
+<h4>
+          <a class="btn btn-custom btn-large" href="{% url 'new_vendor' %}">Add a restaurant</a>
+          <a class="btn btn-custom btn-large hidden-phone" href="#reviewModal" data-toggle="modal">Write a Review</a>
+          <a class="btn btn-custom btn-large" href="{% url 'about' %}">Learn More</a>
+</h4>
         </p>
       </div>
     </div>
@@ -69,7 +71,7 @@
 	        <h3>Neighborhoods</h3>
             <ul>
               {% for neighborhood in neighborhoods %}
-                <li><a href="/vendors/?neighborhood={{ neighborhood.name }}">{{ neighborhood.name }}</a></li>
+                <li><a href="/vendors/?neighborhood={{ neighborhood.id }}">{{ neighborhood.name }}</a></li>
               {% endfor %}
             </ul>
           </div>
