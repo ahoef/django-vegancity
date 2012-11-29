@@ -304,7 +304,8 @@ class Vendor(NamedCreatedModel):
     neighborhood = models.ForeignKey('Neighborhood', blank=True, null=True, editable=False)
     phone = models.CharField(max_length=50, blank=True, null=True,
                              validators = [validators.validate_phone_number])
-    website = models.URLField(blank=True, null=True)
+    website = models.URLField(blank=True, null=True,
+                             validators = [validators.validate_website])
     latitude = models.FloatField(default=None, blank=True, null=True, editable=False)
     longitude = models.FloatField(default=None, blank=True, null=True, editable=False)
 
