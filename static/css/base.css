@@ -114,6 +114,11 @@ input#vc-search-input, input#search-input {
  -webkit-font-smoothing: antialiased;
 }
 
+.btn {
+    font-family: 'Average Sans', serif;
+    font-weight: bold;
+}
+
 * {
     margin: 0;
 }
