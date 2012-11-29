@@ -52,15 +52,19 @@ div#vc-searchbox {
     padding-right: 10px;
 }
 
+
 .hero-unit {
-    background: -moz-linear-gradient(45deg, #EEEEEE 0%,
-                                     #F6F6F6 100%)
+    /* background: -moz-linear-gradient(45deg, #EEEEEE 0%, */
+    /*                                  #F6F6F6 100%) */
+    background: url(/static/images/hero_unit.jpg);
+    opacity: .5;
 }
 
 .hero-unit h1 {
-    color: rgb(210, 93, 7);
+    /* color: rgb(210, 93, 7); */
     font-size: 55px;
 }
+
 
 #footer {
     background-color: rgb(210, 93, 7);
