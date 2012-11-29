@@ -92,7 +92,7 @@ input#vc-search-input, input#search-input {
     border-color: green;
 }
 
-.btn-custom { 
+.btn-green { 
     /* TODO : match all shades of green */
     background-color: hsl(141, 43%, 19%) !important;
     background-repeat: repeat-x;
@@ -108,4 +108,21 @@ input#vc-search-input, input#search-input {
     color: #fff !important;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.26);
     -webkit-font-smoothing: antialiased;
+}
+
+.btn-custom {
+ background-color: hsl(250, 100%, 2%) !important;
+ background-repeat: repeat-x;
+ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="rgb(16, 28, 53)", endColorstr="rgb(16, 28, 53)");
+ background-image: -khtml-gradient(linear, left top, left bottom, from(rgb(16, 28, 53)), to(rgb(16, 28, 53)));
+ background-image: -moz-linear-gradient(top, rgb(16, 28, 53), rgb(16, 28, 53));
+ background-image: -ms-linear-gradient(top, rgb(16, 28, 53), rgb(16, 28, 53));
+ background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgb(16, 28, 53)), color-stop(100%, rgb(16, 28, 53)));
+ background-image: -webkit-linear-gradient(top, rgb(16, 28, 53), rgb(16, 28, 53));
+ background-image: -o-linear-gradient(top, rgb(16, 28, 53), rgb(16, 28, 53));
+ background-image: linear-gradient(rgb(16, 28, 53), rgb(16, 28, 53));
+ border-color: rgb(16, 28, 53) rgb(16, 28, 53) hsl(250, 100%, -3%);
+ color: #fff !important;
+ text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.33);
+ -webkit-font-smoothing: antialiased;
 }
