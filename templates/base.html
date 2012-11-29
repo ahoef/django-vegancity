@@ -10,11 +10,6 @@
 	<title>VegPhilly</title>
 
 	<link rel="shortcut icon" type="image/x-icon" href="{{ STATIC_URL }}images/favicon.ico">
-    <style>
-      body {
-        padding-top: 100px;
-      }
-    </style>
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap-combined.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="{{ STATIC_URL }}css/base.css">
     <link href='http://fonts.googleapis.com/css?family=Sanchez' rel='stylesheet' type='text/css'>
@@ -31,61 +26,64 @@
   </head>
   <body data-spy="scroll">
 
-<div class="vc-wrapper">
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="brand" href= "{% url 'home' %}"><img src="{{ STATIC_URL }}images/vegphillylogo.jpg" alt="VegPhilly"></a>
+    <div id="wrapper">
+      <div id="top_push"></div>
+      <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+          <div class="container">
+            <a class="brand" href= "{% url 'home' %}"><img src="{{ STATIC_URL }}images/vegphillylogo.jpg" alt="VegPhilly"></a>
 
 
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
 
             <div class="nav-collapse collapse">
-            <ul class="nav pull-right">
-		      <li><a href="{% url 'vendors' %}"><p class="vc-nav-item">Restaurants</p></a></li>
-              <li><a href="{% url 'about' %}"><p class="vc-nav-item">About</p></a></li>
-              <li><a href="{% url 'blog' %}"><p class="vc-nav-item">Blog</p></a></li>
-              {% if user.is_authenticated %}
-                <li><a href="{% url 'logout' %}"><p class="vc-nav-item">Logout (<u>{{user}}</u>)</p></a></li>
-              {% else %}
-                <li><a href="{% url 'login' %}"><p class="vc-nav-item">Login</p></a></li>
-              {% endif %}
-            </ul>
-            
+              <ul class="nav pull-right">
+		        <li><a href="{% url 'vendors' %}"><p class="vc-nav-item">Restaurants</p></a></li>
+                <li><a href="{% url 'about' %}"><p class="vc-nav-item">About</p></a></li>
+                <li><a href="{% url 'blog' %}"><p class="vc-nav-item">Blog</p></a></li>
+                {% if user.is_authenticated %}
+                  <li><a href="{% url 'logout' %}"><p class="vc-nav-item">Logout (<u>{{user}}</u>)</p></a></li>
+                {% else %}
+                  <li><a href="{% url 'login' %}"><p class="vc-nav-item">Login</p></a></li>
+                {% endif %}
+              </ul>
+              
             </div>
 
           </div>
+        </div>
+      </div>
+
+
+      <div class="container">
+        <h1>{% block headline %}{% endblock %}</h1>
+        <h3>{% block summary %}{% endblock %}</h3>
+      </div>
+
+
+      {% block content_flexible %}
+        <div class="container">
+          {% block content %}
+          {% endblock content %}
+        </div>
+      {% endblock content_flexible %}
+      <br>
+      <div id="bottom_push"></div>
+    </div>
+    <div id="footer">
+      <br>
+      <div class="container">
+        <p>
+          VegPhilly<br>
+          <a href="{% url 'privacy' %}">Privacy Policy</a>
+           /           
+          <a href="{% url 'about' %}">About</a>         
+        </p>
       </div>
     </div>
-
-
-    <div class="container">
-      <h1>{% block headline %}{% endblock %}</h1>
-      <h3>{% block summary %}{% endblock %}</h3>
-    </div>
-
-
-    {% block content_flexible %}
-      <div class="container">
-        {% block content %}
-        {% endblock content %}
-      </div>
-    {% endblock content_flexible %}
-<br>
-<div class="push"></div>
-</div>
-    <footer class="footer" id="vc-footer">
-<br>
-      <div class="container">
-      <p>VegPhilly</p>
-      </div>
-
-
-    </footer>
-
   </body>
 </html>

@@ -46,6 +46,8 @@ urlpatterns += patterns('django.views.generic',
          'template_object_name' : 'vendor' }, name="vendor_detail"),
 
     url(r'^about/$', 'simple.direct_to_template', {'template': 'vegancity/about.html'}, name='about'),
+    url(r'^privacy/$', 'simple.direct_to_template', {'template': 'vegancity/privacy.html'}, name='privacy'),
+
     url(r'^vendors/review/(?P<object_id>\d+)/thanks/$', 'list_detail.object_detail', 
         {'queryset' : models.Vendor.approved_objects.all(), 'template_name' : 'vegancity/review_thanks.html',
          'template_object_name' : 'vendor', 'extra_context' : {'warning' : True }}, name="review_thanks"),
