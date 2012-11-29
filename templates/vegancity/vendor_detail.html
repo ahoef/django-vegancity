@@ -26,13 +26,15 @@
         <br/>
       </div>
       <div class="span6">
-        {% if vendor.notes %}
+        {% if vendor.name %}
           <h3>
             {{vendor.name}}
             {% if user.is_staff %}
               - <a href="/admin/vegancity/vendor/{{ vendor.id }}/">Edit</a>
             {% endif %}
-          </h3>          
+          </h3>
+        {% endif %}     
+         {% if vendor.notes %}
           <h5>{{ vendor.notes }}</h5>
         {% endif %}
 
@@ -81,7 +83,8 @@
           {% endif %}
           {% if vendor.best_vegan_dish %}
             <tr>
-              <td>Best Vegan Dish:{{ vendor.best_vegan_dish }}</td>
+              <td>Best Vegan Dish:</td>
+              <td>{{ vendor.best_vegan_dish }}</td>
             </tr>
           {% endif %}
           {% if vendor.cuisine_tags.all %}
@@ -93,7 +96,7 @@
           {% if vendor.feature_tags.all %}
             <tr>
               <td>Features: </td>
-              <td>{% for tag in vendor.feature_tags.all %}<strong>{{ tag }}</strong>, {% endfor %}</td>
+              <td>{% for tag in vendor.feature_tags.all %}<strong>{{ tag }}</strong>{% if not forloop.last %}, {% endif %}{% endfor %}</td>
             </tr>
           {% endif %}
         </table>
