@@ -57,7 +57,7 @@ div#vc-searchbox {
     /* background: -moz-linear-gradient(45deg, #EEEEEE 0%, */
     /*                                  #F6F6F6 100%) */
     background: url(/static/images/hero_unit.jpg);
-    opacity: .5;
+    /* opacity: .5; */
 }
 
 .hero-unit h1 {

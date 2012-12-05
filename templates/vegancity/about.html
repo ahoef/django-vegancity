@@ -2,10 +2,6 @@
 
 {% block headline %}about{% endblock %}
 
-{% block summary %}
-  why vegancity?
-{% endblock %}
-
 {% block content %}
   <div class="row">
     <div class="span12">
@@ -14,25 +10,45 @@
       <p>Vegancity was founded by several vegans in Philadelphia, Pennsylvania who wanted more detailed and accurate information about vegan and vegan-friendly establishments in their city. We want Vegancity to be the most comprehensive list of both vegan restaurants and places that offer vegan options. We hope to add forums, and a blog to highlight new vegan foods and places to eat.</p>
 
       <p>We need your help to make the site better. Please contact us if you have any comments, questions, or suggestions.</p>
-
-      <hr/>
-      <h3>meet the team!</h3>
-      <!-- We need bios and possibly pictures here -->
+    </div>
+  </div>
+  <br>
+  <div class="row" style="text-align: center">
+    <h3>meet the team!</h3>
+    <div class="span4">
+      <img src="http://www.gravatar.com/avatar/?size=250">
       <p><b>Steve Lamb</b></p>
-      <p>Lead Developer</p>
-
+      <p>Founder, Technical Lead</p>
+      <p>Steve loves writing free software and eating vegan food. He studied Mathematics at SUNY Albany and got involved with free software shortly after. He puts <a href="https://en.wikipedia.org/wiki/Nutritional_yeast" target="_blank">nutritional yeast</a> on pretty much everything.</p>
+    </div>
+    <div class="span4">    
+      <img src="http://www.gravatar.com/avatar/?size=250">
       <p><b>Jonathan Farbowitz</b></p>
       <p>Content Lead</p>
       <p>Jonathan hails from Allentown, Pennsylvania. He is a graduate of Vassar College. Jonathan has been vegan since 2010. In his spare time he enjoys biking around Philly, baking, and tea.</p>
-
+    </div>
+    <div class="span4">    
+      <img src="http://www.gravatar.com/avatar/?size=250">
       <p><b>Jeff Frankl</b></p>
       <p>Design Lead</p>
-    </div>
-
+      <p>info about jeff</p>
+    </div>    
   </div>
-<br>
-<hr>
-<br>
+  <hr>
+  <div class="row">
+    <div class="span10">    
+    <h4>Contributors</h4>
+    <h5>Alexandra H</h5>
+    <p>Ali's bio. Ali's bio. Ali's bio. Ali's bio. Ali's bio. Ali's bio. Ali's bio. Ali's bio. Ali's bio. Ali's bio. Ali's bio. </p>
+    <h5>Kevin M</h5>
+    <p>Kevin's bio. Kevin's bio. Kevin's bio. Kevin's bio. Kevin's bio. Kevin's bio. Kevin's bio. Kevin's bio. Kevin's bio. </p>
+    <h5>Zack B</h5>
+    <p>Zack's bio.Zack's bio.Zack's bio.Zack's bio.Zack's bio.Zack's bio.Zack's bio.Zack's bio.Zack's bio.Zack's bio.Zack's bio.</p>
+  </div>
+  </div>
+  <br>
+  <hr>
+  <br>
   <div class="row">
     <div class="span12">
       <h4>We're proud to bring VegPhilly to you using the following tools:</h4>
@@ -46,5 +62,5 @@
       <img src="{{ STATIC_URL }}images/postgres.png" style="max-height: 100px;">
     </div>
   </div>
-<br><br>
+  <br><br>
 {% endblock %}
