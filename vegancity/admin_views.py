@@ -26,7 +26,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 import forms
 import models
 import itertools
-import tracking
+# import tracking
 
 @staff_member_required
 def pending_approval_count(request):
@@ -45,13 +45,14 @@ def pending_approval(request):
     return render_to_response("admin/pending_approval.html", ctx,
                               context_instance=RequestContext(request))
 
-@staff_member_required
-def search_log(request):
-    ctx = {
-        'search_log': tracking.get_log(),
-        }
-    return render_to_response("admin/search_log.html", ctx,
-                              context_instance=RequestContext(request))
+# phased out
+# @staff_member_required
+# def search_log(request):
+#     ctx = {
+#         'search_log': tracking.get_log(),
+#         }
+#     return render_to_response("admin/search_log.html", ctx,
+#                               context_instance=RequestContext(request))
 
 
 @staff_member_required

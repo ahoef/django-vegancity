@@ -26,7 +26,7 @@ import itertools
 import geocode
 import validators
 #import search
-import tracking
+#import tracking
 
 #####################################
 ## ABSTRACT CLASSES
@@ -114,7 +114,7 @@ class VegLevel(NamedModel):
         return "(%s) %s" % (self.super_category, self.description)
 
 class Neighborhood(NamedCreatedModel):
-    """Used for tracking what neighborhood a vendor is in."""
+    """Used for determining what neighborhood a vendor is in."""
     class Meta:
         verbose_name = "Neighborhood"
         verbose_name_plural = "Neighborhoods"
