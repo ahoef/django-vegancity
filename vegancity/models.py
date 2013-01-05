@@ -195,7 +195,9 @@ class Review(models.Model):
     approved_objects = ApprovedReviewManager()
 
     # DESCRIPTIVE FIELDS
-    title = models.CharField(max_length=255, null=True, blank=True)
+    title = models.CharField(
+        "Title of review (optional)",
+        max_length=255, null=True, blank=True)
     food_rating = models.IntegerField(
         "How would you rate the food, overall?",
         choices=tuple((i, i) for i in range(1, 5)), 
@@ -204,11 +206,14 @@ class Review(models.Model):
         "How would you rate the atmosphere?",
         choices=tuple((i, i) for i in range(1, 5)), 
         blank=True, null=True,)
-    best_vegan_dish = models.ForeignKey('VeganDish', blank=True, null=True)
+    best_vegan_dish = models.ForeignKey(
+        'VeganDish', 
+        verbose_name="Favorite Vegan Dish",
+        blank=True, null=True)
     unlisted_vegan_dish = models.CharField(
         "Favorite Vegan Dish (if not listed)",
         max_length=100,
-        help_text="We'll work on getting it in the database so others know about it!",
+        help_text="We'll post this on the site so others know about it.",
         blank=True, null=True)
     suggested_feature_tags = models.CharField(max_length=255, blank=True, null=True)
     suggested_cuisine_tags = models.CharField(max_length=255, blank=True, null=True)
