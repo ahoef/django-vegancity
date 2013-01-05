@@ -83,10 +83,10 @@
                 <li><a href="{{ vendor.get_absolute_url }}">{{ vendor.name }}</a></li>
               {% endfor %}
             </ul>
-            <h3>Recent Activity</h3>
+            <h3>Recently Reviewed</h3>
             <ul>
-              {% for review in recent_activity %}
-                <li><a href="{{ review.vendor.get_absolute_url }}">{{ review.vendor.name }}</a></li>
+              {% for vendor in recently_active %}
+                <li><a href="{{ vendor.get_absolute_url }}">{{ vendor.name }}</a></li>
               {% endfor %}
             </ul>
           </div>

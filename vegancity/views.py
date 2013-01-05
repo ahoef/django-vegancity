@@ -29,22 +29,22 @@ from vegancity import forms
 from vegancity import models
 from vegancity import search
 
+from django.db.models import Max
 
 def home(request):
     "The view for the homepage."
 
     vendors = models.Vendor.approved_objects.all()
     top_5 = vendors.annotate(score=Sum('review__food_rating')).order_by('score')[:5]
-    # TODO: add "distinct('vendor')
-    # doesn't work right now because of initial order_by clause
-    recent_activity = models.Review.approved_objects.order_by("created")[:5]
+    recently_active = vendors.annotate(score=Max('review__created')).exclude(score=None).order_by('score')[:5]
+
     neighborhoods = models.Neighborhood.objects.all()
     cuisine_tags = models.CuisineTag.objects.with_vendors()
     feature_tags = models.FeatureTag.objects.with_vendors()
 
     ctx = {
         'top_5': top_5,
-        'recent_activity' : recent_activity,
+        'recently_active' : recently_active,
         'neighborhoods': neighborhoods,
         'cuisine_tags' : cuisine_tags,
         'feature_tags' : feature_tags,
