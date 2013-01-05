@@ -359,14 +359,13 @@ class Vendor(NamedCreatedModel):
 
 
     def save(self, *args, **kwargs):
-        """Steps to take before/after saving to db.
+        """Steps to take before saving to db.
 
         Before saving, see if the vendor has been geocoded.
         If not, geocode."""
+
         if self.pk is not None:
             orig_address = Vendor.objects.get(pk=self.pk).address
-            print "orig_address:", orig_address, "\n"
-
         else:
             orig_address = None
         if (orig_address != self.address) or self.needs_geocoding():
@@ -377,7 +376,8 @@ class Vendor(NamedCreatedModel):
         "Returns the best vegan dish for the vendor"
         dishes = VeganDish.objects.filter(vendor=self)
         if dishes:
-            return max(dishes, key=lambda d: Review.objects.filter(best_vegan_dish=d).count())
+            return max(dishes, 
+                       key=lambda d: Review.objects.filter(best_vegan_dish=d).count())
         else:
             return None
 
@@ -390,8 +390,10 @@ class Vendor(NamedCreatedModel):
             return None
 
     def atmosphere_rating(self):
+        "calculates the average rating for a vendor"
         reviews = Review.objects.filter(vendor=self)
-        atmosphere_ratings = [review.atmosphere_rating for review in reviews if review.atmosphere_rating]
+        atmosphere_ratings = [review.atmosphere_rating for review in reviews 
+                              if review.atmosphere_rating]
         if atmosphere_ratings:
             return sum(atmosphere_ratings) / len(atmosphere_ratings)
         else:

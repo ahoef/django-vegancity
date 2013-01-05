@@ -12,11 +12,13 @@
           <tr><th><div class="text"><span>Pending Vendors</span></div></th></tr>
         </thead>
         <tbody>
-          <tr>
-            {% for vendor in pending_vendors %}          
-              <th><a href="/admin/vegancity/vendor/{{ vendor.id }}/">{{ vendor.name }}</a></th>
+
+            {% for vendor in pending_vendors %}
+              <tr>
+              <td><a href="/admin/vegancity/vendor/{{ vendor.id }}/">{{ vendor.name }}</a></td>
+              </tr>
             {% endfor %}
-          </tr>
+
         </tbody>
       </table>
     </div>
@@ -33,7 +35,7 @@
         <tbody>
           <tr>
             {% for review in pending_reviews %}
-              <th><a href="/admin/vegancity/review/{{ review.id }}/">{{ review }}</a></th>
+              <td><a href="/admin/vegancity/review/{{ review.id }}/">{{ review }}</a></td>
             {% endfor %}
           </tr>
         </tbody>

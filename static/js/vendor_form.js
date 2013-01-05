@@ -70,7 +70,8 @@ function convert_phone_number(phone_field){
 $(document).ready(function() {
     var admin_container = $('div.form-row.field-name');
     if (admin_container[0]) {
-        admin_container.append('<button type="button" id="magic_button">Prefill data from Google Places (based on name)</button>');
+        admin_container.append(
+            '<button type="button" id="magic_button">Prefill data from Google Places (based on name)</button>');
         admin_container.append('<div id="address_magic"></div>');
         document.getElementById("magic_button").onclick = address_magic;
     }

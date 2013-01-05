@@ -65,6 +65,7 @@ class _BaseVendorForm(forms.ModelForm):
 
     class Media:
         js = (
+            'http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js',
             'js/vendor_form.js',
             )
 
@@ -75,8 +76,8 @@ class AdminVendorForm(_BaseVendorForm):
 
     class Media:
         js = (
-            'http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false',
-            'js/vendor_form.js',
+            #'http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false',
+            # 'js/vendor_form.js',
             )
 
     def __init__(self, *args, **kwargs):
