@@ -52,3 +52,7 @@ def geocode_all(request):
             vendor.apply_geocoding()
             vendor.save()
     return HttpResponseRedirect("/admin/")
+
+@staff_member_required
+def search_log(request):
+    pass
