@@ -117,14 +117,34 @@
             <h2>{{ reviews.count }} Review{% if reviews.count != 1 %}s{% endif %}</h2>
             <hr>
             {% for review in vendor.review_set.all %}
-              <h4>{{review.title }}</h4>
-              <h5>entered by: {{ review.author }}</h5>
+              <h3>{{review.title }}</h3>
+                  <h5>entered by {{ review.author }}</h5>
               <h6>{{ review.created }}</h6>
+              <table id="review_summary">              
+                {% if review.atmosphere_rating %}
+                  <tr>
+                    <td>atmosphere rating:</td>
+                    <td>{{ review.atmosphere_rating }} / 4</td>
+                  </tr>
+                {% endif %}           
+                {% if review.food_rating %}      
+                  <tr>
+                    <td>food rating:</td>
+                    <td>{{ review.food_rating }} / 4</td>
+                  </tr>
+                {% endif %}           
+                <!-- <tr> -->
+                <!--   <td>entered by:</td> -->
+                <!--   <td>{{ review.author }}</td> -->
+                <!-- </tr> -->
+              </table>
+              <br>
               {% if review.best_vegan_dish %}
                 <h6>best vegan dish: {{ review.best_vegan_dish }}</h6>
               {% endif %}
               <p>{{ review.content }}</p>
               <br>          
+
             {% endfor %}
           </div>
           <div class="span6 hidden-phone" style="text-align: center">
