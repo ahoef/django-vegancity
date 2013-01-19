@@ -45,6 +45,7 @@ class VendorAdmin(admin.ModelAdmin):
     list_display_links = ('name',)
     list_editable = ('approved',)
     list_filter = ('approved',)
+    ordering = ('name',)
     filter_vertical = ('cuisine_tags','feature_tags',)
     form = forms.AdminVendorForm
 
