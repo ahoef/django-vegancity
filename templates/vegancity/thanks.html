@@ -19,11 +19,11 @@ We're glad you submitted some content.
 <p>
 {% block warning %}
   {% if warning %}
-    A moderator will take a look at your submission to make sure it's legit. It should be 
+    A moderator will look at your submission to make sure it's legit. It should be 
     posted to the site shortly.<br/>
     Please note that negative reviews are less likely to be approved if they were submitted by 
-    an account with an unverified email. <br/>
-    Please consider creating an account with a verified email.
+    an account with an unverified email address. <br/>
+    Please consider creating an account with a verified email address.
   {% endif %}
 {% endblock warning %}
 </p>
@@ -33,7 +33,7 @@ We're glad you submitted some content.
 <h4>Now What?</h4>
 {% block links_ul %}
 <ul>
-  <li><a href="{% url 'vendors' %}">View all vendors</a></li>
+  <li><a href="{% url 'vendors' %}">View all food vendors</a></li>
   <li><a href="{% url 'home' %}">Go to our homepage</a></li>  
 </ul>
 {% endblock links_ul %}
