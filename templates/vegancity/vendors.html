@@ -14,8 +14,8 @@
       <strong>{{vendor.name}}</strong><br/>\
       {{vendor.address}}<br/>\
       {{vendor.phone}}<br/>\
-      <a href="{%url 'vendor_detail' object_id=vendor.id %}">More Info</a> | \
-      <a href="http://maps.google.com/maps?q={{ vendor.address }}" target="_BLANK">jump to Google Maps</a><br/>\
+      <a class="uline" href="{%url 'vendor_detail' object_id=vendor.id %}">More Info</a> | \
+      <a class="uline" href="http://maps.google.com/maps?q={{ vendor.address }}" target="_BLANK">jump to Google Maps</a><br/>\
       ', {{ vendor.id }}],
     {% endif %}{% endfor %}
     ];
@@ -95,7 +95,7 @@
               {% for vendor in vendors %}
                 <tr>
                   <td><img src="//www.google.com/mapfiles/marker.png" class="marker-link vendor-{{vendor.id}}"></td>
-                  <td><a href="{% url 'vendor_detail' object_id=vendor.id %}">{{ vendor.name }}</a></td>
+                  <td><a class="uline" href="{% url 'vendor_detail' object_id=vendor.id %}">{{ vendor.name }}</a></td>
                 </tr>
               {% endfor %}
             </tbody>
