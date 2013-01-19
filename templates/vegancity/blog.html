@@ -15,7 +15,7 @@
         {% for entry in object_list %}
           <h5>{{ entry.title }}</h5>
           <h6>by {{ entry.author }}</h6>
-      <p>{{ entry.body }}</p>
+      <p>{{ entry.body|safe }}</p>
       <hr/>
     {% endfor %}
   {% else %}
