@@ -53,6 +53,12 @@ def home(request):
     return render_to_response("vegancity/home.html", ctx,
                               context_instance=RequestContext(request))
 
+def account_page(request):
+    "The view for user accounts / profile pages."
+
+    return render_to_response("vegancity/account_page.html",
+                              context_instance=RequestContext(request))
+
 
 def vendors(request):
     """Display table level data about vendors.
@@ -83,7 +89,7 @@ def vendors(request):
 
 def _generic_form_processing_view(request, form_obj, redirect_url, 
                                   template_name, pre_save_functions=[],
-                                  form_init={}, ctx={}):
+                                  form_init={}, ctx={}, commit_flag=False):
     """Generic view for form processing.
 
     Takes a number of arguments pertaining to the form processing
@@ -122,7 +128,7 @@ def _generic_form_processing_view(request, form_obj, redirect_url,
         obj = None
         
         if form.is_valid():
-            obj = form.save(commit=False)
+            obj = form.save(commit=commit_flag)
             
             for fn in pre_save_functions:
                 fn(obj)
@@ -151,7 +157,8 @@ def register(request):
     response, obj =  _generic_form_processing_view(
         request, forms.VegUserCreationForm, 
         reverse("register_thanks"), 
-        "vegancity/register.html")
+        "vegancity/register.html",
+        commit_flag=True)
 
     # if the registration was successful, log the user in
     if obj:
