@@ -165,7 +165,7 @@ class SearchForm(forms.Form):
     
     class Media:
         js = (
-            'js/filter_form.js',
+            'js/search_form.js',
             )
 
     def __init__(self, *args, **kwargs):
