@@ -59,7 +59,7 @@
               <td>{{ vendor.phone }}</td>
             </tr>
           {% endif %}
-          {% if vendor.website %}
+          {% if vendor.website and not vendor.website == "http://" %}
             <tr>
               <td>Website:</td>
               <td>{{ vendor.website|urlize|target_blank }}</td>      
