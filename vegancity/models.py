@@ -328,7 +328,9 @@ class Vendor(NamedCreatedModel):
     approved_objects = ApprovedVendorManager()
 
     # DESCRIPTIVE FIELDS
-    notes = models.TextField(blank=True, null=True,)
+    notes = models.TextField(
+        blank=True, null=True,
+        help_text="Use this section to briefly describe the vendor. Notes will appear below the vendor's name.")
     veg_level = models.ForeignKey('VegLevel',
         help_text="How vegan friendly is this place?  See documentation for guildelines.",
         blank=True, null=True,)
