@@ -17,6 +17,10 @@
 
 
 from django.contrib import admin
+
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
+
 import models
 import forms
 
@@ -65,9 +69,20 @@ class BlogEntryAdmin(admin.ModelAdmin):
             return qs
         return qs.filter(author=request.user)
 
+class UserProfileInline(admin.StackedInline):
+    model = models.UserProfile
+
+class UserProfileAdmin(UserAdmin):
+    inlines = [ UserProfileInline, ]
+
+
 #####################################
 ## ADMIN REGISTRATION
 #####################################
+
+admin.site.unregister(User)
+admin.site.register(User, UserProfileAdmin)
+admin.site.register(models.UserProfile)
 
 admin.site.register(models.Vendor, VendorAdmin)
 admin.site.register(models.Review, ReviewAdmin)

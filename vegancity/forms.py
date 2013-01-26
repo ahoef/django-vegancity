@@ -26,15 +26,25 @@ from django.contrib.auth.models import User
 
 class VegUserCreationForm(UserCreationForm):
     "Form used for creating new users."
-    email = forms.EmailField(max_length=70, label="Email (STRONGLY recommended)", 
-                             help_text="for password restoration ONLY.",
-                             required=False)
+    email_explanation = "VegPhilly is under development. We may use your email to contact you ONLY about important changes to your account."
+    email = forms.EmailField(max_length=70, label="Email (Temporarily Required)", 
+                             help_text=email_explanation,
+                             required=True)
+    bio = forms.CharField(label="Bio",
+                          help_text="This optional field will be displayed to all site users along with your username.",
+                          required=False,
+                          widget=forms.Textarea)
+    mailing_list = forms.BooleanField(label="Would you like to join our mailinglist?",
+                                      help_text="We will contact you about changes to the site.")
 
     def save(self, *args, **kwargs):
         user = super(VegUserCreationForm, self).save(*args, **kwargs)
         user.email = self.cleaned_data['email']
-        if kwargs.get('commit', False):
-            user.save()
+        user_profile = models.UserProfile(user=user)
+
+        user_profile.bio = self.cleaned_data['bio']
+        user_profile.mailing_list = self.cleaned_data['mailing_list']
+        user_profile.save()
         return user
         
     def clean(self):
@@ -49,7 +59,6 @@ class VegUserCreationForm(UserCreationForm):
             raise forms.ValidationError(
                 "Username must be at least 3 characters.")
 
-            
         if username != username.lower():
             raise forms.ValidationError(
                 "Cannot have capital letters in username at this time. Please correct.")
