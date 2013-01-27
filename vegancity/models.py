@@ -25,7 +25,6 @@ import shlex
 import itertools
 import geocode
 import validators
-#import search
 
 #####################################
 ## ABSTRACT CLASSES
@@ -120,6 +119,17 @@ class Neighborhood(NamedCreatedModel):
         get_latest_by = "created"
         ordering = ('name',)
 
+
+##########################################
+# USER-RELATED MODELS
+##########################################
+
+class UserProfile(models.Model):
+    user = models.ForeignKey(User, unique=True)
+    mailing_list = models.BooleanField(default=False)
+    karma_points = models.IntegerField(null=True, blank=True)
+    bio = models.TextField(null=True, blank=True)
+
 class BlogEntry(models.Model):
     "Blog entries. They get entered in the admin."
     title = models.CharField(max_length=255)
@@ -141,12 +151,10 @@ class BlogEntry(models.Model):
     def get_absolute_url(self):
         return (reverse('blog_detail'), (str(self.id),))
 
+
 ##########################################
 # VENDOR-RELATED MODELS
 ##########################################
-
-    
-
 
 
 class VeganDish(NamedCreatedModel):
@@ -320,7 +328,9 @@ class Vendor(NamedCreatedModel):
     approved_objects = ApprovedVendorManager()
 
     # DESCRIPTIVE FIELDS
-    notes = models.TextField(blank=True, null=True,)
+    notes = models.TextField(
+        blank=True, null=True,
+        help_text="Use this section to briefly describe the vendor. Notes will appear below the vendor's name.")
     veg_level = models.ForeignKey('VegLevel',
         help_text="How vegan friendly is this place?  See documentation for guildelines.",
         blank=True, null=True,)

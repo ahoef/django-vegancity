@@ -29,6 +29,8 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+AUTH_PROFILE_MODULE = "vegancity.UserProfile"
+
 DATABASES = {
     'default' : {
         'ENGINE' : 'django.db.backends.postgresql_psycopg2',

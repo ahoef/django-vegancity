@@ -17,6 +17,7 @@
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
 
+    {% include "analytics.html" %}
 
     {% block header_extra %}
     {% endblock %}
@@ -45,7 +46,9 @@
                 <li><a href="{% url 'about' %}"><p class="vc-nav-item">About</p></a></li>
                 <li><a href="{% url 'blog' %}"><p class="vc-nav-item">Blog</p></a></li>
                 {% if user.is_authenticated %}
-                  <li><a href="{% url 'logout' %}"><p class="vc-nav-item">Logout (<u>{{user}}</u>)</p></a></li>
+                  <li><a href="{% url 'account_page' %}"><p class="vc-nav-item">My Account (<u>{{user}}</u>)</p></a></li>
+
+                  <li><a href="{% url 'logout' %}"><p class="vc-nav-item">Logout</p></a></li>
                 {% else %}
                   <li><a href="{% url 'login' %}"><p class="vc-nav-item">Login</p></a></li>
                 {% endif %}
