@@ -176,6 +176,7 @@ class SearchForm(forms.Form):
         self.selected_cuisine = self.data.get('cuisine', None)
         self.selected_feature = self.data.get('feature', None)
         self.query = self.data.get('query', None)
+        # TODO: use this later
         self.old_query = self.data.get('old_query', None)
         self.search_type = self.data.get('search_type', None)
         self.vendors = None
