@@ -74,24 +74,20 @@ def _address_rank(query):
 #########################################
 
 def name_search(query, initial_queryset=None):
-    real_words = fluff_split(query)
-    if len(real_words) == 0:
-        return []
-
+    words = query.split()
     name_words = set()
     name_vendors = set()
     name_rank = 0 # name gets no love initially
 
-    for word in real_words:
+    for word in words:
         name_hits = Vendor.approved_objects.filter(name__icontains=word)
-        print "name_hits:", name_hits, "\n"
 
         if name_hits:
             name_words.add(word)
             name_vendors = name_vendors.union(name_hits)
             name_rank += 1
 
-    name_word_density = float(len(name_words)) / len(real_words)
+    name_word_density = float(len(name_words)) / len(words)
     name_rank += name_word_density * 10
 
     if initial_queryset:
@@ -100,15 +96,12 @@ def name_search(query, initial_queryset=None):
     return name_vendors, name_rank
 
 def tag_search(query, initial_queryset=None):
-    real_words = fluff_split(query)
-    if len(real_words) == 0:
-        return []
-
+    words = query.split()
     tag_words = set()
     tag_vendors = set()
     tag_rank = 2 # tag is more likely, give it 2 for now
 
-    for word in real_words:
+    for word in words:
         ft_hits = FeatureTag.objects.word_search(word)
         ft_hits_vendors = FeatureTag.objects.get_vendors(ft_hits)
         if ft_hits:
@@ -123,7 +116,7 @@ def tag_search(query, initial_queryset=None):
             tag_vendors = tag_vendors.union(ct_hits_vendors)
             tag_rank += 1
 
-    tag_word_density = float(len(tag_words)) / len(real_words)
+    tag_word_density = float(len(tag_words)) / len(words)
     tag_rank += tag_word_density * 10
 
     if initial_queryset:
@@ -132,7 +125,7 @@ def tag_search(query, initial_queryset=None):
     return tag_vendors, tag_rank
 
 def address_search(query, initial_queryset=None):
-    address_rank = 5 
+    address_rank = 8
     address_rank += _address_rank(query)
 
     address_vendors = Vendor.approved_objects.address_search(query)

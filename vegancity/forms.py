@@ -213,6 +213,10 @@ class SearchForm(forms.Form):
         else:
             self.vendors = self.get_pre_filtered_vendors()
     
+        if type(self.vendors) == list:
+            self.vendor_count = len(self.vendors)
+        else:
+            self.vendor_count = self.vendors.count()
 
     def filter_selections_by_vendors(self, vendors):
         ids = [vendor.id for vendor in vendors]
