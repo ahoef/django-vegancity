@@ -54,35 +54,31 @@
                "West Philly",
                "North Philly",               
                ]'>
-        <button type="submit" class="btn btn-custom">Search</button>
-        <br><br>
-        <button type="submit" class="btn btn-custom">Search</button>
-        <br><br>
 
-               <div class="btn-group">
+
                  {% if search_form.search_type %}
+               <div class="btn-group">
                  <button class="btn btn-custom">Search by {{ search_form.search_type }}</button>
                  <button class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
                    <span class="caret"></span>
                  </button>
-               {% else %}
-                 <button class="btn btn-custom dropdown-toggle" data-toggle="dropdown">
-                   Search
-                 </button>                   
-               {% endif %}
-                 </button>
                  <ul class="dropdown-menu">
                    <li><a type="#" id="search_by_name">Search by Name</a></li>
-                   <li><a href="#" id="search_by_tag">Search by Tag</a></li>
+                   <li><a href="#" id="search_by_tag">Search by Cuisine & Feature</a></li>
                    <li><a href="#" id="search_by_address">Search by Address</a></li>
                  </ul>
                </div>
+               {% else %}
+                 <button class="btn btn-custom">Search</button>
+               {% endif %}
 
         <br>
         <h5>{{ search_form.search_type|showing_vendors_string }}{% if search_form.query %}"{{ search_form.query }}"{% endif %}</h5>
 
       {% if search_form.vendors %}
         <div id="map_canvas"></div>
+      {% else %}
+        <div id="map_canvas" style="visibility: hidden"></div>
       {% endif %}
     </div>
 
@@ -119,7 +115,7 @@
             <thead>
               <tr>
                 <th>Map</th>
-                <th>Results ({{ search_form.vendor_count }})</th>
+                <th>Results ({{ search_form.vendor_count|default:"0" }})</th>
               </tr>
             </thead>
             <tbody>
