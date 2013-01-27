@@ -2,10 +2,10 @@
 
 {% load url from future %}
 
-{% block headline %}thanks{% endblock %}
+{% block headline %}Thanks{% endblock %}
 
 {% block summary %}
-thanks for {% block action %}submitting content{% endblock %}!
+Thanks for {% block action %}submitting content{% endblock %}!
 {% endblock %}
 
 {% block content %}
@@ -21,9 +21,9 @@ We're glad you submitted some content.
   {% if warning %}
     A moderator will look at your submission to make sure it's legit. It should be 
     posted to the site shortly.<br/>
-    Please note that negative reviews are less likely to be approved if they were submitted by 
+    <!--Please note that negative reviews are less likely to be approved if they were submitted by 
     an account with an unverified email address. <br/>
-    Please consider creating an account with a verified email address.
+    Please consider creating an account with a verified email address.-->
   {% endif %}
 {% endblock warning %}
 </p>
