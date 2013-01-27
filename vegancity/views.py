@@ -69,9 +69,7 @@ def vendors(request):
 
     search_form = forms.SearchForm(request.GET)
     
-    # if search_form.is_valid():
-    #     search_form.apply_search()
-    #     search_form.filter_selections_by_vendors(search_form.vendors)
+    # print "search_form.vendor_count:", search_form.vendor_count
 
     return render_to_response('vegancity/vendors.html', {'search_form':search_form},
                               context_instance=RequestContext(request))

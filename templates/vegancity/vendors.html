@@ -43,7 +43,11 @@
     <div class="span6">
 
       <form action="{% url 'vendors' %}" method="get" name="filters" id="filters" class="form-search">
+        {% if search_form.search_type %}
+          {% comment %}If there's a search_type, stick it in the form, otherwise dont.
+This prevents null searches from getting a value of None stuck here and throwing off the UI.{% endcomment %}            
         <input id="search_type" name="search_type" type="hidden" value="{{ search_form.search_type }}">
+      {% endif %}        
         {% if search_from.old_query %}
         <input id="old_query" name="old_query" type="hidden" value="{{ search_form.old_query }}">
       {% endif %}
