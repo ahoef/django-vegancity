@@ -148,3 +148,8 @@ html, body {
 a.uline {
     text-decoration: underline;
 }
+
+div#vendor_table {
+    height: 650px;
+    overflow: auto;
+}

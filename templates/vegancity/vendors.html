@@ -49,13 +49,7 @@
       {% endif %}
         <input id="search-input" type="text" class="input-large" 
                autofocus="autofocus" autocomplete="off" name="query" 
-               {% if search_form.query %}value="{{ search_form.query }}"{% endif %}
-               data-provide="typeahead" data-source='[
-               "West Philly",
-               "North Philly",               
-               ]'>
-
-
+               {% if search_form.query %}value="{{ search_form.query }}"{% endif %}>
                  {% if search_form.search_type %}
                <div class="btn-group">
                  <button class="btn btn-custom">Search by {{ search_form.search_type }}</button>
@@ -110,7 +104,7 @@
         </div>
 
 
-        <div class="span3">
+        <div class="span3" id="vendor_table">
           <table id="vendorList" class="table-striped">
             <thead>
               <tr>
@@ -134,7 +128,10 @@
 
       </div>
     </div>
+
+    
+
+
   </div>
-</div>
 
 {% endblock content %}
