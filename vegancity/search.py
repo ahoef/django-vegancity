@@ -33,33 +33,13 @@ import shlex
 
 from vegancity.models import FeatureTag, CuisineTag, Vendor
 
-# DIFFERENTIAL
-# IF ONE SCORE IS HIGHER THAN ANOTHER SCORE BY THE DIFFERENTIAL
-# THEN WE DON'T EVEN USE THAT TYPE OF SEARCH.
-DIFF = 5
-
-# THRESHOLD
-# IF THE SCORE OF ANY SEARCH TYPE IS BELOW THE THRESHOLD,
-# DON'T DO THAT SEARCH AT ALL
-THRESHOLD = 5
-
-FLUFF_WORDS = ("and", "or", "&", "the", "best")
 
 def fluff_split(query):
     "takes a query and returns a list of non-fluff tokens"
+    FLUFF_WORDS = ("and", "or", "&", "the", "best")
     tokens = [token for token in query.split() if token not in FLUFF_WORDS and len(token) > 2]
     return tokens
 
-_ADDRESS_PATTERNS = (
-    (3, "\dth"), 
-    (3, "\dst"), 
-    (3, "\dnd"), 
-    (3,  "\drd"), 
-    (2, "near"),
-    (2, " by "),
-    (1, " and "), 
-    (1, " & "),
-    )
 
 #######################
 # PRIVATE FUNCTIONS
@@ -76,23 +56,24 @@ def _calculate_rank(query, patterns):
     return rank
     
 def _address_rank(query):
-    return _calculate_rank(query, _ADDRESS_PATTERNS)
+    ADDRESS_PATTERNS = (
+        (3, "\dth"), 
+        (3, "\dst"), 
+        (3, "\dnd"), 
+        (3,  "\drd"), 
+        (2, "near"),
+        (2, " by "),
+        (1, " and "), 
+        (1, " & "),
+        )
+    return _calculate_rank(query, ADDRESS_PATTERNS)
 
 
 #########################################
 # PUBLIC / RUNMODES (CURRENTLY UNUSED)
 #########################################
 
-def master_search(query, initial_queryset=None):
-    """Master Search for vegancity.
-
-    Takes a query string and searches for it using a complicated
-    series of operations. (Tries to decide how best to serve results)
-
-    Finally, if a queryset or list was passed as initial_queryset,
-    all results not in that queryset will be removed."""
-
-    # take the query and do a featuretag and cuisine search on each word.
+def name_search(query, initial_queryset=None):
     real_words = fluff_split(query)
     if len(real_words) == 0:
         return []
@@ -100,10 +81,6 @@ def master_search(query, initial_queryset=None):
     name_words = set()
     name_vendors = set()
     name_rank = 0 # name gets no love initially
-
-    tag_words = set()
-    tag_vendors = set()
-    tag_rank = 2 # tag is more likely, give it 2 for now
 
     for word in real_words:
         name_hits = Vendor.approved_objects.filter(name__icontains=word)
@@ -114,19 +91,33 @@ def master_search(query, initial_queryset=None):
             name_vendors = name_vendors.union(name_hits)
             name_rank += 1
 
+    name_word_density = float(len(name_words)) / len(real_words)
+    name_rank += name_word_density * 10
+
+    if initial_queryset:
+        name_vendors = [ v for v in name_vendors if v in initial_queryset ]
+
+    return name_vendors, name_rank
+
+def tag_search(query, initial_queryset=None):
+    real_words = fluff_split(query)
+    if len(real_words) == 0:
+        return []
+
+    tag_words = set()
+    tag_vendors = set()
+    tag_rank = 2 # tag is more likely, give it 2 for now
+
+    for word in real_words:
         ft_hits = FeatureTag.objects.word_search(word)
-        print "ft_hits:", ft_hits, "\n"
         ft_hits_vendors = FeatureTag.objects.get_vendors(ft_hits)
-        print "ft_hits_vendors:", ft_hits_vendors, "\n"
         if ft_hits:
             tag_words.add(word)
             tag_vendors = tag_vendors.union(ft_hits_vendors)
             tag_rank += 1
 
         ct_hits = CuisineTag.objects.word_search(word)
-        print "ct_hits:", ct_hits, "\n"
         ct_hits_vendors = CuisineTag.objects.get_vendors(ct_hits)
-        print "ct_hits_vendors:", ct_hits_vendors, "\n"
         if ct_hits:
             tag_words.add(word)
             tag_vendors = tag_vendors.union(ct_hits_vendors)
@@ -135,51 +126,41 @@ def master_search(query, initial_queryset=None):
     tag_word_density = float(len(tag_words)) / len(real_words)
     tag_rank += tag_word_density * 10
 
-    name_word_density = float(len(name_words)) / len(real_words)
-    name_rank += name_word_density * 10
+    if initial_queryset:
+        tag_vendors = [ v for v in tag_vendors if v in initial_queryset ]
 
-    print "query:", query, "\n"
-    tokens = shlex.split(query)
-    print "tokens:", tokens, "\n"
-    address_tokens = [token for token in tokens if token not in tag_words]
-    print "address_tokens:", address_tokens, "\n"
+    return tag_vendors, tag_rank
 
+def address_search(query, initial_queryset=None):
     address_rank = 5 
     address_rank += _address_rank(query)
-    # insert more statements that bump up the address rank.
-    # might be nice to have a cache of street names.
 
-    # THis will be the big block
-    # where we go ahead and compare  
-    # the namesearch, tagsearch, 
-    # and address_presearch
-    # STANDIN:
-    rank_differential_test = (
-        (name_rank + tag_rank) / address_rank < 2 and
-        len(address_tokens) > 2
-        )
-    print "rank_differential_test:", rank_differential_test
-    
+    address_vendors = Vendor.approved_objects.address_search(query)
+
+    if initial_queryset:
+        address_vendors = [ v for v in address_vendors if v in initial_queryset ]
+
+    return address_vendors, address_rank
+
+def master_search(query, initial_queryset=None):
+    address_vendors, address_rank = address_search(query)
+    name_vendors, name_rank = name_search(query)
+    tag_vendors, tag_rank = tag_search(query)
+
+    search_type = ""
     master_results = []
-
-    # always put name vendors at the top.
-    # there won't be many!
-    master_results.extend(name_vendors) 
-    print "master_results:", master_results, "\n"
-    
-    if rank_differential_test:
-        address_search = Vendor.approved_objects.address_search(query)
-        print "address_search:", address_search
-        master_results.extend(address_search)
-
-    print "master_results:", master_results, "\n"
-
-    for name in tag_vendors:
-        print "name:", name
-        if name not in master_results:
-            master_results.append(name)
+    best_score = max(address_rank, tag_rank, name_rank)
+    if address_rank == best_score:
+        search_type = "address"
+        master_results = address_vendors
+    elif name_rank == best_score:
+        search_type = "name"
+        master_results = name_vendors
+    else:
+        search_type = "tag"
+        master_results = tag_vendors
 
     if initial_queryset:
         master_results = [vendor for vendor in master_results if vendor in initial_queryset]
-    print "master_results:", master_results, "\n"
-    return master_results
+    return master_results, search_type
+

@@ -164,7 +164,7 @@ class NewReviewForm(_BaseReviewForm):
         
 
 
-class FilterForm(forms.Form):
+class SearchForm(forms.Form):
     neighborhood = forms.ModelChoiceField(queryset=models.Neighborhood.objects.distinct(),
                                           required=False)
     cuisine = forms.ModelChoiceField(queryset=models.CuisineTag.objects.with_vendors().distinct(),
@@ -174,17 +174,20 @@ class FilterForm(forms.Form):
     
     class Media:
         js = (
-            'js/filter_form.js',
+            'js/search_form.js',
             )
 
     def __init__(self, *args, **kwargs):
-        super(FilterForm, self).__init__(*args, **kwargs)
+        super(SearchForm, self).__init__(*args, **kwargs)
 
         # initialize extra values
         self.selected_neighborhood = self.data.get('neighborhood', None)
         self.selected_cuisine = self.data.get('cuisine', None)
         self.selected_feature = self.data.get('feature', None)
         self.query = self.data.get('query', None)
+        # TODO: use this later
+        self.old_query = self.data.get('old_query', None)
+        self.search_type = self.data.get('search_type', None)
         self.vendors = None
 
         self.checked_feature_filters = []
@@ -192,9 +195,21 @@ class FilterForm(forms.Form):
             if self.data.get(f.name) or self.selected_feature == str(f.id):
                 self.checked_feature_filters.append(f)
 
+        if self.is_valid():
+            self.apply_search()
+            self.filter_selections_by_vendors(self.vendors)
+        
+
     def apply_search(self):
         if self.query:
-            self.vendors = search.master_search(self.query, self.get_pre_filtered_vendors())
+            if self.search_type == 'name':
+                self.vendors, _  = search.name_search(self.query, self.get_pre_filtered_vendors())
+            elif self.search_type == 'address':
+                self.vendors, _  = search.address_search(self.query, self.get_pre_filtered_vendors())
+            elif self.search_type == 'tag':
+                self.vendors, _  = search.tag_search(self.query, self.get_pre_filtered_vendors())
+            else:
+                self.vendors, self.search_type = search.master_search(self.query, self.get_pre_filtered_vendors())
         else:
             self.vendors = self.get_pre_filtered_vendors()
     

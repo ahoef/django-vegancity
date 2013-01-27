@@ -67,19 +67,13 @@ def vendors(request):
     the search runmode.  Otherwise, we just return all vendors
     in our database."""
 
-    filter_form = forms.FilterForm(request.GET)
+    search_form = forms.SearchForm(request.GET)
     
-    if filter_form.is_valid():
-        filter_form.apply_search()
-        filter_form.filter_selections_by_vendors(filter_form.vendors)
+    # if search_form.is_valid():
+    #     search_form.apply_search()
+    #     search_form.filter_selections_by_vendors(search_form.vendors)
 
-    ctx = {
-        'vendors' : filter_form.vendors,
-        'vendor_count' : (len(filter_form.vendors) if filter_form.vendors else 0),
-        'filter_form' : filter_form,
-        }
-
-    return render_to_response('vegancity/vendors.html', ctx,
+    return render_to_response('vegancity/vendors.html', {'search_form':search_form},
                               context_instance=RequestContext(request))
 
 

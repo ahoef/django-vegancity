@@ -2,13 +2,15 @@
 
 {% load url from future %}
 
+{% load vegancity_template_tags %}
+
 {% block header_extra %}
   <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}/js/map.js"></script>
   <script type="text/javascript">
 
     var vendors = [
-    {% for vendor in vendors %}{% if vendor.latitude %}
+    {% for vendor in search_form.vendors %}{% if vendor.latitude %}
       [{{ vendor.latitude }}, {{vendor.longitude }}, 
       '\
       <strong>{{vendor.name}}</strong><br/>\
@@ -26,7 +28,7 @@
     ]    
 
   </script>
-    {{ filter_form.media }}
+    {{ search_form.media }}
 {% endblock %}
 
 {% block headline %}{% endblock %}
@@ -39,19 +41,44 @@
   <!-- FIRST ROW -->  
   <div class="row">
     <div class="span6">
+
       <form action="{% url 'vendors' %}" method="get" name="filters" id="filters" class="form-search">
+        <input id="search_type" name="search_type" type="hidden" value="{{ search_form.search_type }}">
+        {% if search_from.old_query %}
+        <input id="old_query" name="old_query" type="hidden" value="{{ search_form.old_query }}">
+      {% endif %}
         <input id="search-input" type="text" class="input-large" 
                autofocus="autofocus" autocomplete="off" name="query" 
-               {% if filter_form.query %}value="{{ filter_form.query }}"{% endif %}
+               {% if search_form.query %}value="{{ search_form.query }}"{% endif %}
                data-provide="typeahead" data-source='[
                "West Philly",
                "North Philly",               
                ]'>
-        <button type="submit" class="btn btn-custom">Search</button>
-        <br><br>
 
-      {% if vendors %}
+
+                 {% if search_form.search_type %}
+               <div class="btn-group">
+                 <button class="btn btn-custom">Search by {{ search_form.search_type }}</button>
+                 <button class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
+                   <span class="caret"></span>
+                 </button>
+                 <ul class="dropdown-menu">
+                   <li><a type="#" id="search_by_name">Search by Name</a></li>
+                   <li><a href="#" id="search_by_tag">Search by Cuisine & Feature</a></li>
+                   <li><a href="#" id="search_by_address">Search by Address</a></li>
+                 </ul>
+               </div>
+               {% else %}
+                 <button class="btn btn-custom">Search</button>
+               {% endif %}
+
+        <br>
+        <h5>{{ search_form.search_type|showing_vendors_string }}{% if search_form.query %}"{{ search_form.query }}"{% endif %}</h5>
+
+      {% if search_form.vendors %}
         <div id="map_canvas"></div>
+      {% else %}
+        <div id="map_canvas" style="visibility: hidden"></div>
       {% endif %}
     </div>
 
@@ -60,18 +87,18 @@
         <div class="span3">
 
             <h4>Neighborhood:</h4>
-            {{ filter_form.neighborhood }}
+            {{ search_form.neighborhood }}
             <h4>Cuisine:</h4>
-            {{ filter_form.cuisine }}
+            {{ search_form.cuisine }}
             <h4>Features:</h4>
-            {{ filter_form.checked_features }}
-            {% for checked in filter_form.checked_feature_filters %}
+            {{ search_form.checked_features }}
+            {% for checked in search_form.checked_feature_filters %}
               <label class="checkbox">
                 <input type="checkbox" name="{{ checked.name }}" value="True" checked="checked" onchange="this.form.submit()">
                 {{ checked }}
               </label>
             {% endfor %}         
-            {{ filter_form.feature }}
+            {{ search_form.feature }}
 
           </form>
 
@@ -88,11 +115,11 @@
             <thead>
               <tr>
                 <th>Map</th>
-                <th>Results ({{ vendor_count }})</th>
+                <th>Results ({{ search_form.vendor_count|default:"0" }})</th>
               </tr>
             </thead>
             <tbody>
-              {% for vendor in vendors %}
+              {% for vendor in search_form.vendors %}
                 <tr>
                   <td><img src="//www.google.com/mapfiles/marker.png" class="marker-link vendor-{{vendor.id}}"></td>
                   <td><a class="uline" href="{% url 'vendor_detail' object_id=vendor.id %}">{{ vendor.name }}</a></td>
