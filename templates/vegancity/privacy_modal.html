@@ -1,0 +1,13 @@
+{% load url from future %}
+
+    <div id="privacyModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="privacyModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="privacyModalLabel">Privacy Policy</h3>
+      </div>
+      <div class="modal-body">
+        <p>If you have given us your email address and choose to receive updates, we may email you periodically. We will not share your personal information with anyone else. If you have chosen not to receive email updates, we will not contact you unless there is an issue with your account.</p>
+
+        <p>A <a class="uline" target="_blank" href="{% url "privacy" %}">longer version</a> of our privacy policy is also available.</p>
+      </div>
+    </div>

@@ -3,6 +3,11 @@
 {% block headline %}Register{% endblock %}
 
 {% block content %}
+
+<br>
+<p>Please take note of our <a class="uline" href="#privacyModal" data-toggle="modal">Privacy Policy</a></p>
+{% include "vegancity/privacy_modal.html" %}
+<hr>
   <form action="" method="post">
     {% csrf_token %}
       {{ form.as_p }}
