@@ -54,16 +54,20 @@
                "West Philly",
                "North Philly",               
                ]'>
-               
+
+        <button type="submit" class="btn btn-custom">Search</button>
+        <br><br>
                <div class="btn-group">
                  {% if search_form.search_type %}
                  <button class="btn btn-custom">Search by {{ search_form.search_type }}</button>
-                 <button class="btn dropdown-toggle" data-toggle="dropdown">
-               {% else %}
-                 <button class="btn dropdown-toggle" data-toggle="dropdown">
-                   Search                   
-               {% endif %}
+                 <button class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
                    <span class="caret"></span>
+                 </button>
+               {% else %}
+                 <button class="btn btn-custom dropdown-toggle" data-toggle="dropdown">
+                   Search
+                 </button>                   
+               {% endif %}
                  </button>
                  <ul class="dropdown-menu">
                    <li><a type="#" id="search_by_name">Search by Name</a></li>
