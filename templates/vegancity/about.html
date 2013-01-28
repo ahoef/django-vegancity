@@ -1,6 +1,25 @@
 {% extends "base.html" %}
 
+
 {% block headline %}About{% endblock %}
+
+{% block header_extra %}
+<style type="text/css">
+
+body {
+background: url({{STATIC_URL}}images/about_background.jpg);
+background-repeat: no-repeat;
+background-position: center center;
+
+}
+
+#content_main, #headline_main {
+  background-color: #ffffff; 
+  opacity: 0.9;
+}
+</style>
+{% endblock %}
+
 
 {% block content %}
   <div class="row">
