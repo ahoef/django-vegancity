@@ -1,4 +1,6 @@
-
+function reset_filters () {
+    $("#id_neighborhood, #id_cuisine, #id_checked_features, #id_feature").val(0);
+}
 
 
 $(document).ready(function() {
@@ -9,6 +11,10 @@ $(document).ready(function() {
         this.form.submit();
     });
 
+    $("#search_by_dynamic").click(function(event) {
+        reset_filters();
+        $("#filters").submit();
+    });
     
     $("#search_by_address").click(function(event) { 
         $("#filters #search_type").val("address");
