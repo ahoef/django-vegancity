@@ -34,7 +34,7 @@ class VegUserCreationForm(UserCreationForm):
                           help_text="This optional field will be displayed to all site users along with your username.",
                           required=False,
                           widget=forms.Textarea)
-    mailing_list = forms.BooleanField(label="Would you like to join our mailinglist?")
+    mailing_list = forms.BooleanField(label="Would you like to join our mailinglist?", required=False)
                                       
 
     def save(self, *args, **kwargs):
