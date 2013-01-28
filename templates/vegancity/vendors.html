@@ -56,7 +56,7 @@ This prevents null searches from getting a value of None stuck here and throwing
                {% if search_form.query %}value="{{ search_form.query }}"{% endif %}>
                  {% if search_form.search_type %}
                <div class="btn-group">
-                 <button class="btn btn-custom">Search by {{ search_form.search_type|title }}</button>
+                 <button class="btn btn-custom" id="search_by_dynamic">Search by {{ search_form.search_type|title }}</button>
                  <button class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
                    <span class="caret"></span>
                  </button>
@@ -67,7 +67,7 @@ This prevents null searches from getting a value of None stuck here and throwing
                  </ul>
                </div>
                {% else %}
-                 <button class="btn btn-custom">Search</button>
+                 <button class="btn btn-custom" id="search_by_dynamic">Search</button>
                {% endif %}
 
         <br>
