@@ -419,7 +419,7 @@ class Vendor(NamedCreatedModel):
 
     class Meta:
         get_latest_by = "created"
-        ordering = ('created',)
+        ordering = ('name',)
         verbose_name = "Vendor"
         verbose_name_plural = "Vendors"
 
