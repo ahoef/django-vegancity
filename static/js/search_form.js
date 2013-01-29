@@ -1,5 +1,6 @@
 function reset_filters () {
     $("#id_neighborhood, #id_cuisine, #id_checked_features, #id_feature").val(0);
+    $("input:checkbox").val(null);
 }
 
 
@@ -18,6 +19,11 @@ $(document).ready(function() {
     
     $("#clear_all").click(function(event) { 
         reset_filters();
+        $("#filters").submit(); 
+    });
+
+    $("#clear_search").click(function(event) { 
+        $("#search-input").val("");
         $("#filters").submit(); 
     });
 

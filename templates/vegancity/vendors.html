@@ -69,7 +69,7 @@ This prevents null searches from getting a value of None stuck here and throwing
                {% else %}
                  <button class="btn btn-custom" id="search_by_dynamic">Search</button>
                {% endif %}
-
+                 <a href="#" class="btn btn-warning" id="clear_search">Clear Search</a>
         <br>
         {% if search_form.query %}
         <h5>Showing {% if search_form.vendors %}only{% else %}no{% endif %} results{{ search_form.search_type|showing_vendors_string }}{% if search_form.query %}"{{ search_form.query }}"{% endif %}</h5>
@@ -95,7 +95,7 @@ This prevents null searches from getting a value of None stuck here and throwing
             {{ search_form.checked_features }}
             {% for checked in search_form.checked_feature_filters %}
               <label class="checkbox">
-                <input type="checkbox" name="{{ checked.name }}" value="True" checked="checked" onchange="this.form.submit()">
+                <input type="checkbox" id="id_feature_{{ checked.name }}" name="{{ checked.name }}" value="True" checked="checked" onchange="this.form.submit()">
                 {{ checked }}
               </label>
             {% endfor %}         
