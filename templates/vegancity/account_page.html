@@ -7,10 +7,17 @@ Account details for <strong>{{ user }}</strong>
 {% endblock %}
 
 {% block content %}
-Email:{{user.email}}<br>
-Subscribed to mailing list:{{user.mailinglist}}<br>
-Bio:{{user.bio}}<br>
-
+  <table class="table table-hover">
+    <tr>
+      <td>Email:</td><td>{{user.email}}</td>
+    </tr>
+    <tr>
+      <td>Subscribed to mailing list:</td><td>{{user.get_profile.mailing_list}}</td>
+    </tr>
+    <tr>
+      <td>Bio:</td><td>{{user.get_profile.bio}}</td>
+    </tr>
+  </table>
 <hr>
 
 <p>
