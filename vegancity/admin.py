@@ -90,3 +90,5 @@ admin.site.register(models.BlogEntry, BlogEntryAdmin)
 admin.site.register(models.VeganDish)
 admin.site.register(models.CuisineTag)
 admin.site.register(models.FeatureTag)
+admin.site.register(models.Neighborhood)
+ 
