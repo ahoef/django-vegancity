@@ -71,7 +71,7 @@ This prevents null searches from getting a value of None stuck here and throwing
                {% endif %}
 
         <br>
-        <h5>{{ search_form.search_type|showing_vendors_string }}{% if search_form.query %}"{{ search_form.query }}"{% endif %}</h5>
+        <h5>Showing {% if search_form.vendors %}only{% else %}no{% endif %} results{{ search_form.search_type|showing_vendors_string }}{% if search_form.query %}"{{ search_form.query }}"{% endif %}</h5>
 
       {% if search_form.vendors %}
         <div id="map_canvas"></div>

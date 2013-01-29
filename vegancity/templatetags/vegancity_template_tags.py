@@ -8,11 +8,11 @@ def target_blank(text):
 def showing_vendors_string(text):
     if text:
         if text == "address":
-            return "Showing only food vendors near "
+            return " near "
         elif text == "name":
-            return "Showing only food vendors with name containing any of "
+            return " with name containing any of "
         else:
-            return "Showing only food vendors with cuisine or features containing any of "
+            return " with cuisine or features containing any of "
     else:
         return ""
 
