@@ -4,4 +4,5 @@ db
 *.pyc
 settings_private.py
 nohup.out
+templates/analytics.html
 *~
