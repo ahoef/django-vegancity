@@ -417,6 +417,9 @@ class Vendor(NamedCreatedModel):
     def get_absolute_url(self):
         return "/vendors/%d/" % self.id
 
+    def approved_reviews(self):
+        return Review.approved_objects.filter(vendor=self.id)
+
     class Meta:
         get_latest_by = "created"
         ordering = ('name',)

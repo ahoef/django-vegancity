@@ -108,7 +108,7 @@
     </div>
   </div>
 
-  {% if vendor.review_set.all %}
+  {% if vendor.approved_reviews %}
     <div style="background-color: #F6F6F6">
       <div class="container">
         <div class="row">
@@ -116,7 +116,7 @@
             <hr/>
             <h2>{{ reviews.count }} Review{% if reviews.count != 1 %}s{% endif %}</h2>
             <hr>
-            {% for review in vendor.review_set.all %}
+            {% for review in vendor.approved_reviews %}
               <h3>{{review.title }}</h3>
                   <h5>entered by {{ review.author }}</h5>
               <h6>{{ review.created }}</h6>
