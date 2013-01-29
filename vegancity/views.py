@@ -170,7 +170,8 @@ def new_vendor(request):
         request, 
         forms.NewVendorForm, 
         reverse("vendor_thanks"), 
-        "vegancity/new_vendor.html")
+        "vegancity/new_vendor.html",
+        commit_flag=True)
 
     return response
 
