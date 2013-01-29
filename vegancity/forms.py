@@ -165,6 +165,7 @@ class NewReviewForm(_BaseReviewForm):
 
 
 class SearchForm(forms.Form):
+
     neighborhood = forms.ModelChoiceField(queryset=models.Neighborhood.objects.distinct(),
                                           required=False)
     cuisine = forms.ModelChoiceField(queryset=models.CuisineTag.objects.with_vendors().distinct(),
@@ -213,15 +214,17 @@ class SearchForm(forms.Form):
         else:
             self.vendors = self.get_pre_filtered_vendors()
     
-        if type(self.vendors) == list:
+        # TODO: yikes, I coded myself into a corner here! Fix it!
+        if type(self.vendors) == list or type(self.vendors) == set:
             self.vendor_count = len(self.vendors)
         else:
             self.vendor_count = self.vendors.count()
 
     def filter_selections_by_vendors(self, vendors):
         ids = [vendor.id for vendor in vendors]
-        self.fields['neighborhood'].queryset = models.Neighborhood.objects.filter(vendor__in=ids).distinct()
-        self.fields['cuisine'].queryset = models.CuisineTag.objects.filter(vendor__in=ids).distinct()
+        # don't filter these! Causes too many UI bugs!
+        # self.fields['neighborhood'].queryset = models.Neighborhood.objects.filter(vendor__in=ids).distinct()
+        # self.fields['cuisine'].queryset = models.CuisineTag.objects.filter(vendor__in=ids).distinct()
         self.fields['feature'].queryset = models.FeatureTag.objects.filter(vendor__in=ids).distinct()
 
     def get_pre_filtered_vendors(self):

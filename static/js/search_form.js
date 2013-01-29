@@ -11,11 +11,16 @@ $(document).ready(function() {
         this.form.submit();
     });
 
-    $("#search_by_dynamic").click(function(event) {
-        reset_filters();
-        $("#filters").submit();
-    });
+    // $("#search_by_dynamic").click(function(event) {
+    //     reset_filters();
+    //     $("#filters").submit();
+    // });
     
+    $("#clear_all").click(function(event) { 
+        reset_filters();
+        $("#filters").submit(); 
+    });
+
     $("#search_by_address").click(function(event) { 
         $("#filters #search_type").val("address");
         $("#filters").submit(); 

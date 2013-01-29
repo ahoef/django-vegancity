@@ -71,8 +71,11 @@ This prevents null searches from getting a value of None stuck here and throwing
                {% endif %}
 
         <br>
+        {% if search_form.query %}
         <h5>Showing {% if search_form.vendors %}only{% else %}no{% endif %} results{{ search_form.search_type|showing_vendors_string }}{% if search_form.query %}"{{ search_form.query }}"{% endif %}</h5>
-
+      {% else %}
+        <br>
+      {% endif %}
       {% if search_form.vendors %}
         <div id="map_canvas"></div>
       {% else %}
@@ -85,7 +88,7 @@ This prevents null searches from getting a value of None stuck here and throwing
         <div class="span3">
 
             <h4>Neighborhood:</h4>
-            {{ search_form.neighborhood }}
+              {{ search_form.neighborhood }}
             <h4>Cuisine:</h4>
             {{ search_form.cuisine }}
             <h4>Features:</h4>
@@ -100,7 +103,7 @@ This prevents null searches from getting a value of None stuck here and throwing
 
           </form>
 
-          <p><a href="{% url 'vendors' %}" class="btn btn-warning">Clear All Filters</a></p>
+          <p><a href="#" class="btn btn-warning" id="clear_all">Clear Filters</a></p>
           <br>
           
           <h4>Something missing?</h4>
