@@ -2,9 +2,13 @@
 
 {% load url from future %}
 
+{% block title %}VegPhilly | Restaurants{% endblock %}
+
+
 {% load vegancity_template_tags %}
 
 {% block header_extra %}
+<meta name="description" content="View local vegan and vegetarian restaurants in Philly. Search food vendors by cuisine, features, or neighborhood.">
   <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}/js/map.js"></script>
   <script type="text/javascript">
