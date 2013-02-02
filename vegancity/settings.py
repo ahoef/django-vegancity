@@ -32,23 +32,12 @@ MANAGERS = ADMINS
 AUTH_PROFILE_MODULE = "vegancity.UserProfile"
 
 DATABASES = {
-    'default' : {
-        'ENGINE' : 'django.db.backends.postgresql_psycopg2',
-        'NAME' : 'vegancity_dev',
-        'USER' : 'vegancity_dev',
-        #'PASSWORD' : ''; # password not needed, alternative credential verification.
-        'HOST' : 'vegphilly.com',
-        'PORT' : '5432',
-        },
-    'lite': {
+    'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(APP_ROOT, 'db'),
         }
     }
 
-
-REDIS_SERVER = "localhost"
-REDIS_APPNAME = "vegancity"
 
 # In order to simplify bounding box calculations,
 # please enter the latitude of the region that this
