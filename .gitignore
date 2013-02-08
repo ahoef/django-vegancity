@@ -6,3 +6,4 @@ settings_private.py
 nohup.out
 templates/analytics.html
 *~
+.vagrant
