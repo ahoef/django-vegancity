@@ -2,7 +2,7 @@ db
 *.log
 *.pot
 *.pyc
-settings_private.py
+settings_local.py
 nohup.out
 templates/analytics.html
 *~
