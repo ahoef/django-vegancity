@@ -1,6 +1,7 @@
 
 body {
     font-family: 'Average Sans', serif;
+    font-size: 16px;
 }
 
 .navbar-inner {
@@ -27,16 +28,49 @@ div#map_canvas {
 }
 
 /* TODO: Some of these should be #101c35 */
-h1, h2, h3, h4, h5, h6, th {
+h1, h2, h3, h4, th {
     font-family: 'Sanchez', serif;
     color: rgb(210, 93, 7);
 }
 
-table#review_summary {
+h5, h6, table.review_summary  {
+    color: #101c35;
 }
 
-h6, table#review_summary  {
-    color: #101c35;
+h5, h6 {
+    font-family: 'Open Sans', sans-serif;
+    /* this looks CRAZY in chrome. */
+    /* letter-spacing: -2px; */
+}
+
+.reviews_header h2 {
+    line-height: 75%;
+    background-color: #EB8B4B;
+    color: #fff;
+    padding:  10px;
+    text-align: center;
+    /* this is not needed?: */
+    /* font-family: 'Sanchez', serif; */
+
+    /*font-variant:small-caps;
+    letter-spacing: -4px;*/
+
+}
+
+.review_title h4 {
+    line-height: 30px;
+}
+
+.review_number {
+    padding-left: 20px;
+    color: rgb(210, 93, 7);
+
+}
+
+#review_button {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    
 }
 
 div#vc-search-borderbox {
@@ -53,6 +87,16 @@ div#vc-searchbox {
     padding-top: 10px;
     padding-left: 10px;
     padding-right: 10px;
+}
+
+#skyline_circle {
+    height: 350px;
+    width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 90px;
+    margin-bottom: 30px;
+   
 }
 
 
@@ -78,6 +122,7 @@ div#vc-searchbox {
 
 a {
     color: rgb(16, 28, 53);
+
 }
 
 input#vc-search-input, input#search-input {
@@ -152,4 +197,6 @@ a.uline {
 div#vendor_table {
     height: 650px;
     overflow: auto;
+    font-size: 14px;
 }
+

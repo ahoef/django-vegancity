@@ -104,10 +104,13 @@
             </tr>
           {% endif %}
         </table>
-
-        <h5><a href="{% url 'new_review' vendor_id=vendor.id %}" class="btn btn-custom">Write a review</a></h5>
-        <br />
-        <h5>Problem with this listing? <a href="mailto:vegphilly@gmail.com?subject=Vendor Issue - {{ vendor.name }}">Contact us.</a></h5>
+        
+        <div id="review_button">
+          <h5><a href="{% url 'new_review' vendor_id=vendor.id %}" class="btn btn-custom">Write a Review</a></h5>
+        </div>
+          <h6>Problem with this listing? <a href="mailto:vegphilly@gmail.com?subject=Vendor Issue - {{ vendor.name }}">Contact us.</a></h6>
+        
+        
       </div>
     </div>
   </div>
@@ -117,24 +120,25 @@
       <div class="container">
         <div class="row">
           <div class="span6">
-            <hr/>
-            <h2>{{ reviews.count }} Review{% if reviews.count != 1 %}s{% endif %}</h2>
-            <hr>
+            <div class="reviews_header">
+              <h2>{{ reviews.count }} Review{% if reviews.count != 1 %}s{% endif %}</h2>
+            </div>
+            <br>
             {% for review in vendor.approved_reviews %}
-              <h3>{{review.title }}</h3>
+              <span class="review_title"><h4>{{review.title }}</h4></span>
                   <h5>entered by {{ review.author }}</h5>
               <h6>{{ review.created }}</h6>
-              <table id="review_summary">              
+              <table class="review_summary">              
                 {% if review.atmosphere_rating %}
                   <tr>
-                    <td>atmosphere rating:</td>
-                    <td>{{ review.atmosphere_rating }} / 4</td>
+                    <td>Atmosphere rating:</td>
+                    <td class="review_number">{{ review.atmosphere_rating }} / 4</td>
                   </tr>
                 {% endif %}           
                 {% if review.food_rating %}      
                   <tr>
-                    <td>food rating:</td>
-                    <td>{{ review.food_rating }} / 4</td>
+                    <td>Food rating:</td>
+                    <td class="review_number">{{ review.food_rating }} / 4</td>
                   </tr>
                 {% endif %}           
                 <!-- <tr> -->
@@ -147,7 +151,7 @@
                 <h6>best vegan dish: {{ review.best_vegan_dish }}</h6>
               {% endif %}
               <p>{{ review.content }}</p>
-              <br>          
+              <hr>
 
             {% endfor %}
           </div>
