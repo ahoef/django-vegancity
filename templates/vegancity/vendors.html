@@ -20,7 +20,7 @@
       <strong>{{vendor.name}}</strong><br/>\
       {{vendor.address}}<br/>\
       {{vendor.phone}}<br/>\
-      <a class="uline" href="{%url 'vendor_detail' object_id=vendor.id %}">More Info</a> | \
+      <a class="uline" href="{{ vendor.get_absolute_url }}">More Info</a> | \
       <a class="uline" href="http://maps.google.com/maps?q={{ vendor.address }}" target="_BLANK">jump to Google Maps</a><br/>\
       ', {{ vendor.id }}],
     {% endif %}{% endfor %}
@@ -127,7 +127,7 @@ This prevents null searches from getting a value of None stuck here and throwing
               {% for vendor in search_form.vendors %}
                 <tr>
                   <td><img src="//www.google.com/mapfiles/marker.png" class="marker-link vendor-{{vendor.id}}"></td>
-                  <td><a class="uline" href="{% url 'vendor_detail' object_id=vendor.id %}">{{ vendor.name }}</a></td>
+                  <td><a class="uline" href="{{ vendor.get_absolute_url }}">{{ vendor.name }}</a></td>
                 </tr>
               {% endfor %}
             </tbody>

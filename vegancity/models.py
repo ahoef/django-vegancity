@@ -21,6 +21,8 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.db.models import Count
 
+from django.template.defaultfilters import slugify
+
 import shlex
 import itertools
 import geocode
@@ -233,7 +235,7 @@ class Review(models.Model):
         return "%s -- %s" % (self.vendor.name, str(self.created))
 
     def get_absolute_url(self):
-        return "/vendors/%d/" % self.vendor.id
+        return "/vendors/%d-%s/" % (self.vendor.id, slugify(self.vendor.name))
 
     class Meta:
         get_latest_by = "created"
@@ -415,7 +417,7 @@ class Vendor(NamedCreatedModel):
             return None
 
     def get_absolute_url(self):
-        return "/vendors/%d/" % self.id
+        return "/vendors/%d-%s/" % (self.id, slugify(self.name))
 
     def approved_reviews(self):
         return Review.approved_objects.filter(vendor=self.id)

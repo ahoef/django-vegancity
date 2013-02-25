@@ -41,7 +41,7 @@ urlpatterns += patterns('django.views.generic',
         {'queryset' : models.BlogEntry.objects.all(), 'template_name' : 'vegancity/blog.html' }, 
         name="blog"),
 
-    url(r'^vendors/(?P<object_id>\d+)/$', 'list_detail.object_detail',
+    url(r'^vendors/(?P<object_id>\d+)(-[\w\d]+)*/$', 'list_detail.object_detail',
         {'queryset' : models.Vendor.approved_objects.all(), 'template_name' : 'vegancity/vendor_detail.html',
          'template_object_name' : 'vendor' }, name="vendor_detail"),
 
