@@ -15,7 +15,9 @@
   </script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/map.js"></script>
 
-
+{% if vendor.notes %}
+<meta name="description" content="{{ vendor.notes }}">
+{% endif %}
 {% endblock %}
 
 {% block summary %}
