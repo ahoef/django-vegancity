@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% load url from future %}
+
+{% block summary %}
+Edit your account details
+{% endblock %}
+
+{% block content %}
+<br>
+<p>Please take note of our <a class="uline" href="#privacyModal" data-toggle="modal">Privacy Policy</a></p>
+{% include "vegancity/privacy_modal.html" %}
+<hr>
+  <form action="" method="post">
+    {% csrf_token %}
+      {{ user_form.as_p }}
+      {{ profile_form.as_p }}
+    <input class="btn btn-custom" type="submit" value="Save">
+  </form>
+{% endblock %}
