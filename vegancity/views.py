@@ -38,7 +38,7 @@ def home(request):
     vendors_with_reviews = vendors.filter(review__approved=True).distinct()
     top_5 = vendors.annotate(score=Sum('review__food_rating')).exclude(score=None).order_by('-score')[:5]
     recently_active = vendors_with_reviews.annotate(score=Max('review__created')).exclude(score=None).order_by('-score')[:5]
-    recently_added = vendors.annotate(score=Max('created')).order_by('-score')[:5]
+    recently_added = vendors.order_by('-created')[:5]
 
     neighborhoods = models.Neighborhood.objects.all()
     cuisine_tags = models.CuisineTag.objects.with_vendors()
