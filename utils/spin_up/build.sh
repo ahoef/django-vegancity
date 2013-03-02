@@ -27,9 +27,7 @@ su postgres -c "createdb -O vagrant -l en_US.UTF8 -E UTF8 -T template0 vegphilly
 ###############################
 apt-get install -y python-psycopg2
 apt-get install -y python-pip
-pip install Django
-pip install south
-pip install Gunicorn
+pip install -r /var/projects/vegphilly/requirements.txt
 
 ###############################
 ## PREPARE APP ENV
