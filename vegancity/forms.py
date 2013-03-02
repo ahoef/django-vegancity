@@ -98,7 +98,7 @@ class NewVendorForm(_BaseVendorForm):
     "Form used for adding new vendors."
 
     class Meta(_BaseVendorForm.Meta):
-        exclude = ('approved',)
+        exclude = ('approved', 'notes',)
         widgets = {
             'cuisine_tags' : forms.CheckboxSelectMultiple,
             'feature_tags' : forms.CheckboxSelectMultiple,
