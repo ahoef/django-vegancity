@@ -28,27 +28,11 @@ import itertools
 import geocode
 import validators
 
-#####################################
-## ABSTRACT CLASSES
-#####################################
-
-class NamedModel(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        abstract = True
-
-class NamedCreatedModel(NamedModel):
-    created = models.DateTimeField(auto_now_add=True, null=True)
-
-    class Meta:
-        abstract = True
 
 class TagManager(models.Manager):
+    """Manager class that can be used for any type of Tag class
 
+    in this case, CuisineTag and FeatureTag"""
     def word_search(self, word):
         "takes a word and searches all tag names for that word"
         print "word:", word, "\n"
@@ -74,6 +58,9 @@ class TagManager(models.Manager):
         return results
         
 class _TagModel(models.Model):
+    """Abstract class that can be used for any type of Tag class
+
+    in this case, CuisineTag and FeatureTag"""
     name = models.CharField(
         help_text="short name, all lowercase alphas, underscores for spaces",
         max_length=255, unique=True
@@ -101,7 +88,8 @@ class _TagModel(models.Model):
 # SITE CLASSES
 #######################################
 
-class VegLevel(NamedModel):
+class VegLevel(models.Model):
+    name = models.CharField(max_length=255, unique=True)
     description = models.TextField()
     super_category = models.CharField(max_length=30,
         choices=(
@@ -113,8 +101,14 @@ class VegLevel(NamedModel):
     def __unicode__(self):
         return "(%s) %s" % (self.super_category, self.description)
 
-class Neighborhood(NamedCreatedModel):
+class Neighborhood(models.Model):
     """Used for determining what neighborhood a vendor is in."""
+    name = models.CharField(max_length=255, unique=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __unicode__(self):
+        return self.name
+
     class Meta:
         verbose_name = "Neighborhood"
         verbose_name_plural = "Neighborhoods"
@@ -159,8 +153,13 @@ class BlogEntry(models.Model):
 ##########################################
 
 
-class VeganDish(NamedCreatedModel):
+class VeganDish(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
     vendor = models.ForeignKey('Vendor')
+
+    def __unicode__(self):
+        return self.name
 
     class Meta:
         get_latest_by = "created"
@@ -310,10 +309,11 @@ class ApprovedVendorManager(VendorManager):
         return new_qs
 
 
-class Vendor(NamedCreatedModel):
+class Vendor(models.Model):
     "The main class for this application"
 
     # CORE FIELDS
+    name = models.CharField(max_length=255, unique=True)
     address = models.TextField(null=True)
     neighborhood = models.ForeignKey('Neighborhood', blank=True, null=True, editable=False)
     phone = models.CharField(max_length=50, blank=True, null=True,
@@ -324,6 +324,7 @@ class Vendor(NamedCreatedModel):
     longitude = models.FloatField(default=None, blank=True, null=True, editable=False)
 
     # ADMINISTRATIVE FIELDS
+    created = models.DateTimeField(auto_now_add=True, null=True)
     modified = models.DateTimeField(auto_now=True, null=True)
     approved = models.BooleanField(default=False)
     objects = VendorManager()
@@ -418,6 +419,9 @@ class Vendor(NamedCreatedModel):
 
     def get_absolute_url(self):
         return "/vendors/%d-%s/" % (self.id, slugify(self.name))
+
+    def __unicode__(self):
+        return self.name
 
     def approved_reviews(self):
         return Review.approved_objects.filter(vendor=self.id)
