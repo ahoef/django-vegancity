@@ -268,9 +268,6 @@ class VendorManager(models.Manager):
             return []
         latitude, longitude, neighborhood = geocode_result
 
-        if neighborhood == None:
-            return []
-
         point_a = (latitude, longitude)
 
         # TODO test this with a reasonable number of latitudes and longitudes
