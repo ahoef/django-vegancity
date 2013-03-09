@@ -66,6 +66,23 @@ class VegUserCreationForm(UserCreationForm):
         return cleaned_data
         
 
+class VegUserEditForm(forms.ModelForm):
+    """Form for users to edit their information"""
+    
+    first_name = forms.CharField(max_length=30, required=False, help_text='We will show this next to your reviews')
+    last_name = forms.CharField(max_length=30, required=False, help_text='We will show your last initial next to your reviews')
+    
+    class Meta:
+        model = models.User
+        fields = ('first_name', 'last_name',)
+        
+        
+class VegProfileEditForm(forms.ModelForm):
+    class Meta:
+        model = models.UserProfile
+        fields = ('bio', 'mailing_list',)
+    
+    
 ##############################
 ### Vendor Forms
 ##############################

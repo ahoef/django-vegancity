@@ -24,6 +24,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from django.contrib.auth import authenticate, login
+from django.contrib import messages
 
 from vegancity import forms
 from vegancity import models
@@ -56,6 +57,7 @@ def home(request):
     return render_to_response("vegancity/home.html", ctx,
                               context_instance=RequestContext(request))
 
+@login_required
 def account_page(request):
     "The view for user accounts / profile pages."
 
@@ -210,3 +212,27 @@ def new_review(request, vendor_id):
             ctx)
 
     return response
+
+
+@login_required
+def account_edit(request):
+    """Edit page for user accounts"""
+    
+    user = request.user
+    user_profile = user.get_profile()
+    
+    if request.method == 'POST':
+        user_form = forms.VegUserEditForm(request.POST, instance=user)
+        profile_form = forms.VegProfileEditForm(request.POST,
+                                                instance=user_profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Profile saved!')
+        return HttpResponseRedirect(reverse('account_page'))
+    else:
+        user_form = forms.VegUserEditForm(instance=user)
+        profile_form = forms.VegProfileEditForm(instance=user_profile)
+    return render_to_response('vegancity/account_edit.html',
+        {'user_form': user_form, 'profile_form': profile_form},
+        context_instance=RequestContext(request))

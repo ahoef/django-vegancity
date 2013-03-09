@@ -63,6 +63,7 @@ urlpatterns += patterns('',
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page' : '/'},  name='logout'),
     url(r'^accounts/register/$', 'vegancity.views.register', name='register'),
     url(r'^accounts/account_page/$', 'vegancity.views.account_page', name='account_page'),
+    url(r'^accounts/account_page/edit/$', 'vegancity.views.account_edit', name='account_edit'),
 )
 
 # ADMIN VIEWS
