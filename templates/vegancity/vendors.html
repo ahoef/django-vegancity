@@ -19,7 +19,7 @@
         {
             id: "{{ vendor.id }}",
             name: "{{ vendor.name }}",
-            address: "{{ vendor.address }}",
+            address: "{{ vendor.address|linebreaksbr }}",
             phone: "{{ vendor.phone }}",
             url: "{{ vendor.get_absolute_url }}",
             latitude: "{{ vendor.latitude }}", 
