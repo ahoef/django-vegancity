@@ -12,23 +12,28 @@
   <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}/js/map.js"></script>
   <script type="text/javascript">
-
-    var vendors = [
-    {% for vendor in search_form.vendors %}{% if vendor.latitude %}
-      [{{ vendor.latitude }}, {{vendor.longitude }}, 
-      '\
+  var bubbleText =  '\
       <strong>{{vendor.name}}</strong><br/>\
       {{vendor.address}}<br/>\
       {{vendor.phone}}<br/>\
       <a class="uline" href="{{ vendor.get_absolute_url }}">More Info</a> | \
       <a class="uline" href="http://maps.google.com/maps?q={{ vendor.address }}" target="_BLANK">jump to Google Maps</a><br/>\
-      ', {{ vendor.id }}],
+      ';
+      
+    var vendors = [
+    {% for vendor in search_form.vendors %}{% if vendor.latitude %}
+        {
+            latitude: {{ vendor.latitude }}, 
+            longitude: {{ vendor.longitude }}, 
+            bubbleText: bubbleText,
+            id: {{ vendor.id }}
+        }{% if not forloop.last %},{% endif %}
     {% endif %}{% endfor %}
     ];
 
     var typeahead_values = [
     "West Philly",
-    "North Philly",
+    "North Philly"
     ]    
 
   </script>
