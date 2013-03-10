@@ -1,4 +1,4 @@
-function vendorMap(map_container_id, bounds) {
+function VendorMap(map_container_id, bounds) {
     this.center = bounds.getCenter();
     var map_parameters = { zoom: 15, maxZoom:17, minZoom: 11,
                            center: this.center, mapTypeId: google.maps.MapTypeId.ROADMAP };
@@ -8,7 +8,7 @@ function vendorMap(map_container_id, bounds) {
     this.map.fitBounds(bounds);
 };
 
-vendorMap.prototype.place  = function(LatLng, marker, body) {
+VendorMap.prototype.place  = function(LatLng, marker, body) {
 
     var image = new google.maps.MarkerImage(marker);
     var marker = new google.maps.Marker({
@@ -33,10 +33,10 @@ vendorMap.prototype.place  = function(LatLng, marker, body) {
 function createMap(vendors) {
 
     var bounds = new google.maps.LatLngBounds();
-    for (var i = 0; i < vendors.length; i++) {
-        var LatLng = new google.maps.LatLng(vendors[i][0], vendors[i][1]);
+    _.each(vendors, function(vendor) {
+        var LatLng = new google.maps.LatLng(vendor.latitude, vendor.longitude);
         bounds.extend(LatLng);
-    }
+    });
 
     var marker = "";
     if (vendors.length == 1){
@@ -45,13 +45,12 @@ function createMap(vendors) {
         marker = "//www.google.com/mapfiles/marker.png";
     };
 
-    map = new vendorMap("map_canvas", bounds);
-
-    for (var i = 0; i < vendors.length; i++) {
-        var vendor = vendors[i];
-        var LatLng = new google.maps.LatLng(vendor[0], vendor[1]);
-        map.markers[vendor[3]] = map.place(LatLng, marker, vendor[2]);
-    }
+    map = new VendorMap("map_canvas", bounds);
+    
+    _.each(vendors, function(vendor) {
+        var LatLng = new google.maps.LatLng(vendor.latitude, vendor.longitude);
+        map.markers[vendor.id] = map.place(LatLng, marker, vendor.bubbleText);
+    });
 }; 
 
 
