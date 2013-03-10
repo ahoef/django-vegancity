@@ -18,6 +18,7 @@
 
 from django import forms
 
+from settings import DEFAULT_CENTER
 import models
 import search
 
@@ -192,6 +193,8 @@ class SearchForm(forms.Form):
     
     class Media:
         js = (
+            'js/map.js',
+            'js/vendors.js',
             'js/search_form.js',
             )
 
@@ -207,6 +210,8 @@ class SearchForm(forms.Form):
         self.old_query = self.data.get('old_query', None)
         self.search_type = self.data.get('search_type', None)
         self.vendors = None
+        self.has_get_params = (True if self.data else False)
+        self.center_latitude, self.center_longitude = DEFAULT_CENTER
 
         self.checked_feature_filters = []
         for f in models.FeatureTag.objects.with_vendors():

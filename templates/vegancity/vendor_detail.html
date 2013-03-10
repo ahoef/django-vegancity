@@ -10,10 +10,19 @@
   <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
   <script type="text/javascript">
     var vendors = [
-    [{{ vendor.latitude }}, {{vendor.longitude }}],
+        {
+            id: "{{ vendor.id }}",
+            name: "{{ vendor.name }}",
+            address: "{{ vendor.address }}",
+            phone: "{{ vendor.phone }}",
+            url: "{{ vendor.get_absolute_url }}",
+            latitude: "{{ vendor.latitude }}", 
+            longitude: "{{ vendor.longitude }}"
+        }
     ];
   </script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/map.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/vendor_detail.js"></script>
 
 {% if vendor.notes %}
 <meta name="description" content="{{ vendor.notes }}">
