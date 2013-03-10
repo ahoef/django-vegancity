@@ -249,7 +249,7 @@ class VendorManager(models.Manager):
         """returns all vendors that are not approved, which are
         otherwise impossible to get in a normal query (for now)."""
         normal_qs = super(VendorManager, self).get_query_set()
-        pending = normal_qs.filter(approved=False)
+        pending = normal_qs.filter(approval_status='pending')
         return pending
         
 
@@ -302,7 +302,7 @@ class ApprovedVendorManager(VendorManager):
     Inherits the normal vendor manager."""
     def get_query_set(self):
         normal_qs = super(VendorManager, self).get_query_set()
-        new_qs = normal_qs.filter(approved=True)
+        new_qs = normal_qs.filter(approval_status='approved')
         return new_qs
 
 
