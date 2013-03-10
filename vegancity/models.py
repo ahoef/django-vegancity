@@ -323,7 +323,6 @@ class Vendor(models.Model):
     # ADMINISTRATIVE FIELDS
     created = models.DateTimeField(auto_now_add=True, null=True)
     modified = models.DateTimeField(auto_now=True, null=True)
-    approved = models.BooleanField(default=False)
     approval_status = models.CharField(max_length=100,
                                        choices = (('pending', 'Pending Approval'),
                                                   ('approved', 'Approved'),
