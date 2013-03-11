@@ -4,7 +4,7 @@
 
 {% load vegancity_template_tags %}
 
-{% block title %}VegPhilly | {{ vendor.name }}{% endblock %}
+{% block title %}{{ vendor.name }} | VegPhilly{% endblock %}
 
 {% block header_extra %}
   <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
@@ -33,12 +33,8 @@
       </div>
       <div class="span6">
         {% if vendor.name %}
-          <h3>
-            {{vendor.name}}
-            {% if user.is_staff %}
-              - <a href="/admin/vegancity/vendor/{{ vendor.id }}/">Edit</a>
-            {% endif %}
-          </h3>
+          <h1>{{vendor.name}}</h1>
+          {% if user.is_staff %}<h1>- <a href="/admin/vegancity/vendor/{{ vendor.id }}/">Edit</a></h1>{% endif %}
         {% endif %}     
          {% if vendor.notes %}
           <h5>{{ vendor.notes }}</h5>
