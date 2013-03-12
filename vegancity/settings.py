@@ -56,6 +56,7 @@ LOCATION_BOUNDS = (
     str(LOCATION_NORTHEAST_CORNER[0]) + "," + str(LOCATION_NORTHEAST_CORNER[1])
     )
 LOCATION_COMPONENTS = "country:US|locality:Philadelphia"
+DEFAULT_CENTER = (39.946385, -75.1785634)
 
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 TIME_ZONE = None

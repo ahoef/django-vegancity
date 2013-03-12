@@ -10,23 +10,21 @@
 {% block header_extra %}
 <meta name="description" content="View local vegan and vegetarian restaurants in Philly. Search food vendors by cuisine, features, or neighborhood.">
   <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}/js/map.js"></script>
   <script type="text/javascript">
-  var bubbleText =  '\
-      <strong>{{vendor.name}}</strong><br/>\
-      {{vendor.address}}<br/>\
-      {{vendor.phone}}<br/>\
-      <a class="uline" href="{{ vendor.get_absolute_url }}">More Info</a> | \
-      <a class="uline" href="http://maps.google.com/maps?q={{ vendor.address }}" target="_BLANK">jump to Google Maps</a><br/>\
-      ';
-      
+
+    var autoResize = {% if search_form.has_get_params %}true{% else %}false{% endif %};
+    var defaultCenter = new google.maps.LatLng({{ search_form.center_latitude }}, {{ search_form.center_longitude }});
     var vendors = [
     {% for vendor in search_form.vendors %}{% if vendor.latitude %}
         {
-            latitude: {{ vendor.latitude }}, 
-            longitude: {{ vendor.longitude }}, 
-            bubbleText: bubbleText,
-            id: {{ vendor.id }}
+            id: "{{ vendor.id }}",
+            name: "{{ vendor.name }}",
+            address: "{{ vendor.address|linebreaksbr }}",
+            phone: "{{ vendor.phone }}",
+            url: "{{ vendor.get_absolute_url }}",
+            latitude: "{{ vendor.latitude }}", 
+            longitude: "{{ vendor.longitude }}",
+            vegLevel: {{ vendor.veg_level.id }}
         }{% if not forloop.last %},{% endif %}
     {% endif %}{% endfor %}
     ];
