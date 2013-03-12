@@ -18,9 +18,18 @@ background-position: center center;
 
 }
 
+img {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
 #content_main, #headline_main {
   background-color: #ffffff; 
   opacity: 0.9;
+}
+
+#vegphilly-icons {
+  text-align: center;
 }
 </style>
 {% endblock %}
@@ -67,8 +76,11 @@ Check out <a class="uline" href="http://justadudeintheworld.info/" target="_blan
   <div class="row">
     <div class="span12">    
     <h4>Contributors</h4>
+    <br>
     <h5>Alexandra Hoefinger</h5>
-    <p>A newbie hacker, but long-time vegetarian, who recently relocated to Philadelphia, Alexandra is excited to work on VegPhilly design, data entry, and SEO.</p>
+    <p>Alexandra breaks and fixes VegPhilly CSS and contributes to a little bit of everything else. She works at <a href="http://www.bethesdaproject.org" target="_blank">Bethesda Project</a>, runs an <a href="http://www.philodendrondesigns.etsy.com" target="_blank">Etsy shop</a>, and loves <a href="http://www.reddit.com/r/aww" target="blank">r/aww</a>.
+    <br>
+    <br>
     <h5>Jeff Frankl</h5>
     <p>Jeff prototyped initial designs for the site; advised on fonts, colors, and branding; and plotted out much of the functionality of the site. See what Jeff's up to at <a href="http://www.frankl.org" target="_new">frankl.org</a>.</p>
   </div>
@@ -80,14 +92,14 @@ Check out <a class="uline" href="http://justadudeintheworld.info/" target="_blan
     <div class="span12">
       <h4>We're proud to bring you VegPhilly thanks to the following tools:</h4>
       <br>
+      <div class="row" id="vegphilly-icons">
       <img src="{{ STATIC_URL }}images/linode.png" style="max-height: 100px;">
       <img src="{{ STATIC_URL }}images/debian.png" style="max-height: 100px;">
       <img src="{{ STATIC_URL }}images/nginx.gif" style="max-height: 100px;">
       <img src="{{ STATIC_URL }}images/python.png" style="max-height: 100px;">
       <img src="{{ STATIC_URL }}images/django.gif" style="max-height: 100px;">
-      <!-- We're not using redis for anything at the moment -->      
-      <!-- <img src="{{ STATIC_URL }}images/redis.png" style="max-height: 100px;"> -->
       <img src="{{ STATIC_URL }}images/postgres.png" style="max-height: 100px;">
+    </div>
     </div>
   </div>
   <br><br>
