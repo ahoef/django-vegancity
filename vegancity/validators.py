@@ -11,6 +11,8 @@ def validate_website(value):
     print "value:", value
     print type(value)
     try:
-        urllib2.urlopen(value)
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.11 (KHTML like Gecko) Chrome/23.0.1271.95 Safari/537.11'}
+        req = urllib2.Request(value, None, headers)
+        urllib2.urlopen(req)
     except urllib2.URLError:
         raise ValidationError(u'That url appears not to work.')
