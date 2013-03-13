@@ -128,11 +128,6 @@ def _generic_form_processing_view(request, form_obj, redirect_url,
             for fn in pre_save_functions:
                 fn(obj)
 
-            # If the object being edited has an approved attribute(field),
-            # set approved to true for staff users
-            if request.user.is_staff and 'approved' in dir(obj):
-                setattr(obj, 'approved', True)
-
             obj.save()
             return HttpResponseRedirect(redirect_url), obj
         
