@@ -45,10 +45,10 @@ class VeganDishInline(admin.TabularInline):
 class VendorAdmin(admin.ModelAdmin):
     inlines = (VeganDishInline,)
     readonly_fields = ('latitude', 'longitude', 'neighborhood')
-    list_display = ('approved', 'name', 'created', 'neighborhood')
+    list_display = ('approval_status', 'name', 'created', 'neighborhood')
     list_display_links = ('name',)
-    list_editable = ('approved',)
-    list_filter = ('approved',)
+    list_editable = ('approval_status',)
+    list_filter = ('approval_status',)
     ordering = ('name',)
     filter_vertical = ('cuisine_tags','feature_tags',)
     form = forms.AdminVendorForm
