@@ -109,7 +109,7 @@ class AdminVendorForm(_BaseVendorForm):
     def __init__(self, *args, **kwargs):
         super(AdminVendorForm, self).__init__(*args, **kwargs)
         if not self.instance.created:
-            self.fields['approval_status'].initial = 'approved'
+            self.fields['approval_status'].initial = 'pending'
 
 class NewVendorForm(_BaseVendorForm):
     "Form used for adding new vendors."
