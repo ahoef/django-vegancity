@@ -324,6 +324,7 @@ class Vendor(models.Model):
     created = models.DateTimeField(auto_now_add=True, null=True)
     modified = models.DateTimeField(auto_now=True, null=True)
     approval_status = models.CharField(max_length=100,
+                                       default='pending',
                                        choices = (('pending', 'Pending Approval'),
                                                   ('approved', 'Approved'),
                                                   ('quarantined', 'Quarantined')))
