@@ -102,9 +102,9 @@ class _BaseVendorForm(forms.ModelForm):
 class AdminVendorForm(_BaseVendorForm):
 
     class Media:
+        extend = True
         js = (
-            #'http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false',
-            # 'js/vendor_form.js',
+            'http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false',
             )
 
     def __init__(self, *args, **kwargs):
@@ -168,6 +168,7 @@ class NewReviewForm(_BaseReviewForm):
         self.filter_dishes(vendor)
 
     class Media:
+        extend = True
         js = (
             '//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js',
             'js/review_form.js',
