@@ -6,7 +6,6 @@ function address_magic(){
     var website_field = document.getElementById("id_website");
     service = new google.maps.places.PlacesService(document.getElementById("address_magic"));
 
-    var detail_reqest
 
     var ts_request = {
         location: new google.maps.LatLng(39.9491679, -75.1677507),
