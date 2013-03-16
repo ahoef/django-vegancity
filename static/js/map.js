@@ -1,3 +1,7 @@
+/////////////////////////////////////
+// TEMPLATES
+/////////////////////////////////////
+
 var tChunks = {
     name: '<strong><%= name %></strong><br/>',
     address: '<%= address %><br/>',
@@ -8,17 +12,29 @@ var tChunks = {
 },
 summaryCaptionTemplate = [tChunks.name, tChunks.address, tChunks.phone, tChunks.url, tChunks.seperator, tChunks.google_url].join(""),
 detailCaptionTemplate = [tChunks.name, tChunks.google_url].join(""),
-vegLevelMarkerMapping = {
-    1: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=V|008B00|FFFFFF",
-    2: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=V|FAA732|FFFFFF",
-    3: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=V|FAA732|FFFFFF",
-    4: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=V|FAA732|FFFFFF",
-    5: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=O|101C35|FFFFFF",
-    6: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=O|101C35|FFFFFF",
-    7: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=O|101C35|FFFFFF"
+// TODO: all of this can be abstracted beyond veg level to allow coloring by anything
+pinApiTemplate = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=<%= letter %>|<%= bgColor %>|<%= fgColor %>",
+vpGreen = "008B00",
+vpOrange = "FAA732",
+vpBlue = "2A3655",
+vegLevelCategoryMapping = {
+    1: 'vegan',
+    2: 'vegetarian',
+    3: 'vegetarian',
+    4: 'vegetarian',
+    5: 'omni',
+    6: 'omni',
+    7: 'omni'
+}
+vegCategoryMarkerMapping = {
+    'vegan': _.template(pinApiTemplate)({ letter: "V", bgColor: vpGreen, fgColor: "FFFFFF" }),
+    'vegetarian': _.template(pinApiTemplate)({ letter: "V", bgColor: vpOrange, fgColor: "FFFFFF" }),
+    'omni': _.template(pinApiTemplate)({ letter: "", bgColor: vpBlue, fgColor: "FFFFFF" })
 };
 
-
+/////////////////////////////////////
+// MAP WRAPPER OBJECT
+/////////////////////////////////////
 
 var vendorMap = {
     initialize: function(map_container_id, vendors, mapType, autoResize) {
@@ -89,7 +105,9 @@ var vendorMap = {
             bodyText = _.template(this.captionTemplate)(vendor);
 
         if (this.mapType === 'summary') {
-            image = new google.maps.MarkerImage(vegLevelMarkerMapping[vendor.vegLevel]);
+            // convert veg level to super category and then lookup an icon for that category
+            // TODO make this more readable.
+            image = new google.maps.MarkerImage(vegCategoryMarkerMapping[vegLevelCategoryMapping[vendor.vegLevel]]);
         } else if (this.mapType === 'detail') {
             image = new google.maps.MarkerImage("//www.google.com/mapfiles/arrow.png");
         }
@@ -108,6 +126,4 @@ var vendorMap = {
         };
         return marker;   
     }
-    
 };
-
