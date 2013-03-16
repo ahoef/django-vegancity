@@ -95,8 +95,7 @@ class VegLevel(models.Model):
         choices=(
             ('vegan','Vegan'),
             ('vegetarian','Vegetarian'),
-            ('not_veg', 'Not Vegetarian'),
-            ('beware','Beware!')))
+            ('not_veg', 'Not Vegetarian')))
 
     def __unicode__(self):
         return "(%s) %s" % (self.super_category, self.description)
