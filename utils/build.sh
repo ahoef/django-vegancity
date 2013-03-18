@@ -4,17 +4,12 @@
 # Ideally should be run only in conjunction
 # with a vagrant initialization.
 
-#echo 'LC_ALL="en_US.UTF-8"' > /etc/default/locale
-#echo 'LANG=en_US.UTF-8' >> /etc/default/locale
-#update-locale LC_CTYPE="en_US.UTF-8" LC_ALL="en_US.UTF-8" LANG="en_US.UTF-8"
-
 apt-get update
 
 ##########################
 ## INITIALIZE POSTGRES
 ##########################
 apt-get install -y postgresql
-
 echo "Creating db superuser 'vagrant'"
 su postgres -c "createuser -s vagrant"
 echo "Trying to delete a db called vegphilly"
@@ -32,16 +27,15 @@ pip install -r /var/projects/vegphilly/requirements.txt
 ###############################
 ## PREPARE APP ENV
 ###############################
-cp -v /var/projects/vegphilly/utils/spin_up/settings_local_TEMPLATE.py /var/projects/vegphilly/vegancity/settings_local.py
-if [ -f /var/projects/vegphilly/utils/spin_up/data.sql ]
+cp -v /var/projects/vegphilly/utils/dev_env/settings_local_TEMPLATE.py /var/projects/vegphilly/vegancity/settings_local.py
+if [ -f /var/projects/vegphilly/utils/dev_env/private_data.sql ]
 then
-    su vagrant -c "python /var/projects/vegphilly/manage.py dbshell < /var/projects/vegphilly/utils/spin_up/data.sql"
+    su vagrant -c "python /var/projects/vegphilly/manage.py dbshell < /var/projects/vegphilly/utils/dev_env/private_data.sql"
 else
     su vagrant -c "python /var/projects/vegphilly/manage.py syncdb --noinput"
-    # This was needed at some point while messing with south, and may be needed again
-    # su vagrant -c "python /var/projects/vegphilly/manage.py schemamigration vegancity --initial"
-    # su vagrant -c "python /var/projects/vegphilly/manage.py migrate vegancity"
-    su vagrant -c "python /var/projects/vegphilly/manage.py loaddata /var/projects/vegphilly/utils/data.json"
+    su vagrant -c "python /var/projects/vegphilly/manage.py migrate"
+    su vagrant -c "python /var/projects/vegphilly/manage.py loaddata /var/projects/vegphilly/utils/lite_env/public_data.json"
+    # TODO: switch to south, when installed
 fi
 
 ###############################

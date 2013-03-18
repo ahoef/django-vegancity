@@ -66,19 +66,6 @@ function convert_phone_number(phone_field){
     }
 }
 
-
-function remove_veg_level_beware () {
-    //TODO : this is a hack. Change it.
-
-    var veg_level_selected = $("#id_veg_level option:selected")
-    var veg_level_beware = $("#id_veg_level option[value='8']")
-
-    if (veg_level_beware.text() == "(Beware) Beware!" &&
-        !(veg_level_beware == veg_level_selected)) {
-        veg_level_beware.remove();
-    }
-}
-
 $(document).ready(function() {
     var admin_container = $('div.form-row.field-name');
     if (admin_container[0]) {
@@ -90,7 +77,4 @@ $(document).ready(function() {
 
     var phone_field = document.getElementById("id_phone");
     phone_field.onblur = function(){ convert_phone_number(this) };
-
-    //TODO : this is a hack. Change it.
-    remove_veg_level_beware();
 });
