@@ -28,8 +28,8 @@ python manage.py runserver
   
 then direct your browser to localhost:8000 and start hacking!
 
-quickstart
-==========
+current contributors
+====================
 
 Having trouble?
 
