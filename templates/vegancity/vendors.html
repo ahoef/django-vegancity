@@ -24,7 +24,7 @@
             url: "{{ vendor.get_absolute_url }}",
             latitude: "{{ vendor.latitude }}", 
             longitude: "{{ vendor.longitude }}",
-            vegLevel: {{ vendor.veg_level.id }}
+            vegLevel: {% if vendor.veg_level %}{{ vendor.veg_level.id }}{% else %}0{% endif %}
         }{% if not forloop.last %},{% endif %}
     {% endif %}{% endfor %}
     ];
