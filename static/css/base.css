@@ -27,7 +27,10 @@ div#map_canvas {
     height: 600px;
 }
 
-/* TODO: Some of these should be #101c35 */
+h1 {
+    font-size: 28px;
+} 
+
 h1, h2, h3, h4, th {
     font-family: 'Sanchez', serif;
     color: rgb(210, 93, 7);
