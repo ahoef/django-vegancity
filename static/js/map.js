@@ -8,7 +8,7 @@ var tChunks = {
     phone: '<%= phone %><br/>',
     url: '<a class="uline" href="<%= url %>">More Info</a>',
     seperator: ' | ',
-    google_url: '<a class="uline" href="http://maps.google.com/maps?q=<%= address %>" target="_BLANK">Google Maps</a><br/>'
+    google_url: '<a class="uline" href="http://maps.google.com/maps?q=<%= address %>" target="_BLANK" rel="nofollow">Google Maps</a><br/>'
 },
 summaryCaptionTemplate = [tChunks.name, tChunks.address, tChunks.phone, tChunks.url, tChunks.seperator, tChunks.google_url].join(""),
 detailCaptionTemplate = [tChunks.name, tChunks.google_url].join(""),

@@ -5,6 +5,9 @@ register = template.Library()
 def target_blank(text):
     return text.replace('<a ', '<a target="_blank" ')
 
+def nofollow(text):
+    return text.replace('<a ', '<a rel="nofollow" ')
+
 def showing_vendors_string(text):
     if text:
         if text == "address":
@@ -27,4 +30,5 @@ def format_search_type(text):
 
 format_search_type = register.filter(format_search_type, is_safe=True)
 target_blank = register.filter(target_blank, is_safe=True)
+nofollow = register.filter(nofollow, is_safe=True)
 showing_vendors_string = register.filter(showing_vendors_string, is_safe=True)
