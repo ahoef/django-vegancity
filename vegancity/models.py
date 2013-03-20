@@ -424,7 +424,7 @@ class Vendor(models.Model):
         return self.name
 
     def approved_reviews(self):
-        return Review.approved_objects.filter(vendor=self.id)
+        return Review.approved_objects.filter(vendor=self.id).order_by('-created')
 
     class Meta:
         get_latest_by = "created"
