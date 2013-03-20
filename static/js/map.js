@@ -24,7 +24,8 @@ vegLevelCategoryMapping = {
     4: 'vegetarian',
     5: 'omni',
     6: 'omni',
-    7: 'omni'
+    7: 'omni',
+    0: 'omni' // There is no zero in postgres, but we are coercing nulls to 0
 }
 vegCategoryMarkerMapping = {
     'vegan': _.template(pinApiTemplate)({ letter: "V", bgColor: vpGreen, fgColor: "FFFFFF" }),

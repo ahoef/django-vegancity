@@ -78,21 +78,8 @@
     <div style="background-color: #F6F6F6;">
       <div class="container">
         <div class="row"> 
-	      <div class="span3">
-	        <h3>Neighborhoods</h3>
-            <ul>
-              {% for neighborhood in neighborhoods %}
-                <li><a href="/vendors/?neighborhood={{ neighborhood.id }}">{{ neighborhood.name }}</a></li>
-              {% endfor %}
-            </ul>
-          </div>
-          <div class="span3">
-            <h3>Top Five</h3>
-            <ul>
-              {% for vendor in top_5 %}
-                <li><a href="{{ vendor.get_absolute_url }}">{{ vendor.name }}</a></li>
-              {% endfor %}
-            </ul>
+	        <div class="span3">
+            
             <h3>Recently Added</h3>
             <ul>
               {% for vendor in recently_added %}
@@ -103,6 +90,20 @@
             <ul>
               {% for vendor in recently_active %}
                 <li><a href="{{ vendor.get_absolute_url }}">{{ vendor.name }}</a></li>
+              {% endfor %}
+            </ul>
+            <h3>Top Five</h3>
+            <ul>
+              {% for vendor in top_5 %}
+                <li><a href="{{ vendor.get_absolute_url }}">{{ vendor.name }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div class="span3">
+          <h3>Neighborhoods</h3>
+            <ul>
+              {% for neighborhood in neighborhoods %}
+                <li><a href="/vendors/?neighborhood={{ neighborhood.id }}">{{ neighborhood.name }}</a></li>
               {% endfor %}
             </ul>
           </div>

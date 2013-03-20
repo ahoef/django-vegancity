@@ -23,7 +23,16 @@ python manage.py syncdb
 ...  
 follow steps / create superuser  
 ...  
-python manage.py loaddata utils/live_env/public_data.json  
+python manage.py loaddata utils/lite_env/public_data.json  
 python manage.py runserver  
   
 then direct your browser to localhost:8000 and start hacking!
+
+current contributors
+====================
+
+Having trouble?
+
+Sometimes commits can fall out of sync with your database. That's why your development
+database is meant to be thrown out. Just delete your development db (vegancity/db) and
+run the quickstart commands above.

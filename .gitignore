@@ -7,4 +7,4 @@ nohup.out
 templates/analytics.html
 *~
 .vagrant
-data.sql
+private_data.sql
