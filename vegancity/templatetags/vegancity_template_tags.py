@@ -1,3 +1,4 @@
+import re
 from django import template
 
 register = template.Library()
@@ -36,8 +37,13 @@ def format_button_title(text):
     else:
         return ""
 
+def strip_http(text):
+    if text:
+        return re.sub('>https?://(?P<url>.+?)/?</a>', '>\g<url></a>', text)
+
 format_search_type = register.filter(format_search_type, is_safe=True)
 format_button_title = register.filter(format_button_title, is_safe=True)
 target_blank = register.filter(target_blank, is_safe=True)
 nofollow = register.filter(nofollow, is_safe=True)
 showing_vendors_string = register.filter(showing_vendors_string, is_safe=True)
+strip_http = register.filter(strip_http, is_safe=True)
