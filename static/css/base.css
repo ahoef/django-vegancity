@@ -124,7 +124,7 @@ div#vc-searchbox {
 
 
 a {
-    color: rgb(16, 28, 53);
+    color: rgb(210, 93, 7);
 
 }
 
@@ -195,6 +195,10 @@ html, body {
 
 a.uline {
     text-decoration: underline;
+}
+
+a.blue {
+    color: #101c35;
 }
 
 div#vendor_table {

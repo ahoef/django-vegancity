@@ -83,19 +83,19 @@
             <h3>Recently Added</h3>
             <ul>
               {% for vendor in recently_added %}
-                <li><a href="{{ vendor.get_absolute_url }}">{{ vendor.name }}</a></li>
+                <li><a href="{{ vendor.get_absolute_url }}" class="blue">{{ vendor.name }}</a></li>
               {% endfor %}
             </ul>  
             <h3>Recently Reviewed</h3>
             <ul>
               {% for vendor in recently_active %}
-                <li><a href="{{ vendor.get_absolute_url }}">{{ vendor.name }}</a></li>
+                <li><a href="{{ vendor.get_absolute_url }}" class="blue">{{ vendor.name }}</a></li>
               {% endfor %}
             </ul>
             <h3>Top Five</h3>
             <ul>
               {% for vendor in top_5 %}
-                <li><a href="{{ vendor.get_absolute_url }}">{{ vendor.name }}</a></li>
+                <li><a href="{{ vendor.get_absolute_url }}" class="blue">{{ vendor.name }}</a></li>
               {% endfor %}
             </ul>
           </div>
@@ -103,7 +103,7 @@
           <h3>Neighborhoods</h3>
             <ul>
               {% for neighborhood in neighborhoods %}
-                <li><a href="/vendors/?neighborhood={{ neighborhood.id }}">{{ neighborhood.name }}</a></li>
+                <li><a href="/vendors/?neighborhood={{ neighborhood.id }}" class="blue">{{ neighborhood.name }}</a></li>
               {% endfor %}
             </ul>
           </div>
@@ -111,7 +111,7 @@
 	        <h3>Cuisines</h3>
             <ul>
               {% for cuisine in cuisine_tags %}
-                <li><a href="/vendors/?cuisine={{ cuisine.id }}">{{ cuisine.description }}</a></li>
+                <li><a href="/vendors/?cuisine={{ cuisine.id }}" class="blue">{{ cuisine.description }}</a></li>
               {% endfor %}
             </ul>
           </div>
@@ -119,7 +119,7 @@
 	        <h3>Features</h3>
             <ul>
               {% for feature in feature_tags %}
-                <li><a href="/vendors/?feature={{ feature.id }}">{{ feature.description }}</a></li>
+                <li><a href="/vendors/?feature={{ feature.id }}" class="blue">{{ feature.description }}</a></li>
               {% endfor %}
             </ul>
           </div>
