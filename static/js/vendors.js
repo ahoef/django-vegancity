@@ -27,4 +27,13 @@ $(document).ready(function() {
         });
         $("#legend-table tbody").append(tableRow);
     });
+    
+    $(".veg-level-0").attr("src", vegCategoryMarkerMapping['omni']);
+    $(".veg-level-7").attr("src", vegCategoryMarkerMapping['omni']);
+    $(".veg-level-6").attr("src", vegCategoryMarkerMapping['omni']);
+    $(".veg-level-5").attr("src", vegCategoryMarkerMapping['omni']);
+    $(".veg-level-4").attr("src", vegCategoryMarkerMapping['vegetarian']);
+    $(".veg-level-3").attr("src", vegCategoryMarkerMapping['vegetarian']);
+    $(".veg-level-2").attr("src", vegCategoryMarkerMapping['vegetarian']);
+    $(".veg-level-1").attr("src", vegCategoryMarkerMapping['vegan']);
 });
