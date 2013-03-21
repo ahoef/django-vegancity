@@ -3,16 +3,12 @@
 {% load url from future %}
 
 {% block action %}
-  submitting a new vendor
-{% endblock %}
-
-{% block initial_thanks %}
-  Thanks for submitting a new vendor! We value your input.
+  Thanks for submitting a new vendor!
 {% endblock %}
 
 {% block links_ul %}
 <ul>
-  <li><a href="{% url 'vendors' %}">View all vendors</a></li>
-  <li><a href="{% url 'home' %}"  >Go to our homepage</a></li>
+  <li><a href="{% url 'vendors' %}" class="blue">View all vendors</a></li>
+  <li><a href="{% url 'home' %}" class="blue">Go to our homepage</a></li>
 </ul>
 {% endblock %}

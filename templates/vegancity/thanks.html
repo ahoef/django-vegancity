@@ -2,10 +2,8 @@
 
 {% load url from future %}
 
-{% block headline %}Thanks{% endblock %}
-
 {% block summary %}
-Thanks for {% block action %}submitting content{% endblock %}!
+  {% block action %}Thanks for submitting content!{% endblock %}
 {% endblock %}
 
 {% block content %}
@@ -33,8 +31,8 @@ We're glad you submitted some content.
 <h4>Now What?</h4>
 {% block links_ul %}
 <ul>
-  <li><a href="{% url 'vendors' %}">View all food vendors</a></li>
-  <li><a href="{% url 'home' %}">Go to our homepage</a></li>  
+  <li><a href="{% url 'vendors' %}" class="blue">View all food vendors</a></li>
+  <li><a href="{% url 'home' %}" class="blue">Go to our homepage</a></li>  
 </ul>
 {% endblock links_ul %}
 
