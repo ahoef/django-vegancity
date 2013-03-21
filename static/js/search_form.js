@@ -27,7 +27,7 @@ $(document).ready(function() {
         $("#filters").submit(); 
     });
 
-    $("#search_by_address").click(function(event) { 
+    $("#search_by_location").click(function(event) { 
         $("#filters #search_type").val("address");
         $("#filters").submit(); 
     });
