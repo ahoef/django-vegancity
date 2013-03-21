@@ -39,6 +39,17 @@ else
 fi
 
 ###############################
+## PREPARE APP ENV
+###############################
+apt-get install -y supervisor
+cp -v /var/projects/vegphilly/utils/dev_env/supervisor_vegphilly_runserver_TEMPLATE.conf /etc/supervisor/conf.d/vegphilly_runserver.conf
+mkdir /var/log/vegphilly
+touch /var/log/vegphilly/log.log
+chmod -R 777 /var/log/vegphilly
+supervisorctl update
+
+
+###############################
 ## COMING SOON
 ###############################
 #apt-get install -y memcached
