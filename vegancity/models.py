@@ -155,7 +155,6 @@ class BlogEntry(models.Model):
 class VeganDish(models.Model):
     name = models.CharField(max_length=255, unique=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
-    vendor = models.ForeignKey('Vendor')
 
     def __unicode__(self):
         return self.name
@@ -339,6 +338,7 @@ class Vendor(models.Model):
         blank=True, null=True,)
     cuisine_tags = models.ManyToManyField('CuisineTag', null=True, blank=True)
     feature_tags = models.ManyToManyField('FeatureTag', null=True, blank=True)
+    vegan_dishes = models.ManyToManyField('VeganDish', null=True, blank=True)
 
 
     def needs_geocoding(self):
