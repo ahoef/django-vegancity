@@ -143,7 +143,7 @@ class _BaseReviewForm(forms.ModelForm):
         return cleaned_data
 
     def filter_dishes(self, vendor):
-        dishes = models.VeganDish.objects.filter(vendor=vendor)
+        dishes = vendor.vegan_dishes.all()
         if dishes:
             self.fields['best_vegan_dish'].queryset = dishes
         else:

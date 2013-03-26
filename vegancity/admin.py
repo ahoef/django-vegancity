@@ -38,18 +38,17 @@ class ReviewAdmin(admin.ModelAdmin):
     list_filter = ('approved', 'unlisted_vegan_dish')
     form = forms.AdminEditReviewForm
 
-class VeganDishInline(admin.TabularInline):
-    model = models.VeganDish
+class VendorVeganDishInline(admin.TabularInline):
+    model = models.Vendor.vegan_dishes.through
     extra = 0
 
 class VendorAdmin(admin.ModelAdmin):
-    inlines = (VeganDishInline,)
     readonly_fields = ('latitude', 'longitude', 'neighborhood')
     list_display = ('name', 'approval_status', 'created', 'neighborhood')
     list_display_links = ('name',)
     list_filter = ('approval_status',)
     ordering = ('name',)
-    filter_vertical = ('cuisine_tags','feature_tags',)
+    filter_vertical = ('cuisine_tags','feature_tags', 'vegan_dishes',)
     form = forms.AdminVendorForm
 
 class BlogEntryAdmin(admin.ModelAdmin):
@@ -74,6 +73,10 @@ class UserProfileInline(admin.StackedInline):
 class UserProfileAdmin(UserAdmin):
     inlines = [ UserProfileInline, ]
 
+class VeganDishAdmin(admin.ModelAdmin):
+    inlines = (VendorVeganDishInline,)
+    list_display = ('name',)
+    list_display_links = ('name',)
 
 #####################################
 ## ADMIN REGISTRATION
@@ -86,7 +89,7 @@ admin.site.register(models.UserProfile)
 admin.site.register(models.Vendor, VendorAdmin)
 admin.site.register(models.Review, ReviewAdmin)
 admin.site.register(models.BlogEntry, BlogEntryAdmin)
-admin.site.register(models.VeganDish)
+admin.site.register(models.VeganDish, VeganDishAdmin)
 admin.site.register(models.CuisineTag)
 admin.site.register(models.FeatureTag)
 admin.site.register(models.Neighborhood)

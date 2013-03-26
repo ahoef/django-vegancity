@@ -392,7 +392,7 @@ class Vendor(models.Model):
 
     def best_vegan_dish(self):
         "Returns the best vegan dish for the vendor"
-        dishes = VeganDish.objects.filter(vendor=self)
+        dishes = self.vegan_dishes.all()
         if dishes:
             return max(dishes, 
                        key=lambda d: Review.objects.filter(best_vegan_dish=d).count())
