@@ -120,6 +120,8 @@ div#vc-searchbox {
     background-color: rgb(210, 93, 7);
     opacity: .7;
     text-align: center;
+    color: #fff;
+    font-size: 18px;
 }
 
 
@@ -199,6 +201,10 @@ a.uline {
 
 a.blue {
     color: #101c35;
+}
+
+a.white {
+    color: #fff;
 }
 
 div#vendor_table {
