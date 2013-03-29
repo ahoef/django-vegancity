@@ -3,12 +3,6 @@ from django import template
 
 register = template.Library()
 
-def target_blank(text):
-    return text.replace('<a ', '<a target="_blank" ')
-
-def nofollow(text):
-    return text.replace('<a ', '<a rel="nofollow" ')
-
 def showing_vendors_string(text):
     if text:
         if text == "address":
@@ -39,11 +33,12 @@ def format_button_title(text):
 
 def strip_http(text):
     if text:
-        return re.sub('>https?://(?P<url>.+?)/?</a>', '>\g<url></a>', text)
+        text = re.sub('https?://', '', text)
+        if text[-1] == '/':
+            text = text[:-1]
+        return text
 
 format_search_type = register.filter(format_search_type, is_safe=True)
 format_button_title = register.filter(format_button_title, is_safe=True)
-target_blank = register.filter(target_blank, is_safe=True)
-nofollow = register.filter(nofollow, is_safe=True)
 showing_vendors_string = register.filter(showing_vendors_string, is_safe=True)
 strip_http = register.filter(strip_http, is_safe=True)

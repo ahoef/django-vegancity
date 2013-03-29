@@ -71,7 +71,7 @@
           {% if vendor.website and not vendor.website == "http://" %}
             <tr>
               <td>Website:</td>
-              <td>{{ vendor.website|urlize|target_blank|nofollow|strip_http }}</td>
+              <td><a href="{{ vendor.website }}" target="_blank" rel="nofollow">{{ vendor.website|strip_http }}</a></td>
             </tr>
           {% endif %}
           {% if vendor.veg_level %}
