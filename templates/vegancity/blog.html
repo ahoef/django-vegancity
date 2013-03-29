@@ -7,6 +7,21 @@
 
   <meta name="description" content="Read blog posts about the latest VegPhilly news and local vegan and vegetarian restaurant information.">
 
+  <style>
+
+  .cat {
+    box-shadow: 5px 5px 5px #888;
+    display: block;
+    margin: auto;
+  }
+
+  #caption {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  </style>
+
 {% endblock %}
 
 {% block headline %}Blog{% endblock %}
@@ -32,7 +47,8 @@
   {% endif %}
     </div>
     <div class="span6 hidden-phone">
-      <img src="{{ STATIC_URL }}images/cat.png" alt="VegPhilly's mascot illustration">
+      <img src="{{ STATIC_URL }}images/fat-cat-frame-mockup.png" class="cat" alt="VegPhilly's mascot illustration" width="375px">
+      <div id="caption"> <p>Mr. Peppers, VegPhilly's original spokescat<p> </div>
     </div>
   </div>
 
