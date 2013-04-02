@@ -28,7 +28,6 @@ import itertools
 import geocode
 import validators
 
-
 class TagManager(models.Manager):
     """Manager class that can be used for any type of Tag class
 
@@ -249,50 +248,6 @@ class VendorManager(models.Manager):
         normal_qs = super(VendorManager, self).get_query_set()
         pending = normal_qs.filter(approval_status='pending')
         return pending
-        
-
-    #TODO - replace with something better!
-    def address_search(self, query):
-        """ Search vendors by address.
-
-        THIS WILL BE CHANGED SO NOT WRITING DOCUMENTATION."""
-        
-        vendors = self
-
-        # todo this is a mess!
-        geocode_result = geocode.geocode_address(query)
-
-        if geocode_result == None:
-            return []
-        latitude, longitude, neighborhood = geocode_result
-
-        point_a = (latitude, longitude)
-
-        # TODO test this with a reasonable number of latitudes and longitudes
-        lat_flr, lat_ceil, lng_flr, lng_ceil = geocode.bounding_box_offsets(point_a, 0.75)
-
-        vendors_in_box = vendors.filter(latitude__gte=lat_flr,
-                                     latitude__lte=lat_ceil,
-                                     longitude__gte=lng_flr,
-                                     longitude__lte=lng_ceil,)
-
-
-        vendor_distances = geocode.distances(point_a, 
-                                             [(vendor.latitude, vendor.longitude)
-                                              for vendor in vendors_in_box])
-
-
-        vendor_pairs = zip(vendors_in_box, vendor_distances)
-
-        sorted_vendor_pairs = sorted(vendor_pairs, key=lambda pair: pair[1][1])
-
-        vendor_matches = filter(lambda pair: geocode.meters_to_miles(pair[1][1]) <= 0.75,
-                                 sorted_vendor_pairs)
-
-        vendors = map(lambda x: x[0], vendor_matches)
-            
-        return vendors
-    
 
 class ApprovedVendorManager(VendorManager):
     """Manager for approved vendors only.

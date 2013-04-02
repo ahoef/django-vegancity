@@ -30,6 +30,7 @@
 
 import re
 import shlex
+import geocode
 
 from vegancity.models import FeatureTag, CuisineTag, Vendor
 
@@ -128,7 +129,7 @@ def address_search(query, initial_queryset=None):
     address_rank = 8
     address_rank += _address_rank(query)
 
-    address_vendors = Vendor.approved_objects.address_search(query)
+    address_vendors = perform_address_search(Vendor.approved_objects.all(), query)
 
     if initial_queryset:
         address_vendors = [ v for v in address_vendors if v in initial_queryset ]
@@ -157,3 +158,39 @@ def master_search(query, initial_queryset=None):
         master_results = [vendor for vendor in master_results if vendor in initial_queryset]
     return master_results, search_type
 
+def perform_address_search(initial_queryset, query):
+        vendors = initial_queryset
+
+        # todo this is a mess!
+        geocode_result = geocode.geocode_address(query)
+
+        if geocode_result == None:
+            return []
+        latitude, longitude, neighborhood = geocode_result
+
+        point_a = (latitude, longitude)
+
+        # TODO test this with a reasonable number of latitudes and longitudes
+        lat_flr, lat_ceil, lng_flr, lng_ceil = geocode.bounding_box_offsets(point_a, 0.75)
+
+        vendors_in_box = vendors.filter(latitude__gte=lat_flr,
+                                     latitude__lte=lat_ceil,
+                                     longitude__gte=lng_flr,
+                                     longitude__lte=lng_ceil,)
+
+
+        vendor_distances = geocode.distances(point_a, 
+                                             [(vendor.latitude, vendor.longitude)
+                                              for vendor in vendors_in_box])
+
+
+        vendor_pairs = zip(vendors_in_box, vendor_distances)
+
+        sorted_vendor_pairs = sorted(vendor_pairs, key=lambda pair: pair[1][1])
+
+        vendor_matches = filter(lambda pair: geocode.meters_to_miles(pair[1][1]) <= 0.75,
+                                 sorted_vendor_pairs)
+
+        vendors = map(lambda x: x[0], vendor_matches)
+            
+        return vendors
