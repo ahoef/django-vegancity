@@ -133,9 +133,17 @@
             <br>
             {% for review in vendor.approved_reviews %}
               <span class="review_title"><h4>{{review.title }}</h4></span>
+              <div class="row">
+                <div class="span1">
+                  <img src="{{ review.author.email|gravatar_urlify }}" title="add your photo on gravatar.com!">
+                </div>
+                <div class="span5">
                   <h5>entered by {{ review.author }}</h5>
-              <h6>{{ review.created }}</h6>
-              <table class="review_summary">              
+                  <h6>{{ review.created }}</h6>
+                </div>
+              </div>
+              <br>
+              <table class="review_summary">
                 {% if review.atmosphere_rating %}
                   <tr>
                     <td>Atmosphere rating:</td>

@@ -1,7 +1,16 @@
 import re
 from django import template
+import hashlib
+from urllib import quote_plus
 
 register = template.Library()
+
+def gravatar_urlify(email_address, size=48):
+    # TODO: change to something relative
+    default = "https://www.vegphilly.com/static/images/default_user_icon.jpg"
+    if email_address:
+        hash = hashlib.md5(email_address).hexdigest()
+        return "http://gravatar.com/avatar/%s?s=%i&d=%s" % (hash, size, quote_plus(default))
 
 def showing_vendors_string(text):
     if text:
@@ -42,3 +51,4 @@ format_search_type = register.filter(format_search_type, is_safe=True)
 format_button_title = register.filter(format_button_title, is_safe=True)
 showing_vendors_string = register.filter(showing_vendors_string, is_safe=True)
 strip_http = register.filter(strip_http, is_safe=True)
+gravatr_urlify = register.filter(gravatar_urlify, is_safe=True)
