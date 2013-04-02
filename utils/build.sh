@@ -31,6 +31,8 @@ cp -v /var/projects/vegphilly/utils/dev_env/settings_local_TEMPLATE.py /var/proj
 if [ -f /var/projects/vegphilly/utils/dev_env/private_data.sql ]
 then
     su vagrant -c "python /var/projects/vegphilly/manage.py dbshell < /var/projects/vegphilly/utils/dev_env/private_data.sql"
+    su vagrant -c "python /var/projects/vegphilly/manage.py syncdb --noinput"
+    su vagrant -c "python /var/projects/vegphilly/manage.py migrate"
 else
     su vagrant -c "python /var/projects/vegphilly/manage.py syncdb --noinput"
     su vagrant -c "python /var/projects/vegphilly/manage.py migrate"
