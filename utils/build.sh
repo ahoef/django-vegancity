@@ -34,7 +34,7 @@ then
 else
     su vagrant -c "python /var/projects/vegphilly/manage.py syncdb --noinput"
     su vagrant -c "python /var/projects/vegphilly/manage.py migrate"
-    su vagrant -c "python /var/projects/vegphilly/manage.py loaddata /var/projects/vegphilly/utils/lite_env/public_data.json"
+    su vagrant -c "python /var/projects/vegphilly/manage.py loaddata /var/projects/vegphilly/vegancity/fixtures/public_data.json"
     # TODO: switch to south, when installed
 fi
 

@@ -23,7 +23,7 @@ python manage.py syncdb
 ...  
 follow steps / create superuser  
 ...  
-python manage.py loaddata utils/lite_env/public_data.json  
+python manage.py loaddata vegancity/fixtures/public_data.json  
 python manage.py runserver  
   
 then direct your browser to localhost:8000 and start hacking!
