@@ -4,7 +4,6 @@
 
 {% block header_extra %}
 
-
   <meta name="description" content="Read blog posts about the latest VegPhilly news and local vegan and vegetarian restaurant information.">
 
   <style>
@@ -38,7 +37,7 @@
         <hr/>
         {% for entry in object_list %}
           <h5>{{ entry.title }}</h5>
-          <h6>by {{ entry.author }}</h6>
+          <h6>by {{ entry.author }}&nbsp;{{ entry.created }}</h6>
       <p>{{ entry.body|safe }}</p>
       <hr/>
     {% endfor %}

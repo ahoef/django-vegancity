@@ -70,9 +70,7 @@ urlpatterns += patterns('',
 if 'django.contrib.admin' in INSTALLED_APPS:
     urlpatterns += patterns('',
         url(r'^admin/pending_approval/$', 'vegancity.admin_views.pending_approval', name="pending_approval"),
-        url(r'^admin/search_log/$', 'vegancity.admin_views.search_log', name="search_log"),
         url(r'^admin/pending_approval/count/$', 'vegancity.admin_views.pending_approval_count', name="pending_approval_count"),
-        url(r'^admin/geocode_all/', 'vegancity.admin_views.geocode_all', name="geocode_all"),
         # TODO this is a hack.
         # after overriding this url with a 410, i'm getting 'view does not exist' messages.
         # can't tell why.  For now, we'll just direct this url to a dummy view to avoid crashes.

@@ -43,16 +43,3 @@ def pending_approval(request):
         }
     return render_to_response("admin/pending_approval.html", ctx,
                               context_instance=RequestContext(request))
-
-@staff_member_required
-def geocode_all(request):
-    "Scan all vendors to determine if geocoding is needed and apply where needed."
-    for vendor in models.Vendor.approved_objects.all():
-        if vendor.needs_geocoding():
-            vendor.apply_geocoding()
-            vendor.save()
-    return HttpResponseRedirect("/admin/")
-
-@staff_member_required
-def search_log(request):
-    pass
