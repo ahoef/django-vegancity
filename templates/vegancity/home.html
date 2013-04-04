@@ -9,6 +9,15 @@
 
   <meta name="description" content="VegPhilly is a community driven vegan and vegetarian food search guide for Philadelphia. Browse restaurants, add a new restaurant, and write reviews.">
 
+  <style>
+
+  #headline {
+    font-family: 'Sanchez', serif;
+    text-align: center;
+  }
+
+  </style>
+
 {% endblock %}
 
 
@@ -21,7 +30,7 @@
 
   <div class="container">
     <div class="hero-unit">
-      <h1>Find delicious vegan food in Philly</h1>
+      <h1 id="headline">Find delicious vegan food in Philly</h1>
       <br>
       <form action="{% url 'vendors' %}" method="get">
             <input id="vc-search-input" class="input-block-level" type="text" autocomplete="off" placeholder="e.g., 18th and Walnut, Royal Tavern, Falafel, 19143" autofocus="autofocus" name="query">
