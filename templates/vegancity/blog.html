@@ -13,6 +13,7 @@
     box-shadow: 5px 5px 5px #888;
     display: block;
     margin: auto;
+    margin-top: 125px;
   }
 
   #caption {
@@ -24,7 +25,7 @@
 
 {% endblock %}
 
-{% block headline %}Blog{% endblock %}
+{% block headline %}Welcome to the VegPhilly Blog!{% endblock %}
 
 {% block summary %}
 {% endblock %}
@@ -32,7 +33,6 @@
 {% block content %}
   <div class="row">
     <div class="span6">
-      <h4>Welcome to the VegPhilly Blog</h4>
       {% if object_list %}
         {{ object_list.count }} entries.
         <hr/>
