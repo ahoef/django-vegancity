@@ -265,7 +265,7 @@ class Vendor(models.Model):
     # CORE FIELDS
     name = models.CharField(max_length=255, unique=True)
     address = models.TextField(null=True)
-    neighborhood = models.ForeignKey('Neighborhood', blank=True, null=True, editable=False)
+    neighborhood = models.ForeignKey('Neighborhood', blank=True, null=True)
     phone = models.CharField(max_length=50, blank=True, null=True,
                              validators = [validators.validate_phone_number])
     website = models.URLField(blank=True, null=True,
@@ -341,6 +341,7 @@ class Vendor(models.Model):
             orig_address = Vendor.objects.get(pk=self.pk).address
         else:
             orig_address = None
+
         if (orig_address != self.address) or self.needs_geocoding():
             self.apply_geocoding()
         super(Vendor, self).save(*args, **kwargs)
