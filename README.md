@@ -1,4 +1,4 @@
-django-vegancity
+django-vegancity [![Build Status](https://travis-ci.org/vegphilly/django-vegancity.png)](https://travis-ci.org/vegphilly/django-vegancity)
 ================
 
 a vegan website for every city!  
