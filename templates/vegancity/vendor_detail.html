@@ -190,23 +190,18 @@
                     <td class="review_number">{{ review.food_rating }} / 4</td>
                   </tr>
                 {% endif %}           
-                <!-- <tr> -->
-                <!--   <td>entered by:</td> -->
-                <!--   <td>{{ review.author }}</td> -->
-                <!-- </tr> -->
               </table>
               <br>
               {% if review.best_vegan_dish %}
                 <h6>best vegan dish: {{ review.best_vegan_dish }}</h6>
               {% endif %}
-              <p>{{ review.content }}</p>
+              <p>{{ review.content|linebreaks }}</p>
               <hr>
 
             {% endfor %}
           </div>
           <div class="span6 hidden-phone" style="text-align: center">
             <br><br>
-            <!-- <img src="{{ STATIC_URL }}images/tomato.png"> -->
             <div id="skyline_circle">
               <img src="{{ STATIC_URL }}images/phillyskyline.gif" alt="VegPhilly circular skyline logo">
             </div>  
