@@ -8,20 +8,25 @@
 
 {% block content %}
   <form action="" method="post">
-    {{ form.non_field_errors }}    
+    {{ form.non_field_errors }}
+    {% if form.errors %}
+      <p style="color: red">There were errors in your submission. Please review the starred fields below.</p>
+    {% endif %} 
     {% csrf_token %}
 
     <div class="row">
       <div class="span4">
         <div class="fieldWrapper">
-          {{ form.name.errors }}
-          {{ form.name.label_tag }}        
+          <label for="id_name">{{ form.name.label }}
+            {% if form.name.errors %}<span style="color: red">* (Required)</span>{% endif %}
+          </label>
           {{ form.name }}
         </div>
 
         <div class="fieldWrapper">
-          {{ form.address.errors }}
-          {{ form.address.label_tag }}
+          <label for="id_address">{{ form.address.label }}
+            {% if form.address.errors %}<span style="color: red">* (Required)</span>{% endif %}
+          </label>
           {{ form.address }}
         </div>
 
