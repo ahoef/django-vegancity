@@ -27,6 +27,40 @@
 {% if vendor.notes %}
 <meta name="description" content="{{ vendor.notes }}">
 {% endif %}
+
+<style>
+#skyline_circle {
+    height: 350px;
+    width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 90px;
+    margin-bottom: 30px; 
+}
+
+.reviews_header h2 {
+    line-height: 75%;
+    background-color: rgb(210, 93, 7);
+    color: #fff;
+    padding:  10px;
+    text-align: center;
+}
+
+.review_title h4 {
+    line-height: 30px;
+}
+
+.review_number {
+    padding-left: 20px;
+    color: rgb(210, 93, 7);
+}
+
+#review_button {
+    margin-top: 25px;
+    margin-bottom: 25px;  
+}
+</style>
+
 {% endblock %}
 
 {% block summary %}

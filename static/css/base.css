@@ -1,7 +1,41 @@
 
 body {
-    font-family: 'Average Sans', serif;
+    font-family: 'Source Sans Pro', sans-serif;
     font-size: 16px;
+    color: #444444;
+}
+
+a {
+    color: rgb(210, 93, 7);
+}
+
+h1, h2, h3, h4, th {
+    font-family: 'Merriweather Sans', sans-serif;
+    color: rgb(210, 93, 7);
+}
+
+h1 {
+    font-size: 28px;
+} 
+
+h3 {
+    font-size: 20px;
+}
+
+h5 {
+    font-size: 18px;
+}
+
+h6 {
+    font-size: 16px;
+}
+
+h5, h6, table.review_summary  {
+    color: #101c35;
+}
+
+h5, h6 {
+    font-family: 'Source Sans Pro', sans-serif;
 }
 
 .navbar-inner {
@@ -17,63 +51,13 @@ p.vc-nav-item {
     color: white;
     font-weight: bold;
     /* Must override text shadow or
-     Bootstrap will do what it wants*/
+     Bootstrap will do what it wants */
     text-shadow: 0pt 0px 0pt white;
-
 }
 
 div#map_canvas {
     width: 100%;
     height: 600px;
-}
-
-h1 {
-    font-size: 28px;
-} 
-
-h1, h2, h3, h4, th {
-    font-family: 'Sanchez', serif;
-    color: rgb(210, 93, 7);
-}
-
-h5, h6, table.review_summary  {
-    color: #101c35;
-}
-
-h5, h6 {
-    font-family: 'Open Sans', sans-serif;
-    /* this looks CRAZY in chrome. */
-    /* letter-spacing: -2px; */
-}
-
-.reviews_header h2 {
-    line-height: 75%;
-    background-color: #EB8B4B;
-    color: #fff;
-    padding:  10px;
-    text-align: center;
-    /* this is not needed?: */
-    /* font-family: 'Sanchez', serif; */
-
-    /*font-variant:small-caps;
-    letter-spacing: -4px;*/
-
-}
-
-.review_title h4 {
-    line-height: 30px;
-}
-
-.review_number {
-    padding-left: 20px;
-    color: rgb(210, 93, 7);
-
-}
-
-#review_button {
-    margin-top: 25px;
-    margin-bottom: 25px;
-    
 }
 
 div#vc-search-borderbox {
@@ -92,29 +76,13 @@ div#vc-searchbox {
     padding-right: 10px;
 }
 
-#skyline_circle {
-    height: 350px;
-    width: 350px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 90px;
-    margin-bottom: 30px;
-   
-}
-
-
 .hero-unit {
-    /* background: -moz-linear-gradient(45deg, #EEEEEE 0%, */
-    /*                                  #F6F6F6 100%) */
     background: url(/static/images/hero_unit.jpg);
-    /* opacity: .5; */
 }
 
 .hero-unit h1 {
-    /* color: rgb(210, 93, 7); */
     font-size: 55px;
 }
-
 
 #footer {
     background-color: rgb(210, 93, 7);
@@ -122,12 +90,6 @@ div#vc-searchbox {
     text-align: center;
     color: #fff;
     font-size: 18px;
-}
-
-
-a {
-    color: rgb(210, 93, 7);
-
 }
 
 input#vc-search-input, input#search-input {
@@ -190,10 +152,10 @@ html, body {
     height: 100%;
     margin: 0 auto -100px;
 }
+
 #footer, #top_push, #bottom_push {
     height: 100px;
 }
-
 
 a.uline {
     text-decoration: underline;
