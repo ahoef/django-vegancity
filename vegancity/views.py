@@ -25,6 +25,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
+from django.views.generic import ListView, DetailView, TemplateView
 
 from vegancity import forms
 from vegancity import models
@@ -231,3 +232,48 @@ def account_edit(request):
     return render_to_response('vegancity/account_edit.html',
         {'user_form': user_form, 'profile_form': profile_form},
         context_instance=RequestContext(request))
+
+
+###########################
+## generic views
+###########################
+
+class BlogView(ListView):
+    template_name = 'vegancity/blog.html'
+    model = models.BlogEntry
+
+
+class VendorDetailView(DetailView):
+    template_name = 'vegancity/vendor_detail.html'
+    queryset = models.Vendor.approved_objects.all()
+
+
+class AboutView(TemplateView):
+    template_name = 'vegancity/about.html'
+
+
+class PrivacyView(TemplateView):
+    template_name = 'vegancity/privacy.html'
+
+
+class ReviewThanksView(DetailView):
+    template_name = 'vegancity/review_thanks.html'
+    queryset = models.Vendor.approved_objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super(ReviewThanksView, self).get_context_data(**kwargs)
+        context.update({'warning': True})
+        return context
+
+
+class VendorThanksView(TemplateView):
+    template_name = 'vegancity/vendor_thanks.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(VendorThanksView, self).get_context_data(**kwargs)
+        context.update({'warning': True})
+        return context
+
+
+class RegisterThanksView(TemplateView):
+    template_name = 'vegancity/register_thanks.html'
