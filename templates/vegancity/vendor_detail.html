@@ -71,10 +71,6 @@
     <br/>
     <div class="row">
       <div class="span6">
-        <div id="map_canvas"></div>
-        <br/>
-      </div>
-      <div class="span6">
         {% if vendor.name %}
           <h1>{{vendor.name}}</h1>
           {% if user.is_staff %}<h1>- <a href="/admin/vegancity/vendor/{{ vendor.id }}/">Edit</a></h1>{% endif %}
@@ -152,6 +148,10 @@
           <h6>Problem with this listing? <a href="mailto:vegphilly@gmail.com?subject=Vendor Issue - {{ vendor.name }}">Contact us.</a></h6>
         
         
+      </div>
+      <div class="span6">
+        <div id="map_canvas"></div>
+        <br/>
       </div>
     </div>
   </div>
