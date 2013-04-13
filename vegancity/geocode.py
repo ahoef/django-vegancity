@@ -26,7 +26,8 @@ import json
 from settings import LOCATION_LATITUDE, LOCATION_CITY_STATE, LOCATION_BOUNDS, LOCATION_COMPONENTS
 
 def geocode_address(address):
-    "takes an address as a string and returns a tuple of latitude and longitude in float format"
+    """takes an address as a string and returns a tuple of latitude, 
+    longitude and neighborhood in float format"""
     base_url = "http://maps.googleapis.com/maps/api/geocode/json?"
     address_param = "address=" + urllib.quote_plus(address)
     sensor_param = "sensor=false"
