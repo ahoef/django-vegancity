@@ -21,7 +21,7 @@ from django.contrib import admin
 
 from settings import INSTALLED_APPS
 
-from vegancity import models
+from vegancity import models, views
 
 admin.autodiscover()
 
@@ -35,26 +35,27 @@ urlpatterns = patterns('vegancity.views',
     )
 
 # GENERIC VIEWS
-urlpatterns += patterns('django.views.generic',
+urlpatterns += patterns('',
     
-    url(r'^blog/$', 'list_detail.object_list', 
-        {'queryset' : models.BlogEntry.objects.all(), 'template_name' : 'vegancity/blog.html' }, 
-        name="blog"),
+    url(r'^blog/$', views.BlogView.as_view(), name="blog"),
 
-    url(r'^vendors/(?P<object_id>\d+)(-[\w\d]+)*/$', 'list_detail.object_detail',
-        {'queryset' : models.Vendor.approved_objects.all(), 'template_name' : 'vegancity/vendor_detail.html',
-         'template_object_name' : 'vendor' }, name="vendor_detail"),
+    url(r'^vendors/(?P<pk>\d+)(-[\w\d]+)*/$',
+        views.VendorDetailView.as_view(),
+        name="vendor_detail"),
 
-    url(r'^about/$', 'simple.direct_to_template', {'template': 'vegancity/about.html'}, name='about'),
-    url(r'^privacy/$', 'simple.direct_to_template', {'template': 'vegancity/privacy.html'}, name='privacy'),
+    url(r'^about/$', views.AboutView.as_view(), name='about'),
+    url(r'^privacy/$', views.PrivacyView.as_view(), name='privacy'),
 
-    url(r'^vendors/review/(?P<object_id>\d+)/thanks/$', 'list_detail.object_detail', 
-        {'queryset' : models.Vendor.approved_objects.all(), 'template_name' : 'vegancity/review_thanks.html',
-         'template_object_name' : 'vendor', 'extra_context' : {'warning' : True }}, name="review_thanks"),
-    url(r'^vendors/add/thanks/$', 'simple.direct_to_template', 
-        {'template' : 'vegancity/vendor_thanks.html', 'extra_context' : {'warning' : True} }, name="vendor_thanks"),
-    url(r'^accounts/register/thanks/$', 'simple.direct_to_template', 
-        {'template' : 'vegancity/register_thanks.html'}, name='register_thanks'),
+    url(r'^vendors/review/(?P<pk>\d+)/thanks/$',
+        views.ReviewThanksView.as_view(),
+        name="review_thanks"),
+
+    url(r'^vendors/add/thanks/$',
+        views.VendorThanksView.as_view(),
+        name="vendor_thanks"),
+    url(r'^accounts/register/thanks/$',
+        views.RegisterThanksView.as_view(),
+        name='register_thanks'),
     )                        
 
 # AUTH VIEWS
