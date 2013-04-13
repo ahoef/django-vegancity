@@ -43,7 +43,7 @@ class VendorVeganDishInline(admin.TabularInline):
     extra = 0
 
 class VendorAdmin(admin.ModelAdmin):
-    readonly_fields = ('latitude', 'longitude')
+    readonly_fields = ('latitude', 'longitude', 'submitted_by')
     list_display = ('name', 'approval_status', 'created', 'neighborhood')
     list_display_links = ('name',)
     list_filter = ('approval_status',)
