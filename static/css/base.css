@@ -6,12 +6,12 @@ body {
 }
 
 a {
-    color: rgb(210, 93, 7);
+    color: #d25d09;
 }
 
 h1, h2, h3, h4, th {
     font-family: 'Merriweather Sans', sans-serif;
-    color: rgb(210, 93, 7);
+    color: #d25d09;
 }
 
 h1 {
@@ -31,7 +31,7 @@ h6 {
 }
 
 h5, h6, table.review_summary  {
-    color: #101c35;
+    color: #2A3655;
 }
 
 h5, h6 {
@@ -39,7 +39,7 @@ h5, h6 {
 }
 
 .navbar-inner {
-   background: #101c35 !important; 
+   background: #2A3655 !important; 
 }
 
 .brand {
@@ -85,7 +85,7 @@ div#vc-searchbox {
 }
 
 #footer {
-    background-color: rgb(210, 93, 7);
+    background-color: #d25d09;
     opacity: .7;
     text-align: center;
     color: #fff;
@@ -93,9 +93,8 @@ div#vc-searchbox {
 }
 
 input#vc-search-input, input#search-input {
-    /* TODO : match all shades of green */
-    box-shadow: green;
-    border-color: green;
+    box-shadow: #888888;
+    border-color: #888888;
 }
 
 .btn-custom {
@@ -143,7 +142,7 @@ a.uline {
 }
 
 a.blue {
-    color: #101c35;
+    color: #2A3655;
 }
 
 a.white {
