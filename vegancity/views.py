@@ -164,12 +164,18 @@ def register(request):
 @login_required
 def new_vendor(request):
     "Create a new vendor."
+    
+    def apply_submitter(request, vendor):
+        vendor.submitted_by = request.user
+
+    apply_submitter = functools.partial(apply_submitter, request)
 
     response, obj =  _generic_form_processing_view(
         request, 
         forms.NewVendorForm, 
         reverse("vendor_thanks"), 
         "vegancity/new_vendor.html",
+        [apply_submitter],
         commit_flag=True)
 
     return response
