@@ -5,6 +5,9 @@ env:
   - DJANGO=1.4
   - DJANGO=1.5
 install:
+  - pip install -r requirements.txt
   - pip install -q Django==$DJANGO --use-mirrors
 script:
-  - python manage.py test vegancity
+  - coverage run manage.py test vegancity
+  - coverage report --include="vegancity/*"
+
