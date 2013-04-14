@@ -23,6 +23,8 @@ from django.db.models import Count
 
 from django.template.defaultfilters import slugify
 
+import collections
+
 import shlex
 import itertools
 import geocode
@@ -348,15 +350,21 @@ class Vendor(models.Model):
 
     def best_vegan_dish(self):
         "Returns the best vegan dish for the vendor"
-        dishes = self.vegan_dishes.all()
+        dishes = collections.Counter()
+        vendor_reviews = Review.approved_objects.filter(vendor=self, 
+                                                         best_vegan_dish__isnull=False)
+
+        for review in vendor_reviews:
+            dishes[review.best_vegan_dish] += 1
+
         if dishes:
-            return max(dishes, 
-                       key=lambda d: Review.objects.filter(best_vegan_dish=d).count())
+            best_vegan_dish, count = dishes.most_common(1)[0]
+            return best_vegan_dish
         else:
             return None
 
     def food_rating(self):
-        reviews = Review.objects.filter(vendor=self)
+        reviews = Review.approved_objects.filter(vendor=self)
         food_ratings = [review.food_rating for review in reviews if review.food_rating]
         if food_ratings:
             return sum(food_ratings) / len(food_ratings)
@@ -365,7 +373,7 @@ class Vendor(models.Model):
 
     def atmosphere_rating(self):
         "calculates the average rating for a vendor"
-        reviews = Review.objects.filter(vendor=self)
+        reviews = Review.approved_objects.filter(vendor=self)
         atmosphere_ratings = [review.atmosphere_rating for review in reviews 
                               if review.atmosphere_rating]
         if atmosphere_ratings:
