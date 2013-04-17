@@ -1,5 +1,7 @@
-django-vegancity [![Build Status](https://travis-ci.org/vegphilly/django-vegancity.png)](https://travis-ci.org/vegphilly/django-vegancity)
+VegPhilly / django-vegancity 
 ================
+[![Build Status](https://travis-ci.org/vegphilly/vegphilly.com.png)](https://travis-ci.org/vegphilly/vegphilly.com)
+
 
 a vegan website for every city!  
 
