@@ -5,12 +5,14 @@ from urllib import quote_plus
 
 register = template.Library()
 
-def gravatar_urlify(email_address, size=48):
-    # TODO: change to something relative
-    default = "https://www.vegphilly.com/static/images/default_user_icon.jpg"
+def gravatar_urlify(email_address, size=72):
+    # TODO: change to something relative or move to settings file
+    default = "http://www.vegphilly.com/static/images/default_user_icon.jpg"
     if email_address:
         hash = hashlib.md5(email_address).hexdigest()
         return "http://gravatar.com/avatar/%s?s=%i&d=%s" % (hash, size, quote_plus(default))
+    else:
+        return quote_plus(default)
 
 def showing_vendors_string(text):
     if text:
