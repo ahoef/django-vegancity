@@ -31,7 +31,7 @@ from vegancity import forms
 from vegancity import models
 from vegancity import search
 
-from django.db.models import Max
+from django.db.models import Max, Count
 
 def home(request):
     "The view for the homepage."
@@ -42,9 +42,9 @@ def home(request):
     recently_active = vendors_with_reviews.annotate(score=Max('review__created')).exclude(score=None).order_by('-score')[:5]
     recently_added = vendors.exclude(created=None).order_by('-created')[:5]
 
-    neighborhoods = models.Neighborhood.objects.all()
-    cuisine_tags = models.CuisineTag.objects.with_vendors()
-    feature_tags = models.FeatureTag.objects.with_vendors()
+    neighborhoods = models.Neighborhood.objects.all().annotate(vcount=Count('vendor')).order_by('-vcount')[:21]
+    cuisine_tags = models.CuisineTag.objects.with_vendors().annotate(vcount=Count('vendor')).order_by('-vcount')[:21]
+    feature_tags = models.FeatureTag.objects.with_vendors().annotate(vcount=Count('vendor')).order_by('-vcount')[:21]
 
     ctx = {
         'top_5': top_5,
