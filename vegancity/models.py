@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Vegancity.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.db import models
+from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 
 from django.db.models import Q
@@ -235,7 +235,7 @@ class Review(models.Model):
         verbose_name = "Review"
         verbose_name_plural = "Reviews"
 
-class VendorManager(models.Manager):
+class VendorManager(models.GeoManager):
     "Manager class for handling searches by vendor."
 
     def pending_approval(self):

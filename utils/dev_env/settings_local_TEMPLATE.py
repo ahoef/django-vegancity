@@ -1,6 +1,6 @@
 DATABASES = {
     'default' : {
-        'ENGINE' : 'django.db.backends.postgresql_psycopg2',
+        'ENGINE' : 'django.contrib.gis.db.backends.postgis',
         'NAME' : 'vegphilly',
         'USER' : 'vagrant',
         'PASSWORD' : '',
@@ -11,7 +11,7 @@ DATABASES = {
 
 try:
     from settings import INSTALLED_APPS
-    INSTALLED_APPS += ('south', 'gunicorn')
+    INSTALLED_APPS += ('south', 'gunicorn', 'django.contrib.gis')
 except ImportError:
     pass
 
