@@ -2,9 +2,18 @@
 
 {% block title %}VegPhilly | Page Not Found{% endblock title %}
 
+{% block header_extra %}
+<style type="text/css">
+h1, h3 {
+	text-align: center;	
+}
+</style>
+{% endblock %}
 
 {% block content %}
-  <div style="width: 200px; margin: auto;">
-    Page not Found.
+  <div style="width: 40%; margin: auto;">
+  	<img src="{{ STATIC_URL }}images/404cat.png" alt="404 Kitty"> 
+    <h1 >404 Error</h1>
+    <h3>Page Not Found</h3>
   </div>
 {% endblock %}
