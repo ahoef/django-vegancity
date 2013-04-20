@@ -2,15 +2,11 @@ Frequently Asked Questions
 
 Q: How does Veg Philly determine the vegan-ness of restaurants?
 
-A: We talk to waiters and chefs at restaurants to determine their level of vegan-ness. We use the following scale:  
-
-[Add scale here]
-
-At vegan-friendly places the same cookware or fryers may be used for meat dishes. All information is accurate to the best of our knowledge, but cooking practices at restaurants can change. Please feel free to contribute and improve our vegan ratings or contact us if you have any questions.
+A: We talk to waiters and chefs at restaurants to determine their level of vegan-ness. All information is accurate to the best of our knowledge, but cooking practices at restaurants can change. Even at vegan-friendly restaurants the same cookware or fryers may be used for meat or dairy. Please contact us if you have any questions.
 
 Q: Where can I find a list of beers, wines, or liquors that are vegan?
 
-A: The best place to find this information is http://www.barnivore.com/. You can also download the app Vegan is Easy (free) for iPhone or VeganXpress (paid) for iPhone or Android so you have the information close at hand. These apps also have information about vegan grocery items. 
+A: One of the best places to find this information is http://www.barnivore.com/. You can also download apps "Vegan is Easy" (free) for iPhone or "VeganXpress" (paid) for iPhone or Android. These apps also have information about vegan grocery items. 
 
 Q: How do I add a restaurant?
 
@@ -23,17 +19,18 @@ A: The Veganomicon is a great cookbook for both the vegan veteran and someone ju
 #######
 #######
 
-Q: The information on your site is inaccurate. How do I fix it?
+Q: Some information on your site is inaccurate. How do I fix it?
 
 A: You need to create an account first. Click on ### to get started. If you already have an account you can click ### to submit your changes. Your changes will need to be approved by a moderator before they appear on the site.  
 
 Q: How can I become part of the Veg Philly team?
 
-A: 
+A: Contact us at vegphilly@gmail.com
 
 Q: How can I become a featured food vendor?
 
-A: We try to feature a new vendor each month...
+A: We will be featuring a new food vendor each month
 
 Q: How do I request new features or report bugs on the website?
 
+A: Contact us. You can also contribute to the project on github.
