@@ -8,3 +8,4 @@ templates/analytics.html
 *~
 .vagrant
 private_data.sql
+.DS_Store
