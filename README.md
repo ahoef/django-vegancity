@@ -17,24 +17,29 @@ We will get there though!
 quickstart
 ==========
 
-The code is provided with a sample dataset that should be enough to get started. 
-If you have python and django installed, you should be able to get a development server
-going quickly with the following commands, from the project root directory:  
+This project is meant to be developed from within a virtualbox environment.  
+Please InstallVirtualbox and Vagrant for your OS.  
+
+Navigate to the root of this project and run:  
+```vagrant up```
+
+This will create a virtual environment, install dependencies, provide you with  
+enough data to get coding right away, and fire up a runserver. Point your browser  
+to ```localhost:8000``` and start editing files.  
   
-python manage.py syncdb  
-...  
-follow steps / create superuser  
-...  
-python manage.py loaddata vegancity/fixtures/public_data.json  
-python manage.py runserver  
-  
-then direct your browser to localhost:8000 and start hacking!
+When you're finished working on the site, just run ```vagrant halt``` to power down  
+the VM. The next time you start it up, it will purge any changes you made to the provided  
+data.  
+
+Of course, you can work on the project without using a virtual machine, but it's on you  
+to get it to work.  
 
 current contributors
 ====================
 
-Having trouble?
+Having trouble?  
 
-Sometimes commits can fall out of sync with your database. That's why your development
-database is meant to be thrown out. Just delete your development db (vegancity/db) and
-run the quickstart commands above.
+Sometimes, but not often, switching branches can cause weird synchronization problems with  
+your virtual machine. Try running ```vagrant destroy``` and ```vagrant up``` again to create  
+a new virtual environment that is guaranteed to be configured for the branch you are working  
+on.
