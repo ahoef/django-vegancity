@@ -7,14 +7,45 @@ Edit your account details
 {% endblock %}
 
 {% block content %}
-<br>
-<p>Please take note of our <a class="uline" href="#privacyModal" data-toggle="modal">Privacy Policy</a></p>
-{% include "vegancity/privacy_modal.html" %}
-<hr>
   <form action="" method="post">
     {% csrf_token %}
-      {{ user_form.as_p }}
-      {{ profile_form.as_p }}
+
+    <div class="fieldWrapper">
+      {{ user_form.first_name.errors }}
+      <h6>First name</h6>
+      {{ user_form.first_name }}<br>
+      <label>We will show this next to your reviews</label>
+    </div>
+    <br>
+
+    <div class="fieldWrapper">
+      {{ user_form.last_name.errors }}
+      <h6>Last name</h6>
+      {{ user_form.last_name }}<br>
+      {{ user_form.last_name.help_text }}
+      <label>We will show your last initial next to your reviews</label>
+    </div>
+    <br>
+
+    <div class="fieldWrapper">
+      {{ profile_form.bio.errors }}
+      <h6>Bio</h6>
+      {{ profile_form.bio }}
+    </div>
+    <br>
+
+    <div class="fieldWrapper">
+      {{ profile_form.mailing_list.errors }}
+      <h6>Mailing list</h6>
+      <label class="checkbox" for="id_mailing_list">
+        {{ profile_form.mailing_list }}I would like to be subscribed to the VegPhilly mailing list
+      </label>
+    </div>
+
+    <br><br>
     <input class="btn btn-custom" type="submit" value="Save">
+    Please take note of our <a class="uline" href="#privacyModal" data-toggle="modal">Privacy Policy</a>
+    {% include "vegancity/privacy_modal.html" %}
+
   </form>
 {% endblock %}
