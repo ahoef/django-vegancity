@@ -12,7 +12,7 @@ def gravatar_urlify(email_address, size=72):
         hash = hashlib.md5(email_address).hexdigest()
         return "http://gravatar.com/avatar/%s?s=%i&d=%s" % (hash, size, quote_plus(default))
     else:
-        return quote_plus(default)
+        return default
 
 def showing_vendors_string(text):
     if text:
