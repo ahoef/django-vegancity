@@ -27,15 +27,15 @@ from django.contrib.auth.models import User
 
 class VegUserCreationForm(UserCreationForm):
     "Form used for creating new users."
-    email_explanation = "VegPhilly is under development. We may use your email to contact you ONLY about important changes to your account."
-    email = forms.EmailField(max_length=70, label="Email (Temporarily Required)", 
+    email_explanation = "VegPhilly is currently under development. We may use your email to contact you ONLY about important changes to your account."
+    email = forms.EmailField(max_length=70, label="Email (temporarily required)", 
                              help_text=email_explanation,
                              required=True)
     bio = forms.CharField(label="Bio",
-                          help_text="This optional field will be displayed to all site users along with your username.",
+                          help_text="Entering a bio is optional. It will appear to all VegPhilly users along with your username.",
                           required=False,
                           widget=forms.Textarea)
-    mailing_list = forms.BooleanField(label="Would you like to join our mailinglist?", required=False)
+    mailing_list = forms.BooleanField(label="Would you like to join our mailing list?", required=False)
                                       
 
     def save(self, *args, **kwargs):
@@ -58,11 +58,11 @@ class VegUserCreationForm(UserCreationForm):
 
         if len(username) < 3:
             raise forms.ValidationError(
-                "Username must be at least 3 characters.")
+                "Your username must be at least three characters.")
 
         if username != username.lower():
             raise forms.ValidationError(
-                "Cannot have capital letters in username at this time. Please correct.")
+                "Usernames cannot contain capital letters at this time. Please correct this.")
 
         return cleaned_data
         
@@ -70,8 +70,8 @@ class VegUserCreationForm(UserCreationForm):
 class VegUserEditForm(forms.ModelForm):
     """Form for users to edit their information"""
     
-    first_name = forms.CharField(max_length=30, required=False, help_text='We will show this next to your reviews')
-    last_name = forms.CharField(max_length=30, required=False, help_text='We will show your last initial next to your reviews')
+    first_name = forms.CharField(max_length=30, required=False, help_text='Your first name will appear in your reviews')
+    last_name = forms.CharField(max_length=30, required=False, help_text='Your last initial will appear in your reviews')
     
     class Meta:
         model = models.User
@@ -138,7 +138,7 @@ class _BaseReviewForm(forms.ModelForm):
 
         if chose_best and entered_unlisted:
             raise forms.ValidationError(
-                "can't have both \"Best vegan dish\" and \"Favorite Vegan Dish\". Please choose one.")
+                "Can't have both \"Best vegan dish\" and \"Favorite Vegan Dish\". Please choose one.")
 
         return cleaned_data
 
