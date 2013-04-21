@@ -156,7 +156,8 @@ class AdminEditReviewForm(_BaseReviewForm):
 
     def __init__(self, *args, **kwargs):
         super(AdminEditReviewForm, self).__init__(*args, **kwargs)
-        if self.instance:
+
+        if self.instance.pk:
             self.filter_dishes(self.instance.vendor)
 
 
