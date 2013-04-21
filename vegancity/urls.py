@@ -48,7 +48,7 @@ urlpatterns = patterns('',
     url(r'^accounts/profile/$', 'vegancity.views.user_profile', { 'username': None }, name='my_account'),
     url(r'^accounts/profile/edit/$', 'vegancity.views.account_edit', name='account_edit'),
 
-    url(r'^users/(?P<username>[a-zA-Z0-9]+)/$', 'vegancity.views.user_profile', name='user_profile'),
+    url(r'^users/(?P<username>[a-zA-Z0-9_@.+-]+)/$', 'vegancity.views.user_profile', name='user_profile'),
     url(r'^admin/pending_approval/$', 'vegancity.admin_views.pending_approval', name="pending_approval"),
     url(r'^admin/pending_approval/count/$', 'vegancity.admin_views.pending_approval_count', name="pending_approval_count"),
     url(r'^admin/', include(admin.site.urls)),
