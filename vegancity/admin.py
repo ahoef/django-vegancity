@@ -61,12 +61,6 @@ class BlogEntryAdmin(admin.ModelAdmin):
         blog_entry.author = request.user
         blog_entry.save()
 
-    def queryset(self, request):
-        qs = super(BlogEntryAdmin, self).queryset(request)
-        if request.user.is_superuser:
-            return qs
-        return qs.filter(author=request.user)
-
 class UserProfileInline(admin.StackedInline):
     model = models.UserProfile
 
