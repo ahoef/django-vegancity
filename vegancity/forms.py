@@ -70,8 +70,8 @@ class VegUserCreationForm(UserCreationForm):
 class VegUserEditForm(forms.ModelForm):
     """Form for users to edit their information"""
     
-    first_name = forms.CharField(max_length=30, required=False, help_text='Your first name will appear in your reviews')
-    last_name = forms.CharField(max_length=30, required=False, help_text='Your last initial will appear in your reviews')
+    first_name = forms.CharField(max_length=30, required=False)
+    last_name = forms.CharField(max_length=30, required=False)
     
     class Meta:
         model = models.User
