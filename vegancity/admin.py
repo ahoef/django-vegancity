@@ -24,8 +24,6 @@ from django.contrib.auth.models import User
 import models
 import forms
 
-
-
 #####################################
 ## MODEL ADMIN CLASSES
 #####################################

@@ -17,8 +17,8 @@
 
 import functools
 
-from django.http import HttpResponseRedirect
-from django.shortcuts import render_to_response
+from django.http import HttpResponseRedirect, Http404
+from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
@@ -58,13 +58,19 @@ def home(request):
     return render_to_response("vegancity/home.html", ctx,
                               context_instance=RequestContext(request))
 
-@login_required
-def account_page(request):
-    "The view for user accounts / profile pages."
-
-    return render_to_response("vegancity/account_page.html",
-                              context_instance=RequestContext(request))
-
+def user_profile(request, username):
+    if username == None:
+        if request.user.username == '':
+            raise Http404
+        else:
+            return redirect('user_profile', username=request.user.username)
+    else:
+        profile_user = get_object_or_404(models.User, username=username)
+        reviews = models.Review.approved_objects.filter(author=profile_user).order_by('-created')
+        return render_to_response(
+            'vegancity/profile_page.html', 
+            {'profile_user': profile_user, 'reviews': reviews},
+            context_instance=RequestContext(request))
 
 def vendors(request):
     """Display table level data about vendors.
@@ -231,7 +237,7 @@ def account_edit(request):
             user_form.save()
             profile_form.save()
             messages.success(request, 'Profile saved!')
-        return HttpResponseRedirect(reverse('account_page'))
+        return HttpResponseRedirect(reverse('my_account'))
     else:
         user_form = forms.VegUserEditForm(instance=user)
         profile_form = forms.VegProfileEditForm(instance=user_profile)
