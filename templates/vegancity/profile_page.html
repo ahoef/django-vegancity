@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% load url from future %}
+
+{% load vegancity_template_tags %}
+
+{% block summary %}
+  <h1>{{ profile_user.username }}</h1>
+{% endblock summary %}
+
+{% block content %}
+  <img src="{{ profile_user.email|gravatar_urlify }}" title="add your photo on gravatar.com!"><br>
+  {% if user == profile_user %}
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-success">
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endif %}
+
+  <table class="table table-hover">
+    {% if user == profile_user %}
+      {% if profile_user.first_name %}<tr><td>Name:</td><td>{{ profile_user.first_name }} {{ profile_user.last_name }}</td></tr>{% endif %}
+        <tr><td>Email:</td><td>{{ profile_user.email }}</td></tr>
+        <tr><td>Subscribed to mailing list:</td><td>{{ profile_user.get_profile.mailing_list }}</td></tr>
+      {% else %}
+        {% if profile_user.first_name %}<tr><td>Name:</td><td>{{ profile_user.first_name }}&nbsp;{{ profile_user.last_name.0.upper }}</td></tr>{% endif %}
+      {% endif %}
+    {% if profile_user.get_profile.bio %}<tr><td>Bio:</td><td>{{ profile_user.get_profile.bio }}</td></tr>{% endif %}
+  </table>
+
+  {% if user == profile_user %}
+    <p><a href="{% url 'account_edit' %}" class="btn btn-custom">Edit your profile</a>
+    <p><a href="{% url 'password_change' %}" class="btn btn-custom">Change Your Password</a>
+  {% endif %}
+
+{% if reviews %}
+  <h2>reviews</h2>
+  {% for review in reviews %}
+    <h3>{{ review.vendor.name }}</h3>
+    {{ review.title }}<br>
+    {{ review.content }}<br>
+    <br><br>
+  {% endfor %}
+{% endif %}
+
+{% endblock content %}
