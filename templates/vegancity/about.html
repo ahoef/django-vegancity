@@ -46,14 +46,14 @@ ul {
 }
 
 .carousel {
-  width: 50%;
+  width: 55%;
+  min-width: 400px;
   margin: 0 auto;
 }
 
 .carousel-item {
   margin: 0 auto;
 }
-
 
 </style>
 {% endblock %}
@@ -127,7 +127,7 @@ Check out <a href="http://justadudeintheworld.info/" target="_blank">Zack's Port
   </div>
    <div class="span4">
     <h5>Jeremie Rose Wimbrow</h5>
-    <div class="bio"><p>Kitty ipsum dolor sit amet, lay down in your way scratched eat hiss, claw judging you judging you sleep in the sink eat the grass eat run toss the mousie. Eat catnip litter box run I don't like that food hairball, puking claw eat knock over the lamp. I don't like that food judging you shed everywhere scratched.</p></div>
+    <div class="bio"><p>Jeremie is a graphic designer living and eating in Philadelphia who creates visuals for VegPhilly. When she's not designing, she enjoys crafting, cooking, and volunteering at the AIGA Gallery Space and regularly attends punk shows.</p></div>
   </div>
   <div class="span4">
     <h5>You!</h5>
@@ -139,7 +139,7 @@ Check out <a href="http://justadudeintheworld.info/" target="_blank">Zack's Port
   <br>
   <h3>Check Out Our Flyers!</h3>
   <br>
-  <p>Click through below to see our designs or <a href="#">download and print our flyers here</a>. If you have ideas for a flyer, we'd love to include your designs here too. <a href="mailto:vegphilly@gmail.com">Let's talk!</a></p>
+  <p>Browse through the gallery below to see our designs, and click on a flyer to download and print a sheet of four. If you have ideas for a flyer, we'd love to include your designs here too. <a href="mailto:vegphilly@gmail.com">Let's talk!</a></p>
   <p>
   <br>
   <div id="this-carousel-id" class="carousel slide"><!-- class of slide for animation -->
@@ -151,7 +151,8 @@ Check out <a href="http://justadudeintheworld.info/" target="_blank">Zack's Port
       </div>
     </div>
     <div class="item">
-      <img src="{{ STATIC_URL }}images/veg_1.png" class="carousel-item" alt="Jeremie's Flyer Version 1" />
+      <a href="#" style="margin: 0 auto;"><img src="{{ STATIC_URL }}images/veg_1.png" alt="Jeremie's Flyer Version 1" /></a>
+      <!--ergggg why does is it not center anymore when i add an a href?-->
       <div class="carousel-caption">
         <p>by Jeremie Rose Wimbrow</p>
       </div>
@@ -172,6 +173,12 @@ Check out <a href="http://justadudeintheworld.info/" target="_blank">Zack's Port
       <img src="{{ STATIC_URL }}images/veg_4.png" class="carousel-item" alt="Jeremie's Flyer Version 4" />
       <div class="carousel-caption">
         <p>by Jeremie Rose Wimbrow</p>
+      </div>
+    </div>
+    <div class="item">
+      <img src="{{ STATIC_URL }}images/vegphilly-hippie-flyer.jpg" class="carousel-item" alt="VegPhilly Compassion Flyer" />
+      <div class="carousel-caption">
+        <p>"Compassion" by Zack Birmingham</p>
       </div>
     </div>
   </div><!-- /.carousel-inner -->
