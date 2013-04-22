@@ -218,16 +218,10 @@ class Review(models.Model):
         'VeganDish', 
         verbose_name="Favorite Vegan Dish",
         blank=True, null=True)
-    unlisted_vegan_dish = models.CharField(
-        "Favorite Vegan Dish (if not listed)",
-        max_length=100,
-        help_text="We'll post this on the site so others know about it.",
-        blank=True, null=True)
+    unlisted_vegan_dish = models.CharField(max_length=100, blank=True, null=True)
     suggested_feature_tags = models.CharField(max_length=255, blank=True, null=True)
     suggested_cuisine_tags = models.CharField(max_length=255, blank=True, null=True)
-    content = models.TextField(
-        "Review", 
-        help_text="NOTE: All slanderous reviews will be scrutinized. No trolling!")
+    content = models.TextField("Review")
 
     def __unicode__(self):
         return "%s -- %s" % (self.vendor.name, str(self.created))

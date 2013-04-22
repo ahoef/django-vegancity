@@ -143,11 +143,7 @@ class _BaseReviewForm(forms.ModelForm):
         return cleaned_data
 
     def filter_dishes(self, vendor):
-        dishes = vendor.vegan_dishes.all()
-        if dishes:
-            self.fields['best_vegan_dish'].queryset = dishes
-        else:
-            self.fields['best_vegan_dish'].widget = forms.HiddenInput()
+        self.fields['best_vegan_dish'].queryset = vendor.vegan_dishes.all()
 
     class Meta:
         model = models.Review
@@ -163,17 +159,8 @@ class AdminEditReviewForm(_BaseReviewForm):
 class NewReviewForm(_BaseReviewForm):
 
     def __init__(self, vendor, *args, **kwargs):
-        print kwargs
         super(NewReviewForm, self).__init__(*args, **kwargs)
         self.filter_dishes(vendor)
-
-    class Media:
-        extend = True
-        js = (
-            '//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js',
-            'js/review_form.js',
-            )
-
 
     class Meta(_BaseReviewForm.Meta):
         exclude = ('approved', 'author',)
