@@ -37,7 +37,6 @@ else
     su vagrant -c "python /var/projects/vegphilly/manage.py syncdb --noinput"
     su vagrant -c "python /var/projects/vegphilly/manage.py migrate"
     su vagrant -c "python /var/projects/vegphilly/manage.py loaddata /var/projects/vegphilly/vegancity/fixtures/public_data.json"
-    # TODO: switch to south, when installed
 fi
 
 ###############################
@@ -49,6 +48,7 @@ mkdir /var/log/vegphilly
 touch /var/log/vegphilly/log.log
 chmod -R 777 /var/log/vegphilly
 supervisorctl update
+supervisorctl reload
 
 
 ###############################
