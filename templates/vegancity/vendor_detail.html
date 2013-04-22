@@ -17,13 +17,14 @@
             address: "{{ vendor.address|linebreaksbr }}",
             phone: "{{ vendor.phone }}",
             url: "{{ vendor.get_absolute_url }}",
-            latitude: "{{ vendor.location.y }}", 
+            latitude: "{{ vendor.location.y }}",
             longitude: "{{ vendor.location.x }}"
         }
     ];
   </script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/map.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/vendor_detail.js"></script>
+  <link href='http://fonts.googleapis.com/css?family=Cabin:400,700' rel='stylesheet' type='text/css'>
 
 {% if vendor.notes %}
 <meta name="description" content="{{ vendor.notes }}">
@@ -31,23 +32,42 @@
 
 <style>
 
-
-h2 {
-    font-family: 'Sanchez', serif;
-    font-size: 45px;
-    color: #444;
-    display: inline; 
-    position: relative;
-    top: 20px;
+h1
+{
+  font-family: 'Cabin', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #8DA189;
 }
 
-h4 {
-    padding: 80px 0px 10px 110px;
-    font-size: 16px;
-    font-weight: normal;
-    color: #2A3655;
-    font-family: 'Source Sans Pro', sans-serif;
-} 
+h2
+{
+  font-family: 'Cabin', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-size: 45px;
+  color: #444;
+  display: inline;
+  position: relative;
+  top: 20px;
+}
+
+h3
+{
+  text-align: center;
+  font-family: 'Source Sans Pro';
+  font-weight: normal;
+  font-size: 18px;
+}
+
+h4
+{
+  padding: 55px 0px 0px 40px;
+  font-size: 18px;
+  font-weight: normal;
+  color: #2A3655;
+  font-family: 'Source Sans Pro', sans-serif;
+}
 
 h5 {
   font-weight: normal;
@@ -57,17 +77,11 @@ h6 {
   font-weight: normal;
   color: #444444;
   font-size: 16px;
-  padding: 10px 40px 20px 40px;
+  padding: 10px 40px 30px 40px;
 }
 
 td {
   padding-left: 40px;
-}
-
-#review_button {
-    margin-top: 25px;
-    margin-bottom: 25px; 
-    text-align: center;
 }
 
 #left-carrot {
@@ -86,12 +100,14 @@ td {
 #map-area {
   width: 80%;
   min-width: 400px;
-  margin: auto; 
+  margin: auto;
   padding-top: 60px;
+  margin-right: 0px;
 }
 
  #map_canvas {
-  height: 450px !important;
+  height: 300px !important;
+  opacity: .75;
  }
 
 .reviews-container {
@@ -103,27 +119,19 @@ td {
     width: 40%;
     min-width: 350px;
     background-color: #FFFFFF;
-    border-radius: 10px;
     margin: auto;
     margin-top: 20px;
-    border: 2px solid #2A3655;
     margin-bottom: 50px;
 }
 
 .reviews-divider {
     text-align: center;
-    margin: auto; 
+    margin: auto;
     width: 100%;
 }
 
 .span12 {
     width: 100%;
- }
-
-.profile {
-    position: absolute;
-    padding-left: 40px;
-    padding-top: 90px;
  }
 
 .review_title h3 {
@@ -136,7 +144,6 @@ td {
     position: relative;
     left: -30px;
     top: 45px;
-    border-radius: 5px;
     box-shadow: 1px 1px 1px #888;
     font-family: 'Merriweather Sans', sans-serif;
 }
@@ -146,12 +153,29 @@ td {
     color: #d25d09;
 }
 
-.watermark {
-    margin-top: 20px;
-    margin-right: 40px;
-    float: right;
-    /*clear: both;*/
+
+.button {
+  display: inline-block;
+  background-color: #2a3655;
+  padding: 18px 35px;
+  margin: 10px 0;
+  text-decoration: none;
+  font-size: 20px;
+  color: #ffffff;
+  font-weight: bold;
+  width: 85%;
+  font-family: 'Cabin', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-align: center;
 }
+
+.button:hover {
+  opacity: 0.6;
+  text-decoration: none;
+  color: #ffffff;
+}
+
 </style>
 
 {% endblock %}
@@ -167,9 +191,11 @@ td {
         {% if vendor.name %}
           <h1>{{vendor.name}}</h1>
           {% if user.is_staff %}<h1>- <a href="/admin/vegancity/vendor/{{ vendor.id }}/">Edit</a></h1>{% endif %}
-        {% endif %}     
+        {% endif %}
          {% if vendor.notes %}
+         <br>
           <h5>{{ vendor.notes }}</h5>
+          <br>
         {% endif %}
 
         <table class="table table-hover">
@@ -246,23 +272,25 @@ td {
             </tr>
           {% endif %}
         </table>
-        <p>Problem with this listing? <a href="mailto:vegphilly@gmail.com?subject=Vendor Issue - {{ vendor.name }}">Contact us.</a></p>
- 
       </div>
 
       <div class="span6">
-        <div id="map-area"> 
+        <div id="map-area">
         <div id="map_canvas"></div>
         <br/>
-        <div id="review_button">
-          <a class="btn btn-custom btn-large hero" href="{% url 'new_review' vendor_id=vendor.id %}" data-toggle="modal">Write a Review</a>
-        </div>
+
+        <a class="button" href="#reviewModal" data-toggle="modal">Write a Review</a>
+
+        <h3>Why write reviews on VegPhilly?</h3>
+            <p>Reviews help other users get a idea for what their experience at a restaurant might be like. Your reviews are some of the most important aspects of this site, and we encourage you to write as many as you'd like!</p><br>
         <br>
       </div>
     </div>
     </div>
   </div>
 
+
+  {% if vendor.approved_reviews %}
       <div class="reviews-container">
         <div class="row">
           <div class="span12">
@@ -274,13 +302,14 @@ td {
             <br>
             {% if vendor.approved_reviews %}
             {% for review in vendor.approved_reviews %}
-            
+
               <div class="reviews-box">
               <span class="review_title"><h3>{{review.title|default:"<em>untitled</em>" }}</h3></span>
-              <div class="watermark"><img class="hidden-phone" src="{{ STATIC_URL }}images/vegphillywatermark.jpg"></div>
+              <!-- <div class="watermark"><img class="hidden-phone" src="{{ STATIC_URL }}images/default_user_icon.jpg"></div> -->
               <div class="row">
                 <div class="span1">
-                  <img class="profile" src="{{ review.author.email|gravatar_urlify }}" title="add your photo on gravatar.com!">
+                  <!-- <img class="profile" src="{{ review.author.email|gravatar_urlify }}" title="add your photo on gravatar.com!"> -->
+                  <!-- <img class="profile" src="{{ STATIC_URL }}images/default_user_icon.jpg" title="add your photo on gravatar.com!"> -->
                 </div>
                 <br>
                 <div class="span5">
@@ -294,33 +323,32 @@ td {
                     <td>Atmosphere rating:</td>
                     <td class="review_number">{{ review.atmosphere_rating }} / 4</td>
                   </tr>
-                {% endif %}           
-                {% if review.food_rating %}      
+                {% endif %}
+                {% if review.food_rating %}
                   <tr>
                     <td>Food rating:</td>
                     <td class="review_number">{{ review.food_rating }} / 4</td>
                   </tr>
-                {% endif %} 
+                {% endif %}
                  {% if review.best_vegan_dish %}
                   <tr>
                     <td>Best vegan dish:</td>
                     <td class="review_number">{{ review.best_vegan_dish }}</td>
                   </tr>
-                {% endif %}            
+                {% endif %}
               </table>
               <h6>{{ review.content|linebreaks }}</h6>
               </div>
             {% endfor %}
+
             {% else %}
               <div class="reviews-box">
                 <h6>There are no reviews for this vendor yet. Be the first!</h6>
               </div>
-            {% endif %}
-          </div>       
+            {% endif %}{% endif %}
+          </div>
         </div>
       </div>
-    
-
 {% endblock %}
 
 
