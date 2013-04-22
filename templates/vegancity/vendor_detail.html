@@ -40,33 +40,21 @@ h1
   color: #8DA189;
 }
 
-h2
-{
-  font-family: 'Cabin', sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  font-size: 45px;
-  color: #444;
-  display: inline;
-  position: relative;
-  top: 20px;
+h2 {
+    font-family: 'Sanchez', serif;
+    font-size: 45px;
+    color: #444;
+    display: inline;
+    position: relative;
+    top: 20px;
 }
 
-h3
-{
-  text-align: center;
-  font-family: 'Source Sans Pro';
-  font-weight: normal;
-  font-size: 18px;
-}
-
-h4
-{
-  padding: 55px 0px 0px 40px;
-  font-size: 18px;
-  font-weight: normal;
-  color: #2A3655;
-  font-family: 'Source Sans Pro', sans-serif;
+h4 {
+    padding: 80px 0px 10px 110px;
+    font-size: 16px;
+    font-weight: normal;
+    color: #2A3655;
+    font-family: 'Source Sans Pro', sans-serif;
 }
 
 h5 {
@@ -168,6 +156,54 @@ td {
   text-transform: uppercase;
   letter-spacing: 1.5px;
   text-align: center;
+}
+
+.button:hover {
+  opacity: 0.6;
+  text-decoration: none;
+  color: #ffffff;
+}
+
+/*#button-section {
+    width: 100%;
+    margin-top: 15px;
+    margin-bottom: 25px;
+    position: relative;
+border: 1px solid red
+;}*/
+
+#arrow {
+  width: 175px;
+  /*
+  position: absolute;
+  right: 615px;
+  top: 5px;*/
+}
+
+#help-text {
+    width: 400px;
+    /*position: absolute;
+    top: 15px;
+    right: 205px;*/
+    float: right;
+    margin: 20px 200px 30px 5px;
+
+
+}
+
+
+.button {
+  display: inline-block;
+  background-color: #2a3655;
+  padding: 18px 35px;
+  text-decoration: none;
+  border-radius: 27px; /* half of height */
+  font-size: 22px;
+  color: #ffffff;
+  float: left;
+  margin: 50px 10px 50px 200px;
+  /*top: 75px;
+  left: 200px;*/
 }
 
 .button:hover {
@@ -289,6 +325,19 @@ td {
     </div>
   </div>
 
+  <div class="container">
+    <div class="row">
+        <div class="span12">
+          <div id="button-section">
+              <a class="button" href="#reviewModal" data-toggle="modal">Write a Review</a>
+            <img id="arrow" class="hidden-phone" src="{{ STATIC_URL }}images/arrow.png">
+            <div class="hidden-phone" id="help-text"> <h3>Why write reviews on VegPhilly?</h3>
+            <p>Your reviews are some of the most important aspects of this site. Reviews help other users get a feeling for what their experience at a restaurant might be like, and we encourage you to write as many as you'd like! If you see an issue with this listing, <a href="mailto:vegphilly@gmail.com">contact us</a>.</p>
+            </div>
+          </div>
+       </div>
+    </div>
+  </div>
 
   {% if vendor.approved_reviews %}
       <div class="reviews-container">
