@@ -3,6 +3,8 @@ VegPhilly / django-vegancity
 [![Build Status](https://travis-ci.org/vegphilly/vegphilly.com.png)](https://travis-ci.org/vegphilly/vegphilly.com)
 
 
+description
+----------
 a vegan website for every city!  
 
 the idea is simple.  instead of building a vegan website for our city, 
@@ -15,7 +17,7 @@ and haven't yet factored out the code to make django-vegancity pluggable.
 We will get there though!
 
 quickstart
-==========
+----------
 
 This project is meant to be developed from within a virtualbox environment.  
 Please InstallVirtualbox and Vagrant for your OS.  
@@ -35,10 +37,37 @@ Of course, you can work on the project without using a virtual machine, but it's
 to get it to work.  
 
 current contributors
-====================
+--------------------
 
-Having trouble?  
+Having trouble? Here's some common problems and solutions.  
 
+### development server
+###### not running after ```vagrant up```
+at times, for one reason or another, the django runserver doesn't start on boot.  
+To start this manually, enter from the project room:
+```
+vagrant ssh
+sudo supervisorctl restart vegphilly-runserver
+```
+The password for the vagrant account is 'vagrant'.
+
+###### viewing the log in realtime
+normally a django runserver runs in your terminal for debugging. If you'd like to view
+the terminal to watch for output, execute:
+```
+vagrant ssh
+cd /var/log/vegphilly/
+tail -f log.log
+```
+###### stopping the server to free port 8000 for other things
+just run
+```
+vagrant ssh
+sudo supervisorctl stop vegphilly-runserver
+```
+
+
+### database error or general weirdness
 Sometimes, but not often, switching branches can cause weird synchronization problems with  
 your virtual machine. Try running ```vagrant destroy``` and ```vagrant up``` again to create  
 a new virtual environment that is guaranteed to be configured for the branch you are working  
