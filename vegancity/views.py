@@ -27,11 +27,24 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, TemplateView
 
+import django.contrib.auth.views
+
 from vegancity import forms
 from vegancity import models
 from vegancity import search
 
 from django.db.models import Max, Count
+
+def password_change(request):
+    response = django.contrib.auth.views.password_change(
+        request, "registration/password_change_form.html", reverse('my_account'))
+    
+    if type(response) == HttpResponseRedirect:
+        messages.success(request, "Password Changed!")
+
+    return response
+
+
 
 def home(request):
     "The view for the homepage."

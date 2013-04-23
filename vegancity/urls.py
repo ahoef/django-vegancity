@@ -19,8 +19,6 @@ from django.core.urlresolvers import reverse
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
-from django.contrib.auth.views import password_change, password_change_done
-
 from settings import INSTALLED_APPS
 
 from vegancity import models, views
@@ -43,8 +41,7 @@ urlpatterns = patterns('',
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page' : '/'},  name='logout'),
     url(r'^accounts/register/$', 'vegancity.views.register', name='register'),
     url(r'^accounts/register/thanks/$', views.RegisterThanksView.as_view(), name='register_thanks'),
-    url(r'^accounts/password/reset/$', password_change, {'template_name': 'registration/password_change_form.html'}, name='password_change'),
-    url(r'^accounts/password/reset/done$', password_change_done, {'template_name': 'registration/password_change_done.html' }, name='pasword_change_done'),
+    url(r'^accounts/password/change/$', 'vegancity.views.password_change', name='password_change'),
     url(r'^accounts/profile/$', 'vegancity.views.user_profile', { 'username': None }, name='my_account'),
     url(r'^accounts/profile/edit/$', 'vegancity.views.account_edit', name='account_edit'),
 
