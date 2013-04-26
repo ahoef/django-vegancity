@@ -172,7 +172,7 @@
                   <img src="{{ review.author.email|gravatar_urlify }}" title="add your photo on gravatar.com!">
                 </div>
                 <div class="span5">
-                  <h5>entered by {{ review.author }}</h5>
+                  <h5>entered by <a href="{% url 'user_profile' username=review.author.username %}">{{ review.author }}</a></h5>
                   <h6>{{ review.created }}</h6>
                 </div>
               </div>
