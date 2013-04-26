@@ -39,11 +39,11 @@ def password_change(request):
     response = django.contrib.auth.views.password_change(
         request, "registration/password_change_form.html", reverse('my_account'))
     
-    if type(response) == HttpResponseRedirect:
+    # redirect happens when the form validates and the model saves
+    if response.status_code == 302:
         messages.success(request, "Password Changed!")
 
     return response
-
 
 
 def home(request):
