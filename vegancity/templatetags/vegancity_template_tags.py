@@ -7,7 +7,7 @@ register = template.Library()
 
 def gravatar_urlify(email_address, size=48):
     # TODO: change to something relative
-    default = "https://www.vegphilly.com/static/images/default_user_icon.jpg"
+    default = "https://www.vegphilly.com/static/images/vegphillyprofiledefault.jpg"
     if email_address:
         hash = hashlib.md5(email_address).hexdigest()
         return "http://gravatar.com/avatar/%s?s=%i&d=%s" % (hash, size, quote_plus(default))
