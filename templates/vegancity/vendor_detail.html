@@ -267,7 +267,7 @@ td {
               <div class="watermark"><img class="hidden-phone" src="{{ STATIC_URL }}images/vegphillywatermark.jpg"></div>
               <div class="row">
                 <div class="span1">
-                  <img class="profile" src="{{ STATIC_URL }}images/vegphillyprofiledefault.jpg">
+                  <img class="profile" src="{{ review.author.email|gravatar_urlify }}" title="add your photo on gravatar.com!">
                 </div>
                 <br>
                 <div class="span5">
