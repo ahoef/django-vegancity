@@ -29,35 +29,127 @@
 {% endif %}
 
 <style>
-#skyline_circle {
-    height: 350px;
-    width: 350px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 90px;
-    margin-bottom: 30px; 
+
+
+h2 {
+    font-family: 'Sanchez', serif;
+    font-size: 45px;
+    color: #444;
+    display: inline; 
+    position: relative;
+    top: 20px;
 }
 
-.reviews_header h2 {
-    line-height: 75%;
-    background-color: rgb(210, 93, 7);
-    color: #fff;
-    padding:  10px;
-    text-align: center;
+h4 {
+    padding: 80px 0px 10px 110px;
+    font-size: 16px;
+    font-weight: normal;
+    color: #2A3655;
+    font-family: 'Source Sans Pro', sans-serif;
+} 
+
+h5 {
+  font-weight: normal;
 }
 
-.review_title h4 {
-    line-height: 30px;
+h6 {
+  font-weight: normal;
+  color: #444444;
+  font-size: 16px;
+  padding: 10px 40px 20px 40px;
 }
 
-.review_number {
-    padding-left: 20px;
-    color: rgb(210, 93, 7);
+td {
+  padding-left: 40px;
 }
 
 #review_button {
     margin-top: 25px;
-    margin-bottom: 25px;  
+    margin-bottom: 25px; 
+    text-align: center;
+}
+
+#left-carrot {
+    padding-top: 40px;
+}
+
+#right-carrot {
+    top: -20px;
+    transform:rotate(180deg);
+    -ms-transform:rotate(180deg);
+    -moz-transform:rotate(180deg);
+    -webkit-transform:rotate(180deg);
+    -o-transform:rotate(180deg);
+ }
+
+#map-area {
+  width: 80%;
+  min-width: 400px;
+  margin: auto; 
+  padding-top: 60px;
+}
+
+ #map_canvas {
+  height: 450px !important;
+ }
+
+.reviews-container {
+  background-image:url('{{ STATIC_URL }}images/wavegrid.png');
+  margin: 0 auto;
+}
+
+.reviews-box {
+    width: 40%;
+    min-width: 350px;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    margin: auto;
+    margin-top: 20px;
+    border: 2px solid #2A3655;
+    margin-bottom: 50px;
+}
+
+.reviews-divider {
+    text-align: center;
+    margin: auto; 
+    width: 100%;
+}
+
+.span12 {
+    width: 100%;
+ }
+
+.profile {
+    position: absolute;
+    padding-left: 40px;
+    padding-top: 90px;
+ }
+
+.review_title h3 {
+    line-height: 30px;
+    background-color: #8DA189;
+    display: inline;
+    padding: 15px 20px;
+    color: #ffffff;
+    font-size: 18px;
+    position: relative;
+    left: -30px;
+    top: 45px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 1px #888;
+    font-family: 'Merriweather Sans', sans-serif;
+}
+
+.review_number {
+    padding-left: 20px;
+    color: #d25d09;
+}
+
+.watermark {
+    margin-top: 20px;
+    margin-right: 40px;
+    float: right;
+    /*clear: both;*/
 }
 </style>
 
@@ -113,13 +205,13 @@
           {% if vendor.food_rating %}
             <tr>
               <td>Food Rating:</td>
-              <td><h4>{{ vendor.food_rating }} / 4</h4></td>
+              <td><p>{{ vendor.food_rating }} / 4</p></td>
             </tr>
           {% endif %}
           {% if vendor.atmosphere_rating %}
             <tr>
               <td>Atmosphere Rating:</td>
-              <td><h4>{{ vendor.atmosphere_rating }} / 4</h4></td>
+              <td><p>{{ vendor.atmosphere_rating }} / 4</p></td>
             </tr>
           {% endif %}
           {% if vendor.best_vegan_dish %}
@@ -141,39 +233,45 @@
             </tr>
           {% endif %}
         </table>
-        
-        <div id="review_button">
-          <h5><a href="{% url 'new_review' vendor_id=vendor.id %}" class="btn btn-custom">Write a Review</a></h5>
-        </div>
-          <h6>Problem with this listing? <a href="mailto:vegphilly@gmail.com?subject=Vendor Issue - {{ vendor.name }}">Contact us.</a></h6>
-        
-        
+        <p>Problem with this listing? <a href="mailto:vegphilly@gmail.com?subject=Vendor Issue - {{ vendor.name }}">Contact us.</a></p>
+ 
       </div>
+
       <div class="span6">
+        <div id="map-area"> 
         <div id="map_canvas"></div>
         <br/>
+                <div id="review_button">
+          <a class="btn btn-custom btn-large hero" href="#reviewModal" data-toggle="modal">Write a Review</a>
+        </div>
+        <br>
       </div>
+    </div>
     </div>
   </div>
 
-  {% if vendor.approved_reviews %}
-    <div style="background-color: #F6F6F6">
-      <div class="container">
+      <div class="reviews-container">
         <div class="row">
-          <div class="span6">
-            <div class="reviews_header">
-              <h2>{{ reviews.count }} Review{% if reviews.count != 1 %}s{% endif %}</h2>
-            </div>
+          <div class="span12">
+              <div class="reviews-divider">
+                <img class="hidden-phone" id="left-carrot" src="{{ STATIC_URL }}images/horiz_carrot.png" width="375px">
+                <h2>Reviews</h2>
+                <img class="hidden-phone" id="right-carrot" src="{{ STATIC_URL }}images/horiz_carrot.png" width="375px">
+              </div>
             <br>
+            {% if vendor.approved_reviews %}
             {% for review in vendor.approved_reviews %}
-              <span class="review_title"><h4>{{review.title }}</h4></span>
+            
+              <div class="reviews-box">
+              <span class="review_title"><h3>{{review.title|default:"<em>untitled</em>" }}</h3></span>
+              <div class="watermark"><img class="hidden-phone" src="{{ STATIC_URL }}images/vegphillywatermark.jpg"></div>
               <div class="row">
                 <div class="span1">
-                  <img src="{{ review.author.email|gravatar_urlify }}" title="add your photo on gravatar.com!">
+                  <img class="profile" src="{{ review.author.email|gravatar_urlify }}" title="add your photo on gravatar.com!">
                 </div>
+                <br>
                 <div class="span5">
-                  <h5>entered by <a href="{% url 'user_profile' username=review.author.username %}">{{ review.author }}</a></h5>
-                  <h6>{{ review.created }}</h6>
+                  <h4>entered by <a href="{% url 'user_profile' username=review.author.username %}">{{ review.author }}</a> on {{ review.created }}</h4>
                 </div>
               </div>
               <br>
@@ -189,27 +287,26 @@
                     <td>Food rating:</td>
                     <td class="review_number">{{ review.food_rating }} / 4</td>
                   </tr>
-                {% endif %}           
+                {% endif %} 
+                 {% if review.best_vegan_dish %}
+                  <tr>
+                    <td>Best vegan dish:</td>
+                    <td class="review_number">{{ review.best_vegan_dish }}</td>
+                  </tr>
+                {% endif %}            
               </table>
-              <br>
-              {% if review.best_vegan_dish %}
-                <h6>best vegan dish: {{ review.best_vegan_dish }}</h6>
-              {% endif %}
-              <p>{{ review.content|linebreaks }}</p>
-              <hr>
-
+              <h6>{{ review.content|linebreaks }}</h6>
+              </div>
             {% endfor %}
-          </div>
-          <div class="span6 hidden-phone" style="text-align: center">
-            <br><br>
-            <div id="skyline_circle">
-              <img src="{{ STATIC_URL }}images/phillyskyline.gif" alt="VegPhilly circular skyline logo">
-            </div>  
-          </div>        
+            {% else %}
+              <div class="reviews-box">
+                <h6>There are no reviews for this vendor yet. Be the first!</h6>
+              </div>
+            {% endif %}
+          </div>       
         </div>
       </div>
-    </div>
-  {% endif %}
+    
 
 {% endblock %}
 
