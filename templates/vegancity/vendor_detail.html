@@ -250,12 +250,12 @@ td {
     </div>
   </div>
 
-  {% if vendor.approved_reviews %}
       <div class="reviews-container">
         <div class="row">
           <div class="span12">
               <div class="reviews-divider"><img class="hidden-phone" id="left-carrot" src="{{ STATIC_URL }}images/horiz_carrot.png" width="375px"><h2> {{ reviews.count }} Review{% if reviews.count != 1 %}s {% endif %} </h2><img class="hidden-phone" id="right-carrot" src="{{ STATIC_URL }}images/horiz_carrot.png" width="375px"></div>
             <br>
+            {% if vendor.approved_reviews %}
             {% for review in vendor.approved_reviews %}
             
               <div class="reviews-box">
@@ -294,11 +294,15 @@ td {
               <h6>{{ review.content|linebreaks }}</h6>
               </div>
             {% endfor %}
+            {% else %}
+              <div class="reviews-box">
+                <h6>There are no reviews for this vendor yet. Be the first!</h6>
+              </div>
+            {% endif %}
           </div>       
         </div>
       </div>
     
-  {% endif %}
 
 {% endblock %}
 
