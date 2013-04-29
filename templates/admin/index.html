@@ -27,10 +27,15 @@ From this page, you can modify individual objects to administer the site.<br/>
     summary_div.textContent += "There are " + count + " items pending approval.";
     if (count <= 0) {
         document.getElementById("please_visit").textContent = "";
-    }  
+    }
 </script>
 
+<br/>
+
+<a href="{% url 'mailing_list' %}">Click here to download the current mailinglist.</a>
+
 <br/><br/>
+
 <div id="content-main">
 
 {% if app_list %}

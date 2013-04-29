@@ -48,6 +48,6 @@ urlpatterns = patterns('',
     url(r'^users/(?P<username>[a-zA-Z0-9_@.+-]+)/$', 'vegancity.views.user_profile', name='user_profile'),
     url(r'^admin/pending_approval/$', 'vegancity.admin_views.pending_approval', name="pending_approval"),
     url(r'^admin/pending_approval/count/$', 'vegancity.admin_views.pending_approval_count', name="pending_approval_count"),
+    url(r'^admin/mailing_list/$', 'vegancity.admin_views.mailing_list', name="mailing_list"),
     url(r'^admin/', include(admin.site.urls)),
 )
-

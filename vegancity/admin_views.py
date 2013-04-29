@@ -20,12 +20,13 @@ from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 
-from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 
 import forms
 import models
 import itertools
+import csv
+import datetime
 
 @staff_member_required
 def pending_approval_count(request):
@@ -43,3 +44,20 @@ def pending_approval(request):
         }
     return render_to_response("admin/pending_approval.html", ctx,
                               context_instance=RequestContext(request))
+
+@staff_member_required
+def mailing_list(request):
+    response = HttpResponse(content_type='text/csv')
+    filename_param = "filename = vegphilly_ml_%s.csv" % (
+        datetime.date.today().strftime("%Y%m%d"))
+    response['Content-Disposition'] = 'attachment; ' + filename_param + ';'
+
+    mailing_list_users = models.User.objects.filter(userprofile__mailing_list=True)
+
+    writer = csv.writer(response)
+    writer.writerow(['username', 'firstname', 'lastname', 'email'])
+
+    for user in mailing_list_users:
+        writer.writerow([user.username, user.first_name, user.last_name, user.email])
+    
+    return response
