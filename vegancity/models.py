@@ -16,6 +16,7 @@
 # along with Vegancity.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.contrib.gis.db import models
+from django.contrib.gis.geos import Point
 from django.contrib.auth.models import User
 
 from django.db.models import Q
@@ -297,7 +298,7 @@ class Vendor(models.Model):
     def needs_geocoding(self):
         """Returns true if the vendor is eligible for geocoding,
         but is missing geocoding data."""
-        if self.latitude or self.longitude or self.neighborhood:
+        if self.location or self.neighborhood:
             return False
 
         elif not self.address:
@@ -325,8 +326,7 @@ class Vendor(models.Model):
 
             self.neighborhood = neighborhood_obj
 
-        self.latitude = latitude
-        self.longitude = longitude
+        self.location = Point(x=longitude, y=latitude, srid=4326)
 
 
     def save(self, *args, **kwargs):
