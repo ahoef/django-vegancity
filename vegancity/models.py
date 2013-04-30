@@ -267,8 +267,6 @@ class Vendor(models.Model):
                              validators = [validators.validate_phone_number])
     website = models.URLField(blank=True, null=True,
                              validators = [validators.validate_website])
-    latitude = models.FloatField(default=None, blank=True, null=True, editable=False)
-    longitude = models.FloatField(default=None, blank=True, null=True, editable=False)
     location = models.PointField(srid=4326, default=None, null=True, blank=True, editable=False)
 
     # ADMINISTRATIVE FIELDS
