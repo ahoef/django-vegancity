@@ -15,6 +15,8 @@ Vagrant::Config.run do |config|
   config.vm.share_folder "share", "/var/projects/vegphilly", "."
 
   # run provisioner script from utils
+  config.vm.provision :shell, :path => "utils/apt_requirements.py"
+  config.vm.provision :shell, :path => "utils/postgres.sh"
   config.vm.provision :shell, :path => "utils/build.sh"
 
 end
