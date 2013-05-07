@@ -33,8 +33,9 @@ AUTH_PROFILE_MODULE = "vegancity.UserProfile"
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(APP_ROOT, 'db'),
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'vegphilly',
+        'USER': 'postgres',
         }
     }
 
@@ -147,6 +148,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+    'django.contrib.gis',
     'vegancity',
 )
 

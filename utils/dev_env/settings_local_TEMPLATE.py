@@ -11,7 +11,7 @@ DATABASES = {
 
 try:
     from settings import INSTALLED_APPS
-    INSTALLED_APPS += ('south', 'gunicorn', 'django.contrib.gis')
+    INSTALLED_APPS += ('south', 'gunicorn')
 except ImportError:
     pass
 
