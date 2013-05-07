@@ -69,8 +69,7 @@ class VendorTest(TestCase):
         vendor = models.Vendor(name="Test Vendor")
         vendor.save()
 
-        self.assertEqual(vendor.latitude, None)
-        self.assertEqual(vendor.longitude, None)
+        self.assertEqual(vendor.location, None)
         self.assertEqual(vendor.neighborhood, None)
         self.assertFalse(vendor.needs_geocoding())
 
@@ -81,8 +80,7 @@ class VendorTest(TestCase):
 
         vendor.save()
 
-        self.assertNotEqual(vendor.latitude, None)
-        self.assertNotEqual(vendor.longitude, None)
+        self.assertNotEqual(vendor.location, None)
         self.assertNotEqual(vendor.neighborhood, None)
         
     def test_needs_geocoding(self):

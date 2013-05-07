@@ -4,24 +4,9 @@
 # Ideally should be run only in conjunction
 # with a vagrant initialization.
 
-apt-get update
-
-##########################
-## INITIALIZE POSTGRES
-##########################
-apt-get install -y postgresql
-echo "Creating db superuser 'vagrant'"
-su postgres -c "createuser -s vagrant"
-echo "Trying to delete a db called vegphilly"
-su postgres -c "dropdb vegphilly"
-echo "Creating db vegphilly with owner vagrant"
-su postgres -c "createdb -O vagrant -l en_US.UTF8 -E UTF8 -T template0 vegphilly"
-
 ###############################
 ## INITIALIZE PYTHON PACKAGES
 ###############################
-apt-get install -y python-psycopg2
-apt-get install -y python-pip
 pip install -r /var/projects/vegphilly/requirements.txt
 
 ###############################
@@ -42,7 +27,6 @@ fi
 ###############################
 ## PREPARE APP ENV
 ###############################
-apt-get install -y supervisor
 cp -v /var/projects/vegphilly/utils/dev_env/supervisor_vegphilly_runserver_TEMPLATE.conf /etc/supervisor/conf.d/vegphilly_runserver.conf
 mkdir /var/log/vegphilly
 touch /var/log/vegphilly/log.log

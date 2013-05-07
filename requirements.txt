@@ -2,3 +2,4 @@ Django==1.4
 south
 Gunicorn
 coverage
+psycopg2

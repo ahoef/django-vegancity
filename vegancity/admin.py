@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Vegancity.  If not, see <http://www.gnu.org/licenses/>.
 
+from django.contrib.gis.admin.options import GeoModelAdmin
 
 from django.contrib import admin
 
@@ -40,8 +41,8 @@ class VendorVeganDishInline(admin.TabularInline):
     model = models.Vendor.vegan_dishes.through
     extra = 0
 
-class VendorAdmin(admin.ModelAdmin):
-    readonly_fields = ('latitude', 'longitude', 'submitted_by')
+class VendorAdmin(GeoModelAdmin):
+    readonly_fields = ('location', 'submitted_by')
     list_display = ('name', 'approval_status', 'created', 'neighborhood')
     list_display_links = ('name',)
     list_filter = ('approval_status',)

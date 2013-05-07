@@ -16,8 +16,8 @@
             address: "{{ vendor.address|linebreaksbr }}",
             phone: "{{ vendor.phone }}",
             url: "{{ vendor.get_absolute_url }}",
-            latitude: "{{ vendor.latitude }}", 
-            longitude: "{{ vendor.longitude }}"
+            latitude: "{{ vendor.location.y }}", 
+            longitude: "{{ vendor.location.x }}"
         }
     ];
   </script>

@@ -15,7 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Vegancity.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.db import models
+from django.contrib.gis.db import models
+from django.contrib.gis.geos import Point
 from django.contrib.auth.models import User
 
 from django.db.models import Q
@@ -235,7 +236,7 @@ class Review(models.Model):
         verbose_name = "Review"
         verbose_name_plural = "Reviews"
 
-class VendorManager(models.Manager):
+class VendorManager(models.GeoManager):
     "Manager class for handling searches by vendor."
 
     def pending_approval(self):
@@ -266,8 +267,7 @@ class Vendor(models.Model):
                              validators = [validators.validate_phone_number])
     website = models.URLField(blank=True, null=True,
                              validators = [validators.validate_website])
-    latitude = models.FloatField(default=None, blank=True, null=True, editable=False)
-    longitude = models.FloatField(default=None, blank=True, null=True, editable=False)
+    location = models.PointField(srid=4326, default=None, null=True, blank=True, editable=False)
 
     # ADMINISTRATIVE FIELDS
     created = models.DateTimeField(auto_now_add=True, null=True)
@@ -296,7 +296,7 @@ class Vendor(models.Model):
     def needs_geocoding(self):
         """Returns true if the vendor is eligible for geocoding,
         but is missing geocoding data."""
-        if self.latitude or self.longitude or self.neighborhood:
+        if self.location or self.neighborhood:
             return False
 
         elif not self.address:
@@ -324,8 +324,7 @@ class Vendor(models.Model):
 
             self.neighborhood = neighborhood_obj
 
-        self.latitude = latitude
-        self.longitude = longitude
+        self.location = Point(x=longitude, y=latitude, srid=4326)
 
 
     def save(self, *args, **kwargs):
