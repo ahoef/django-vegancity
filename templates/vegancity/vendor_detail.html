@@ -181,7 +181,9 @@ td {
           {% if vendor.neighborhood %}
             <tr>
               <td>Neighborhood:</td>
-              <td> {{ vendor.neighborhood }}</td>
+              <td>
+                <a href="/vendors/?neighborhood={{ vendor.neighborhood.id }}">{{ vendor.neighborhood }}</a>
+              </td>
             </tr>
           {% endif %}
           {% if vendor.phone %}
@@ -223,13 +225,23 @@ td {
           {% if vendor.cuisine_tags.all %}
             <tr>
               <td>Cuisine(s): </td>
-              <td>{% for tag in vendor.cuisine_tags.all %}<strong>{{ tag }}</strong>{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+              <td>
+                {% for tag in vendor.cuisine_tags.all %}
+                  <a href="/vendors/?cuisine={{ tag.id }}">{{ tag }}</a>
+                  {% if not forloop.last %}, {% endif %}
+                {% endfor %}
+              </td>
             </tr>
           {% endif %}
           {% if vendor.feature_tags.all %}
             <tr>
               <td>Features: </td>
-              <td>{% for tag in vendor.feature_tags.all %}<strong>{{ tag }}</strong>{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+              <td>
+                {% for tag in vendor.feature_tags.all %}
+                  <a href="/vendors/?feature={{ tag.id }}">{{ tag }}</a>
+                  {% if not forloop.last %}, {% endif %}
+                {% endfor %}
+              </td>
             </tr>
           {% endif %}
         </table>
