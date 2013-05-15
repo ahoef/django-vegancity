@@ -253,8 +253,8 @@ td {
         <div id="map-area"> 
         <div id="map_canvas"></div>
         <br/>
-                <div id="review_button">
-          <a class="btn btn-custom btn-large hero" href="#reviewModal" data-toggle="modal">Write a Review</a>
+        <div id="review_button">
+          <a class="btn btn-custom btn-large hero" href="{% url 'new_review' vendor_id=vendor.id %}" data-toggle="modal">Write a Review</a>
         </div>
         <br>
       </div>
