@@ -18,14 +18,16 @@
 from django.core.urlresolvers import reverse
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-
 from settings import INSTALLED_APPS
-
 from vegancity import models, views
+from .api import build_api
 
 admin.autodiscover()
 
+
 urlpatterns = patterns('',
+    url(r'^api/', include(build_api().urls)),
+
     url(r'^admin/pending_approval/$', 'vegancity.admin_views.pending_approval', name="pending_approval"),
     url(r'^admin/pending_approval/count/$', 'vegancity.admin_views.pending_approval_count', name="pending_approval_count"),
     url(r'^admin/mailing_list/$', 'vegancity.admin_views.mailing_list', name="mailing_list"),
