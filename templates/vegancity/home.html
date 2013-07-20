@@ -58,31 +58,41 @@
   </div>
   <br>
 
+  <div class="container">
+    <div class="row">
+      <div class="span6">
+      </div>
+      <div class="span3">
+        <h3>Recently Added</h3>
+        <ul>
+          {% for vendor in recently_added %}
+            <li><a href="{{ vendor.get_absolute_url }}" class="blue">{{ vendor.name }}</a></li>
+          {% endfor %}
+        </ul>  
+        <h3>Recently Reviewed</h3>
+        <ul>
+          {% for vendor in recently_active %}
+            <li><a href="{{ vendor.get_absolute_url }}" class="blue">{{ vendor.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="span3">
+        <h3>Top Five</h3>
+        <ul>
+          {% for vendor in top_5 %}
+            <li><a href="{{ vendor.get_absolute_url }}" class="blue">{{ vendor.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <br>
+
   <div style="background-color: #F6F6F6;">
     <div class="container">
       <div class="row">
-	    <div class="span3">
-
-          <h3>Recently Added</h3>
-          <ul>
-            {% for vendor in recently_added %}
-              <li><a href="{{ vendor.get_absolute_url }}" class="blue">{{ vendor.name }}</a></li>
-            {% endfor %}
-          </ul>  
-          <h3>Recently Reviewed</h3>
-          <ul>
-            {% for vendor in recently_active %}
-              <li><a href="{{ vendor.get_absolute_url }}" class="blue">{{ vendor.name }}</a></li>
-            {% endfor %}
-          </ul>
-          <h3>Top Five</h3>
-          <ul>
-            {% for vendor in top_5 %}
-              <li><a href="{{ vendor.get_absolute_url }}" class="blue">{{ vendor.name }}</a></li>
-            {% endfor %}
-          </ul>
-        </div>
-        <div class="span3">
+        <div class="span4">
           <h3>Neighborhoods</h3>
           <ul>
             {% for neighborhood in neighborhoods %}
@@ -90,7 +100,7 @@
             {% endfor %}
           </ul>
         </div>
-        <div class="span3">
+        <div class="span4">
 	      <h3>Cuisines</h3>
           <ul>
             {% for cuisine in cuisine_tags %}
@@ -98,7 +108,7 @@
             {% endfor %}
           </ul>
         </div>
-        <div class="span3">
+        <div class="span4">
 	      <h3>Features</h3>
           <ul>
             {% for feature in feature_tags %}
