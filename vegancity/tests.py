@@ -46,7 +46,6 @@ class PageLoadTest(TestCase):
         PAGES_RETURNING_200 = [
             '/',
             '/vendors/',
-            '/blog/',
             '/about/',
             '/accounts/login/',
             '/accounts/register/',
