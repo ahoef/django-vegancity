@@ -110,7 +110,7 @@ var vendorMap = {
             // TODO make this more readable.
             image = new google.maps.MarkerImage(vegCategoryMarkerMapping[vegLevelCategoryMapping[vendor.vegLevel]]);
         } else if (this.mapType === 'detail') {
-            image = new google.maps.MarkerImage("//www.google.com/mapfiles/arrow.png");
+            image = new google.maps.MarkerImage("/static/images/vegphilly-carrot-map-logo.png");
         }
 
         marker = new google.maps.Marker({

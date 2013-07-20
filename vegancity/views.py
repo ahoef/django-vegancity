@@ -263,11 +263,6 @@ def account_edit(request):
 ## generic views
 ###########################
 
-class BlogView(ListView):
-    template_name = 'vegancity/blog.html'
-    model = models.BlogEntry
-
-
 class VendorDetailView(DetailView):
     template_name = 'vegancity/vendor_detail.html'
     queryset = models.Vendor.approved_objects.all()
