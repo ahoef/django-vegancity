@@ -13,10 +13,6 @@ var tChunks = {
 summaryCaptionTemplate = [tChunks.name, tChunks.address, tChunks.phone, tChunks.url, tChunks.seperator, tChunks.google_url].join(""),
 detailCaptionTemplate = [tChunks.name, tChunks.google_url].join(""),
 // TODO: all of this can be abstracted beyond veg level to allow coloring by anything
-pinApiTemplate = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=<%= letter %>|<%= bgColor %>|<%= fgColor %>",
-vpGreen = "008B00",
-vpOrange = "FAA732",
-vpBlue = "2A3655",
 vegLevelCategoryMapping = {
     1: 'vegan',
     2: 'vegetarian',
@@ -28,9 +24,9 @@ vegLevelCategoryMapping = {
     0: 'omni' // There is no zero in postgres, but we are coercing nulls to 0
 }
 vegCategoryMarkerMapping = {
-    'vegan': _.template(pinApiTemplate)({ letter: "V", bgColor: vpGreen, fgColor: "FFFFFF" }),
-    'vegetarian': _.template(pinApiTemplate)({ letter: "V", bgColor: vpOrange, fgColor: "FFFFFF" }),
-    'omni': _.template(pinApiTemplate)({ letter: "", bgColor: vpBlue, fgColor: "FFFFFF" })
+    'vegan': '/static/images/marker-vegan.png',
+    'vegetarian': '/static/images/marker-vegetarian.png',
+    'omni': '/static/images/marker-omni.png'
 };
 
 /////////////////////////////////////
