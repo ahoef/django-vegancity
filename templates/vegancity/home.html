@@ -5,17 +5,13 @@
 {% block title %}VegPhilly - Find Vegan and Vegetarian Food Options in Philadelphia{% endblock %}
 
 {% block header_extra %}
-
-
   <meta name="description" content="VegPhilly is a community driven vegan and vegetarian food search guide for Philadelphia. Browse restaurants, add a new restaurant, and write reviews.">
 
   <style>
-
-  #headline {
+    #headline {
     font-family: 'Sanchez', serif;
     text-align: center;
-  }
-
+    }
   </style>
 
 {% endblock %}
@@ -33,19 +29,19 @@
       <h1 id="headline">Find delicious vegan food in Philly</h1>
       <br>
       <form action="{% url 'vendors' %}" method="get">
-            <input id="vc-search-input" class="input-block-level" type="text" autocomplete="off" placeholder="e.g., 18th and Walnut, Royal Tavern, Falafel, 19143" autofocus="autofocus" name="query">
+        <input id="vc-search-input" class="input-block-level" type="text" autocomplete="off" placeholder="e.g., 18th and Walnut, Royal Tavern, Falafel, 19143" autofocus="autofocus" name="query">
       </form>
       <p>
         <strong>Hungry?</strong> Search for somewhere to eat by name, location, or cuisine. Read and post your own vegan-specific reviews. Spread the word.<br>Get involved in our effort to bring high-quality web applications to vegans and vegetarians in Philadelphia and beyond.
       </p>
-<br>
+      <br>
       <div class="row" style="text-align: center;">
 		<p>
-<h4>
-          <a class="btn btn-custom btn-large hero" href="{% url 'new_vendor' %}">Add a Restaurant</a>
-          <a class="btn btn-custom btn-large hero" href="#reviewModal" data-toggle="modal">Write a Review</a>
-          <a class="btn btn-custom btn-large hero" href="{% url 'about' %}">Learn More</a>
-</h4>
+          <h4>
+            <a class="btn btn-custom btn-large hero" href="{% url 'new_vendor' %}">Add a Restaurant</a>
+            <a class="btn btn-custom btn-large hero" href="#reviewModal" data-toggle="modal">Write a Review</a>
+            <a class="btn btn-custom btn-large hero" href="{% url 'about' %}">Learn More</a>
+          </h4>
         </p>
       </div>
     </div>
@@ -57,83 +53,61 @@
       </div>
       <div class="modal-body">
         <p>Please visit the detail page for a restaurant on the site. From there, click "Write a Review."</p>
-        <!-- commenting until bbird is a featured -->        
-        <!-- <p>Or, why not write a review of our featured restaurant, <a href="/vendors/review/6/">Blackbird Pizzeria</a>?</p> -->
       </div>
     </div>
-
-
-    <!-- <div class="row"> -->
-    <!--   <div class="span6"> -->
-    <!--     <h3>Featured - <a href="vendors/6/">Blackbird Pizzeria</a></h3> -->
-    <!--     <p>Blackbird Pizzeria has been serving awesome vegan pizza in Philly since 2010. In addition, they offer an outstanding selection of sandwiches, wraps, salads, and vegan desserts. You can order by the pie or by the slice, with takeout and delivery available as well. Our staff favorite pie is The Haymaker, with the South Philly running a close second. The Haymaker consists of crumbled seitan sausage, onions, garlic butter, and fresh oregano atop Daiya cheese. If Daiya doesn’t float your boat, we suggest the Tomato Pie topped with shaved elephant garlic and fresh herbs. This pizza really lets Blackbird’s crust shine: perfectly crisp on the outside and chewy on the inside.</p> -->
-    <!--     <p>For sandwiches we suggest the Seitan Cheesesteak. The thinly sliced seitan, grilled onions, bell peppers, and sautéed mushrooms combine to create the best vegan cheesesteak in the city.</p> -->
-    <!--     <p>Blackbird also serves Buffalo and BBQ wings and a selection of desserts from Vegan Treats. The wings are cornmeal-battered and extra-crispy. Blackbird’s decor recalls a classic New York slice shop, but with hardcore punk playing on the stereo. You might even hear your favorite Minor Threat track when you arrive.</p> -->
-    <!--     <\!-- <p><a href="vendors/6/">More Info...</a></p> -\-> -->
-    <!--   </div> -->
-    <!--   <div class="span6"> -->
-    <!--     <br>         -->
-    <!--     <br>         -->
-    <!--     <br>         -->
-    <!--     <a href="vendors/6/"><img src="{{ STATIC_URL }}images/haymaker.jpg" style="width: 500px" class="img-polaroid"></a> -->
-    <!--   </div> -->
-    <!-- </div> -->
   </div>
+  <br>
 
-<br>
+  <div style="background-color: #F6F6F6;">
+    <div class="container">
+      <div class="row">
+	    <div class="span3">
 
-
-
-    <div style="background-color: #F6F6F6;">
-      <div class="container">
-        <div class="row"> 
-	        <div class="span3">
-            
-            <h3>Recently Added</h3>
-            <ul>
-              {% for vendor in recently_added %}
-                <li><a href="{{ vendor.get_absolute_url }}" class="blue">{{ vendor.name }}</a></li>
-              {% endfor %}
-            </ul>  
-            <h3>Recently Reviewed</h3>
-            <ul>
-              {% for vendor in recently_active %}
-                <li><a href="{{ vendor.get_absolute_url }}" class="blue">{{ vendor.name }}</a></li>
-              {% endfor %}
-            </ul>
-            <h3>Top Five</h3>
-            <ul>
-              {% for vendor in top_5 %}
-                <li><a href="{{ vendor.get_absolute_url }}" class="blue">{{ vendor.name }}</a></li>
-              {% endfor %}
-            </ul>
-          </div>
-          <div class="span3">
+          <h3>Recently Added</h3>
+          <ul>
+            {% for vendor in recently_added %}
+              <li><a href="{{ vendor.get_absolute_url }}" class="blue">{{ vendor.name }}</a></li>
+            {% endfor %}
+          </ul>  
+          <h3>Recently Reviewed</h3>
+          <ul>
+            {% for vendor in recently_active %}
+              <li><a href="{{ vendor.get_absolute_url }}" class="blue">{{ vendor.name }}</a></li>
+            {% endfor %}
+          </ul>
+          <h3>Top Five</h3>
+          <ul>
+            {% for vendor in top_5 %}
+              <li><a href="{{ vendor.get_absolute_url }}" class="blue">{{ vendor.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="span3">
           <h3>Neighborhoods</h3>
-            <ul>
-              {% for neighborhood in neighborhoods %}
-                <li><a href="/vendors/?neighborhood={{ neighborhood.id }}" class="blue">{{ neighborhood.name }}</a></li>
-              {% endfor %}
-            </ul>
-          </div>
-          <div class="span3">
-	        <h3>Cuisines</h3>
-            <ul>
-              {% for cuisine in cuisine_tags %}
-                <li><a href="/vendors/?cuisine={{ cuisine.id }}" class="blue">{{ cuisine.description }}</a></li>
-              {% endfor %}
-            </ul>
-          </div>
-          <div class="span3">
-	        <h3>Features</h3>
-            <ul>
-              {% for feature in feature_tags %}
-                <li><a href="/vendors/?feature={{ feature.id }}" class="blue">{{ feature.description }}</a></li>
-              {% endfor %}
-            </ul>
-          </div>
+          <ul>
+            {% for neighborhood in neighborhoods %}
+              <li><a href="/vendors/?neighborhood={{ neighborhood.id }}" class="blue">{{ neighborhood.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="span3">
+	      <h3>Cuisines</h3>
+          <ul>
+            {% for cuisine in cuisine_tags %}
+              <li><a href="/vendors/?cuisine={{ cuisine.id }}" class="blue">{{ cuisine.description }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="span3">
+	      <h3>Features</h3>
+          <ul>
+            {% for feature in feature_tags %}
+              <li><a href="/vendors/?feature={{ feature.id }}" class="blue">{{ feature.description }}</a></li>
+            {% endfor %}
+          </ul>
         </div>
       </div>
     </div>
-  {% endblock %}
+  </div>
+{% endblock %}
 
