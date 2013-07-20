@@ -1,13 +1,13 @@
 $(document).ready(function() {
     var legendRowTemplate = ['<tr><td><img src="',
-                             pinApiTemplate,
+                             '<%= icon %>',
                              '"> <%= pinSummary %>',
                              '</tr></td>'].join(""),
-    // TODO : this is code repetition. Refactor it.
+
     vegLevels = [
-        { pinSummary: "Vegan", letter: "V", bgColor: vpGreen, fgColor: "FFFFFF" },
-        { pinSummary: "Vegetarian", letter: "V", bgColor: vpOrange, fgColor: "FFFFFF" },
-        { pinSummary: "Non-Vegetarian", letter: "", bgColor: vpBlue, fgColor: "FFFFFF" }
+        { pinSummary: "Vegan", icon: vegCategoryMarkerMapping['vegan'] },
+        { pinSummary: "Vegetarian", icon: vegCategoryMarkerMapping['vegetarian'] },
+        { pinSummary: "Non-Vegetarian", icon: vegCategoryMarkerMapping['omni'] }
     ];
 
     vendorMap.initialize("#map_canvas", vendors, "summary", autoResize);
@@ -21,9 +21,7 @@ $(document).ready(function() {
     _.each(vegLevels, function (vegLevel) {
         var tableRow = _.template(legendRowTemplate)({
             pinSummary: vegLevel.pinSummary,
-            letter: vegLevel.letter,
-            bgColor: vegLevel.bgColor,
-            fgColor: vegLevel.fgColor
+            icon: vegLevel.icon
         });
         $("#legend-table tbody").append(tableRow);
     });
