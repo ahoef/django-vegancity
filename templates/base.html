@@ -44,10 +44,8 @@
               <ul class="nav pull-right">
 		        <li><a href="{% url 'vendors' %}"><p class="vc-nav-item">Restaurants</p></a></li>
                 <li><a href="{% url 'about' %}"><p class="vc-nav-item">About</p></a></li>
-                <li><a href="{% url 'blog' %}"><p class="vc-nav-item">Blog</p></a></li>
                 {% if user.is_authenticated %}
                   <li><a href="{% url 'my_account' %}"><p class="vc-nav-item">My Account (<u>{{user}}</u>)</p></a></li>
-
                   <li><a href="{% url 'logout' %}"><p class="vc-nav-item">Logout</p></a></li>
                 {% else %}
                   <li><a href="{% url 'login' %}"><p class="vc-nav-item">Login</p></a></li>
