@@ -283,7 +283,7 @@ td {
                 </div>
                 <br>
                 <div class="span5">
-                  <h4>entered by <a href="{% url 'user_profile' username=review.author.username %}">{{ review.author }}</a> on {{ review.created }}</h4>
+                  <h4>entered by <a href="{% url 'user_profile' username=review.author.username %}">{{ review.author }}</a> on {{ review.created|date:"M. d, Y" }}</h4>
                 </div>
               </div>
               <br>
