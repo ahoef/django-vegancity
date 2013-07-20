@@ -18,20 +18,15 @@
 from django.core.urlresolvers import reverse
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from tastypie.api import Api
-
 from settings import INSTALLED_APPS
-
-from vegancity import models, views, api
+from vegancity import models, views
+from .api import build_api
 
 admin.autodiscover()
 
-v1_api = Api(api_name='v1')
-v1_api.register(api.VendorResource())
-v1_api.register(api.ReviewResource())
 
 urlpatterns = patterns('',
-    url(r'^api/', include(v1_api.urls)),
+    url(r'^api/', include(build_api().urls)),
 
     url(r'^admin/pending_approval/$', 'vegancity.admin_views.pending_approval', name="pending_approval"),
     url(r'^admin/pending_approval/count/$', 'vegancity.admin_views.pending_approval_count', name="pending_approval_count"),

@@ -6,6 +6,14 @@ from tastypie.utils import trailing_slash
 from vegancity import models
 from .search import master_search
 
+from tastypie.api import Api
+
+def build_api():
+    v1_api = Api(api_name='v1')
+    v1_api.register(VendorResource())
+    v1_api.register(ReviewResource())
+    return v1_api
+
 class VendorResource(ModelResource):
     reviews = fields.ToManyField('vegancity.api.ReviewResource', 
                                  'review_set',
