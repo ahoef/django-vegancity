@@ -26,6 +26,11 @@ from vegancity import models, views
 admin.autodiscover()
 
 urlpatterns = patterns('',
+    url(r'^admin/pending_approval/$', 'vegancity.admin_views.pending_approval', name="pending_approval"),
+    url(r'^admin/pending_approval/count/$', 'vegancity.admin_views.pending_approval_count', name="pending_approval_count"),
+    url(r'^admin/mailing_list/$', 'vegancity.admin_views.mailing_list', name="mailing_list"),
+    url(r'^admin/', include(admin.site.urls)),
+
     url(r'^$', views.home, name='home'),
     url(r'^vendors/$', views.vendors, name="vendors"),
     url(r'^vendors/add/$', views.new_vendor, name="new_vendor"),
@@ -45,8 +50,4 @@ urlpatterns = patterns('',
     url(r'^accounts/profile/edit/$', 'vegancity.views.account_edit', name='account_edit'),
 
     url(r'^users/(?P<username>[a-zA-Z0-9_@.+-]+)/$', 'vegancity.views.user_profile', name='user_profile'),
-    url(r'^admin/pending_approval/$', 'vegancity.admin_views.pending_approval', name="pending_approval"),
-    url(r'^admin/pending_approval/count/$', 'vegancity.admin_views.pending_approval_count', name="pending_approval_count"),
-    url(r'^admin/mailing_list/$', 'vegancity.admin_views.mailing_list', name="mailing_list"),
-    url(r'^admin/', include(admin.site.urls)),
 )

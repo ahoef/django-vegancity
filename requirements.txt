@@ -1,5 +1,5 @@
-Django==1.4
-south
-Gunicorn
-coverage
-psycopg2
+Django==1.5
+South==0.8.1
+gunicorn==17.5
+coverage==3.6
+psycopg2==2.5.1
