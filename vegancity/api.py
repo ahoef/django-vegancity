@@ -24,17 +24,17 @@ class VendorResource(ModelResource):
                                      full=True)
     cuisine_tags = fields.ToManyField('vegancity.api.CuisineTagResource',
                                       'cuisine_tags',
-                                      related_name='vendor',
+                                      related_name='vendors',
                                       null=True,
                                       full=True)
     feature_tags = fields.ToManyField('vegancity.api.FeatureTagResource',
                                       'feature_tags',
-                                      related_name='vendor',
+                                      related_name='vendors',
                                       null=True,
                                       full=True)
     veg_level = fields.ToOneField('vegancity.api.VegLevelResource',
                                   'veg_level',
-                                  related_name='vendor',
+                                  related_name='vendors',
                                   null=True,
                                   full=True)
 
@@ -68,8 +68,8 @@ class VendorResource(ModelResource):
 
     def dehydrate_best_vegan_dish(self, bundle):
         vegan_dish = bundle.obj.best_vegan_dish()
-        return vegan_dish.name
-
+        return vegan_dish
+    
     def dehydrate_food_rating(self, bundle):
         return bundle.obj.food_rating()
 
@@ -78,7 +78,7 @@ class VendorResource(ModelResource):
 
     class Meta:
         queryset = models.Vendor.approved_objects.all()
-        resource_name = 'vendor'
+        resource_name = 'vendors'
         fields = [
             'id', 'name', 'address', 'website', 'phone', 'latitude',
             'longitude', 'notes', 'resource_uri'
@@ -98,7 +98,7 @@ class ReviewResource(ModelResource):
 
     class Meta:
         queryset = models.Review.approved_objects.all()
-        resource_name = 'review'
+        resource_name = 'reviews'
         fields = [
             'id', 'atmosphere_rating', 'food_rating', 'title', 'content',
             'created', 'modified', 'suggested_feature_tags',
