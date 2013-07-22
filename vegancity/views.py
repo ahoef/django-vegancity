@@ -22,7 +22,7 @@ from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum
+from django.db.models import Sum, Max, Count, Avg
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, TemplateView
@@ -32,8 +32,6 @@ import django.contrib.auth.views
 from vegancity import forms
 from vegancity import models
 from vegancity import search
-
-from django.db.models import Max, Count
 
 def password_change(request):
     response = django.contrib.auth.views.password_change(
@@ -51,7 +49,9 @@ def home(request):
 
     vendors = models.Vendor.approved_objects.all()
     vendors_with_reviews = vendors.filter(review__approved=True).distinct()
-    top_5 = vendors.annotate(score=Sum('review__food_rating')).exclude(score=None).order_by('-score')[:5]
+    top_5 = vendors.annotate(fscore=Avg('review__food_rating')).annotate(ascore=Avg('review__atmosphere_rating'))\
+                                                              .exclude(fscore=None).exclude(ascore=None)\
+                                                                                  .order_by('-fscore', '-ascore')[:5]
     recently_active = vendors_with_reviews.annotate(score=Max('review__created')).exclude(score=None).order_by('-score')[:5]
     recently_added = vendors.exclude(created=None).order_by('-created')[:5]
 
