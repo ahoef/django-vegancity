@@ -92,6 +92,13 @@
             <li><a href="{{ vendor.get_absolute_url }}" class="blue">{{ vendor.name }}</a></li>
           {% endfor %}
         </ul>
+        <h3>Most Reviewed</h3>
+        <ul>
+          {% for vendor in most_reviewed %}
+            <li><a href="{{ vendor.get_absolute_url }}" class="blue">{{ vendor.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
       <div class="span6 visible-desktop">
         <a class="twitter-timeline" data-dnt="true" href="https://twitter.com/VegPhilly" data-widget-id="358633092363190272">Tweets by @VegPhilly</a>
         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);};}(document,"script","twitter-wjs");</script>

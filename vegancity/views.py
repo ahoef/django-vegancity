@@ -54,6 +54,7 @@ def home(request):
                                                                                   .order_by('-fscore', '-ascore')[:5]
     recently_active = vendors_with_reviews.annotate(score=Max('review__created')).exclude(score=None).order_by('-score')[:5]
     recently_added = vendors.exclude(created=None).order_by('-created')[:5]
+    most_reviewed = vendors_with_reviews.annotate(count=Count('review')).order_by('-count')[:5]
 
     neighborhoods = models.Neighborhood.objects.all().annotate(vcount=Count('vendor')).order_by('-vcount')[:21]
     cuisine_tags = models.CuisineTag.objects.with_vendors().annotate(vcount=Count('vendor')).order_by('-vcount')[:21]
@@ -61,6 +62,7 @@ def home(request):
 
     ctx = {
         'top_5': top_5,
+        'most_reviewed': most_reviewed,
         'recently_added': recently_added,
         'recently_active' : recently_active,
         'neighborhoods': neighborhoods,
