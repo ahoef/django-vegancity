@@ -80,8 +80,7 @@ class VendorResource(ModelResource):
         queryset = models.Vendor.approved_objects.all()
         resource_name = 'vendors'
         fields = [
-            'id', 'name', 'address', 'website', 'phone', 'latitude',
-            'longitude', 'notes', 'resource_uri'
+            'id', 'name', 'address', 'website', 'phone', 'notes', 'resource_uri'
         ]
 
 
