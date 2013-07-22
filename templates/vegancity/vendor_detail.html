@@ -32,6 +32,7 @@
 <style>
 
 
+
 h2 {
     font-family: 'Sanchez', serif;
     font-size: 45px;
@@ -147,15 +148,25 @@ td {
     /*clear: both;*/
 }
 
-/*#button-section {
+#button-section {
+    text-align: center;
+    margin: auto;
     width: 100%;
-    margin-top: 15px;
-    margin-bottom: 25px;
-    position: relative;
-}*/
+    border: 1px solid red;
+}
+
+#button-section p {
+  display: inline;
+}
+
 
 #arrow {
-  width: 175px;
+  width: 150px;
+  display: inline;
+  /*position: relative;
+   right: 150px;
+
+
   /*
   position: absolute;
   right: 615px;
@@ -164,12 +175,19 @@ td {
 
 #help-text {
     width: 400px;
-    /*position: absolute;
-    top: 15px;
-    right: 205px;*/
+    text-align: left;
     float: right;
-    margin: 20px 200px 30px 5px;
+    position: relative;
+    right: 200px;
 
+    /*position: relative;
+    left: 550px;
+    bottom: 50px;
+    position: absolute;
+    top: 15px;
+    right: 205px;
+    float: right;
+    margin: 20px 200px 30px 5px;*/
 }
 
 .button {
@@ -180,9 +198,12 @@ td {
   border-radius: 27px;
   font-size: 22px;
   color: #ffffff;
+  /*position: relative;
+  top: 30px;
+  right: 250px;
   float: left;
   margin: 50px 10px 50px 200px;
-  /*top: 75px;
+  top: 75px;
   left: 200px;*/
 }
 
@@ -310,7 +331,7 @@ td {
               <a class="button" href="#reviewModal" data-toggle="modal">Write a Review</a>
             <img id="arrow" class="hidden-phone" src="{{ STATIC_URL }}images/arrow.png">
             <div class="hidden-phone" id="help-text"> <h3>Why write reviews on VegPhilly?</h3>
-            <p>Your reviews are some of the most important aspects of this site. Reviews help other users get a feeling for what their experience at a restaurant might be like, and we encourage you to write as many as you'd like! If you see an issue with this listing, <a href="mailto:vegphilly@gmail.com">contact us</a>.</p>
+            <p>Reviews help other users get a feeling for what their experience at a restaurant might be like. Your reviews are some of the most important aspects of this site, and we encourage you to write as many as you'd like! If you see an issue with this listing, <a href="mailto:vegphilly@gmail.com">contact us</a>.</p>
             </div>
           </div>
        </div>
