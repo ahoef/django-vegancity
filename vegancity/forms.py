@@ -180,13 +180,6 @@ class SearchForm(forms.Form):
     feature = forms.ModelChoiceField(queryset=models.FeatureTag.objects.with_vendors().distinct(),
                                      required=False)
     
-    class Media:
-        js = (
-            'js/map.js',
-            'js/vendors.js',
-            'js/search_form.js',
-            )
-
     def __init__(self, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
 
