@@ -34,6 +34,7 @@ import geocode
 
 from vegancity.models import FeatureTag, CuisineTag, Vendor
 
+from django.contrib.gis.geos import Point
 
 def fluff_split(query):
     "takes a query and returns a list of non-fluff tokens"
@@ -168,29 +169,7 @@ def perform_address_search(initial_queryset, query):
             return []
         latitude, longitude, neighborhood = geocode_result
 
-        point_a = (latitude, longitude)
+        point = Point(x=longitude, y=latitude, srid=4326)
+        vendors = Vendor.objects.filter(location__dwithin=(point, .004))
 
-        # TODO test this with a reasonable number of latitudes and longitudes
-        lat_flr, lat_ceil, lng_flr, lng_ceil = geocode.bounding_box_offsets(point_a, 0.75)
-
-        vendors_in_box = vendors.filter(latitude__gte=lat_flr,
-                                     latitude__lte=lat_ceil,
-                                     longitude__gte=lng_flr,
-                                     longitude__lte=lng_ceil,)
-
-
-        vendor_distances = geocode.distances(point_a, 
-                                             [(vendor.latitude, vendor.longitude)
-                                              for vendor in vendors_in_box])
-
-
-        vendor_pairs = zip(vendors_in_box, vendor_distances)
-
-        sorted_vendor_pairs = sorted(vendor_pairs, key=lambda pair: pair[1][1])
-
-        vendor_matches = filter(lambda pair: geocode.meters_to_miles(pair[1][1]) <= 0.75,
-                                 sorted_vendor_pairs)
-
-        vendors = map(lambda x: x[0], vendor_matches)
-            
         return vendors
