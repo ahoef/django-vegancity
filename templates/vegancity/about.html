@@ -43,6 +43,14 @@ ul {
 
 #vegphilly-icons {
   text-align: center;
+  margin-top: 20px;
+}
+
+#vegphilly-icons img
+{
+  max-height: 100px;
+  margin-left: 3%;
+  margin-right: 3%;
 }
 
 .carousel {
@@ -78,7 +86,7 @@ ul {
     <div class="span4">
       <img class="aboutpic" src="{{ STATIC_URL }}images/steve.jpg">
       <h5>Steve Lamb</h5>
-      <h6>Software Engineer</h6>
+      <h6>Software Engineering</h6>
       <div class="bio"><p>Steve is responsible for all things technical: coding, database administration, and deployment. He initially envisioned VegPhilly after relocating from New York City, where he used similar resources to find vegan food. He loves <a href="http://www.gnu.org/philosophy/free-sw.html" target="_blank" rel="nofollow">free software</a> and all things geek. You can usually find him with his nose in a science fiction book or eating at one of the awesome restaurants listed on this site. He puts <a href="http://en.wikipedia.org/wiki/Nutritional_yeast" target="_blank" rel="nofollow">nutritional yeast</a> on pretty much everything.</p></div>
     </div>
     <div class="span4">
@@ -90,7 +98,7 @@ ul {
     <div class="span4">
       <img class="aboutpic" src="{{ STATIC_URL }}images/zack.jpg">
       <h5>Zack Birmingham</h5>
-      <h6>Designer</h6>
+      <h6>Design</h6>
       <div class="bio"><p>Zack is a Brooklyn-based graphic and web designer. When he's not designing or playing guitar with the New York-based metal band Scowl, he can be found stuffing his face with vegan food (that's most assuredly covered in hot sauce) and biking the mean streets of New York City.
         <br><br>
 Check out <a href="http://justadudeintheworld.info/" target="_blank">Zack's Portfolio</a> for more info!
@@ -103,21 +111,21 @@ Check out <a href="http://justadudeintheworld.info/" target="_blank">Zack's Port
     <div class="span4">
     <img class="aboutpic" src="{{ STATIC_URL }}images/alexandra.jpg">
     <h5>Alexandra Hoefinger</h5>
-    <h6>Front End Developer</h6>
-    <div class="bio"><p>Alexandra breaks and fixes VegPhilly CSS and contributes to a little bit of everything else. She works at <a href="http://www.bethesdaproject.org" target="_blank">Bethesda Project</a>, runs an <a href="http://www.philodendrondesigns.etsy.com" target="_blank">Etsy shop</a>, and also contributes to <a href="http://www.shetechphilly.com" target="_blank">She Tech Philly</a>. Find her on twitter: <a href="http://www.twitter.com/ahoefinger" target="_blank" rel="nofollow">@ahoefinger</a></p></div>
+    <h6>Front End</h6>
+    <div class="bio"><p>Alexandra breaks and fixes VegPhilly CSS and contributes to a little bit of everything else. She works at <a href="http://www.punkave.com" target="_blank">P'unk Avenue</a>, runs an <a href="http://www.philodendrondesigns.etsy.com" target="_blank">Etsy shop</a>, and also contributes to <a href="http://www.shetechphilly.com" target="_blank">She Tech Philly</a>. Find her on twitter: <a href="http://www.twitter.com/ahoefinger" target="_blank" rel="nofollow">@ahoefinger</a></p></div>
     </div>
 
     <div class="span4">
-    <img class="aboutpic" src="http://placehold.it/230x230">
+    <img class="aboutpic" src="http://placekitten.com/230/230">
     <h5>Christopher Wimbrow</h5>
-    <h6>Software Engineer</h6>
-    <div class="bio"><p>Kitty ipsum dolor sit amet, lay down in your way scratched eat hiss, claw judging you judging you sleep in the sink eat the grass eat run toss the mousie. Eat catnip litter box run I don't like that food hairball, puking claw eat knock over the lamp. I don't like that food judging you shed everywhere scratched.</p></div>
+    <h6>Software Engineering</h6>
+    <div class="bio"><p>Chris is a software developer writing code and fixing bugs for VegPhilly. He enjoys <a href="http://www.flickr.com/photos/ohrwurm/">photography</a>, drinking coffee, running, and trying out new restaurants.</p></div>
     </div>
     <div class="span4">
-    <img class="aboutpic" src="http://placehold.it/230x230">
+    <img class="aboutpic" src="http://placekitten.com/240/240">
     <h5>Kim Showell</h5>
     <h6>Social Media</h6>
-    <div class="bio"><p>Kitty ipsum dolor sit amet, lay down in your way scratched eat hiss, claw judging you judging you sleep in the sink eat the grass eat run toss the mousie. Eat catnip litter box run I don't like that food hairball, puking claw eat knock over the lamp. I don't like that food judging you shed everywhere scratched, lay down in your way shed everywhere I don't like that food stretching chuf hairball.</p></div>
+    <div class="bio"><p>Kim is the social media lead and provides editing and general admin support. She enjoys vegan baking, traveling and exploring new places, and treasure hunting at flea markets and thrift shops.</p></div>
     </div>
   </div>
   <hr>
@@ -135,20 +143,20 @@ Check out <a href="http://justadudeintheworld.info/" target="_blank">Zack's Port
   </div>
   <div class="span4">
     <h5>You!</h5>
-    <div class="bio"><p>Got ideas for how to make this site better? <a href="mailto:vegphilly@gmail.com">Get in touch</a> with us or find VegPhilly on <a href="http://github.com/steventlamb/django-vegancity" target="_blank">Github</a> to dive right in.</p></div>
+    <div class="bio"><p>Got ideas for how to make this site better? <a href="mailto:vegphilly@gmail.com">Get in touch</a> with us! We'd love some help with distributing our flyers and spreading the word about VegPhilly. </p></div>
   </div>
 </div>
 <br>
   <hr>
   <br>
-  <h3>Check Out Our Flyers!</h3>
+ <!--  <h3>Check Out Our Flyers!</h3>
   <br>
   <p>Browse through the gallery below to see our designs, or <a href="#">download and print a sheet of four</a>. If you have ideas for a flyer, we'd love to include your designs here too. <a href="mailto:vegphilly@gmail.com">Let's talk!</a></p>
   <p>
   <br>
   <div id="this-carousel-id" class="carousel slide"><!-- class of slide for animation -->
-  <div class="carousel-inner">
-    <div class="item active"><!-- class of active since it's the first item -->
+  <!-- <div class="carousel-inner">
+    <div class="item active">
       <img src="{{ STATIC_URL }}images/vegphilly-blackmetal-flyer.jpg" class="carousel-item" alt="VegPhilly Black Metal Flyer"/>
       <div class="carousel-caption">
         <p>'The Dark Side' by Zack Birmingham</p>
@@ -166,12 +174,6 @@ Check out <a href="http://justadudeintheworld.info/" target="_blank">Zack's Port
         <p>by Jeremie Rose Wimbrow</p>
       </div>
     </div>
-    <!--<div class="item">
-      <img src="{{ STATIC_URL }}images/veg_3.png" class="carousel-item" alt="VegPhilly Flyer Version 3" />
-      <div class="carousel-caption">
-        <p>by Jeremie Rose Wimbrow</p>
-      </div>
-    </div>-->
     <div class="item">
       <img src="{{ STATIC_URL }}images/veg_4.png" class="carousel-item" alt="VegPhilly Flyer Version 4" />
       <div class="carousel-caption">
@@ -190,26 +192,23 @@ Check out <a href="http://justadudeintheworld.info/" target="_blank">Zack's Port
         <p>"Meow" by Alexandra Hoefinger</p>
       </div>
     </div>
-  </div><!-- /.carousel-inner -->
-  <!--  Next and Previous controls below
-        href values must reference the id for this carousel -->
+  </div>
     <a class="carousel-control left" href="#this-carousel-id" data-slide="prev">&lsaquo;</a>
     <a class="carousel-control right" href="#this-carousel-id" data-slide="next">&rsaquo;</a>
-</div>
-<br>
+</div> -->
+<!-- <br>
 <hr>
-<br>
-  <h4>We're proud to bring you VegPhilly thanks to the following tools:</h4>
+<br> -->
+  <h4>VegPhilly is built with:</h4>
   <div class="row">
     <div class="span12">
       <br>
       <div class="row" id="vegphilly-icons">
-      <img src="{{ STATIC_URL }}images/linode.png" style="max-height: 100px;">
-      <img src="{{ STATIC_URL }}images/debian.png" style="max-height: 100px;">
-      <img src="{{ STATIC_URL }}images/nginx.gif" style="max-height: 100px;">
-      <img src="{{ STATIC_URL }}images/github.jpg" style="max-height: 100px;">
-      <img src="{{ STATIC_URL }}images/djangopython.jpg" style="max-height: 100px;">
-      <img src="{{ STATIC_URL }}images/postgres.png" style="max-height: 100px;">
+      <img src="{{ STATIC_URL }}images/debian.png" >
+      <img src="{{ STATIC_URL }}images/nginx.gif" >
+      <img src="{{ STATIC_URL }}images/github.jpg" >
+      <img src="{{ STATIC_URL }}images/djangopython.jpg" >
+      <img src="{{ STATIC_URL }}images/postgres.png" >
     </div>
     </div>
   </div>
