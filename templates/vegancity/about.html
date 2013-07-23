@@ -9,28 +9,60 @@
 {% block header_extra %}
 
 <meta name="description" content="Read the story behind VegPhilly, meet the founders and contributors, and see the free software tools used to make the site.">
+
+<script>
+  $(document).ready(function(){
+    $('.carousel').carousel();
+  });
+</script>
+
 <style type="text/css">
 
-body {
-background: url({{STATIC_URL}}images/about_background.jpg);
-background-repeat: no-repeat;
-background-position: center center;
 
+h5 {
+  padding-top: 12px;
+  padding-bottom: 3px;
 }
 
-img {
-  padding-left: 15px;
-  padding-right: 15px;
+ul {
+  margin-right: 125px;
+  margin-left: 100px;
 }
 
-#content_main, #headline_main {
-  background-color: #ffffff; 
-  opacity: 0.9;
+.aboutpic {
+  border-radius: 100%;
+  width: 230px;
+  height: 230px;
+}
+
+.bio {
+  padding-left: 35px;
+  padding-right: 35px;
+  text-align: left;
 }
 
 #vegphilly-icons {
   text-align: center;
+  margin-top: 20px;
 }
+
+#vegphilly-icons img
+{
+  max-height: 100px;
+  margin-left: 3%;
+  margin-right: 3%;
+}
+
+.carousel {
+  width: 55%;
+  min-width: 400px;
+  margin: 0 auto;
+}
+
+.carousel-item {
+  margin: 0 auto;
+}
+
 </style>
 {% endblock %}
 
@@ -39,66 +71,144 @@ img {
   <div class="row">
     <div class="span12">
       <h5>VegPhilly helps answer the inevitable question: where are we going to eat?</h5>
-
-      <p>We founded VegPhilly because we wanted more detailed and accurate information about vegan and vegan-friendly establishments in our city. We hope to create the most comprehensive list of vegan restaurants and places that offer vegan options, reviewed and rated. We will also feature new vegan foods and places to eat.</p>
-      <p>We need your help to make the site better. After creating an account, you can add new restaurants, write reviews, and even add your favorite vegan dishes. Please contact us at <a href="mailto:vegphilly@gmail.com">vegphilly@gmail.com</a> if you have any comments, questions, or suggestions.</p>
-<p>VegPhilly is built with free and open source software. Our vision is to produce a framework for a vegan website that is easily-deployable in any city. If you are interested in using our code to start a site in your city, contact us or check out our source code on <a href="http://github.com/vegphilly/vegphilly.com" target="_blank">Github</a>.</p>
+      <br>
+      <ul>
+      <li>We founded VegPhilly because we wanted more detailed and accurate information about vegan and vegan-friendly establishments in our city. We hope to create the most comprehensive list of vegan restaurants and places that offer vegan options, reviewed and rated. We will also feature new vegan foods and places to eat.</li><br>
+      <li>We need your help to make the site better. After creating an account, you can add new restaurants, write reviews, and even add your favorite vegan dishes. Please contact us at <a href="mailto:vegphilly@gmail.com">vegphilly@gmail.com</a> if you have any comments, questions, or suggestions.</li><br>
+<li>VegPhilly is built with free and open source software. Our vision is to produce a framework for a vegan website that is easily-deployable in any city. If you are interested in using our code to start a site in your city, contact us or check out our source code on <a href="http://github.com/steventlamb/django-vegancity" target="_blank">Github</a>.</li>
     </div>
   </div>
   <br>
+  <br>
+  <h3>Meet the Team!</h3>
   <div class="row" style="text-align: center">
-    <h3>Meet the Team!</h3>
-    <br>    
+    <br>
     <div class="span4">
-      <!-- <img src="http://www.gravatar.com/avatar/?size=250"> -->
+      <img class="aboutpic" src="{{ STATIC_URL }}images/steve.jpg">
       <h5>Steve Lamb</h5>
-      <p>Technical Lead</p>
-      <p>Steve is responsible for all things technical: coding, database administration, and deployment. He initially envisioned VegPhilly after relocating from New York City, where he used similar resources to find vegan food. He loves <a href="http://www.gnu.org/philosophy/free-sw.html" target="_blank" rel="nofollow">free software</a> and all things geek. You can usually find him with his nose in a science fiction book or eating at one of the awesome restaurants listed on this site. He puts <a href="http://en.wikipedia.org/wiki/Nutritional_yeast" target="_blank" rel="nofollow">nutritional yeast</a> on pretty much everything.</p>
+      <h6>Software Engineering</h6>
+      <div class="bio"><p>Steve is responsible for all things technical: coding, database administration, and deployment. He initially envisioned VegPhilly after relocating from New York City, where he used similar resources to find vegan food. He loves <a href="http://www.gnu.org/philosophy/free-sw.html" target="_blank" rel="nofollow">free software</a> and all things geek. You can usually find him with his nose in a science fiction book or eating at one of the awesome restaurants listed on this site. He puts <a href="http://en.wikipedia.org/wiki/Nutritional_yeast" target="_blank" rel="nofollow">nutritional yeast</a> on pretty much everything.</p></div>
     </div>
-    <div class="span4">    
-      <!-- <img src="http://www.gravatar.com/avatar/?size=250"> -->
+    <div class="span4">
+      <img class="aboutpic" src="{{ STATIC_URL }}images/jonathancropped.jpg">
       <h5>Jonathan Farbowitz</h5>
-      <p>Content & QA Lead</p>
-      <p>Jonathan writes, edits, and updates all the text for the site. He grew up in Allentown, Pennsylvania. In his spare time he enjoys baking vegan desserts, fixing bicycles, and drinking tea.</p>
+      <h6>Content & QA</h6>
+      <div class="bio"><p>Jonathan writes, edits, and updates all content for VegPhilly. He also tests the site regularly for bugs. Jonathan is a freelance copyeditor and proofreader based in Philadelphia. In his spare time, he enjoys baking vegan desserts, fixing bicycles, and drinking tea.</p></div>
     </div>
-    <div class="span4">    
-      <!-- <img src="http://www.gravatar.com/avatar/?size=250"> -->
+    <div class="span4">
+      <img class="aboutpic" src="{{ STATIC_URL }}images/zack.jpg">
       <h5>Zack Birmingham</h5>
-      <p>Design Lead</p>
-      <p>
-        Zack is a Brooklyn-based graphic and web designer. When he's not designing or playing guitar with the New York-based metal band Scowl, he can be found stuffing his face with vegan food (that's most assuredly covered in hot sauce) and biking the mean streets of New York City.
+      <h6>Design</h6>
+      <div class="bio"><p>Zack is a Brooklyn-based graphic and web designer. When he's not designing or playing guitar with the New York-based metal band Scowl, he can be found stuffing his face with vegan food (that's most assuredly covered in hot sauce) and biking the mean streets of New York City.
         <br><br>
-Check out <a href="http://justadudeintheworld.info/" target="_blank">Zack's Portfolio</a> for more info!        
-      </p>
-    </div>    
+Check out <a href="http://justadudeintheworld.info/" target="_blank">Zack's Portfolio</a> for more info!
+      </p></div>
+    </div>
   </div>
-  <hr>
-  <div class="row">
-    <div class="span12">    
-    <h4>Contributors</h4>
+  <div class="row" style="text-align: center">
     <br>
+    <br>
+    <div class="span4">
+    <img class="aboutpic" src="{{ STATIC_URL }}images/alexandra.jpg">
     <h5>Alexandra Hoefinger</h5>
-    <p>Alexandra breaks and fixes VegPhilly CSS and contributes to a little bit of everything else. She works at <a href="http://www.bethesdaproject.org" target="_blank">Bethesda Project</a>, runs an <a href="http://www.philodendrondesigns.etsy.com" target="_blank">Etsy shop</a>, and loves <a href="http://www.reddit.com/r/aww" target="_blank" rel="nofollow">r/aww</a>.
-    <br>
-    <br>
-    <h5>Jeff Frankl</h5>
-    <p>Jeff prototyped initial designs for the site; advised on fonts, colors, and branding; and plotted out much of the functionality of the site. See what Jeff's up to at <a href="http://www.frankl.org" target="_blank">frankl.org</a>.</p>
+    <h6>Front End</h6>
+    <div class="bio"><p>Alexandra breaks and fixes VegPhilly CSS and contributes to a little bit of everything else. She works at <a href="http://www.punkave.com" target="_blank">P'unk Avenue</a>, runs an <a href="http://www.philodendrondesigns.etsy.com" target="_blank">Etsy shop</a>, and also contributes to <a href="http://www.shetechphilly.com" target="_blank">She Tech Philly</a>. Find her on twitter: <a href="http://www.twitter.com/ahoefinger" target="_blank" rel="nofollow">@ahoefinger</a></p></div>
+    </div>
+
+    <div class="span4">
+    <img class="aboutpic" src="http://placekitten.com/230/230">
+    <h5>Christopher Wimbrow</h5>
+    <h6>Software Engineering</h6>
+    <div class="bio"><p>Chris is a software developer writing code and fixing bugs for VegPhilly. He enjoys <a href="http://www.flickr.com/photos/ohrwurm/">photography</a>, drinking coffee, running, and trying out new restaurants.</p></div>
+    </div>
+    <div class="span4">
+    <img class="aboutpic" src="http://placekitten.com/240/240">
+    <h5>Kim Showell</h5>
+    <h6>Social Media</h6>
+    <div class="bio"><p>Kim is the social media lead and provides editing and general admin support. She enjoys vegan baking, traveling and exploring new places, and treasure hunting at flea markets and thrift shops.</p></div>
+    </div>
   </div>
-  </div>
-  <br>
   <hr>
   <br>
+  <h4>Contributors</h4>
+  <div class="row" style="text-align: center">
+    <br>
+    <div class="span4">
+    <h5>Jeff Frankl</h5>
+    <div class="bio"><p>Jeff prototyped initial designs for the site; advised on fonts, colors, and branding; and plotted out much of the functionality of the site. See what Jeff's up to at <a href="http://www.frankl.org" target="_blank">frankl.org</a>.</p></div>
+  </div>
+   <div class="span4">
+    <h5>Jeremie Rose Wimbrow</h5>
+    <div class="bio"><p>Jeremie is a graphic designer living and eating in Philadelphia who creates visuals for VegPhilly. When she's not designing, she enjoys crafting, cooking, and volunteering at the AIGA Gallery Space and regularly attends punk shows.</p></div>
+  </div>
+  <div class="span4">
+    <h5>You!</h5>
+    <div class="bio"><p>Got ideas for how to make this site better? <a href="mailto:vegphilly@gmail.com">Get in touch</a> with us! We'd love some help with distributing our flyers and spreading the word about VegPhilly. </p></div>
+  </div>
+</div>
+<br>
+  <hr>
+  <br>
+ <!--  <h3>Check Out Our Flyers!</h3>
+  <br>
+  <p>Browse through the gallery below to see our designs, or <a href="#">download and print a sheet of four</a>. If you have ideas for a flyer, we'd love to include your designs here too. <a href="mailto:vegphilly@gmail.com">Let's talk!</a></p>
+  <p>
+  <br>
+  <div id="this-carousel-id" class="carousel slide"><!-- class of slide for animation -->
+  <!-- <div class="carousel-inner">
+    <div class="item active">
+      <img src="{{ STATIC_URL }}images/vegphilly-blackmetal-flyer.jpg" class="carousel-item" alt="VegPhilly Black Metal Flyer"/>
+      <div class="carousel-caption">
+        <p>'The Dark Side' by Zack Birmingham</p>
+      </div>
+    </div>
+    <div class="item">
+      <img src="{{ STATIC_URL }}images/veg_1.png" class="carousel-item" alt="VegPhilly Flyer Version 1" /></a>
+      <div class="carousel-caption">
+        <p>by Jeremie Rose Wimbrow</p>
+      </div>
+    </div>
+    <div class="item">
+      <img src="{{ STATIC_URL }}images/veg_2.png" class="carousel-item" alt="VegPhilly Flyer Version 2" />
+      <div class="carousel-caption">
+        <p>by Jeremie Rose Wimbrow</p>
+      </div>
+    </div>
+    <div class="item">
+      <img src="{{ STATIC_URL }}images/veg_4.png" class="carousel-item" alt="VegPhilly Flyer Version 4" />
+      <div class="carousel-caption">
+        <p>by Jeremie Rose Wimbrow</p>
+      </div>
+    </div>
+    <div class="item">
+      <img src="{{ STATIC_URL }}images/vegphilly-hippie-flyer.jpg" class="carousel-item" alt="VegPhilly Compassion Flyer" />
+      <div class="carousel-caption">
+        <p>"Compassion" by Zack Birmingham</p>
+      </div>
+    </div>
+    <div class="item">
+      <img src="{{ STATIC_URL }}images/vegphilly-meow-flyer.png" class="carousel-item" alt="VegPhilly Meow Flyer" />
+      <div class="carousel-caption">
+        <p>"Meow" by Alexandra Hoefinger</p>
+      </div>
+    </div>
+  </div>
+    <a class="carousel-control left" href="#this-carousel-id" data-slide="prev">&lsaquo;</a>
+    <a class="carousel-control right" href="#this-carousel-id" data-slide="next">&rsaquo;</a>
+</div> -->
+<!-- <br>
+<hr>
+<br> -->
+  <h4>VegPhilly is built with:</h4>
   <div class="row">
     <div class="span12">
-      <h4>We're proud to bring you VegPhilly thanks to the following tools:</h4>
       <br>
       <div class="row" id="vegphilly-icons">
-      <img src="{{ STATIC_URL }}images/linode.png" style="max-height: 100px;">
-      <img src="{{ STATIC_URL }}images/debian.png" style="max-height: 100px;">
-      <img src="{{ STATIC_URL }}images/nginx.gif" style="max-height: 100px;">
-      <img src="{{ STATIC_URL }}images/github.jpg" style="max-height: 100px;">
-      <img src="{{ STATIC_URL }}images/djangopython.jpg" style="max-height: 100px;">
-      <img src="{{ STATIC_URL }}images/postgres.png" style="max-height: 100px;">
+      <img src="{{ STATIC_URL }}images/debian.png" >
+      <img src="{{ STATIC_URL }}images/nginx.gif" >
+      <img src="{{ STATIC_URL }}images/github.jpg" >
+      <img src="{{ STATIC_URL }}images/djangopython.jpg" >
+      <img src="{{ STATIC_URL }}images/postgres.png" >
     </div>
     </div>
   </div>
