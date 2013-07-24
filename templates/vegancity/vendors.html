@@ -24,7 +24,7 @@
             address: "{{ vendor.address|linebreaksbr }}",
             phone: "{{ vendor.phone }}",
             url: "{{ vendor.get_absolute_url }}",
-            latitude: "{{ vendor.location.y }}", 
+            latitude: "{{ vendor.location.y }}",
             longitude: "{{ vendor.location.x }}",
             vegLevel: {% if vendor.veg_level %}{{ vendor.veg_level.id }}{% else %}0{% endif %}
         }{% if not forloop.last %},{% endif %}
@@ -43,21 +43,21 @@
 
 {% block content %}
 
-  <!-- FIRST ROW -->  
+  <!-- FIRST ROW -->
   <div class="row">
-    <div class="span6">
+    <div class="span12">
 
       <form action="{% url 'vendors' %}" method="get" name="filters" id="filters" class="form-search">
         {% if search_form.search_type %}
           {% comment %}If there's a search_type, stick it in the form, otherwise dont.
-This prevents null searches from getting a value of None stuck here and throwing off the UI.{% endcomment %}            
+This prevents null searches from getting a value of None stuck here and throwing off the UI.{% endcomment %}
         <input id="search_type" name="search_type" type="hidden" value="{{ search_form.search_type }}">
-      {% endif %}        
+      {% endif %}
         {% if search_from.old_query %}
         <input id="old_query" name="old_query" type="hidden" value="{{ search_form.old_query }}">
       {% endif %}
-        <input id="search-input" type="text" class="input-large" 
-               autofocus="autofocus" autocomplete="off" name="query" 
+        <input id="search-input" type="text" class="input-large"
+               autofocus="autofocus" autocomplete="off" name="query"
                {% if search_form.query %}value="{{ search_form.query }}"{% endif %}>
                  {% if search_form.search_type %}
                <div class="btn-group">
@@ -88,7 +88,7 @@ This prevents null searches from getting a value of None stuck here and throwing
       {% endif %}
     </div>
 
-    <div class="span6">
+    <div class="span12">
       <div class="row">
         <div class="span3">
 
@@ -103,14 +103,14 @@ This prevents null searches from getting a value of None stuck here and throwing
                 <input type="checkbox" id="id_feature_{{ checked.name }}" name="{{ checked.name }}" value="True" checked="checked" onchange="this.form.submit()">
                 {{ checked }}
               </label>
-            {% endfor %}         
+            {% endfor %}
             {{ search_form.feature }}
 
           </form>
 
           <p><a href="#" class="btn btn-warning" id="clear_all">Clear Filters</a></p>
           <br>
-          
+
           <h4>Something missing?</h4>
           <h4><a href="{% url 'new_vendor' %}" class="btn btn-custom">Add a Restaurant</a></h4>
           <br><br>
@@ -144,13 +144,13 @@ This prevents null searches from getting a value of None stuck here and throwing
           </table>
         </div>
 
-        
+
 
 
       </div>
     </div>
 
-    
+
 
 
   </div>

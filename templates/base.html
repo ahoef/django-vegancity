@@ -12,6 +12,12 @@
 	<link rel="shortcut icon" type="image/x-icon" href="{{ STATIC_URL }}images/favicon.ico">
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap-combined.min.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro|Average+Sans|Sanchez|Merriweather+Sans' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Cabin:400,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Chivo:400,400italic' rel='stylesheet' type='text/css'>
+
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+
     <link rel="stylesheet" href="{{ STATIC_URL }}css/base.css">
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
@@ -30,7 +36,7 @@
       <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
           <div class="container">
-            <a class="brand" href= "{% url 'home' %}"><img src="{{ STATIC_URL }}images/vegphilly-carrot-logo.png" alt="VegPhilly carrot logo" width="24px"></a>            
+            <a class="brand" href= "{% url 'home' %}"><img src="{{ STATIC_URL }}images/vegphilly-carrot-logo.png" alt="VegPhilly carrot logo" width="24px"></a>
             <a class="brand" href= "{% url 'home' %}" style="color: white; padding-top: 35px">VegPhilly</a>
 
             <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -39,7 +45,7 @@
               <span class="icon-bar"></span>
             </a>
 
-            <div class="nav-collapse collapse">              
+            <div class="nav-collapse collapse">
               <ul class="nav pull-right">
 		        <li><a href="{% url 'vendors' %}"><p class="vc-nav-item">Restaurants</p></a></li>
                 <li><a href="{% url 'about' %}"><p class="vc-nav-item">About</p></a></li>
@@ -50,7 +56,7 @@
                   <li><a href="{% url 'login' %}"><p class="vc-nav-item">Login</p></a></li>
                 {% endif %}
               </ul>
-              
+
             </div>
 
           </div>
@@ -77,10 +83,10 @@
       <br>
       <div class="container">
         <p>
-          <a href="{% url 'privacy' %}" class="white">Privacy Policy</a>&nbsp;&nbsp;&nbsp;          
-          <a href="{% url 'about' %}" class="white">About</a>&nbsp;&nbsp;&nbsp;   
+          <a href="{% url 'privacy' %}" class="white">Privacy Policy</a>&nbsp;&nbsp;&nbsp;
+          <a href="{% url 'about' %}" class="white">About</a>&nbsp;&nbsp;&nbsp;
           <a href="http://www.facebook.com/vegphilly"><img src="{{ STATIC_URL }}images/f_logo.png" width="10px" alt="facebook icon"></a>
-          <a href="http://www.twitter.com/vegphilly"><img src="{{ STATIC_URL }}images/t_logo.png" width="40px" alt="twitter icon"></a>      
+          <a href="http://www.twitter.com/vegphilly"><img src="{{ STATIC_URL }}images/t_logo.png" width="40px" alt="twitter icon"></a>
         </p>
       </div>
     </div>
