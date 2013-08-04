@@ -88,7 +88,25 @@ class VegProfileEditForm(forms.ModelForm):
 ### Vendor Forms
 ##############################
 
-class _BaseVendorForm(forms.ModelForm):
+class AdminVendorForm(forms.ModelForm):
+
+    class Media:
+        js = (
+            'http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false',
+            'http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js',
+            'js/vendor_form.js',
+            )
+
+    class Meta:
+        model = models.Vendor
+
+    def __init__(self, *args, **kwargs):
+        super(AdminVendorForm, self).__init__(*args, **kwargs)
+        if not self.instance.created:
+            self.fields['approval_status'].initial = 'pending'
+
+class NewVendorForm(forms.ModelForm):
+    "Form used for adding new vendors."
 
     class Media:
         js = (
@@ -98,24 +116,6 @@ class _BaseVendorForm(forms.ModelForm):
 
     class Meta:
         model = models.Vendor
-
-class AdminVendorForm(_BaseVendorForm):
-
-    class Media:
-        extend = True
-        js = (
-            'http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false',
-            )
-
-    def __init__(self, *args, **kwargs):
-        super(AdminVendorForm, self).__init__(*args, **kwargs)
-        if not self.instance.created:
-            self.fields['approval_status'].initial = 'pending'
-
-class NewVendorForm(_BaseVendorForm):
-    "Form used for adding new vendors."
-
-    class Meta(_BaseVendorForm.Meta):
         exclude = ('approval_status', 'notes',)
         widgets = {
             'cuisine_tags' : forms.CheckboxSelectMultiple,
