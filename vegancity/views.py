@@ -198,7 +198,7 @@ def new_vendor(request):
         reverse("vendor_thanks"), 
         "vegancity/new_vendor.html",
         [apply_submitter],
-        commit_flag=True)
+        commit_flag=False)
 
     return response
 
