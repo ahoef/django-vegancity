@@ -26,15 +26,11 @@ from django.template.defaultfilters import slugify
 
 import collections
 
-import shlex
-import itertools
 import geocode
 import validators
 
 class TagManager(models.Manager):
-    """Manager class that can be used for any type of Tag class
 
-    in this case, CuisineTag and FeatureTag"""
     def word_search(self, word):
         "takes a word and searches all tag names for that word"
         print "word:", word, "\n"
@@ -60,9 +56,7 @@ class TagManager(models.Manager):
         return results
         
 class _TagModel(models.Model):
-    """Abstract class that can be used for any type of Tag class
 
-    in this case, CuisineTag and FeatureTag"""
     name = models.CharField(
         help_text="short name, all lowercase alphas, underscores for spaces",
         max_length=255, unique=True
