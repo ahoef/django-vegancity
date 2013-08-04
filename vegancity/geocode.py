@@ -23,7 +23,7 @@ import math
 import urllib
 import json
 
-from settings import LOCATION_LATITUDE, LOCATION_CITY_STATE, LOCATION_BOUNDS, LOCATION_COMPONENTS
+from settings import LOCATION_BOUNDS, LOCATION_COMPONENTS
 
 def geocode_address(address):
     """takes an address as a string and returns a tuple of latitude, 

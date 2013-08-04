@@ -135,23 +135,17 @@ LOGGING = {
 # CUSTOM
 ###################################
 
-# In order to simplify bounding box calculations,
-# please enter the latitude of the region that this
-# site will be implemented for.  Default is
-# Philadelphia, PA, where this software was produced.
-# All simple address searches will have the following
-# appended to it.  This should suffice to enable google
-# to correctly geocode.
-LOCATION_LATITUDE = 39.952335
-LOCATION_CITY_STATE = "Philadelphia, PA"
-LOCATION_VIEWPORT = None
-LOCATION_SOUTHWEST_CORNER = (39.9269547, -75.2519587)
-LOCATION_NORTHEAST_CORNER = (39.988524, -75.106326)
-LOCATION_BOUNDS = (
-    str(LOCATION_SOUTHWEST_CORNER[0]) + "," + str(LOCATION_SOUTHWEST_CORNER[1]) + "|" +
-    str(LOCATION_NORTHEAST_CORNER[0]) + "," + str(LOCATION_NORTHEAST_CORNER[1])
-    )
+# LOCATION_BOUNDS is the bounding box within which all data should live.
+# This is used for a few different geospatial queries. Specify the
+# southwest corner followed by the northeast corner in the format
+# "sw_lat,sw_lng|ne_lat,ne_lng"
+LOCATION_BOUNDS = "39.9269547,-75.2519587|39.988524,-75.106326"
+
+# A string used to narrow down google maps searches. Consult
+# the google maps javascript api v3 for more details.
 LOCATION_COMPONENTS = "country:US|locality:Philadelphia"
+
+# Used to specify where the map will center.
 DEFAULT_CENTER = (39.946385, -75.1785634)
 try:
     from settings_local import *
