@@ -23,6 +23,7 @@ from django.db.models import Q
 from django.db.models import Count
 
 from django.template.defaultfilters import slugify
+from django.core.exceptions import ValidationError
 
 import collections
 
@@ -287,17 +288,45 @@ class Vendor(models.Model):
     vegan_dishes = models.ManyToManyField('VeganDish', null=True, blank=True)
 
 
-    def needs_geocoding(self):
-        """Returns true if the vendor is eligible for geocoding,
-        but is missing geocoding data."""
-        if self.location or self.neighborhood:
+    def needs_geocoding(self, previous_state=None):
+        """
+        Determine if a vendor needs to be geocoded.
+
+        This method is a little bit complicated for performance reasons.
+        It short circuits to False in the case where there is no address,
+        True in the case where there is an address and no location.
+
+        Otherwise, it looks at the passed in previous_state, or, when missing,
+        queries for the previous state. If the address has changed, geocode
+        again.
+        """
+
+        # can't EVER geocode without an address
+        if not self.address:
             return False
 
-        elif not self.address:
-            return False
+        # if the location is missing, always geocode
+        elif not self.location:
+            return True
 
         else:
-            return True
+
+            # if it's new, and already has an address AND location
+            # raise an error, this shouldn't happen.
+            if self.pk is None:
+                error = "How did this new object already get a location?"
+                raise Exception(error)
+
+            else:
+                if not previous_state:
+                    previous_state = Vendor.objects.get(pk=self.pk)
+
+                if previous_state.address != self.address:
+                    needs_geocoding = True
+                else:
+                    needs_geocoding = False
+
+                return needs_geocoding
 
     def apply_geocoding(self):
 
@@ -322,19 +351,41 @@ class Vendor(models.Model):
 
 
     def save(self, *args, **kwargs):
-        """Steps to take before saving to db.
-
-        Before saving, see if the vendor has been geocoded.
-        If not, geocode."""
-
-        if self.pk is not None:
-            orig_address = Vendor.objects.get(pk=self.pk).address
+        if self.pk == None:
+            self.save_new(*args, **kwargs)
         else:
-            orig_address = None
+            self.save_existing(*args, **kwargs)
 
-        if (orig_address != self.address) or self.needs_geocoding():
+    def save_new(self, *args, **kwargs):
+        if self.address:
             self.apply_geocoding()
         super(Vendor, self).save(*args, **kwargs)
+
+    def save_existing(self, *args, **kwargs):
+        previous_state = Vendor.objects.get(pk=self.pk)
+
+        self.validate_pending(previous_state)
+
+        if self.needs_geocoding(previous_state):
+            self.apply_geocoding()
+
+        super(Vendor, self).save(*args, **kwargs)
+
+
+    def validate_pending(self, orig_vendor):
+        """
+        If the approval_status has just been changed to "pending"
+        from any other value, raise an exception. Once a vendor
+        has been something other than pending, it cannot return
+        to that state. This is required so that a user only gets
+        an approval email ONCE.
+        """
+        if (orig_vendor.approval_status != 'pending'
+            and self.approval_status == 'pending'):
+
+            # TODO: make this fail gracefully instead of causing a crashpage
+            raise ValidationError("Cannot change a vendor back to pending!")
+
 
     def best_vegan_dish(self):
         "Returns the best vegan dish for the vendor"
