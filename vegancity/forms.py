@@ -41,8 +41,12 @@ class VegUserCreationForm(UserCreationForm):
     def save(self, *args, **kwargs):
         user = super(VegUserCreationForm, self).save(*args, **kwargs)
         user.email = self.cleaned_data['email']
-        user_profile = models.UserProfile(user=user)
+        # this is a total hack. saving twice because email isn't included
+        # in the original form. we should do away with this form class
+        # garbage and handle this explicitly in a view.
+        user.save()
 
+        user_profile = models.UserProfile(user=user)
         user_profile.bio = self.cleaned_data['bio']
         user_profile.mailing_list = self.cleaned_data['mailing_list']
         user_profile.save()
