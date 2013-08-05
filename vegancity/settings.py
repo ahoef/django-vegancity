@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Vegancity.  If not, see <http://www.gnu.org/licenses/>.
 
+from django.core.exceptions import ImproperlyConfigured
 import os
 
 APP_ROOT = os.path.dirname(os.path.realpath(__file__))
@@ -148,7 +149,22 @@ LOCATION_COMPONENTS = "country:US|locality:Philadelphia"
 # Used to specify where the map will center.
 DEFAULT_CENTER = (39.946385, -75.1785634)
 
+# Replace these with a valid gmail account login that
+# can be used to send administrative emails
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_PORT = 587
+
 try:
     from settings_local import *
 except ImportError:
     pass
+
+
+if EMAIL_HOST_USER == '' or EMAIL_HOST_PASSWORD == '':
+    error_message = ("No valid email login configured. Please specify "
+                     "EMAIL_HOST_USER and EMAIL_HOST_PASSWORD "
+                     "in your settings_local.py file.")
+    raise ImproperlyConfigured(error_message)
