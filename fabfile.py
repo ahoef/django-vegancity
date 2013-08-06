@@ -82,6 +82,8 @@ def test(test_filter="vegancity"):
 
     _manage('test %s' % test_filter)
 
+def rebuild_fixture():
+    _manage('dumpdata auth contenttypes vegancity > vegancity/fixtures/public_data.json')
 
 def restart_app():
     """ restart the development webserver """
