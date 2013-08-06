@@ -9,7 +9,6 @@ POSTGIS_SQL_PATH=`pg_config --sharedir`/contrib/postgis-1.5
 su postgres -c "psql -d postgres -c \"UPDATE pg_database SET datistemplate='false' WHERE datname='template_postgis';\""
 su postgres -c "dropdb template_postgis"
 su postgres -c "createdb -l en_US.UTF8 -E UTF8 -T template0 template_postgis"
-su postgres -c "createlang -d template_postgis plpgsql"
 su postgres -c "psql -d postgres -c \"UPDATE pg_database SET datistemplate='true' WHERE datname='template_postgis';\""
 # Loading the PostGIS SQL routines
 su postgres -c "psql -d template_postgis -f $POSTGIS_SQL_PATH/postgis.sql"
