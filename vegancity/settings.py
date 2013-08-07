@@ -147,6 +147,7 @@ LOCATION_COMPONENTS = "country:US|locality:Philadelphia"
 
 # Used to specify where the map will center.
 DEFAULT_CENTER = (39.946385, -75.1785634)
+
 try:
     from settings_local import *
 except ImportError:
