@@ -150,7 +150,8 @@ def _generic_form_processing_view(request, form_obj, redirect_url,
             for fn in pre_save_functions:
                 fn(obj)
 
-            obj.save()
+            if commit_flag == False:
+                obj.save()
             return HttpResponseRedirect(redirect_url), obj
         
     else:
@@ -197,7 +198,7 @@ def new_vendor(request):
         reverse("vendor_thanks"), 
         "vegancity/new_vendor.html",
         [apply_submitter],
-        commit_flag=True)
+        commit_flag=False)
 
     return response
 

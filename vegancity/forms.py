@@ -41,8 +41,12 @@ class VegUserCreationForm(UserCreationForm):
     def save(self, *args, **kwargs):
         user = super(VegUserCreationForm, self).save(*args, **kwargs)
         user.email = self.cleaned_data['email']
-        user_profile = models.UserProfile(user=user)
+        # this is a total hack. saving twice because email isn't included
+        # in the original form. we should do away with this form class
+        # garbage and handle this explicitly in a view.
+        user.save()
 
+        user_profile = models.UserProfile(user=user)
         user_profile.bio = self.cleaned_data['bio']
         user_profile.mailing_list = self.cleaned_data['mailing_list']
         user_profile.save()
@@ -88,7 +92,25 @@ class VegProfileEditForm(forms.ModelForm):
 ### Vendor Forms
 ##############################
 
-class _BaseVendorForm(forms.ModelForm):
+class AdminVendorForm(forms.ModelForm):
+
+    class Media:
+        js = (
+            'http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false',
+            'http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js',
+            'js/vendor_form.js',
+            )
+
+    class Meta:
+        model = models.Vendor
+
+    def __init__(self, *args, **kwargs):
+        super(AdminVendorForm, self).__init__(*args, **kwargs)
+        if not self.instance.created:
+            self.fields['approval_status'].initial = 'pending'
+
+class NewVendorForm(forms.ModelForm):
+    "Form used for adding new vendors."
 
     class Media:
         js = (
@@ -98,24 +120,6 @@ class _BaseVendorForm(forms.ModelForm):
 
     class Meta:
         model = models.Vendor
-
-class AdminVendorForm(_BaseVendorForm):
-
-    class Media:
-        extend = True
-        js = (
-            'http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false',
-            )
-
-    def __init__(self, *args, **kwargs):
-        super(AdminVendorForm, self).__init__(*args, **kwargs)
-        if not self.instance.created:
-            self.fields['approval_status'].initial = 'pending'
-
-class NewVendorForm(_BaseVendorForm):
-    "Form used for adding new vendors."
-
-    class Meta(_BaseVendorForm.Meta):
         exclude = ('approval_status', 'notes',)
         widgets = {
             'cuisine_tags' : forms.CheckboxSelectMultiple,
