@@ -3,6 +3,8 @@ from django.utils import unittest
 from django.test.client import RequestFactory
 from mock import MagicMock
 
+from django.db import IntegrityError
+
 from vegancity import  models, views, email
 
 def get_user():
@@ -205,3 +207,67 @@ class EmailTest(TestCase):
         vendor.save()
         email.send_new_vendor_approval.assert_not_called()
 
+class VendorVeganDishValidationTest(TestCase):
+    """
+    Tests that trying to delete vegan dish relationships for
+    vendors that have reviews will signal an error.
+    """
+    def setUp(self):
+        self.user = get_user()
+
+        self.vendor = models.Vendor(name="Test Vendor",
+                                    address="123 Main St")
+        self.vendor.save()
+
+        self.vegan_dish1 = models.VeganDish(name="Tofu Scramble")
+        self.vegan_dish1.save()
+
+        self.vegan_dish2 = models.VeganDish(name="Tempeh Hash")
+        self.vegan_dish2.save()
+
+        self.review1 = models.Review(vendor=self.vendor,
+                                     author=self.user,
+                                     content="ahhhh")
+        self.review1.save()
+
+        self.vendor.vegan_dishes.add(self.vegan_dish1)
+        self.vendor.vegan_dishes.add(self.vegan_dish2)
+
+
+    def test_can_delete_relationship_without_any_reviews(self):
+        self.assertEqual(self.vendor.vegan_dishes.count(), 2)
+
+        self.vendor.vegan_dishes.remove(self.vegan_dish1)
+
+        self.assertEqual(self.vendor.vegan_dishes.count(), 1)
+
+    def test_can_delete_relationship_with_reviews_on_other_vegan_dish(self):
+        self.review1.best_vegan_dish = self.vegan_dish1
+        self.review1.save()
+
+        self.assertEqual(self.vendor.vegan_dishes.count(), 2)
+
+        self.vendor.vegan_dishes.remove(self.vegan_dish2)
+
+        self.assertEqual(self.vendor.vegan_dishes.count(), 1)
+
+    def test_can_clear_relationship_without_any_reviews(self):
+        self.assertEqual(self.vendor.vegan_dishes.count(), 2)
+
+        self.vendor.vegan_dishes.clear()
+
+        self.assertEqual(self.vendor.vegan_dishes.count(), 0)
+
+    def test_cant_clear_relationship_with_any_reviews(self):
+        self.review1.best_vegan_dish = self.vegan_dish1
+        self.review1.save()
+
+        self.assertRaises(IntegrityError, self.vendor.vegan_dishes.clear)
+
+    def test_cant_delete_relationship_with_reviews(self):
+        self.review1.best_vegan_dish = self.vegan_dish1
+        self.review1.save()
+
+        self.assertRaises(IntegrityError,
+                          self.vendor.vegan_dishes.remove,
+                          self.vegan_dish1)

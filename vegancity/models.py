@@ -19,6 +19,10 @@ from django.contrib.gis.db import models
 from django.contrib.gis.geos import Point
 from django.contrib.auth.models import User
 
+from django.db.models.signals import m2m_changed
+
+from django.db import IntegrityError
+
 from django.db.models import Q
 from django.db.models import Count
 
@@ -442,6 +446,45 @@ class Vendor(models.Model):
         ordering = ('name',)
         verbose_name = "Vendor"
         verbose_name_plural = "Vendors"
+
+
+def validate_vegan_dish(sender, instance, action, model, pk_set, **kwargs):
+
+    pre_clear_message = ('You can not clear vegandish relationships on '
+                         'this vendor, because there are reviews for this '
+                         'vendor that reference vegan_dish relationships. '
+                         '\n'
+                         'You may be seeing this message because you tried '
+                         'to add/remove a vegan_dish using the admin '
+                         'interface. Unfortunately, the admin interface is '
+                         'too stupid to add/remove one, it clears the list '
+                         'and then adds everything back in.'
+                         '\n'
+                         'Please have a developer delete this object.')
+
+    pre_remove_message = ('You cannot delete this vendor<->vegan_dish '
+                          'relationship because there are reviews for '
+                          'this vendor that reference this vegan dish. '
+                          'You probably don\'t want to do this anyway. '
+                          'If this is a mistake, please have a developer '
+                          'delete this object.')
+
+    vendor_has_vegan_dishes = (instance.vegan_dishes.count() > 0)
+    vendor_has_vegan_dish_reviews = (instance.review_set\
+                                     .filter(best_vegan_dish__isnull=False)\
+                                     .count() > 0)
+
+    if vendor_has_vegan_dishes and vendor_has_vegan_dish_reviews:
+        if action == 'pre_clear':
+            raise IntegrityError(pre_clear_message)
+
+        elif action == 'pre_remove':
+            if instance.review_set\
+                       .filter(best_vegan_dish__in=pk_set)\
+                       .count() > 0:
+                raise IntegrityError(pre_remove_message)
+
+m2m_changed.connect(validate_vegan_dish, sender=Vendor.vegan_dishes.through)
 
 #######################################
 # TAGS
