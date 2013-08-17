@@ -45,19 +45,65 @@ def pending_approval(request):
     return render_to_response("admin/pending_approval.html", ctx,
                               context_instance=RequestContext(request))
 
+def csv_filename_builder(filename_prefix):
+    """
+    Takes a filename prefix and returns an HttpResponse with headers
+    set for csv and with a filename that is uniquified using the
+    current date.
+
+    ex:
+    'vegphilly_ml' -> response with 'vegphilly_ml_20130504.csv'
+    """
+
+    formatted_datestring = datetime.date.today().strftime("%Y%m%d")
+
+    filename_param = "filename = %s_%s.csv" % (filename_prefix,
+                                               formatted_datestring)
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; %s;' % filename_param
+
+    return response
+    
+
 @staff_member_required
 def mailing_list(request):
-    response = HttpResponse(content_type='text/csv')
-    filename_param = "filename = vegphilly_ml_%s.csv" % (
-        datetime.date.today().strftime("%Y%m%d"))
-    response['Content-Disposition'] = 'attachment; ' + filename_param + ';'
+    response = csv_filename_builder('vegphilly_ml')
 
-    mailing_list_users = models.User.objects.filter(userprofile__mailing_list=True)
+    mailing_list_users = models.User.objects.filter(
+        userprofile__mailing_list=True)
 
     writer = csv.writer(response)
     writer.writerow(['username', 'firstname', 'lastname', 'email'])
 
     for user in mailing_list_users:
-        writer.writerow([user.username, user.first_name, user.last_name, user.email])
+        writer.writerow([user.username, user.first_name,
+                         user.last_name, user.email])
+    
+    return response
+
+@staff_member_required
+def vendor_list(request):
+    response = csv_filename_builder('vegphilly_vendors')
+
+    vendors = models.Vendor.approved_objects.all()
+
+    writer = csv.writer(response)
+    writer.writerow(['name',
+                     'address',
+                     'neighborhood',
+                     'phone',
+                     'website',
+                     'veg_level',
+                     'notes'])
+
+    for vendor in vendors:
+        writer.writerow([vendor.name,
+                         vendor.address,
+                         vendor.neighborhood,
+                         vendor.phone,
+                         vendor.website,
+                         vendor.veg_level,
+                         vendor.notes])
     
     return response
