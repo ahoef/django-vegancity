@@ -1,0 +1,15 @@
+<html>
+<h1>Submission Approved!</h1>
+
+<p>Thanks for adding {{ vendor.name }} to VegPhilly. Your submission has been approved.</p>
+
+<p>While you're at it, why not write a <a href="www.vegphilly.com/{{ vendor.get_absolute_url }}">review</a>?</p>
+
+<a href="http://twitter.com/intent/tweet?url=http://www.vegphilly.com{{ vendor.get_absolute_url }}&text=I just added {{ vendor.name }} to VegPhilly!&via=vegphilly" target="_blank">Click here to tweet about this!</a>
+
+<p>
+Thanks,<br>
+The VegPhilly Team
+</p>
+
+</html>

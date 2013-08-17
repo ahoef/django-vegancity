@@ -27,8 +27,7 @@ from django.core.exceptions import ValidationError
 
 import collections
 
-import geocode
-import validators
+from vegancity import geocode, validators, email
 
 class TagManager(models.Manager):
 
@@ -370,6 +369,15 @@ class Vendor(models.Model):
             self.apply_geocoding()
 
         super(Vendor, self).save(*args, **kwargs)
+
+        # if the approval_status just changed to "approved" from
+        # "pending", email the user who submitted the vendor to
+        # let them know their submission has succeeded.
+        if (previous_state.approval_status == 'pending'
+            and self.approval_status == 'approved'
+            and self.submitted_by
+            and self.submitted_by.email):
+            email.send_new_vendor_approval(self)
 
 
     def validate_pending(self, orig_vendor):

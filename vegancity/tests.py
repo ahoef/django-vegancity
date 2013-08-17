@@ -1,8 +1,9 @@
 from django.test import TestCase
 from django.utils import unittest
 from django.test.client import RequestFactory
+from mock import MagicMock
 
-from vegancity import  models, views
+from vegancity import  models, views, email
 
 def get_user():
     user = models.User(username="Moby")
@@ -163,4 +164,44 @@ class ViewTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(models.Vendor.objects.filter(name="test123").count(), 0)
+
+class EmailTest(TestCase):
+
+    def setUp(self):
+        # mock the email function so that we can just see if it's called
+        email.send_new_vendor_approval = MagicMock()
+        self.user = get_user()
+        self.user.email = "test@test.com"
+        self.user.save()
+
+    def test_newly_approved_vendor_gets_emailed(self):
+        """
+        Test that the email function is called once when a vendor is approved
+        and then not again if its approval status changes, even if to approved.
+        """
+
+        # not called because it is not yet approved
+        vendor = models.Vendor(name="The Test Vendor",
+                               address="123 Main St",
+                               submitted_by=self.user)
+        vendor.save()
+        email.send_new_vendor_approval.assert_not_called()
+        
+        # called now because it was approved
+        vendor.approval_status = "approved"
+        vendor.save()
+        email.send_new_vendor_approval.assert_called_with(vendor)
+
+        # reset mock function to test it doesn't get called again
+        email.send_new_vendor_approval.reset_mock()
+
+        # not called when approval status changes away from approved
+        vendor.approval_status = "quarantined"
+        vendor.save()
+        email.send_new_vendor_approval.assert_not_called()
+
+        # not called when approval status is changed back to approved
+        vendor.approval_status = "approved"
+        vendor.save()
+        email.send_new_vendor_approval.assert_not_called()
 
