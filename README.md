@@ -36,8 +36,15 @@ data.
 Of course, you can work on the project without using a virtual machine, but it's on you  
 to get it to work.  
 
-current contributors
+additional resources
 --------------------
+
+If you have `fabric` installed on your local machine (recommended), you can use fabric
+commands to automate common development tasks. Try reading the `fabfile.py` source or running
+`fab -l` from the project root to see what commands are available.
+
+FAQ
+---
 
 Having trouble? Here's some common problems and solutions.  
 
