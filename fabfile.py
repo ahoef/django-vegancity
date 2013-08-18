@@ -108,7 +108,9 @@ def check():
 
     with settings(warn_only=True):
         with cd(env.site_path):
-            flake8 = run('flake8 --exclude migrations *')
+            flake8 = run('flake8 --exclude=migrations,'
+                         '*.md,*.txt,*.pyc,Vagrantfile,'
+                         'COPYING,urls.py *')
 
     if flake8.failed:
         abort('Code linting failed')
