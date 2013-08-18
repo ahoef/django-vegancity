@@ -24,7 +24,6 @@ from django.template.loader import render_to_string
 
 
 def send_new_vendor_approval(vendor):
-    from pdb import set_trace; set_trace()
     subject = '[VegPhilly] New Vendor Approved'
     html_body = render_to_string(
         "vegancity/approval_email.html", {'vendor': vendor})
