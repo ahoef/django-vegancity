@@ -1,11 +1,11 @@
 DATABASES = {
-    'default' : {
-        'ENGINE' : 'django.contrib.gis.db.backends.postgis',
-        'NAME' : 'vegphilly',
-        'USER' : 'vagrant',
-        'PASSWORD' : '',
-        'HOST' : '',
-        'PORT' : '',
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'vegphilly',
+        'USER': 'vagrant',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
         }
 }
 
@@ -17,4 +17,3 @@ try:
     INSTALLED_APPS += ('south', 'gunicorn')
 except ImportError:
     pass
-

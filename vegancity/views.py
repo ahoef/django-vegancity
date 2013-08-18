@@ -22,21 +22,22 @@ from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum, Max, Count, Avg
+from django.db.models import Max, Count, Avg
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
-from django.views.generic import ListView, DetailView, TemplateView
+from django.views.generic import DetailView, TemplateView
 
 import django.contrib.auth.views
 
 from vegancity import forms
 from vegancity import models
-from vegancity import search
+
 
 def password_change(request):
     response = django.contrib.auth.views.password_change(
-        request, "registration/password_change_form.html", reverse('my_account'))
-    
+        request, "registration/password_change_form.html",
+        reverse('my_account'))
+
     # redirect happens when the form validates and the model saves
     if response.status_code == 302:
         messages.success(request, "Password Changed!")
@@ -49,43 +50,66 @@ def home(request):
 
     vendors = models.Vendor.approved_objects.all()
     vendors_with_reviews = vendors.filter(review__approved=True).distinct()
-    top_5 = vendors.annotate(fscore=Avg('review__food_rating')).annotate(ascore=Avg('review__atmosphere_rating'))\
-                                                              .exclude(fscore=None).exclude(ascore=None)\
-                                                                                  .order_by('-fscore', '-ascore')[:5]
-    recently_active = vendors_with_reviews.annotate(score=Max('review__created')).exclude(score=None).order_by('-score')[:5]
-    recently_added = vendors.exclude(created=None).order_by('-created')[:5]
-    most_reviewed = vendors_with_reviews.annotate(count=Count('review')).order_by('-count')[:5]
+    top_5 = vendors.annotate(fscore=Avg('review__food_rating'))\
+                   .annotate(ascore=Avg('review__atmosphere_rating'))\
+                   .exclude(fscore=None)\
+                   .exclude(ascore=None)\
+                   .order_by('-fscore', '-ascore')[:5]
 
-    neighborhoods = models.Neighborhood.objects.all().annotate(vcount=Count('vendor')).order_by('-vcount')[:21]
-    cuisine_tags = models.CuisineTag.objects.with_vendors().annotate(vcount=Count('vendor')).order_by('-vcount')[:21]
-    feature_tags = models.FeatureTag.objects.with_vendors().annotate(vcount=Count('vendor')).order_by('-vcount')[:21]
+    recently_active = vendors_with_reviews\
+        .annotate(score=Max('review__created'))\
+        .exclude(score=None)\
+        .order_by('-score')[:5]
+
+    recently_added = vendors.exclude(created=None).order_by('-created')[:5]
+
+    most_reviewed = vendors_with_reviews.annotate(count=Count('review'))\
+                                        .order_by('-count')[:5]
+
+    neighborhoods = models.Neighborhood.objects\
+                                       .all()\
+                                       .annotate(vcount=Count('vendor'))\
+                                       .order_by('-vcount')[:21]
+
+    cuisine_tags = models.CuisineTag.objects\
+                                    .with_vendors()\
+                                    .annotate(vcount=Count('vendor'))\
+                                    .order_by('-vcount')[:21]
+
+    feature_tags = models.FeatureTag.objects\
+                                    .with_vendors()\
+                                    .annotate(vcount=Count('vendor'))\
+                                    .order_by('-vcount')[:21]
 
     ctx = {
         'top_5': top_5,
         'most_reviewed': most_reviewed,
         'recently_added': recently_added,
-        'recently_active' : recently_active,
+        'recently_active': recently_active,
         'neighborhoods': neighborhoods,
-        'cuisine_tags' : cuisine_tags,
-        'feature_tags' : feature_tags,
+        'cuisine_tags': cuisine_tags,
+        'feature_tags': feature_tags,
         }
 
     return render_to_response("vegancity/home.html", ctx,
                               context_instance=RequestContext(request))
 
+
 def user_profile(request, username):
-    if username == None:
+    if username is None:
         if request.user.username == '':
             raise Http404
         else:
             return redirect('user_profile', username=request.user.username)
     else:
         profile_user = get_object_or_404(models.User, username=username)
-        reviews = models.Review.approved_objects.filter(author=profile_user).order_by('-created')
+        reviews = models.Review.approved_objects.filter(author=profile_user)\
+                                                .order_by('-created')
         return render_to_response(
-            'vegancity/profile_page.html', 
+            'vegancity/profile_page.html',
             {'profile_user': profile_user, 'reviews': reviews},
             context_instance=RequestContext(request))
+
 
 def vendors(request):
     """Display table level data about vendors.
@@ -95,8 +119,9 @@ def vendors(request):
     in our database."""
 
     search_form = forms.SearchForm(request.GET)
-    
-    return render_to_response('vegancity/vendors.html', {'search_form':search_form},
+
+    return render_to_response('vegancity/vendors.html',
+                              {'search_form': search_form},
                               context_instance=RequestContext(request))
 
 
@@ -104,7 +129,7 @@ def vendors(request):
 ## data entry views
 ###########################
 
-def _generic_form_processing_view(request, form_obj, redirect_url, 
+def _generic_form_processing_view(request, form_obj, redirect_url,
                                   template_name, pre_save_functions=[],
                                   form_init={}, ctx={}, commit_flag=False):
     """Generic view for form processing.
@@ -128,7 +153,7 @@ def _generic_form_processing_view(request, form_obj, redirect_url,
     form to.
 
     OPTIONAL:
-    
+
     pre_save_functions: A list of callables that will be called, in order,
     with the model object, before saving to the database. Defaults to the
     empty list.
@@ -143,40 +168,40 @@ def _generic_form_processing_view(request, form_obj, redirect_url,
     if request.method == 'POST':
         form = form_obj(request.POST)
         obj = None
-        
+
         if form.is_valid():
             obj = form.save(commit=commit_flag)
-            
+
             for fn in pre_save_functions:
                 fn(obj)
 
-            if commit_flag == False:
+            if commit_flag is False:
                 obj.save()
             return HttpResponseRedirect(redirect_url), obj
-        
+
     else:
         form = form_obj(initial=form_init)
         obj = None
 
     ctx['form'] = form
-    
-    return render_to_response(template_name, ctx, 
+
+    return render_to_response(template_name, ctx,
                               context_instance=RequestContext(request)), obj
 
 
 def register(request):
     "Register a new user and log them in."
 
-    response, obj =  _generic_form_processing_view(
-        request, forms.VegUserCreationForm, 
-        reverse("register_thanks"), 
+    response, obj = _generic_form_processing_view(
+        request, forms.VegUserCreationForm,
+        reverse("register_thanks"),
         "vegancity/register.html",
         commit_flag=True)
 
     # if the registration was successful, log the user in
     if obj:
         new_user = authenticate(
-            username=request.POST.get("username"), 
+            username=request.POST.get("username"),
             password=request.POST.get("password1"))
         login(request, new_user)
 
@@ -186,16 +211,16 @@ def register(request):
 @login_required
 def new_vendor(request):
     "Create a new vendor."
-    
+
     def apply_submitter(request, vendor):
         vendor.submitted_by = request.user
 
     apply_submitter = functools.partial(apply_submitter, request)
 
-    response, obj =  _generic_form_processing_view(
-        request, 
-        forms.NewVendorForm, 
-        reverse("vendor_thanks"), 
+    response, obj = _generic_form_processing_view(
+        request,
+        forms.NewVendorForm,
+        reverse("vendor_thanks"),
         "vegancity/new_vendor.html",
         [apply_submitter],
         commit_flag=False)
@@ -225,15 +250,15 @@ def new_review(request, vendor_id):
     # As above, this is done so the function can be callable
     # as apply_author(obj)
     apply_author = functools.partial(apply_author, request)
-        
-    response, obj =  _generic_form_processing_view(
-            request, 
-            form, 
-            reverse("review_thanks", args=[vendor.id]),
-            "vegancity/new_review.html", 
-            [apply_author],
-            {'vendor':vendor}, 
-            ctx)
+
+    response, obj = _generic_form_processing_view(
+        request,
+        form,
+        reverse("review_thanks", args=[vendor.id]),
+        "vegancity/new_review.html",
+        [apply_author],
+        {'vendor': vendor},
+        ctx)
 
     return response
 
@@ -241,10 +266,10 @@ def new_review(request, vendor_id):
 @login_required
 def account_edit(request):
     """Edit page for user accounts"""
-    
+
     user = request.user
     user_profile = user.get_profile()
-    
+
     if request.method == 'POST':
         user_form = forms.VegUserEditForm(request.POST, instance=user)
         profile_form = forms.VegProfileEditForm(request.POST,
@@ -258,8 +283,9 @@ def account_edit(request):
         user_form = forms.VegUserEditForm(instance=user)
         profile_form = forms.VegProfileEditForm(instance=user_profile)
     return render_to_response('vegancity/account_edit.html',
-        {'user_form': user_form, 'profile_form': profile_form},
-        context_instance=RequestContext(request))
+                              {'user_form': user_form,
+                               'profile_form': profile_form},
+                              context_instance=RequestContext(request))
 
 
 ###########################

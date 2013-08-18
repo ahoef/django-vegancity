@@ -29,17 +29,20 @@ import forms
 ## MODEL ADMIN CLASSES
 #####################################
 
+
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('vendor', 'author','approved',
+    list_display = ('vendor', 'author', 'approved',
                     'suggested_feature_tags', 'suggested_cuisine_tags',
-                    
+
                     )
     list_filter = ('approved', 'unlisted_vegan_dish')
     form = forms.AdminEditReviewForm
 
+
 class VendorVeganDishInline(admin.TabularInline):
     model = models.Vendor.vegan_dishes.through
     extra = 0
+
 
 class VendorAdmin(GeoModelAdmin):
     readonly_fields = ('location', 'submitted_by')
@@ -47,24 +50,28 @@ class VendorAdmin(GeoModelAdmin):
     list_display_links = ('name',)
     list_filter = ('approval_status',)
     ordering = ('name',)
-    filter_vertical = ('cuisine_tags','feature_tags', 'vegan_dishes',)
+    filter_vertical = ('cuisine_tags', 'feature_tags', 'vegan_dishes',)
     form = forms.AdminVendorForm
+
 
 class BlogEntryAdmin(admin.ModelAdmin):
 
     exclude = ('author',)
     readonly_fields = ('author',)
-    list_display = ('title','author','body')
+    list_display = ('title', 'author', 'body')
 
     def save_model(self, request, blog_entry, form, change):
         blog_entry.author = request.user
         blog_entry.save()
 
+
 class UserProfileInline(admin.StackedInline):
     model = models.UserProfile
 
+
 class UserProfileAdmin(UserAdmin):
-    inlines = [ UserProfileInline, ]
+    inlines = [UserProfileInline]
+
 
 class VeganDishAdmin(admin.ModelAdmin):
     inlines = (VendorVeganDishInline,)
@@ -86,4 +93,3 @@ admin.site.register(models.VeganDish, VeganDishAdmin)
 admin.site.register(models.CuisineTag)
 admin.site.register(models.FeatureTag)
 admin.site.register(models.Neighborhood)
- 

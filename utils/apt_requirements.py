@@ -3,12 +3,12 @@
 import os
 
 packages = [
-    "postgresql", 
-    "python-dev", 
-    "postgresql-server-dev-9.1", 
-    "postgis", 
-    "postgresql-9.1-postgis", 
-    "python-pip", 
+    "postgresql",
+    "python-dev",
+    "postgresql-server-dev-9.1",
+    "postgis",
+    "postgresql-9.1-postgis",
+    "python-pip",
     "supervisor"
     ]
 
@@ -27,5 +27,3 @@ for package in packages:
         os.system("apt-get update")
         os.system(install_string)
         break
-    
-    

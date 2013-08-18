@@ -18,7 +18,6 @@
 """ A simple module for sending emails through gmail """
 
 from django.conf import settings
-from django.core.mail import send_mail
 from django.core.mail import EmailMultiAlternatives
 from django.utils.html import strip_tags
 from django.template.loader import render_to_string
@@ -28,7 +27,7 @@ def send_new_vendor_approval(vendor):
     from pdb import set_trace; set_trace()
     subject = '[VegPhilly] New Vendor Approved'
     html_body = render_to_string(
-        "vegancity/approval_email.html", { 'vendor': vendor })
+        "vegancity/approval_email.html", {'vendor': vendor})
     text_body = strip_tags(html_body)
     sender = settings.EMAIL_HOST_USER
     recipients = [vendor.submitted_by.email]
@@ -40,4 +39,3 @@ def send_new_vendor_approval(vendor):
 
     msg.attach_alternative(html_body, "text/html")
     msg.send()
-

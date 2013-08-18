@@ -1,5 +1,3 @@
-import os
-
 from fabric.api import cd, run, require, sudo, env, local, settings, abort
 from fabric import operations
 
@@ -8,6 +6,7 @@ from fabric import operations
 ####################
 
 env.site_path = '/var/projects/vegphilly'
+
 
 def vagrant():
     """ Configure fabric to use vagrant as a host.
@@ -35,7 +34,7 @@ def vagrant():
                 setting_value = setting_value[1:-1]
 
             vagrant_ssh_config[setting_name] = setting_value
-        except Exception, e:
+        except Exception:
             pass
 
     env.key_filename = vagrant_ssh_config['IdentityFile']
@@ -46,12 +45,15 @@ def vagrant():
 # utility commands
 ####################
 
+
 def _python(cmd):
     """ build a command string for python """
     return 'python %s' % cmd
 
+
 def _supervisor_runserver(cmd):
     return "supervisorctl %s vegphilly-runserver" % cmd
+
 
 def _manage(cmd):
     """ Execute 'cmd' as a python management command """
@@ -64,6 +66,7 @@ def _manage(cmd):
 #
 # use these commands to run unit tests or linting on source
 
+
 def syncdb():
     """ run syncdb and all migrations
 
@@ -73,11 +76,13 @@ def syncdb():
     _manage('syncdb --noinput')
     _manage('migrate --noinput')
 
+
 def schemamigration(app_name, flag=' --auto'):
     """ create a south schemamigration """
     require('site_path')
 
     _manage('schemamigration %s %s' % (app_name, flag))
+
 
 def rebuild_fixture():
     _manage('dumpdata auth contenttypes vegancity > '
@@ -89,11 +94,13 @@ def rebuild_fixture():
 #
 # use these commands to run unit tests or linting on source
 
+
 def test(test_filter="vegancity"):
     """ run application tests """
     require('site_path')
 
     _manage('test %s' % test_filter)
+
 
 def check():
     """ Run flake8 (pep8 + pyflakes) """
@@ -124,17 +131,21 @@ def restart_app():
     """ restart the development webserver """
     sudo(_supervisor_runserver("restart"))
 
+
 def start_app():
     """ start the development webserver """
     sudo(_supervisor_runserver("start"))
+
 
 def stop_app():
     """ stop the development webserver """
     sudo(_supervisor_runserver("stop"))
 
+
 def app_status():
     """ view the status of the webserver process """
     sudo(_supervisor_runserver("status"))
+
 
 def watch_log():
     """ view the development webserver console in realtime """
@@ -150,6 +161,7 @@ def watch_log():
 # python code.
 #
 
+
 def debugserver():
     """
     run a development server in the current terminal
@@ -159,13 +171,16 @@ def debugserver():
     sudo(_supervisor_runserver("stop"))
     _manage("runserver 0.0.0.0:8000")
 
+
 def django_shell():
     """ Opens a python shell that connects to the django application """
     operations.open_shell(command=_manage("shell"))
 
+
 def dbshell():
     """ Opens a psql shell that connects to the application database """
     operations.open_shell(command=_manage("dbshell"))
+
 
 def venv_shell():
     """ Opens a bash shell on the vm from the project root"""
