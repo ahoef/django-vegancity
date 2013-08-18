@@ -37,7 +37,6 @@ class TagManager(models.Manager):
 
     def word_search(self, word):
         "takes a word and searches all tag names for that word"
-        print "word:", word, "\n"
         qs = self.filter(name__icontains=word)
         if not qs and word[-1] == 's':
             qs = self.filter(name__icontains=word[:-1])
@@ -188,8 +187,7 @@ class ApprovedReviewManager(ReviewManager):
 
 
 class Review(models.Model):
-    "The main class for handling reviews.  More or less requires a vendor."
-    
+
     # CORE FIELDS
     vendor = models.ForeignKey('Vendor')
     author = models.ForeignKey(User)

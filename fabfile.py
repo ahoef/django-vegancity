@@ -1,6 +1,7 @@
-from fabric.api import cd, run, require, sudo, env, local
-
 import os
+
+from fabric.api import cd, run, require, sudo, env, local, settings, abort
+from fabric import operations
 
 ####################
 # env mods
@@ -57,9 +58,11 @@ def _manage(cmd):
     with cd(env.site_path):
         run(_python('manage.py %s' % cmd))
 
-####################
-# runnable commands
-####################
+####################################################################
+# data management commands
+####################################################################
+#
+# use these commands to run unit tests or linting on source
 
 def syncdb():
     """ run syncdb and all migrations
@@ -76,14 +79,46 @@ def schemamigration(app_name, flag=' --auto'):
 
     _manage('schemamigration %s %s' % (app_name, flag))
 
+def rebuild_fixture():
+    _manage('dumpdata auth contenttypes vegancity > '
+            'vegancity/fixtures/public_data.json')
+
+####################################################################
+# testing commands
+####################################################################
+#
+# use these commands to run unit tests or linting on source
+
 def test(test_filter="vegancity"):
     """ run application tests """
     require('site_path')
 
     _manage('test %s' % test_filter)
 
-def rebuild_fixture():
-    _manage('dumpdata auth contenttypes vegancity > vegancity/fixtures/public_data.json')
+def check():
+    """ Run flake8 (pep8 + pyflakes) """
+    require('site_path')
+
+    with settings(warn_only=True):
+        with cd(env.site_path):
+            flake8 = run('flake8 --exclude migrations *')
+
+    if flake8.failed:
+        abort('Code linting failed')
+
+####################################################################
+# appserver daemon commands
+####################################################################
+#
+# by default, the build tools will automatically start a daemon that
+# runs an appserver on your host machine's port 8000. This is great
+# for designers and content editors so they can just run 'vagrant up'
+# and get to work. The following commands allow you to control that
+# process without logging into the machine.
+
+# see terminal/shell commands for command that give you more fine-
+# grained control, like running debuggers in your current terminal
+
 
 def restart_app():
     """ restart the development webserver """
@@ -104,3 +139,34 @@ def app_status():
 def watch_log():
     """ view the development webserver console in realtime """
     sudo("tail -f /var/log/vegphilly/log.log")
+
+####################################################################
+# terminal shell/debugger commands
+####################################################################
+#
+
+# to run a 'debugserver' which will kill the daemon and run a server
+# in your current terminal. This is useful for using pdb to debug
+# python code.
+#
+
+def debugserver():
+    """
+    run a development server in the current terminal
+
+    kills the daemon appserver first to avoid port conflicts.
+    """
+    sudo(_supervisor_runserver("stop"))
+    _manage("runserver 0.0.0.0:8000")
+
+def django_shell():
+    """ Opens a python shell that connects to the django application """
+    operations.open_shell(command=_manage("shell"))
+
+def dbshell():
+    """ Opens a psql shell that connects to the application database """
+    operations.open_shell(command=_manage("dbshell"))
+
+def venv_shell():
+    """ Opens a bash shell on the vm from the project root"""
+    operations.open_shell(command="cd %s" % env.site_path)
