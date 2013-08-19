@@ -7,7 +7,7 @@
 ###############################
 ## INITIALIZE PYTHON PACKAGES
 ###############################
-pip install -r /var/projects/vegphilly/requirements.txt
+pip install -r /usr/local/vegphilly/requirements.txt
 
 ###############################
 ## PREPARE APP ENV
@@ -20,9 +20,18 @@ su vagrant -c "python /var/projects/vegphilly/manage.py loaddata /var/projects/v
 ###############################
 ## PREPARE APP ENV
 ###############################
-cp -v /var/projects/vegphilly/utils/dev_env/supervisor_vegphilly_runserver_TEMPLATE.conf /etc/supervisor/conf.d/vegphilly_runserver.conf
+cp -v /usr/local/vegphilly/utils/dev_env/supervisor_vegphilly_runserver_TEMPLATE.conf /etc/supervisor/conf.d/vegphilly_runserver.conf
 mkdir /var/log/vegphilly
 touch /var/log/vegphilly/log.log
 chmod -R 777 /var/log/vegphilly
 supervisorctl update
 supervisorctl reload
+
+###############################
+## PREPARE WEBSERVER
+###############################
+cp -v /usr/local/vegphilly/utils/dev_env/nginx_vegphilly.conf /etc/nginx/conf.d/
+rm /etc/nginx/sites-enabled/default
+rm /etc/nginx/sites-available/default
+sudo service nginx restart
+
