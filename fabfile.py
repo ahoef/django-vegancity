@@ -1,6 +1,8 @@
 from fabric.api import cd, run, require, sudo, env, local, settings, abort
 from fabric import operations
 
+import datetime
+
 ####################
 # env mods
 ####################
@@ -187,3 +189,25 @@ def dbshell():
 def venv_shell():
     """ Opens a bash shell on the vm from the project root"""
     operations.open_shell(command="cd %s" % env.site_path)
+
+
+####################################################################
+# server maintenance commands
+####################################################################
+#
+# these commands are used to maintain production servers. you will
+# be responsible for providing host and credential information, but
+# they make it easier to peform certain tasks.
+
+def backup_db():
+    """
+    backup the db on a remote host
+
+    requires privilege to su to postgres user.
+
+    should be run like: 'fab -H www.foo.com -u username backup_db'
+    """
+    formatted_datestring = datetime.date.today().strftime("%Y%m%d")
+    filename = "%s.sql" % formatted_datestring
+    run('su postgres -c "pg_dump vegphilly > /tmp/%s"' % filename)
+    run('mv /tmp/%s /var/vegphilly_backups/' % filename)
