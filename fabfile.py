@@ -5,7 +5,7 @@ from fabric import operations
 # env mods
 ####################
 
-env.site_path = '/var/projects/vegphilly'
+env.site_path = '/usr/local/vegphilly'
 
 
 def vagrant():
@@ -52,7 +52,7 @@ def _python(cmd):
 
 
 def _supervisor_runserver(cmd):
-    return "supervisorctl %s vegphilly-runserver" % cmd
+    return "supervisorctl %s vegphilly" % cmd
 
 
 def _manage(cmd):
@@ -151,7 +151,7 @@ def app_status():
 
 def watch_log():
     """ view the development webserver console in realtime """
-    sudo("tail -f /var/log/vegphilly/log.log")
+    sudo("tail -f /var/log/vegphilly/access.log")
 
 ####################################################################
 # terminal shell/debugger commands
