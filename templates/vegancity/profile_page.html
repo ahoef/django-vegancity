@@ -4,13 +4,205 @@
 
 {% load vegancity_template_tags %}
 
+{% block header_extra %}
+
+<link href='http://fonts.googleapis.com/css?family=Chivo:400,400italic' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="{{ STATIC_URL }}js/profile_page.js"></script>
+
+<style>
+body
+{
+  background-image:url('{{ STATIC_URL }}images/wavegrid.png');
+}
+
+/*#wrapper
+{
+  width: 55%;
+}*/
+
+.container
+{
+  width: 60%;
+}
+.column-1, .column-2
+{
+  width: 50%;
+  float: left;
+  position:relative;
+}
+.column-1 img
+{
+  float: left;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+.profile-menu
+{
+  display:none;
+}
+.column-2 a
+{
+  /*margin: 0 auto;*/
+  display: block;
+  margin-left: 60px;
+}
+.triangle
+{
+  content: "";
+  width: 0;
+  height: 0;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-right:15px solid #2a3655;
+  position: absolute;
+  top: 9px;
+  left: 45px;
+}
+.column-2 .edit-profile
+{
+  border-bottom: 1px solid white;
+}
+
+
+.row
+{
+  background-color: rgba(255, 255, 255, .5);
+/*  padding: 30px 0;*/
+  margin: 0;
+}
+
+.user-info img
+{
+  width: 85%;
+  border-radius: 100%;
+  padding-top: 30px;
+}
+
+.user-info-text
+{
+  padding: 30px 0;
+}
+
+.user-info-text p
+{
+  margin: 40px 0;
+}
+.button {
+  display: inline-block;
+  background-color: #2a3655;
+  padding: 14px 20px;
+  /*margin: 10px 0;*/
+  text-decoration: none;
+  font-size: 14px;
+  color: #ffffff;
+  font-family: 'Cabin', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+  width: 160px;
+}
+
+.button:hover {
+  opacity: 0.6;
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.user h3, .non-user h3
+{
+
+  font-family: 'Cabin', sans-serif;
+  font-size: 28px;
+  color: #444;
+  line-height: 24px;
+}
+
+.user h4, .non-user h4
+{
+  font-family: 'Chivo', sans-serif;
+  font-style: italic;
+  font-weight: normal;
+  font-size: 20px;
+}
+
+.non-user h3
+{
+  padding: 12px 20px 6px 0;
+
+
+}
+.reviews-section
+{
+  background-image:url('{{ STATIC_URL }}images/wavegrid.png');
+  min-width: 1200px;
+}
+.reviews-header
+{
+  text-align: center;
+}
+
+#left-carrot {
+  padding-top: 40px;
+}
+
+#right-carrot {
+  top: -20px;
+  transform:rotate(180deg);
+  -ms-transform:rotate(180deg);
+  -moz-transform:rotate(180deg);
+  -webkit-transform:rotate(180deg);
+  -o-transform:rotate(180deg);
+ }
+
+.reviews-header h2
+{
+  display: inline-block;
+  font-family: 'Cabin', sans-serif;
+  letter-spacing: 1.5px;
+  font-size: 28px;
+  color: white;
+  display: inline;
+  background-color: #2A3655;
+  width: 100%;
+}
+
+.gear img
+{
+  position: absolute;
+  left:16px;
+  top:14px;
+}
+.open {
+  display:block;
+}
+
+@media (max-width: 1280px) {
+  .container {width: 80%;}
+}
+@media (max-width: 1015px) {
+  .column-1, .column-2 {width: 100%;}
+}
+@media (max-width: 450px) {
+  .container {width: 90%;}
+  .user h3 {font-size: 24px;}
+  .user h4 {font-size: 16px;}
+  .user-info-text p {margin: 15px 0 30px 0;}
+  .non-user h3 {padding: 12px 20px 32px 0;}
+}
+@media (max-width: 345px) {
+  .non-user h3 {padding: 12px 20px 6px 0;}
+}
+
+</style>
+{% endblock %}
+
 {% block summary %}
-  <h1>{{ profile_user.username }}</h1>
+<!--   <h1>{{ profile_user.username }}</h1> -->
 {% endblock summary %}
 
 {% block content %}
-  <div class="container">
-  <img src="{{ profile_user.email|gravatar_urlify }}" title="add your photo on gravatar.com!"><br>
+<div class="container">
+
   {% if user == profile_user %}
     {% if messages %}
       {% for message in messages %}
@@ -22,30 +214,66 @@
     {% endif %}
   {% endif %}
 
-  <table class="table table-hover">
-    {% if user == profile_user %}
-      {% if profile_user.first_name %}<tr><td>Name:</td><td>{{ profile_user.first_name }} {{ profile_user.last_name }}</td></tr>{% endif %}
-        <tr><td>Email:</td><td>{{ profile_user.email }}</td></tr>
-        <tr><td>Subscribed to mailing list:</td><td>{% if profile_user.get_profile.mailing_list %}Yes{% else %}No{% endif %}</td></tr>
-      {% else %}
-        {% if profile_user.first_name %}<tr><td>Name:</td><td>{{ profile_user.first_name }}&nbsp;{{ profile_user.last_name.0.upper }}</td></tr>{% endif %}
-      {% endif %}
-    {% if profile_user.get_profile.bio %}<tr><td>Bio:</td><td>{{ profile_user.get_profile.bio }}</td></tr>{% endif %}
-  </table>
+  <div class="user-info-text">
+    <div class="column-1 ">
+      <img src="{{ profile_user.email|gravatar_urlify }}" title="add your photo on gravatar.com!" style="width:72px">
 
-  {% if user == profile_user %}
-    <p><a href="{% url 'account_edit' %}" class="btn btn-custom">Edit your profile</a>
-    <p><a href="{% url 'password_change' %}" class="btn btn-custom">Change Your Password</a>
-  {% endif %}
+    {% if user == profile_user %}
+      <div class="user">
+        {% if profile_user.first_name %}
+          <h3>{{ profile_user.first_name }} {{ profile_user.last_name }}</h3>
+        {% else %}
+          <h3>{{ profile_user.username }}</h3>
+        {% endif %}
+        <h4>{{ profile_user.email }}</h4>
+      </div>
+    {% else %}
+      <div class="non-user">
+        {% if profile_user.first_name %}
+          <h3>{{ profile_user.first_name }}&nbsp;{{ profile_user.last_name.0.upper }}</h3>
+        {% else %}
+          <h3>{{ profile_user.username }}</h3>
+        {% endif %}
+      </div>
+    {% endif %}
+
+      {% if profile_user.get_profile.bio %}<p>{{ profile_user.get_profile.bio }}</p>{% endif %}
+    </div>
+
+    <div class="column-2">
+
+        {% if user == profile_user %}
+        <div class="gear"><img src="{{ STATIC_URL }}images/gear.png" title=""></div>
+        <div class="profile-menu">
+          <div class="triangle"></div>
+          <a href="{% url 'account_edit' %}" class="button edit-profile">Edit Your Profile</a>
+          <a href="{% url 'password_change' %}" class="button">Change Your Password</a>
+        </div>
+        {% endif %}
+    </div>
+  </div>
+</div>
 
 {% if reviews %}
-  <h2>reviews</h2>
+<div class="row">
+<!-- <div class="reviews-section"> -->
+
+  <div class="reviews-header">
+    {% if profile_user.first_name %}
+      <h2> {{ profile_user.first_name }}'s reviews</h2>
+    {% else %}
+      <h2> {{ profile_user.username }}'s reviews</h2>
+    {% endif %}
+  </div>
   {% for review in reviews %}
     <h3>{{ review.vendor.name }}</h3>
     {{ review.title }}<br>
     {{ review.content }}<br>
     <br><br>
   {% endfor %}
+
+<!-- </div> -->
+</div>
 {% endif %}
 
 </div>
