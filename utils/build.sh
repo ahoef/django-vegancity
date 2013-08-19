@@ -25,6 +25,7 @@ mkdir /var/log/vegphilly
 touch /var/log/vegphilly/access.log
 touch /var/log/vegphilly/error.log
 chmod -R 777 /var/log/vegphilly
+mkdir /var/vegphilly_backups/
 supervisorctl update
 supervisorctl reload
 
@@ -36,3 +37,8 @@ rm /etc/nginx/sites-enabled/default
 rm /etc/nginx/sites-available/default
 sudo service nginx restart
 
+###############################
+## CREATE BACKUP CRONJOB
+###############################
+
+echo '0 2 * * * /usr/local/vegphilly/utils/db_backup.py' | crontab -
