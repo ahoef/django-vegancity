@@ -4,6 +4,78 @@
 
 {% load vegancity_template_tags %}
 
+{% block header_extra %}
+
+<style>
+
+.user-info
+{
+  margin-bottom: 40px;
+}
+.user-info img
+{
+  width: 100%;
+}
+.button {
+  display: inline-block;
+  background-color: #2a3655;
+  padding: 18px 35px;
+  margin: 10px 0;
+  text-decoration: none;
+  font-size: 20px;
+  color: #ffffff;
+  width: 85%;
+  font-family: 'Cabin', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-align: center;
+}
+
+.button:hover {
+  opacity: 0.6;
+  text-decoration: none;
+  color: #ffffff;
+}
+.reviews-section
+{
+  background-image:url('{{ STATIC_URL }}images/wavegrid.png');
+  min-width: 1200px;
+}
+.reviews-header
+{
+  text-align: center;
+}
+
+#left-carrot {
+  padding-top: 40px;
+}
+
+#right-carrot {
+  top: -20px;
+  transform:rotate(180deg);
+  -ms-transform:rotate(180deg);
+  -moz-transform:rotate(180deg);
+  -webkit-transform:rotate(180deg);
+  -o-transform:rotate(180deg);
+ }
+
+.reviews-header h2
+{
+  display: inline-block;
+  font-family: 'Cabin', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-size: 35px;
+  color: #444;
+  display: inline;
+  position: relative;
+  top: 20px;
+
+}
+
+</style>
+{% endblock %}
+
 {% block summary %}
   <h1>{{ profile_user.username }}</h1>
 {% endblock summary %}
@@ -24,28 +96,60 @@
 
   <table class="table table-hover">
     {% if user == profile_user %}
-      {% if profile_user.first_name %}<tr><td>Name:</td><td>{{ profile_user.first_name }} {{ profile_user.last_name }}</td></tr>{% endif %}
-        <tr><td>Email:</td><td>{{ profile_user.email }}</td></tr>
-        <tr><td>Subscribed to mailing list:</td><td>{% if profile_user.get_profile.mailing_list %}Yes{% else %}No{% endif %}</td></tr>
-      {% else %}
-        {% if profile_user.first_name %}<tr><td>Name:</td><td>{{ profile_user.first_name }}&nbsp;{{ profile_user.last_name.0.upper }}</td></tr>{% endif %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-success">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+          </div>
+        {% endfor %}
       {% endif %}
-    {% if profile_user.get_profile.bio %}<tr><td>Bio:</td><td>{{ profile_user.get_profile.bio }}</td></tr>{% endif %}
-  </table>
+    {% endif %}
+  </div>
 
-  {% if user == profile_user %}
-    <p><a href="{% url 'account_edit' %}" class="btn btn-custom">Edit your profile</a>
-    <p><a href="{% url 'password_change' %}" class="btn btn-custom">Change Your Password</a>
-  {% endif %}
+  <div class="span4">
+    <table class="table table-hover">
+      {% if user == profile_user %}
+        {% if profile_user.first_name %}<tr><td>Name:</td><td>{{ profile_user.first_name }} {{ profile_user.last_name }}</td></tr>{% endif %}
+          <tr><td>Email:</td><td>{{ profile_user.email }}</td></tr>
+          <tr><td>Subscribed to mailing list:</td><td>{% if profile_user.get_profile.mailing_list %}Yes{% else %}No{% endif %}</td></tr>
+        {% else %}
+          {% if profile_user.first_name %}<tr><td>Name:</td><td>{{ profile_user.first_name }}&nbsp;{{ profile_user.last_name.0.upper }}</td></tr>{% endif %}
+        {% endif %}
+      {% if profile_user.get_profile.bio %}<tr><td>Bio:</td><td>{{ profile_user.get_profile.bio }}</td></tr>{% endif %}
+    </table>
+  </div>
+  <div class="span4">
+    {% if user == profile_user %}
+      <p><a href="{% url 'account_edit' %}" class="button">Edit your profile</a>
+      <p><a href="{% url 'password_change' %}" class="button">Change Your Password</a>
+    {% endif %}
+  </div>
+</div>
 
 {% if reviews %}
-  <h2>reviews</h2>
+
+<div class="reviews-section">
+<div class="container">
+
+  <div class="reviews-header">
+    <img id="left-carrot" src="{{ STATIC_URL }}images/horiz_carrot.png" width="325px">
+    {% if profile_user.first_name %}
+      <h2> {{ profile_user.first_name }}'s reviews</h2>
+    {% else %}
+      <h2> {{ profile_user.username }}'s reviews</h2>
+    {% endif %}
+    <img id="right-carrot" src="{{ STATIC_URL }}images/horiz_carrot.png" width="325px">
+  </div>
   {% for review in reviews %}
     <h3>{{ review.vendor.name }}</h3>
     {{ review.title }}<br>
     {{ review.content }}<br>
     <br><br>
   {% endfor %}
+</div>
+
+</div>
 {% endif %}
 
 </div>
