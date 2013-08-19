@@ -8,14 +8,16 @@ from .search import master_search
 
 from tastypie.api import Api
 
+
 def build_api():
     v1_api = Api(api_name='v1')
     v1_api.register(VendorResource())
     v1_api.register(ReviewResource())
     return v1_api
 
+
 class VendorResource(ModelResource):
-    reviews = fields.ToManyField('vegancity.api.ReviewResource', 
+    reviews = fields.ToManyField('vegancity.api.ReviewResource',
                                  'review_set',
                                  null=True)
     neighborhood = fields.ToOneField('vegancity.api.NeighborhoodResource',
@@ -43,14 +45,14 @@ class VendorResource(ModelResource):
     atmosphere_rating = fields.IntegerField(null=True, readonly=True)
 
     def prepend_urls(self):
-        response_list = [
-            url(r'^(?P<resource_name>%s)/search%s$' %
-            (self._meta.resource_name, trailing_slash()),
-            self.wrap_view('get_search'),
-            name='api_get_search'),
-        ]
+        url_template = r'^(?P<resource_name>%s)/search%s$'
 
-        return response_list
+        url_body = url_template % (self._meta.resource_name, trailing_slash())
+
+        response_url = url(url_body, self.wrap_view('get_search'),
+                           name='api_get_search')
+
+        return [response_url]
 
     def get_search(self, request, **kwargs):
         raw_results = master_search(request.GET.get('q', ''))
@@ -69,7 +71,7 @@ class VendorResource(ModelResource):
     def dehydrate_best_vegan_dish(self, bundle):
         vegan_dish = bundle.obj.best_vegan_dish()
         return vegan_dish
-    
+
     def dehydrate_food_rating(self, bundle):
         return bundle.obj.food_rating()
 
@@ -79,9 +81,8 @@ class VendorResource(ModelResource):
     class Meta:
         queryset = models.Vendor.approved_objects.all()
         resource_name = 'vendors'
-        fields = [
-            'id', 'name', 'address', 'website', 'phone', 'notes', 'resource_uri'
-        ]
+        fields = ['id', 'name', 'address', 'website', 'phone',
+                  'notes', 'resource_uri']
 
 
 class ReviewResource(ModelResource):

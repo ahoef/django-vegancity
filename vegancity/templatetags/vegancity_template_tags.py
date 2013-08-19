@@ -5,14 +5,17 @@ from urllib import quote_plus
 
 register = template.Library()
 
+
 def gravatar_urlify(email_address, size=72):
     # TODO: change to something relative or move to settings file
     default = "http://www.vegphilly.com/static/images/default_user_icon.jpg"
     if email_address:
         hash = hashlib.md5(email_address).hexdigest()
-        return "http://gravatar.com/avatar/%s?s=%i&d=%s" % (hash, size, quote_plus(default))
+        return ("http://gravatar.com/avatar/%s?s=%i&d=%s" %
+                (hash, size, quote_plus(default)))
     else:
         return default
+
 
 def showing_vendors_string(text):
     if text:
@@ -25,6 +28,7 @@ def showing_vendors_string(text):
     else:
         return ""
 
+
 def format_search_type(text):
     if text:
         if text == "tag":
@@ -36,11 +40,13 @@ def format_search_type(text):
     else:
         return ""
 
+
 def format_button_title(text):
     if text == "location":
         return "Enter an address, intersection or zip code"
     else:
         return ""
+
 
 def strip_http(text):
     if text:

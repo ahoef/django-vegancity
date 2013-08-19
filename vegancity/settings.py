@@ -19,7 +19,7 @@ from django.core.exceptions import ImproperlyConfigured
 import os
 
 APP_ROOT = os.path.dirname(os.path.realpath(__file__))
-PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -37,8 +37,6 @@ DATABASES = {
         'USER': 'postgres',
         }
     }
-
-
 
 TIME_ZONE = None
 
@@ -135,7 +133,7 @@ EMAIL_HOST_PASSWORD = ''
 EMAIL_PORT = 587
 
 try:
-    from settings_local import *
+    from settings_local import *  # NOQA
 except ImportError:
     pass
 

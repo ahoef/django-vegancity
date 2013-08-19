@@ -1,19 +1,22 @@
 from django.test import TestCase
-from django.utils import unittest
 from django.test.client import RequestFactory
 from mock import MagicMock
 
 from django.db import IntegrityError
 
-from vegancity import  models, views, email
+from vegancity import models, views, email
+
 
 def get_user():
     user = models.User(username="Moby")
     user.save()
     return user
 
+
 class PageLoadTest(TestCase):
+
     fixtures = ['public_data.json']
+
     def setUp(self):
         self.reviews = models.Review.approved_objects.all()
         self.vendors = models.Vendor.approved_objects.all()
@@ -65,10 +68,11 @@ class PageLoadTest(TestCase):
             self.assertNoBrokenTemplates(url)
             self.assertCorrectStatusCode(url, 200)
 
+
 class VendorTest(TestCase):
     def setUp(self):
         self.user = get_user()
-        
+
     def test_no_address_no_geocode(self):
         vendor = models.Vendor(name="Test Vendor")
         vendor.save()
@@ -86,14 +90,14 @@ class VendorTest(TestCase):
 
         self.assertNotEqual(vendor.location, None)
         self.assertNotEqual(vendor.neighborhood, None)
-        
+
     def test_needs_geocoding(self):
         vendor = models.Vendor(name="Test Vendor")
         self.assertFalse(vendor.needs_geocoding())
 
         vendor.address = "300 Christian St, Philadelphia, PA, 19147"
         self.assertTrue(vendor.needs_geocoding())
-        
+
         vendor.save()
         self.assertFalse(vendor.needs_geocoding())
 
@@ -104,7 +108,7 @@ class VendorTest(TestCase):
         self.assertEqual(vendor.food_rating(), None)
         self.assertEqual(vendor.atmosphere_rating(), None)
 
-        models.Review(vendor=vendor, 
+        models.Review(vendor=vendor,
                       approved=True,
                       food_rating=1,
                       atmosphere_rating=1,
@@ -113,33 +117,34 @@ class VendorTest(TestCase):
         self.assertEqual(vendor.food_rating(), 1)
         self.assertEqual(vendor.atmosphere_rating(), 1)
 
-        review2 = models.Review(vendor=vendor, 
-                      approved=False,
-                      food_rating=4,
-                      atmosphere_rating=4,
-                      author=self.user)
+        review2 = models.Review(vendor=vendor,
+                                approved=False,
+                                food_rating=4,
+                                atmosphere_rating=4,
+                                author=self.user)
         review2.save()
 
         self.assertEqual(vendor.food_rating(), 1)
         self.assertEqual(vendor.atmosphere_rating(), 1)
 
-        review2.approved=True
+        review2.approved = True
         review2.save()
 
         # Floored Average
         self.assertEqual(vendor.food_rating(), 2)
         self.assertEqual(vendor.atmosphere_rating(), 2)
 
-        review3 = models.Review(vendor=vendor, 
-                      approved=True,
-                      food_rating=4,
-                      atmosphere_rating=4,
-                      author=self.user)
+        review3 = models.Review(vendor=vendor,
+                                approved=True,
+                                food_rating=4,
+                                atmosphere_rating=4,
+                                author=self.user)
         review3.save()
 
         # Floored Average
         self.assertEqual(vendor.food_rating(), 3)
         self.assertEqual(vendor.atmosphere_rating(), 3)
+
 
 class ViewTests(TestCase):
     def setUp(self):
@@ -148,24 +153,27 @@ class ViewTests(TestCase):
 
     def test_valid_new_vendor_redirects(self):
         request = self.factory.post('/vendors/add',
-                                    { 'name': 'test123',
-                                      'address': '123 Main st'})
+                                    {'name': 'test123',
+                                     'address': '123 Main st'})
         request.user = self.user
 
         response = views.new_vendor(request)
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(models.Vendor.objects.filter(name="test123").count(), 1)
+        self.assertEqual(1,
+                         models.Vendor.objects.filter(name="test123").count())
 
     def test_invalid_new_vendor_does_not_save(self):
         request = self.factory.post('/vendors/add',
-                                    { 'name': 'test123' })
+                                    {'name': 'test123'})
         request.user = self.user
 
         response = views.new_vendor(request)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(models.Vendor.objects.filter(name="test123").count(), 0)
+        self.assertEqual(0,
+                         models.Vendor.objects.filter(name="test123").count())
+
 
 class EmailTest(TestCase):
 
@@ -188,7 +196,7 @@ class EmailTest(TestCase):
                                submitted_by=self.user)
         vendor.save()
         email.send_new_vendor_approval.assert_not_called()
-        
+
         # called now because it was approved
         vendor.approval_status = "approved"
         vendor.save()
@@ -206,6 +214,7 @@ class EmailTest(TestCase):
         vendor.approval_status = "approved"
         vendor.save()
         email.send_new_vendor_approval.assert_not_called()
+
 
 class VendorVeganDishValidationTest(TestCase):
     """
@@ -232,7 +241,6 @@ class VendorVeganDishValidationTest(TestCase):
 
         self.vendor.vegan_dishes.add(self.vegan_dish1)
         self.vendor.vegan_dishes.add(self.vegan_dish2)
-
 
     def test_can_delete_relationship_without_any_reviews(self):
         self.assertEqual(self.vendor.vegan_dishes.count(), 2)

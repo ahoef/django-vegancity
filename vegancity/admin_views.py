@@ -15,35 +15,35 @@
 # You should have received a copy of the GNU General Public License
 # along with Vegancity.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response, render
+from django.http import HttpResponse
+from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.core.urlresolvers import reverse
 
 from django.contrib.admin.views.decorators import staff_member_required
 
-import forms
 import models
-import itertools
 import csv
 import datetime
 
+
 @staff_member_required
 def pending_approval_count(request):
-    pending_approval_count = (models.Vendor.objects.pending_approval().count() +
-                              models.Review.objects.pending_approval().count())
-    return HttpResponse(str(pending_approval_count))
+    pending_vendor_count = models.Vendor.objects.pending_approval().count()
+    pending_review_count = models.Review.objects.pending_approval().count()
+    return HttpResponse(str(pending_vendor_count + pending_review_count))
+
 
 @staff_member_required
 def pending_approval(request):
     pending_vendors = models.Vendor.objects.pending_approval()
     pending_reviews = models.Review.objects.pending_approval()
     ctx = {
-        'pending_vendors' : pending_vendors,
-        'pending_reviews' : pending_reviews,
+        'pending_vendors': pending_vendors,
+        'pending_reviews': pending_reviews,
         }
     return render_to_response("admin/pending_approval.html", ctx,
                               context_instance=RequestContext(request))
+
 
 def csv_filename_builder(filename_prefix):
     """
@@ -64,7 +64,7 @@ def csv_filename_builder(filename_prefix):
     response['Content-Disposition'] = 'attachment; %s;' % filename_param
 
     return response
-    
+
 
 @staff_member_required
 def mailing_list(request):
@@ -79,8 +79,9 @@ def mailing_list(request):
     for user in mailing_list_users:
         writer.writerow([user.username, user.first_name,
                          user.last_name, user.email])
-    
+
     return response
+
 
 @staff_member_required
 def vendor_list(request):
@@ -105,5 +106,5 @@ def vendor_list(request):
                          vendor.website,
                          vendor.veg_level,
                          vendor.notes])
-    
+
     return response

@@ -15,17 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with Vegancity.  If not, see <http://www.gnu.org/licenses/>.
 
-from django.core.urlresolvers import reverse
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from settings import INSTALLED_APPS
-from vegancity import models, views
+from vegancity import views
 from .api import build_api
 
 admin.autodiscover()
 
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
     url(r'^api/', include(build_api().urls)),
 
     url(r'^admin/pending_approval/$', 'vegancity.admin_views.pending_approval', name="pending_approval"),
@@ -45,11 +44,11 @@ urlpatterns = patterns('',
     url(r'^vendors/review/(?P<pk>\d+)/thanks/$', views.ReviewThanksView.as_view(), name="review_thanks"),
 
     url(r'^accounts/login/$',  'django.contrib.auth.views.login', name='login'),
-    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page' : '/'},  name='logout'),
+    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'},  name='logout'),
     url(r'^accounts/register/$', 'vegancity.views.register', name='register'),
     url(r'^accounts/register/thanks/$', views.RegisterThanksView.as_view(), name='register_thanks'),
     url(r'^accounts/password/change/$', 'vegancity.views.password_change', name='password_change'),
-    url(r'^accounts/profile/$', 'vegancity.views.user_profile', { 'username': None }, name='my_account'),
+    url(r'^accounts/profile/$', 'vegancity.views.user_profile', {'username': None}, name='my_account'),
     url(r'^accounts/profile/edit/$', 'vegancity.views.account_edit', name='account_edit'),
 
     url(r'^users/(?P<username>[a-zA-Z0-9_@.+-]+)/$', 'vegancity.views.user_profile', name='user_profile'),

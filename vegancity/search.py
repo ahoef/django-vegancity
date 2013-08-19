@@ -16,30 +16,33 @@
 
 # You should have received a copy of the GNU General Public License
 # along with Vegancity.  If not, see <http://www.gnu.org/licenses/>.
+"""
+A module for taking a search query and deciding which resultset to
+show first.
 
+The idea is that queries with certain patterns are likely to be
+lumped as an address search, or a name search, etc.  This module
+contains tools for taking a query and returing a rank tuple of the
+form:
 
+((score, type_string), (score, type_string))
 
-# A module for taking a search query and deciding which resultset to show first.
-
-# The idea is that queries with certain patterns are likely to be lumped as an
-# address search, or a name search, etc.  This module contains tools for taking
-# a query and returing a rank tuple of the form:
-#
-#     ((score, type_string), (score, type_string))
-# ex. ((7, 'address'), (4, 'name'), (0, 'tags'))
+ex. ((7, 'address'), (4, 'name'), (0, 'tags'))
+"""
 
 import re
-import shlex
 import geocode
 
 from vegancity.models import FeatureTag, CuisineTag, Vendor
 
 from django.contrib.gis.geos import Point
 
+
 def fluff_split(query):
     "takes a query and returns a list of non-fluff tokens"
     FLUFF_WORDS = ("and", "or", "&", "the", "best")
-    tokens = [token for token in query.split() if token not in FLUFF_WORDS and len(token) > 2]
+    tokens = [token for token in query.split()
+              if token not in FLUFF_WORDS and len(token) > 2]
     return tokens
 
 
@@ -56,16 +59,17 @@ def _calculate_rank(query, patterns):
         hits = re.findall(regexp, query)
         rank += score * len(hits)
     return rank
-    
+
+
 def _address_rank(query):
     ADDRESS_PATTERNS = (
-        (3, "\dth"), 
-        (3, "\dst"), 
-        (3, "\dnd"), 
-        (3,  "\drd"), 
+        (3, "\dth"),
+        (3, "\dst"),
+        (3, "\dnd"),
+        (3,  "\drd"),
         (2, "near"),
         (2, " by "),
-        (1, " and "), 
+        (1, " and "),
         (1, " & "),
         )
     return _calculate_rank(query, ADDRESS_PATTERNS)
@@ -79,7 +83,7 @@ def name_search(query, initial_queryset=None):
     words = query.split()
     name_words = set()
     name_vendors = set()
-    name_rank = 0 # name gets no love initially
+    name_rank = 0  # name gets no love initially
 
     for word in words:
         name_hits = Vendor.approved_objects.filter(name__icontains=word)
@@ -93,15 +97,16 @@ def name_search(query, initial_queryset=None):
     name_rank += name_word_density * 10
 
     if initial_queryset:
-        name_vendors = [ v for v in name_vendors if v in initial_queryset ]
+        name_vendors = [v for v in name_vendors if v in initial_queryset]
 
     return name_vendors, name_rank
+
 
 def tag_search(query, initial_queryset=None):
     words = query.split()
     tag_words = set()
     tag_vendors = set()
-    tag_rank = 2 # tag is more likely, give it 2 for now
+    tag_rank = 2  # tag is more likely, give it 2 for now
 
     for word in words:
         ft_hits = FeatureTag.objects.word_search(word)
@@ -122,20 +127,24 @@ def tag_search(query, initial_queryset=None):
     tag_rank += tag_word_density * 10
 
     if initial_queryset:
-        tag_vendors = [ v for v in tag_vendors if v in initial_queryset ]
+        tag_vendors = [v for v in tag_vendors if v in initial_queryset]
 
     return tag_vendors, tag_rank
+
 
 def address_search(query, initial_queryset=None):
     address_rank = 8
     address_rank += _address_rank(query)
 
-    address_vendors = perform_address_search(Vendor.approved_objects.all(), query)
+    address_vendors = perform_address_search(Vendor.approved_objects.all(),
+                                             query)
 
     if initial_queryset:
-        address_vendors = [ v for v in address_vendors if v in initial_queryset ]
+        address_vendors = [v for v in address_vendors
+                           if v in initial_queryset]
 
     return address_vendors, address_rank
+
 
 def master_search(query, initial_queryset=None):
     address_vendors, address_rank = address_search(query)
@@ -156,8 +165,10 @@ def master_search(query, initial_queryset=None):
         master_results = tag_vendors
 
     if initial_queryset:
-        master_results = [vendor for vendor in master_results if vendor in initial_queryset]
+        master_results = [vendor for vendor in master_results
+                          if vendor in initial_queryset]
     return master_results, search_type
+
 
 def perform_address_search(initial_queryset, query):
         vendors = initial_queryset
@@ -165,7 +176,7 @@ def perform_address_search(initial_queryset, query):
         # todo this is a mess!
         geocode_result = geocode.geocode_address(query)
 
-        if geocode_result == None:
+        if geocode_result is None:
             return []
         latitude, longitude, neighborhood = geocode_result
 

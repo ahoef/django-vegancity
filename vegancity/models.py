@@ -18,12 +18,12 @@
 from django.contrib.gis.db import models
 from django.contrib.gis.geos import Point
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 
 from django.db.models.signals import m2m_changed
 
 from django.db import IntegrityError
 
-from django.db.models import Q
 from django.db.models import Count
 
 from django.template.defaultfilters import slugify
@@ -32,6 +32,7 @@ from django.core.exceptions import ValidationError
 import collections
 
 from vegancity import geocode, validators, email
+
 
 class TagManager(models.Manager):
 
@@ -57,7 +58,8 @@ class TagManager(models.Manager):
         for tag in qs:
             results = results.union(tag.vendor_set.all())
         return results
-        
+
+
 class _TagModel(models.Model):
 
     name = models.CharField(
@@ -77,7 +79,7 @@ class _TagModel(models.Model):
     def get_vendors(self):
         "returns all the vendors that are tagged with this tag."
         return self.vendor_set.all()
-   
+
     class Meta:
         abstract = True
         get_latest_by = "created"
@@ -87,17 +89,19 @@ class _TagModel(models.Model):
 # SITE CLASSES
 #######################################
 
+
 class VegLevel(models.Model):
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField()
     super_category = models.CharField(max_length=30,
-        choices=(
-            ('vegan','Vegan'),
-            ('vegetarian','Vegetarian'),
-            ('not_veg', 'Not Vegetarian')))
+                                      choices=(
+                                          ('vegan', 'Vegan'),
+                                          ('vegetarian', 'Vegetarian'),
+                                          ('not_veg', 'Not Vegetarian')))
 
     def __unicode__(self):
         return "(%s) %s" % (self.super_category, self.description)
+
 
 class Neighborhood(models.Model):
     """Used for determining what neighborhood a vendor is in."""
@@ -123,6 +127,7 @@ class UserProfile(models.Model):
     mailing_list = models.BooleanField(default=False)
     karma_points = models.IntegerField(null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
+
 
 class BlogEntry(models.Model):
     "Blog entries. They get entered in the admin."
@@ -164,9 +169,9 @@ class VeganDish(models.Model):
         verbose_name = "Vegan Dish"
         verbose_name_plural = "Vegan Dishes"
 
+
 class ReviewManager(models.Manager):
     "Manager class for handling searches by review."
-
 
     def pending_approval(self):
         """returns all reviews that are not approved, which are
@@ -205,19 +210,22 @@ class Review(models.Model):
         max_length=255, null=True, blank=True)
     food_rating = models.IntegerField(
         "How would you rate the food, overall?",
-        choices=tuple((i, i) for i in range(1, 5)), 
+        choices=tuple((i, i) for i in range(1, 5)),
         blank=True, null=True,)
     atmosphere_rating = models.IntegerField(
         "How would you rate the atmosphere?",
-        choices=tuple((i, i) for i in range(1, 5)), 
+        choices=tuple((i, i) for i in range(1, 5)),
         blank=True, null=True,)
     best_vegan_dish = models.ForeignKey(
-        'VeganDish', 
+        'VeganDish',
         verbose_name="Favorite Vegan Dish",
         blank=True, null=True)
-    unlisted_vegan_dish = models.CharField(max_length=100, blank=True, null=True)
-    suggested_feature_tags = models.CharField(max_length=255, blank=True, null=True)
-    suggested_cuisine_tags = models.CharField(max_length=255, blank=True, null=True)
+    unlisted_vegan_dish = models.CharField(max_length=100,
+                                           blank=True, null=True)
+    suggested_feature_tags = models.CharField(max_length=255,
+                                              blank=True, null=True)
+    suggested_cuisine_tags = models.CharField(max_length=255,
+                                              blank=True, null=True)
     content = models.TextField("Review")
 
     def __unicode__(self):
@@ -232,6 +240,7 @@ class Review(models.Model):
         verbose_name = "Review"
         verbose_name_plural = "Reviews"
 
+
 class VendorManager(models.GeoManager):
     "Manager class for handling searches by vendor."
 
@@ -241,6 +250,7 @@ class VendorManager(models.GeoManager):
         normal_qs = super(VendorManager, self).get_query_set()
         pending = normal_qs.filter(approval_status='pending')
         return pending
+
 
 class ApprovedVendorManager(VendorManager):
     """Manager for approved vendors only.
@@ -260,10 +270,11 @@ class Vendor(models.Model):
     address = models.TextField(null=True)
     neighborhood = models.ForeignKey('Neighborhood', blank=True, null=True)
     phone = models.CharField(max_length=50, blank=True, null=True,
-                             validators = [validators.validate_phone_number])
+                             validators=[validators.validate_phone_number])
     website = models.URLField(blank=True, null=True,
-                             validators = [validators.validate_website])
-    location = models.PointField(srid=4326, default=None, null=True, blank=True, editable=False)
+                              validators=[validators.validate_website])
+    location = models.PointField(srid=4326, default=None,
+                                 null=True, blank=True, editable=False)
 
     # ADMINISTRATIVE FIELDS
     created = models.DateTimeField(auto_now_add=True, null=True)
@@ -271,23 +282,31 @@ class Vendor(models.Model):
     modified = models.DateTimeField(auto_now=True, null=True)
     approval_status = models.CharField(max_length=100,
                                        default='pending',
-                                       choices = (('pending', 'Pending Approval'),
-                                                  ('approved', 'Approved'),
-                                                  ('quarantined', 'Quarantined')))
+                                       choices=(('pending',
+                                                 'Pending Approval'),
+
+                                                ('approved',
+                                                 'Approved'),
+
+                                                ('quarantined',
+                                                 'Quarantined')))
     objects = VendorManager()
     approved_objects = ApprovedVendorManager()
 
     # DESCRIPTIVE FIELDS
-    notes = models.TextField(
-        blank=True, null=True,
-        help_text="Use this section to briefly describe the vendor. Notes will appear below the vendor's name.")
-    veg_level = models.ForeignKey('VegLevel',
-        help_text="How vegan friendly is this place?  See documentation for guildelines.",
-        blank=True, null=True,)
+    notes = models.TextField(blank=True, null=True,
+                             help_text=("Use this section to briefly describe "
+                                        "the vendor. Notes will appear below "
+                                        "the vendor's name."))
+    veg_level = models.ForeignKey('VegLevel', blank=True, null=True,
+                                  help_text=("How vegan friendly is "
+                                             "this place? See "
+                                             "documentation for "
+                                             "guidelines."))
+
     cuisine_tags = models.ManyToManyField('CuisineTag', null=True, blank=True)
     feature_tags = models.ManyToManyField('FeatureTag', null=True, blank=True)
     vegan_dishes = models.ManyToManyField('VeganDish', null=True, blank=True)
-
 
     def needs_geocoding(self, previous_state=None):
         """
@@ -331,7 +350,7 @@ class Vendor(models.Model):
 
     def apply_geocoding(self):
 
-        geocode_result  = geocode.geocode_address(self.address)
+        geocode_result = geocode.geocode_address(self.address)
         latitude, longitude, neighborhood = geocode_result
 
         if neighborhood:
@@ -350,9 +369,8 @@ class Vendor(models.Model):
 
         self.location = Point(x=longitude, y=latitude, srid=4326)
 
-
     def save(self, *args, **kwargs):
-        if self.pk == None:
+        if self.pk is None:
             self.save_new(*args, **kwargs)
         else:
             self.save_existing(*args, **kwargs)
@@ -375,12 +393,13 @@ class Vendor(models.Model):
         # if the approval_status just changed to "approved" from
         # "pending", email the user who submitted the vendor to
         # let them know their submission has succeeded.
-        if (previous_state.approval_status == 'pending'
-            and self.approval_status == 'approved'
-            and self.submitted_by
-            and self.submitted_by.email):
-            email.send_new_vendor_approval(self)
+        should_send_email = (previous_state.approval_status == 'pending'
+                             and self.approval_status == 'approved'
+                             and self.submitted_by
+                             and self.submitted_by.email)
 
+        if should_send_email:
+            email.send_new_vendor_approval(self)
 
     def validate_pending(self, orig_vendor):
         """
@@ -390,18 +409,19 @@ class Vendor(models.Model):
         to that state. This is required so that a user only gets
         an approval email ONCE.
         """
-        if (orig_vendor.approval_status != 'pending'
-            and self.approval_status == 'pending'):
+        previously_not_pending = (orig_vendor.approval_status != 'pending')
+        currently_pending = (self.approval_status == 'pending')
 
+        if previously_not_pending and currently_pending:
             # TODO: make this fail gracefully instead of causing a crashpage
             raise ValidationError("Cannot change a vendor back to pending!")
-
 
     def best_vegan_dish(self):
         "Returns the best vegan dish for the vendor"
         dishes = collections.Counter()
-        vendor_reviews = Review.approved_objects.filter(vendor=self, 
-                                                         best_vegan_dish__isnull=False)
+        vendor_reviews = Review.approved_objects\
+                               .filter(vendor=self,
+                                       best_vegan_dish__isnull=False)
 
         for review in vendor_reviews:
             dishes[review.best_vegan_dish] += 1
@@ -414,7 +434,8 @@ class Vendor(models.Model):
 
     def food_rating(self):
         reviews = Review.approved_objects.filter(vendor=self)
-        food_ratings = [review.food_rating for review in reviews if review.food_rating]
+        food_ratings = [review.food_rating for review in reviews
+                        if review.food_rating]
         if food_ratings:
             return sum(food_ratings) / len(food_ratings)
         else:
@@ -423,7 +444,7 @@ class Vendor(models.Model):
     def atmosphere_rating(self):
         "calculates the average rating for a vendor"
         reviews = Review.approved_objects.filter(vendor=self)
-        atmosphere_ratings = [review.atmosphere_rating for review in reviews 
+        atmosphere_ratings = [review.atmosphere_rating for review in reviews
                               if review.atmosphere_rating]
         if atmosphere_ratings:
             return sum(atmosphere_ratings) / len(atmosphere_ratings)
@@ -437,7 +458,8 @@ class Vendor(models.Model):
         return self.name
 
     def approved_reviews(self):
-        return Review.approved_objects.filter(vendor=self.id).order_by('-created')
+        return Review.approved_objects.filter(vendor=self.id)\
+                                      .order_by('-created')
 
     class Meta:
         get_latest_by = "created"
@@ -468,8 +490,8 @@ def validate_vegan_dish(sender, instance, action, model, pk_set, **kwargs):
                           'delete this object.')
 
     vendor_has_vegan_dishes = (instance.vegan_dishes.count() > 0)
-    vendor_has_vegan_dish_reviews = (instance.review_set\
-                                     .filter(best_vegan_dish__isnull=False)\
+    vendor_has_vegan_dish_reviews = (instance.review_set
+                                     .filter(best_vegan_dish__isnull=False)
                                      .count() > 0)
 
     if vendor_has_vegan_dishes and vendor_has_vegan_dish_reviews:
@@ -488,15 +510,16 @@ m2m_changed.connect(validate_vegan_dish, sender=Vendor.vegan_dishes.through)
 # TAGS
 #######################################
 
+
 class CuisineTag(_TagModel):
 
     class Meta(_TagModel.Meta):
         verbose_name = "Cuisine Tag"
         verbose_name_plural = "Cuisine Tags"
 
+
 class FeatureTag(_TagModel):
-    
+
     class Meta(_TagModel.Meta):
         verbose_name = "Feature Tag"
         verbose_name_plural = "Feature Tags"
-
