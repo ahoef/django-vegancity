@@ -12,10 +12,10 @@ pip install -r /usr/local/vegphilly/requirements.txt
 ###############################
 ## PREPARE APP ENV
 ###############################
-cp -v /var/projects/vegphilly/utils/dev_env/settings_local_TEMPLATE.py /var/projects/vegphilly/vegancity/settings_local.py
-su vagrant -c "python /var/projects/vegphilly/manage.py syncdb --noinput"
-su vagrant -c "python /var/projects/vegphilly/manage.py migrate"
-su vagrant -c "python /var/projects/vegphilly/manage.py loaddata /var/projects/vegphilly/vegancity/fixtures/public_data.json"
+cp -v /usr/local/vegphilly/utils/dev_env/settings_local_TEMPLATE.py /usr/local/vegphilly/vegancity/settings_local.py
+su postgres -c "python /usr/local/vegphilly/manage.py syncdb --noinput"
+su postgres -c "python /usr/local/vegphilly/manage.py migrate"
+su postgres -c "python /usr/local/vegphilly/manage.py loaddata /usr/local/vegphilly/vegancity/fixtures/public_data.json"
 
 ###############################
 ## PREPARE APP ENV
