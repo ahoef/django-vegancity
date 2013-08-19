@@ -64,7 +64,7 @@ the terminal to watch for output, execute:
 ```
 vagrant ssh
 cd /var/log/vegphilly/
-tail -f log.log
+tail -f access.log
 ```
 ###### stopping the server to free port 8000 for other things
 just run
