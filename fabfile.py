@@ -1,7 +1,7 @@
 from fabric.api import cd, run, require, sudo, env, local, settings, abort
 from fabric import operations
 
-import datetime
+from utils import db_backup
 
 ####################
 # env mods
@@ -207,7 +207,6 @@ def backup_db():
 
     should be run like: 'fab -H www.foo.com -u username backup_db'
     """
-    formatted_datestring = datetime.date.today().strftime("%Y%m%d")
-    filename = "%s.sql" % formatted_datestring
-    run('su postgres -c "pg_dump vegphilly > /tmp/%s"' % filename)
-    run('mv /tmp/%s /var/vegphilly_backups/' % filename)
+    filename = db_backup.generate_filename()
+    run(db_backup.generate_pg_dump_command(filename))
+    run(db_backup.generate_mv_command(filename))
