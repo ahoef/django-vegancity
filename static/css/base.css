@@ -1,3 +1,12 @@
+.clearfix:after
+{
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
 
 body {
     font-family: 'Source Sans Pro', sans-serif;
@@ -16,7 +25,7 @@ h1, h2, h3, h4, th {
 
 h1 {
     font-size: 28px;
-} 
+}
 
 h3 {
     font-size: 20px;
@@ -39,7 +48,7 @@ h5, h6 {
 }
 
 .navbar-inner {
-   background: #2A3655 !important; 
+   background: #2A3655 !important;
 }
 
 .brand {
