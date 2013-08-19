@@ -107,6 +107,11 @@ INSTALLED_APPS = (
     'vegancity',
 )
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+}
+
 ###################################
 # CUSTOM
 ###################################

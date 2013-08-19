@@ -18,10 +18,10 @@ su postgres -c "psql -d template_postgis -c \"GRANT ALL ON geography_columns TO 
 su postgres -c "psql -d template_postgis -c \"GRANT ALL ON spatial_ref_sys TO PUBLIC;\""
 
 
-echo "Creating db superuser 'vagrant'"
-su postgres -c "createuser -s vagrant"
+echo "Creating db superuser 'vegphilly'"
+su postgres -c "createuser -s vegphilly"
 echo "Trying to delete a db called vegphilly"
 su postgres -c "dropdb vegphilly"
-echo "Creating db vegphilly with owner vagrant"
-su postgres -c "createdb -O vagrant -l en_US.UTF8 -E UTF8 -T template_postgis vegphilly"
+echo "Creating db vegphilly with owner vegphilly"
+su postgres -c "createdb -O vegphilly -l en_US.UTF8 -E UTF8 -T template_postgis vegphilly"
 

@@ -9,7 +9,8 @@ packages = [
     "postgis",
     "postgresql-9.1-postgis",
     "python-pip",
-    "supervisor"
+    "supervisor",
+    "nginx",
     ]
 
 not_installed = []

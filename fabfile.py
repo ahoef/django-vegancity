@@ -1,11 +1,13 @@
 from fabric.api import cd, run, require, sudo, env, local, settings, abort
 from fabric import operations
 
+from utils import db_backup
+
 ####################
 # env mods
 ####################
 
-env.site_path = '/var/projects/vegphilly'
+env.site_path = '/usr/local/vegphilly'
 
 
 def vagrant():
@@ -52,7 +54,7 @@ def _python(cmd):
 
 
 def _supervisor_runserver(cmd):
-    return "supervisorctl %s vegphilly-runserver" % cmd
+    return "supervisorctl %s vegphilly" % cmd
 
 
 def _manage(cmd):
@@ -151,7 +153,7 @@ def app_status():
 
 def watch_log():
     """ view the development webserver console in realtime """
-    sudo("tail -f /var/log/vegphilly/log.log")
+    sudo("tail -f /var/log/vegphilly/access.log")
 
 ####################################################################
 # terminal shell/debugger commands
@@ -187,3 +189,24 @@ def dbshell():
 def venv_shell():
     """ Opens a bash shell on the vm from the project root"""
     operations.open_shell(command="cd %s" % env.site_path)
+
+
+####################################################################
+# server maintenance commands
+####################################################################
+#
+# these commands are used to maintain production servers. you will
+# be responsible for providing host and credential information, but
+# they make it easier to peform certain tasks.
+
+def backup_db():
+    """
+    backup the db on a remote host
+
+    requires privilege to su to postgres user.
+
+    should be run like: 'fab -H www.foo.com -u username backup_db'
+    """
+    filename = db_backup.generate_filename()
+    run(db_backup.generate_pg_dump_command(filename))
+    run(db_backup.generate_mv_command(filename))

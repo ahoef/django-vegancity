@@ -7,22 +7,38 @@
 ###############################
 ## INITIALIZE PYTHON PACKAGES
 ###############################
-pip install -r /var/projects/vegphilly/requirements.txt
+pip install -r /usr/local/vegphilly/requirements.txt
 
 ###############################
 ## PREPARE APP ENV
 ###############################
-cp -v /var/projects/vegphilly/utils/dev_env/settings_local_TEMPLATE.py /var/projects/vegphilly/vegancity/settings_local.py
-su vagrant -c "python /var/projects/vegphilly/manage.py syncdb --noinput"
-su vagrant -c "python /var/projects/vegphilly/manage.py migrate"
-su vagrant -c "python /var/projects/vegphilly/manage.py loaddata /var/projects/vegphilly/vegancity/fixtures/public_data.json"
+cp -v /usr/local/vegphilly/utils/dev_env/settings_local_TEMPLATE.py /usr/local/vegphilly/vegancity/settings_local.py
+su postgres -c "python /usr/local/vegphilly/manage.py syncdb --noinput"
+su postgres -c "python /usr/local/vegphilly/manage.py migrate"
+su postgres -c "python /usr/local/vegphilly/manage.py loaddata /usr/local/vegphilly/vegancity/fixtures/public_data.json"
 
 ###############################
 ## PREPARE APP ENV
 ###############################
-cp -v /var/projects/vegphilly/utils/dev_env/supervisor_vegphilly_runserver_TEMPLATE.conf /etc/supervisor/conf.d/vegphilly_runserver.conf
+cp -v /usr/local/vegphilly/utils/dev_env/supervisor_vegphilly_runserver_TEMPLATE.conf /etc/supervisor/conf.d/vegphilly_runserver.conf
 mkdir /var/log/vegphilly
-touch /var/log/vegphilly/log.log
+touch /var/log/vegphilly/access.log
+touch /var/log/vegphilly/error.log
 chmod -R 777 /var/log/vegphilly
+mkdir /var/vegphilly_backups/
 supervisorctl update
 supervisorctl reload
+
+###############################
+## PREPARE WEBSERVER
+###############################
+cp -v /usr/local/vegphilly/utils/dev_env/nginx_vegphilly.conf /etc/nginx/conf.d/
+rm /etc/nginx/sites-enabled/default
+rm /etc/nginx/sites-available/default
+sudo service nginx restart
+
+###############################
+## CREATE BACKUP CRONJOB
+###############################
+
+echo '0 2 * * * /usr/local/vegphilly/utils/db_backup.py' | crontab -
