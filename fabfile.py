@@ -172,7 +172,6 @@ def debugserver():
 
     kills the daemon appserver first to avoid port conflicts.
     """
-    sudo(_supervisor_runserver("stop"))
     _manage("runserver 0.0.0.0:8000")
 
 
