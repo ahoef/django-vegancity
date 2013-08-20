@@ -1,3 +1,5 @@
+import os
+
 from fabric.api import cd, run, require, sudo, env, local, settings, abort
 from fabric import operations
 
@@ -7,7 +9,8 @@ from utils import db_backup
 # env mods
 ####################
 
-env.site_path = '/usr/local/vegphilly'
+env.site_path = '/usr/local/vegphilly/'
+env.backup_path = '/var/vegphilly_backups/'
 
 
 def vagrant():
@@ -198,7 +201,7 @@ def venv_shell():
 # be responsible for providing host and credential information, but
 # they make it easier to peform certain tasks.
 
-def backup_db():
+def backup_db(copy_to_local=False):
     """
     backup the db on a remote host
 
@@ -206,6 +209,12 @@ def backup_db():
 
     should be run like: 'fab -H www.foo.com -u username backup_db'
     """
+    require('backup_path')
+
     filename = db_backup.generate_filename()
     run(db_backup.generate_pg_dump_command(filename))
     run(db_backup.generate_mv_command(filename))
+
+    if copy_to_local:
+        operations.get(os.path.join(env.backup_path, filename),
+                       os.path.join(".", filename))
