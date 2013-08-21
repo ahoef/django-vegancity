@@ -22,6 +22,7 @@ su postgres -c "python /usr/local/vegphilly/manage.py loaddata /usr/local/vegphi
 ###############################
 cp -v /usr/local/vegphilly/utils/dev_env/supervisor_vegphilly_runserver_TEMPLATE.conf /etc/supervisor/conf.d/vegphilly_runserver.conf
 mkdir /var/log/vegphilly
+touch /var/log/vegphilly/gunicorn.log
 touch /var/log/vegphilly/access.log
 touch /var/log/vegphilly/error.log
 chmod -R 777 /var/log/vegphilly
