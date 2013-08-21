@@ -184,3 +184,22 @@ def perform_address_search(initial_queryset, query):
         vendors = Vendor.objects.filter(location__dwithin=(point, .004))
 
         return vendors
+
+
+def filter_vendors_by_search(initial_vendors, query, search_type=None):
+        search_map = {
+            'name': name_search,
+            'address': address_search,
+            'tag': tag_search,
+        }
+        if query:
+            search_fn = search_map.get(search_type, None)
+            if search_fn:
+                vendors, _ = search_fn(query, initial_vendors)
+            else:
+                vendors, search_type = master_search(query,
+                                                     initial_vendors)
+        else:
+            vendors = initial_vendors
+
+        return vendors, search_type
