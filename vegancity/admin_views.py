@@ -99,12 +99,15 @@ def vendor_list(request):
                      'notes'])
 
     for vendor in vendors:
-        writer.writerow([vendor.name,
-                         vendor.address,
-                         vendor.neighborhood,
-                         vendor.phone,
-                         vendor.website,
-                         vendor.veg_level,
-                         vendor.notes])
+        name = vendor.name.encode("utf-8")
+        address = vendor.address.encode("utf-8")
+        neighborhood = vendor.neighborhood
+        phone = vendor.phone
+        website = vendor.website.encode("utf-8")
+        veg_level = vendor.veg_level
+        notes = vendor.notes.encode("utf-8")
+
+        writer.writerow([name, address, neighborhood,
+                         phone, website, veg_level, notes])
 
     return response
