@@ -66,10 +66,8 @@ def home(request):
     most_reviewed = vendors_with_reviews.annotate(count=Count('review'))\
                                         .order_by('-count')[:5]
 
-    neighborhoods = models.Neighborhood.objects\
-                                       .all()\
-                                       .annotate(vcount=Count('vendor'))\
-                                       .order_by('-vcount')[:21]
+    neighborhoods = models.Neighborhood.objects.with_vendors()\
+                                               .order_by('-vendor_count')[:21]
 
     cuisine_tags = models.CuisineTag.objects\
                                     .with_vendors()\

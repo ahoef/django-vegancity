@@ -102,11 +102,20 @@ class VegLevel(models.Model):
     def __unicode__(self):
         return "(%s) %s" % (self.super_category, self.description)
 
+class NeighborhoodManager(models.Manager):
+
+    def with_vendors(self):
+        qs = self.all()
+        qs = qs.annotate(vendor_count=Count('vendor'))\
+               .filter(vendor_count__gt=0)
+        return qs
 
 class Neighborhood(models.Model):
     """Used for determining what neighborhood a vendor is in."""
     name = models.CharField(max_length=255, unique=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
+
+    objects = NeighborhoodManager()
 
     def __unicode__(self):
         return self.name
