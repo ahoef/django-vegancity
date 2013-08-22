@@ -69,7 +69,7 @@ class PageLoadTest(TestCase):
             self.assertCorrectStatusCode(url, 200)
 
 
-class VendorTest(TestCase):
+class VendorGeocodeTest(TestCase):
     def setUp(self):
         self.user = get_user()
 
@@ -100,6 +100,10 @@ class VendorTest(TestCase):
 
         vendor.save()
         self.assertFalse(vendor.needs_geocoding())
+
+class VendorModelTest(TestCase):
+    def setUp(self):
+        self.user = get_user()
 
     def test_food_and_atmosphere_rating(self):
         vendor = models.Vendor(name="Test Vendor")
@@ -146,7 +150,7 @@ class VendorTest(TestCase):
         self.assertEqual(vendor.atmosphere_rating(), 3)
 
 
-class ViewTests(TestCase):
+class VendorViewTest(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         self.user = get_user()
@@ -175,7 +179,7 @@ class ViewTests(TestCase):
                          models.Vendor.objects.filter(name="test123").count())
 
 
-class EmailTest(TestCase):
+class VendorEmailTest(TestCase):
 
     def setUp(self):
         # mock the email function so that we can just see if it's called
