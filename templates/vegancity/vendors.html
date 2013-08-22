@@ -14,10 +14,10 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script>
   <script type="text/javascript">
 
-    var autoResize = {% if search_form.has_get_params %}true{% else %}false{% endif %};
-    var defaultCenter = new google.maps.LatLng({{ search_form.center_latitude }}, {{ search_form.center_longitude }});
+    var autoResize = {% if has_get_params %}true{% else %}false{% endif %};
+    var defaultCenter = new google.maps.LatLng({{ center_latitude }}, {{ center_longitude }});
     var vendors = [
-    {% for vendor in search_form.vendors %}{% if vendor.location %}
+    {% for vendor in vendors %}{% if vendor.location %}
         {
             id: "{{ vendor.id }}",
             name: "{{ vendor.name }}",
@@ -48,20 +48,20 @@
     <div class="span6">
 
       <form action="{% url 'vendors' %}" method="get" name="filters" id="filters" class="form-search">
-        {% if search_form.search_type %}
+        {% if search_type %}
           {% comment %}If there's a search_type, stick it in the form, otherwise dont.
 This prevents null searches from getting a value of None stuck here and throwing off the UI.{% endcomment %}            
-        <input id="search_type" name="search_type" type="hidden" value="{{ search_form.search_type }}">
+        <input id="search_type" name="search_type" type="hidden" value="{{ search_type }}">
       {% endif %}        
         {% if search_from.old_query %}
-        <input id="old_query" name="old_query" type="hidden" value="{{ search_form.old_query }}">
+        <input id="previous_query" name="previous_query" type="hidden" value="{{ previous_query }}">
       {% endif %}
         <input id="search-input" type="text" class="input-large" 
-               autofocus="autofocus" autocomplete="off" name="query" 
-               {% if search_form.query %}value="{{ search_form.query }}"{% endif %}>
-                 {% if search_form.search_type %}
+               autofocus="autofocus" autocomplete="off" name="current_query" 
+               {% if current_query %}value="{{ current_query }}"{% endif %}>
+                 {% if search_type %}
                <div class="btn-group">
-                 <button class="btn btn-custom" id="search_by_dynamic" title="{{ search_form.search_type|format_button_title }}">Search by {{ search_form.search_type|format_search_type }}</button>
+                 <button class="btn btn-custom" id="search_by_dynamic" title="{{ search_type|format_button_title }}">Search by {{ search_type|format_search_type }}</button>
                  <button class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
                    <span class="caret"></span>
                  </button>
@@ -76,12 +76,12 @@ This prevents null searches from getting a value of None stuck here and throwing
                {% endif %}
                  <a href="#" class="btn btn-warning" id="clear_search">Clear Search</a>
         <br>
-        {% if search_form.query %}
-        <h5>Showing {% if search_form.vendors %}only{% else %}no{% endif %} results{{ search_form.search_type|showing_vendors_string }}{% if search_form.query %}"{{ search_form.query }}"{% endif %}</h5>
+        {% if current_query %}
+        <h5>Showing {% if vendors %}only{% else %}no{% endif %} results{{ search_type|showing_vendors_string }}{% if current_query %}"{{ current_query }}"{% endif %}</h5>
       {% else %}
         <br>
       {% endif %}
-      {% if search_form.vendors %}
+      {% if vendors %}
         <div id="map_canvas"></div>
       {% else %}
         <div id="map_canvas" style="visibility: hidden"></div>
@@ -93,18 +93,36 @@ This prevents null searches from getting a value of None stuck here and throwing
         <div class="span3">
 
             <h4>Neighborhood:</h4>
-              {{ search_form.neighborhood }}
+              <select id="id_neighborhood" name="neighborhood">
+                <option value="" selected="selected">---------</option>
+                {% for neighborhood in neighborhoods %}
+                <option value="{{ neighborhood.id }}">{{ neighborhood.name }}</option>
+                {% endfor %}
+              </select>
             <h4>Cuisine:</h4>
-            {{ search_form.cuisine }}
+              <select id="id_cuisine" name="cuisine_tag">
+                <option value="" {% if selected_cuisine_tag %}selected="selected"{% endif %}>---------</option>
+                {% for cuisine_tag in cuisine_tags %}
+                <option value="{{ cuisine_tag.id }}" {% if cuisine_tag == selected_cuisine_tag %}selected="selected"{% endif %}>{{ cuisine_tag.description }}</option>
+                {% endfor %}
+              </select>
+
             <h4>Features:</h4>
-            {{ search_form.checked_features }}
-            {% for checked in search_form.checked_feature_filters %}
+
+            {% for checked in checked_feature_filters %}
               <label class="checkbox">
                 <input type="checkbox" id="id_feature_{{ checked.name }}" name="{{ checked.name }}" value="True" checked="checked" onchange="this.form.submit()">
                 {{ checked }}
               </label>
             {% endfor %}         
-            {{ search_form.feature }}
+              <select id="id_feature" name="feature_tag">
+                <option value="" {% if selected_feature_tag %}selected="selected"{% endif %}>---------</option>
+                {% for feature_tag in feature_tags %}
+                <option value="{{ feature_tag.id }}">
+                  {{ feature_tag.description }}
+                </option>
+                {% endfor %}
+              </select>
 
           </form>
 
@@ -130,11 +148,11 @@ This prevents null searches from getting a value of None stuck here and throwing
             <thead>
               <tr>
                 <th>Map</th>
-                <th>Results ({{ search_form.vendor_count|default:"0" }})</th>
+                <th>Results ({{ vendor_count|default:"0" }})</th>
               </tr>
             </thead>
             <tbody>
-              {% for vendor in search_form.vendors %}
+              {% for vendor in vendors %}
                 <tr>
                   <td><img src="" class="marker-link vendor-{{vendor.id}} veg-level-{{vendor.veg_level.id|default:"0"}}"></td>
                   <td><a class="blue" href="{{ vendor.get_absolute_url }}">{{ vendor.name }}</a></td>

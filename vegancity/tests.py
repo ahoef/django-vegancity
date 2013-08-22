@@ -5,7 +5,7 @@ from mock import MagicMock
 from django.db import IntegrityError
 
 from vegancity import models, views, email
-
+from bs4 import BeautifulSoup
 
 def get_user():
     user = models.User(username="Moby")
@@ -69,7 +69,7 @@ class PageLoadTest(TestCase):
             self.assertCorrectStatusCode(url, 200)
 
 
-class VendorTest(TestCase):
+class VendorGeocodeTest(TestCase):
     def setUp(self):
         self.user = get_user()
 
@@ -100,6 +100,10 @@ class VendorTest(TestCase):
 
         vendor.save()
         self.assertFalse(vendor.needs_geocoding())
+
+class VendorModelTest(TestCase):
+    def setUp(self):
+        self.user = get_user()
 
     def test_food_and_atmosphere_rating(self):
         vendor = models.Vendor(name="Test Vendor")
@@ -146,7 +150,7 @@ class VendorTest(TestCase):
         self.assertEqual(vendor.atmosphere_rating(), 3)
 
 
-class ViewTests(TestCase):
+class VendorViewTest(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         self.user = get_user()
@@ -175,7 +179,7 @@ class ViewTests(TestCase):
                          models.Vendor.objects.filter(name="test123").count())
 
 
-class EmailTest(TestCase):
+class VendorEmailTest(TestCase):
 
     def setUp(self):
         # mock the email function so that we can just see if it's called
@@ -279,3 +283,55 @@ class VendorVeganDishValidationTest(TestCase):
         self.assertRaises(IntegrityError,
                           self.vendor.vegan_dishes.remove,
                           self.vegan_dish1)
+
+class SearchTest(TestCase):
+    def setUp(self):
+        self.v1 = models.Vendor.objects.create(name="Test Vendor Foo", approval_status='approved')
+        self.v2 = models.Vendor.objects.create(name="Test Vendor Bar", approval_status='approved')
+        self.v3 = models.Vendor.objects.create(name="Test Vendor Baz", approval_status='approved')
+        self.v4 = models.Vendor.objects.create(name="Test Vendor Bart", approval_status='approved')
+        self.factory = RequestFactory()
+
+    def test_search_by_name_for_substring(self):
+        request = self.factory.get('',
+                                   {'current_query': 'Bar',})
+
+        response = views.vendors(request)
+        self.assertEqual(response.content.count("Results (2)"), 1)
+
+        request = self.factory.get('',
+                                   {'current_query': 'Vendor',})
+
+        response = views.vendors(request)
+        self.assertEqual(response.content.count("Results (4)"), 1)
+
+    def test_search_by_name_approved_only(self):
+        self.v4.approval_status = 'quarantined'
+        self.v4.save()
+
+        request = self.factory.get('',
+                                   {'current_query': 'Vendor',})
+
+        response = views.vendors(request)
+        self.assertEqual(response.content.count("Results (3)"), 1)
+
+    def test_neighborhoods_field_is_populated(self):
+        """ This test was born out of an actual observed bug """
+
+        def count_option_elements():
+            request = self.factory.get('')
+            response = views.vendors(request)
+            content = BeautifulSoup(response.content)
+            neighborhood_element = filter(lambda x: x['name'] == 'neighborhood',
+                                          content.find_all('select'))[0]
+            return len(neighborhood_element.find_all('option'))
+
+        n1 = models.Neighborhood.objects.create(name="Foo")
+
+        self.assertEqual(count_option_elements(), 1)
+
+        self.v1.neighborhood = n1
+        self.v1.save()
+
+        self.assertEqual(count_option_elements(), 2)
+

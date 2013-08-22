@@ -26,11 +26,13 @@ from django.db.models import Max, Count, Avg
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.views.generic import DetailView, TemplateView
+from django.conf import settings
 
 import django.contrib.auth.views
 
 from vegancity import forms
 from vegancity import models
+from vegancity import search
 
 
 def password_change(request):
@@ -66,10 +68,8 @@ def home(request):
     most_reviewed = vendors_with_reviews.annotate(count=Count('review'))\
                                         .order_by('-count')[:5]
 
-    neighborhoods = models.Neighborhood.objects\
-                                       .all()\
-                                       .annotate(vcount=Count('vendor'))\
-                                       .order_by('-vcount')[:21]
+    neighborhoods = models.Neighborhood.objects.with_vendors()\
+                                               .order_by('-vendor_count')[:21]
 
     cuisine_tags = models.CuisineTag.objects\
                                     .with_vendors()\
@@ -112,16 +112,55 @@ def user_profile(request, username):
 
 
 def vendors(request):
-    """Display table level data about vendors.
+    center_latitude, center_longitude = settings.DEFAULT_CENTER
+    current_query = request.GET.get('current_query', None)
+    previous_query = request.GET.get('previous_query', None)
+    search_type = request.GET.get('search_type', None)
+    selected_neighborhood = request.GET.get('neighborhood', None)
+    selected_cuisine_tag_id = request.GET.get('cuisine_tag', None)
+    selected_feature_tag_id = request.GET.get('feature_tag', None)
+    checked_feature_filters = [f for f
+                               in models.FeatureTag.objects.with_vendors()
+                               if request.GET.get(f.name) or
+                               selected_feature_tag_id == str(f.id)]
 
-    If this view has a get param called query, then we trigger
-    the search runmode.  Otherwise, we just return all vendors
-    in our database."""
+    vendors = models.Vendor.approved_objects.all()
 
-    search_form = forms.SearchForm(request.GET)
+    if selected_neighborhood:
+        vendors = vendors.filter(neighborhood__id=selected_neighborhood)
 
-    return render_to_response('vegancity/vendors.html',
-                              {'search_form': search_form},
+    if selected_cuisine_tag_id:
+        selected_cuisine_tag = models.CuisineTag.objects.get(
+            pk=selected_cuisine_tag_id)
+        vendors = vendors.filter(cuisine_tags__id=selected_cuisine_tag_id)
+    else:
+        selected_cuisine_tag = None
+
+    if selected_feature_tag_id:
+        vendors = vendors.filter(feature_tags__id=selected_feature_tag_id)
+
+    for f in checked_feature_filters:
+        vendors = vendors.filter(feature_tags__id__exact=f.id)
+
+    vendors, search_type = search.filter_vendors_by_search(
+        vendors, current_query, search_type)
+
+    ctx = {
+        'cuisine_tags': models.CuisineTag.objects.all(),
+        'feature_tags': models.FeatureTag.objects.all(),
+        'neighborhoods': models.Neighborhood.objects.with_vendors(),
+        'vendor_count': len(vendors),
+        'vendors': vendors,
+        'previous_query': previous_query,
+        'current_query': current_query,
+        'selected_cuisine_tag': selected_cuisine_tag,
+        'checked_feature_filters': checked_feature_filters,
+        'search_type': search_type,
+        'has_get_params': len(request.GET) > 0,
+        'center_latitude': center_latitude,
+        'center_longitude': center_longitude,
+    }
+    return render_to_response('vegancity/vendors.html', ctx,
                               context_instance=RequestContext(request))
 
 

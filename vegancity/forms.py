@@ -18,9 +18,7 @@
 
 from django import forms
 
-from settings import DEFAULT_CENTER
 import models
-import search
 
 from django.contrib.auth.forms import UserCreationForm
 
@@ -186,95 +184,3 @@ class NewReviewForm(_BaseReviewForm):
         widgets = {
             'vendor': forms.HiddenInput,
         }
-
-
-class SearchForm(forms.Form):
-
-    neighborhood = forms.ModelChoiceField(queryset=models.Neighborhood
-                                          .objects
-                                          .distinct(),
-                                          required=False)
-    cuisine = forms.ModelChoiceField(queryset=models.CuisineTag.objects
-                                     .with_vendors()
-                                     .distinct(),
-                                     required=False)
-    feature = forms.ModelChoiceField(queryset=models.FeatureTag.objects
-                                     .with_vendors()
-                                     .distinct(),
-                                     required=False)
-
-    def __init__(self, *args, **kwargs):
-        super(SearchForm, self).__init__(*args, **kwargs)
-
-        # initialize extra values
-        self.selected_neighborhood = self.data.get('neighborhood', None)
-        self.selected_cuisine = self.data.get('cuisine', None)
-        self.selected_feature = self.data.get('feature', None)
-        self.query = self.data.get('query', None)
-        # TODO: use this later
-        self.old_query = self.data.get('old_query', None)
-        self.search_type = self.data.get('search_type', None)
-        self.vendors = None
-        self.has_get_params = (True if self.data else False)
-        self.center_latitude, self.center_longitude = DEFAULT_CENTER
-
-        self.checked_feature_filters = []
-        for f in models.FeatureTag.objects.with_vendors():
-            if self.data.get(f.name) or self.selected_feature == str(f.id):
-                self.checked_feature_filters.append(f)
-
-        if self.is_valid():
-            self.apply_search()
-            self.filter_selections_by_vendors(self.vendors)
-
-    def apply_search(self):
-        if self.query:
-            if self.search_type == 'name':
-                self.vendors, _ = search.name_search(
-                    self.query, self.get_pre_filtered_vendors())
-            elif self.search_type == 'address':
-                self.vendors, _ = search.address_search(
-                    self.query, self.get_pre_filtered_vendors())
-            elif self.search_type == 'tag':
-                self.vendors, _ = search.tag_search(
-                    self.query, self.get_pre_filtered_vendors())
-            else:
-                self.vendors, self.search_type = search.master_search(
-                    self.query, self.get_pre_filtered_vendors())
-        else:
-            self.vendors = self.get_pre_filtered_vendors()
-
-        # TODO: yikes, I coded myself into a corner here! Fix it!
-        if type(self.vendors) == list or type(self.vendors) == set:
-            self.vendor_count = len(self.vendors)
-        else:
-            self.vendor_count = self.vendors.count()
-
-    def filter_selections_by_vendors(self, vendors):
-        ids = [vendor.id for vendor in vendors]
-        # don't filter these! Causes too many UI bugs!
-        # self.fields['neighborhood'].queryset = models.Neighborhood\
-        #    .objects.filter(vendor__in=ids).distinct()
-        # self.fields['cuisine'].queryset = models.CuisineTag\
-        #    .objects.filter(vendor__in=ids).distinct()
-        self.fields['feature'].queryset = models.FeatureTag\
-                                                .objects\
-                                                .filter(vendor__in=ids)\
-                                                .distinct()
-
-    def get_pre_filtered_vendors(self):
-        vendors = models.Vendor.approved_objects.all()
-
-        for f in self.checked_feature_filters:
-            vendors = vendors.filter(feature_tags__id__exact=f.id)
-
-        if self.selected_neighborhood:
-            vendors = vendors.filter(
-                neighborhood__id=self.selected_neighborhood)
-
-        if self.selected_cuisine:
-            vendors = vendors.filter(cuisine_tags__id=self.selected_cuisine)
-
-        if self.selected_feature:
-            vendors = vendors.filter(feature_tags__id=self.selected_feature)
-        return vendors
