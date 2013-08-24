@@ -25,7 +25,7 @@ from django.db.models.signals import m2m_changed
 from django.db.models import Count
 
 from django.template.defaultfilters import slugify
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 
 import collections
 
@@ -361,11 +361,10 @@ class Vendor(models.Model):
         latitude, longitude, neighborhood = geocode_result
 
         if neighborhood:
-            neighborhood_obj = None
             try:
                 neighborhood_obj = Neighborhood.objects.get(name=neighborhood)
-            except:
-                pass
+            except ObjectDoesNotExist:
+                neighborhood_obj = None
 
             if not neighborhood_obj:
                     neighborhood_obj = Neighborhood()
