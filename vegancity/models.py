@@ -22,8 +22,6 @@ from django.core.urlresolvers import reverse
 
 from django.db.models.signals import m2m_changed
 
-from django.db import IntegrityError
-
 from django.db.models import Count
 
 from django.template.defaultfilters import slugify
@@ -505,13 +503,13 @@ def validate_vegan_dish(sender, instance, action, model, pk_set, **kwargs):
 
     if vendor_has_vegan_dishes and vendor_has_vegan_dish_reviews:
         if action == 'pre_clear':
-            raise IntegrityError(pre_clear_message)
+            raise ValidationError(pre_clear_message)
 
         elif action == 'pre_remove':
             if instance.review_set\
                        .filter(best_vegan_dish__in=pk_set)\
                        .count() > 0:
-                raise IntegrityError(pre_remove_message)
+                raise ValidationError(pre_remove_message)
 
 m2m_changed.connect(validate_vegan_dish, sender=Vendor.vegan_dishes.through)
 

@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.test.client import RequestFactory
 from mock import MagicMock
 
-from django.db import IntegrityError
+from django.core.exceptions import ValidationError
 
 from vegancity import models, views, email
 from bs4 import BeautifulSoup
@@ -274,13 +274,13 @@ class VendorVeganDishValidationTest(TestCase):
         self.review1.best_vegan_dish = self.vegan_dish1
         self.review1.save()
 
-        self.assertRaises(IntegrityError, self.vendor.vegan_dishes.clear)
+        self.assertRaises(ValidationError, self.vendor.vegan_dishes.clear)
 
     def test_cant_delete_relationship_with_reviews(self):
         self.review1.best_vegan_dish = self.vegan_dish1
         self.review1.save()
 
-        self.assertRaises(IntegrityError,
+        self.assertRaises(ValidationError,
                           self.vendor.vegan_dishes.remove,
                           self.vegan_dish1)
 
