@@ -360,20 +360,20 @@ class Vendor(models.Model):
         geocode_result = geocode.geocode_address(self.address)
         latitude, longitude, neighborhood = geocode_result
 
-        if neighborhood:
-            try:
-                neighborhood_obj = Neighborhood.objects.get(name=neighborhood)
-            except ObjectDoesNotExist:
-                neighborhood_obj = None
+        if latitude and longitude:
+            self.location = Point(x=longitude, y=latitude, srid=4326)
+            if neighborhood:
+                try:
+                    neighborhood_obj = Neighborhood.objects.get(name=neighborhood)
+                except ObjectDoesNotExist:
+                    neighborhood_obj = Neighborhood.objects\
+                                                   .create(name=neighborhood)
 
-            if not neighborhood_obj:
-                    neighborhood_obj = Neighborhood()
-                    neighborhood_obj.name = neighborhood
-                    neighborhood_obj.save()
+                self.neighborhood = neighborhood_obj
 
-            self.neighborhood = neighborhood_obj
-
-        self.location = Point(x=longitude, y=latitude, srid=4326)
+        else:
+            print ("WARNING: Geocoding of '%s' failed. Not geocoding vendor %s!"
+                   % (self.address, self.name))
 
     def save(self, *args, **kwargs):
         if self.pk is None:
