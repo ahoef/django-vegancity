@@ -14,7 +14,13 @@ def get_user():
     user, _ = models.User.objects.get_or_create(username="Moby")
     return user
 
+import logging
+
 class VegancityTestRunner(DjangoTestSuiteRunner):
+    def run_tests(self, *args, **kwargs):
+        logging.disable(logging.CRITICAL)
+        super(VegancityTestRunner, self).run_tests(*args, **kwargs)
+
     def build_suite(self, test_labels, *args, **kwargs):
         test_labels = test_labels or settings.MANAGED_APPS
         return super(VegancityTestRunner, self).build_suite(test_labels,
@@ -343,11 +349,14 @@ class SearchTest(TestCase):
         request = self.factory.get('',
                                    {'current_query': 'Bar',})
 
+        request.user = get_user()
+
         response = views.vendors(request)
         self.assertEqual(response.content.count("Results (2)"), 1)
 
         request = self.factory.get('',
                                    {'current_query': 'Vendor',})
+        request.user = get_user()
 
         response = views.vendors(request)
         self.assertEqual(response.content.count("Results (4)"), 1)
@@ -358,6 +367,7 @@ class SearchTest(TestCase):
 
         request = self.factory.get('',
                                    {'current_query': 'Vendor',})
+        request.user = get_user()
 
         response = views.vendors(request)
         self.assertEqual(response.content.count("Results (3)"), 1)

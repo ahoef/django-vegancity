@@ -118,6 +118,84 @@ INSTALLED_APPS = UNMANAGED_APPS + MANAGED_APPS
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
+    'formatters': {
+        'standard': {
+            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt' : "%d/%b/%Y %H:%M:%S"
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'general': {
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': '/var/log/vegphilly/django-general.log',
+            'maxBytes': 500000,
+            'backupCount': 2,
+            'formatter': 'simple',
+        },
+        'request': {
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': '/var/log/vegphilly/django-request.log',
+            'maxBytes': 500000,
+            'backupCount': 2,
+            'formatter': 'simple',
+        },
+        'sql': {
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': '/var/log/vegphilly/django-sql.log',
+            'maxBytes': 500000,
+            'backupCount': 2,
+            'formatter': 'standard',
+        },
+        'vegancity-general': {
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': '/var/log/vegphilly/vegancity-general.log',
+            'maxBytes': 500000,
+            'backupCount': 2,
+            'formatter': 'standard',
+        },
+        'vegancity-search': {
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': '/var/log/vegphilly/vegancity-search.log',
+            'maxBytes': 500000,
+            'backupCount': 2,
+            'formatter': 'standard',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['general'],
+            'propagate': True,
+            'level': 'WARN',
+        },
+        'django.request': {
+            'handlers': ['request'],
+            'propagate': True,
+            'level': 'WARN',
+        },
+        'django.db.backends': {
+            'handlers': ['sql'],
+            'level': 'WARN',
+            'propagate': False,
+        },
+        'vegancity': {
+            'handlers': ['vegancity-general'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'vegancity-search': {
+            'handlers': ['vegancity-search'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
 }
 
 TEST_RUNNER = 'vegancity.tests.VegancityTestRunner'

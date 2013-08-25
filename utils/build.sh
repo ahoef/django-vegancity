@@ -9,10 +9,16 @@
 ###############################
 
 mkdir /var/log/vegphilly
-touch /var/log/vegphilly/gunicorn.log
-touch /var/log/vegphilly/access.log
-touch /var/log/vegphilly/error.log
-chmod -R 777 /var/log/vegphilly
+touch /var/log/vegphilly/gunicorn-general.log
+touch /var/log/vegphilly/gunicorn-access.log
+touch /var/log/vegphilly/gunicorn-error.log
+touch /var/log/vegphilly/django-general.log
+touch /var/log/vegphilly/django-request.log
+touch /var/log/vegphilly/django-sql.log
+touch /var/log/vegphilly/vegancity-general.log
+touch /var/log/vegphilly/vegancity-search.log
+chmod -R 777 /var/log/vegphilly/
+chown -R vegphilly:nogroup /var/log/vegphilly/
 mkdir /var/vegphilly_backups/
 
 ###############################
@@ -43,10 +49,22 @@ python /usr/local/vegphilly/manage.py migrate
 python /usr/local/vegphilly/manage.py loaddata /usr/local/vegphilly/vegancity/fixtures/public_data.json
 
 ###############################
+## REASSIGN LOG PERMISSIONS
+###############################
+#
+# for some reason syncdb or migrate will change the owner
+# of the django db backend log. supervisor will crash
+# if it can't get permission to that log file.
+#
+chmod -R 777 /var/log/vegphilly/
+chown -R vegphilly:nogroup /var/log/vegphilly/
+
+###############################
 ## PREPARE GUNICORN
 ###############################
 
 cp -v /usr/local/vegphilly/utils/dev_env/supervisor_vegphilly_runserver_TEMPLATE.conf /etc/supervisor/conf.d/vegphilly_runserver.conf
 supervisorctl update
 supervisorctl reload
+
 

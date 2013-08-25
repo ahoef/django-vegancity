@@ -28,8 +28,12 @@ from django.template.defaultfilters import slugify
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 
 import collections
+import logging
 
 from vegancity import geocode, validators, email
+
+
+logger = logging.getLogger(__name__)
 
 
 class TagManager(models.Manager):
@@ -372,8 +376,8 @@ class Vendor(models.Model):
                 self.neighborhood = neighborhood_obj
 
         else:
-            print ("WARNING: Geocoding of '%s' failed. Not geocoding vendor %s!"
-                   % (self.address, self.name))
+            logger.warn("WARNING: Geocoding of '%s' failed. "
+                        "Not geocoding vendor %s!" % (self.address, self.name))
 
     def save(self, *args, **kwargs):
         if self.pk is None:
