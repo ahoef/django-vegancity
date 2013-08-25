@@ -96,7 +96,7 @@ TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, 'templates'),
 )
 
-INSTALLED_APPS = (
+UNMANAGED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -105,12 +105,22 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.gis',
     'vegancity',
+    'south',
+    'gunicorn',
 )
+
+MANAGED_APPS = (
+    'vegancity',
+)
+
+INSTALLED_APPS = UNMANAGED_APPS + MANAGED_APPS
 
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
 }
+
+TEST_RUNNER = 'vegancity.tests.VegancityTestRunner'
 
 ###################################
 # CUSTOM

@@ -1,9 +1,11 @@
 from django.test import TestCase
 from django.test.client import RequestFactory
+from django.test.simple import DjangoTestSuiteRunner
 from mock import Mock
 
 from django.core.exceptions import ValidationError
 from django.contrib.gis.geos import Point
+from django.conf import settings
 
 from vegancity import models, views, email, geocode
 from bs4 import BeautifulSoup
@@ -12,6 +14,13 @@ def get_user():
     user = models.User(username="Moby")
     user.save()
     return user
+
+class VegancityTestRunner(DjangoTestSuiteRunner):
+    def build_suite(self, test_labels, *args, **kwargs):
+        test_labels = test_labels or settings.MANAGED_APPS
+        return super(VegancityTestRunner, self).build_suite(test_labels,
+                                                            *args,
+                                                            **kwargs)
 
 
 class PageLoadTest(TestCase):

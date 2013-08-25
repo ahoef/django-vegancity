@@ -100,7 +100,7 @@ def rebuild_fixture():
 # use these commands to run unit tests or linting on source
 
 
-def test(test_filter="vegancity"):
+def test(test_filter=""):
     """ run application tests """
     require('site_path')
 
