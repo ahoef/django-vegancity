@@ -5,30 +5,15 @@
 # with a vagrant initialization.
 
 ###############################
-## INITIALIZE PYTHON PACKAGES
+## PREPARE OS FOR APP
 ###############################
-pip install -r /usr/local/vegphilly/requirements.txt
 
-###############################
-## PREPARE APP ENV
-###############################
-cp -v /usr/local/vegphilly/utils/dev_env/settings_local_TEMPLATE.py /usr/local/vegphilly/vegancity/settings_local.py
-su postgres -c "python /usr/local/vegphilly/manage.py syncdb --noinput"
-su postgres -c "python /usr/local/vegphilly/manage.py migrate"
-su postgres -c "python /usr/local/vegphilly/manage.py loaddata /usr/local/vegphilly/vegancity/fixtures/public_data.json"
-
-###############################
-## PREPARE APP ENV
-###############################
-cp -v /usr/local/vegphilly/utils/dev_env/supervisor_vegphilly_runserver_TEMPLATE.conf /etc/supervisor/conf.d/vegphilly_runserver.conf
 mkdir /var/log/vegphilly
 touch /var/log/vegphilly/gunicorn.log
 touch /var/log/vegphilly/access.log
 touch /var/log/vegphilly/error.log
 chmod -R 777 /var/log/vegphilly
 mkdir /var/vegphilly_backups/
-supervisorctl update
-supervisorctl reload
 
 ###############################
 ## PREPARE WEBSERVER
@@ -43,3 +28,25 @@ sudo service nginx restart
 ###############################
 
 echo '0 2 * * * /usr/local/vegphilly/utils/db_backup.py' | crontab -
+
+###############################
+## INITIALIZE PYTHON PACKAGES
+###############################
+pip install -r /usr/local/vegphilly/requirements.txt
+
+###############################
+## PREPARE APP ENV
+###############################
+cp -v /usr/local/vegphilly/utils/dev_env/settings_local_TEMPLATE.py /usr/local/vegphilly/vegancity/settings_local.py
+python /usr/local/vegphilly/manage.py syncdb --noinput
+python /usr/local/vegphilly/manage.py migrate
+python /usr/local/vegphilly/manage.py loaddata /usr/local/vegphilly/vegancity/fixtures/public_data.json
+
+###############################
+## PREPARE GUNICORN
+###############################
+
+cp -v /usr/local/vegphilly/utils/dev_env/supervisor_vegphilly_runserver_TEMPLATE.conf /etc/supervisor/conf.d/vegphilly_runserver.conf
+supervisorctl update
+supervisorctl reload
+
