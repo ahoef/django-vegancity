@@ -22,12 +22,10 @@ from django.core.urlresolvers import reverse
 
 from django.db.models.signals import m2m_changed
 
-from django.db import IntegrityError
-
 from django.db.models import Count
 
 from django.template.defaultfilters import slugify
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 
 import collections
 
@@ -362,21 +360,20 @@ class Vendor(models.Model):
         geocode_result = geocode.geocode_address(self.address)
         latitude, longitude, neighborhood = geocode_result
 
-        if neighborhood:
-            neighborhood_obj = None
-            try:
-                neighborhood_obj = Neighborhood.objects.get(name=neighborhood)
-            except:
-                pass
+        if latitude and longitude:
+            self.location = Point(x=longitude, y=latitude, srid=4326)
+            if neighborhood:
+                try:
+                    neighborhood_obj = Neighborhood.objects.get(name=neighborhood)
+                except ObjectDoesNotExist:
+                    neighborhood_obj = Neighborhood.objects\
+                                                   .create(name=neighborhood)
 
-            if not neighborhood_obj:
-                    neighborhood_obj = Neighborhood()
-                    neighborhood_obj.name = neighborhood
-                    neighborhood_obj.save()
+                self.neighborhood = neighborhood_obj
 
-            self.neighborhood = neighborhood_obj
-
-        self.location = Point(x=longitude, y=latitude, srid=4326)
+        else:
+            print ("WARNING: Geocoding of '%s' failed. Not geocoding vendor %s!"
+                   % (self.address, self.name))
 
     def save(self, *args, **kwargs):
         if self.pk is None:
@@ -505,13 +502,13 @@ def validate_vegan_dish(sender, instance, action, model, pk_set, **kwargs):
 
     if vendor_has_vegan_dishes and vendor_has_vegan_dish_reviews:
         if action == 'pre_clear':
-            raise IntegrityError(pre_clear_message)
+            raise ValidationError(pre_clear_message)
 
         elif action == 'pre_remove':
             if instance.review_set\
                        .filter(best_vegan_dish__in=pk_set)\
                        .count() > 0:
-                raise IntegrityError(pre_remove_message)
+                raise ValidationError(pre_remove_message)
 
 m2m_changed.connect(validate_vegan_dish, sender=Vendor.vegan_dishes.through)
 

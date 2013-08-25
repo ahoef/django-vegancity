@@ -1,10 +1,11 @@
 from django.test import TestCase
 from django.test.client import RequestFactory
-from mock import MagicMock
+from mock import Mock
 
-from django.db import IntegrityError
+from django.core.exceptions import ValidationError
+from django.contrib.gis.geos import Point
 
-from vegancity import models, views, email
+from vegancity import models, views, email, geocode
 from bs4 import BeautifulSoup
 
 def get_user():
@@ -82,6 +83,7 @@ class VendorGeocodeTest(TestCase):
         self.assertFalse(vendor.needs_geocoding())
 
     def test_address_causes_geocode(self):
+        geocode.geocode_address = Mock(return_value=(100, 100, "South Philly"))
         vendor = models.Vendor(
             name="Test Vendor",
             address="300 Christian St, Philadelphia, PA, 19147")
@@ -100,6 +102,43 @@ class VendorGeocodeTest(TestCase):
 
         vendor.save()
         self.assertFalse(vendor.needs_geocoding())
+
+    def run_apply_geocoding_test(self, geocoder_return_value,
+                                 location, neighborhood):
+        geocode.geocode_address = Mock(return_value=geocoder_return_value)
+        vendor = models.Vendor(name="Test Vendor", address="123 Main Street")
+        vendor.save()
+        vendor.apply_geocoding()
+        self.assertEqual(vendor.location, location)
+        if neighborhood:
+            self.assertEqual(vendor.neighborhood.name, neighborhood)
+        else:
+            self.assertEqual(vendor.neighborhood, neighborhood)
+
+    def test_apply_geocoding_fails_gracefully(self):
+        self.run_apply_geocoding_test(
+            geocoder_return_value=(None, None, None),
+            location=None,
+            neighborhood=None)
+
+    def test_apply_geocoding_with_weird_input(self):
+        self.run_apply_geocoding_test(
+            geocoder_return_value=(None, None, "South Philly"),
+            location=None,
+            neighborhood=None)
+
+    def test_apply_geocoding_without_neighborhood(self):
+        self.run_apply_geocoding_test(
+            geocoder_return_value=(100, 100, None),
+            location=Point(100, 100, srid=4326),
+            neighborhood=None)
+
+    def test_apply_geocoding_with_neighborhood(self):
+        self.run_apply_geocoding_test(
+            geocoder_return_value=(100, 100, "South Philly"),
+            location=Point(100, 100, srid=4326),
+            neighborhood="South Philly")
+
 
 class VendorModelTest(TestCase):
     def setUp(self):
@@ -183,7 +222,7 @@ class VendorEmailTest(TestCase):
 
     def setUp(self):
         # mock the email function so that we can just see if it's called
-        email.send_new_vendor_approval = MagicMock()
+        email.send_new_vendor_approval = Mock()
         self.user = get_user()
         self.user.email = "test@test.com"
         self.user.save()
@@ -274,13 +313,13 @@ class VendorVeganDishValidationTest(TestCase):
         self.review1.best_vegan_dish = self.vegan_dish1
         self.review1.save()
 
-        self.assertRaises(IntegrityError, self.vendor.vegan_dishes.clear)
+        self.assertRaises(ValidationError, self.vendor.vegan_dishes.clear)
 
     def test_cant_delete_relationship_with_reviews(self):
         self.review1.best_vegan_dish = self.vegan_dish1
         self.review1.save()
 
-        self.assertRaises(IntegrityError,
+        self.assertRaises(ValidationError,
                           self.vendor.vegan_dishes.remove,
                           self.vegan_dish1)
 

@@ -24,8 +24,15 @@ from settings import LOCATION_BOUNDS, LOCATION_COMPONENTS
 
 
 def geocode_address(address):
-    """takes an address as a string and returns a tuple of latitude,
-    longitude and neighborhood in float format"""
+    """
+    takes an address as a string and returns a tuple of latitude,
+    longitude and neighborhood in float format.
+
+    if geocoding fails, silently returns a 3-tuple of None values.
+    logging should be performed on the other end where more context
+    is available.
+    """
+
     base_url = "http://maps.googleapis.com/maps/api/geocode/json?"
     address_param = "address=" + urllib.quote_plus(address)
     sensor_param = "sensor=false"
@@ -37,7 +44,7 @@ def geocode_address(address):
     raw_response = urllib.urlopen(full_url).read()
     json_response = json.loads(raw_response)
     if not json_response['status'] == 'OK':
-        return None
+        latitude = longitude = neighborhood = None
     else:
         latitude = json_response['results'][0]['geometry']['location']['lat']
         longitude = json_response['results'][0]['geometry']['location']['lng']
