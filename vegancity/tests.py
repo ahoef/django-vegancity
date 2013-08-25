@@ -11,8 +11,7 @@ from vegancity import models, views, email, geocode
 from bs4 import BeautifulSoup
 
 def get_user():
-    user = models.User(username="Moby")
-    user.save()
+    user, _ = models.User.objects.get_or_create(username="Moby")
     return user
 
 class VegancityTestRunner(DjangoTestSuiteRunner):
