@@ -51,7 +51,9 @@ class TagManager(models.Manager):
         if vendors:
             qs = qs.filter(vendor__in=vendors).distinct('name')
         else:
-            annotated = self.annotate(num_vendors=Count('vendor'))
+            annotated = self.filter(vendor__approval_status='approved')\
+                            .distinct()\
+                            .annotate(num_vendors=Count('vendor'))
             qs = annotated.filter(num_vendors__gte=1)
         return qs
 
@@ -109,7 +111,9 @@ class NeighborhoodManager(models.Manager):
 
     def with_vendors(self):
         qs = self.all()
-        qs = qs.annotate(vendor_count=Count('vendor'))\
+        qs = qs.filter(vendor__approval_status='approved')\
+               .distinct()\
+               .annotate(vendor_count=Count('vendor'))\
                .filter(vendor_count__gt=0)
         return qs
 
