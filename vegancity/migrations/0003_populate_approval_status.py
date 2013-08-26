@@ -4,18 +4,19 @@ from south.db import db
 from south.v2 import DataMigration
 from django.db import models
 
+
 class Migration(DataMigration):
 
     def forwards(self, orm):
         "Write your forwards methods here."
-        # Note: Remember to use orm['appname.ModelName'] rather than "from appname.models..."
+        # Note: Remember to use orm['appname.ModelName'] rather than "from
+        # appname.models..."
         for vendor in orm.Vendor.objects.all():
             if vendor.approved:
                 vendor.approval_status = "approved"
             else:
                 vendor.approval_status = "pending"
             vendor.save()
-
 
     def backwards(self, orm):
         "Write your backwards methods here."
@@ -31,7 +32,6 @@ class Migration(DataMigration):
                 # the migration so we need a catch all.
                 vendor.approved = False
             vendor.save()
-
 
     models = {
         'auth.group': {

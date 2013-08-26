@@ -12,15 +12,15 @@ class Migration(SchemaMigration):
         db.create_table('vegancity_vendor_vegan_dishes', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('vendor', models.ForeignKey(orm['vegancity.vendor'], null=False)),
-            ('vegandish', models.ForeignKey(orm['vegancity.vegandish'], null=False))
+            ('vegandish', models.ForeignKey(
+                orm['vegancity.vegandish'], null=False))
         ))
-        db.create_unique('vegancity_vendor_vegan_dishes', ['vendor_id', 'vegandish_id'])
-
+        db.create_unique(
+            'vegancity_vendor_vegan_dishes', ['vendor_id', 'vegandish_id'])
 
     def backwards(self, orm):
         # Removing M2M table for field vegan_dishes on 'Vendor'
         db.delete_table('vegancity_vendor_vegan_dishes')
-
 
     models = {
         'auth.group': {

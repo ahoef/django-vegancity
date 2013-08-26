@@ -31,7 +31,7 @@ def vagrant():
             i = l.index(' ')
 
             setting_name = l[:i].strip()
-            setting_value = l[i+1:].strip()
+            setting_value = l[i + 1:].strip()
 
             # Newer versions of vagrant will wrap certain params like
             # IdentityFile in quotes, we need to strip them off
@@ -100,7 +100,7 @@ def rebuild_fixture():
 # use these commands to run unit tests or linting on source
 
 
-def test(test_filter="vegancity"):
+def test(test_filter=""):
     """ run application tests """
     require('site_path')
 

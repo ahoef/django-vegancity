@@ -107,6 +107,7 @@ class ReviewResource(ModelResource):
 
 
 class CuisineTagResource(ModelResource):
+
     class Meta:
         queryset = models.CuisineTag.objects.all()
         resource_name = 'cuisine_tag'
@@ -114,6 +115,7 @@ class CuisineTagResource(ModelResource):
 
 
 class NeighborhoodResource(ModelResource):
+
     class Meta:
         queryset = models.Neighborhood.objects.all()
         resource_name = 'neighborhood'
@@ -121,6 +123,7 @@ class NeighborhoodResource(ModelResource):
 
 
 class FeatureTagResource(ModelResource):
+
     class Meta:
         queryset = models.FeatureTag.objects.all()
         resource_name = 'feature_tag'
@@ -128,6 +131,7 @@ class FeatureTagResource(ModelResource):
 
 
 class UserResource(ModelResource):
+
     class Meta:
         queryset = User.objects.all()
         resource_name = 'user'
@@ -135,6 +139,7 @@ class UserResource(ModelResource):
 
 
 class VeganDishResource(ModelResource):
+
     class Meta:
         queryset = models.VeganDish.objects.all()
         resource_name = 'vegan_dish'
@@ -142,6 +147,7 @@ class VeganDishResource(ModelResource):
 
 
 class VegLevelResource(ModelResource):
+
     class Meta:
         queryset = models.VegLevel.objects.all()
         resource_name = 'veg_level'

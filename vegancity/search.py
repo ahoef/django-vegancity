@@ -71,7 +71,7 @@ def _address_rank(query):
         (2, " by "),
         (1, " and "),
         (1, " & "),
-        )
+    )
     return _calculate_rank(query, ADDRESS_PATTERNS)
 
 

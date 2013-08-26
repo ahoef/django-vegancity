@@ -10,14 +10,13 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding field 'Vendor.location'
         db.add_column('vegancity_vendor', 'location',
-                      self.gf('django.contrib.gis.db.models.fields.PointField')(default=None, null=True, blank=True),
+                      self.gf('django.contrib.gis.db.models.fields.PointField')(
+                          default=None, null=True, blank=True),
                       keep_default=False)
-
 
     def backwards(self, orm):
         # Deleting field 'Vendor.location'
         db.delete_column('vegancity_vendor', 'location')
-
 
     models = {
         'auth.group': {

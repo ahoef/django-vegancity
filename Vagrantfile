@@ -15,6 +15,7 @@ Vagrant::Config.run do |config|
   config.vm.provision :shell, :path => "utils/dev_env/perms.sh"
   config.vm.provision :shell, :path => "utils/sys.sh"
   config.vm.provision :shell, :path => "utils/postgres.sh"
+  config.vm.provision :shell, :path => "utils/os.sh"
   config.vm.provision :shell, :path => "utils/build.sh"
 
 end

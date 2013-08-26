@@ -28,8 +28,12 @@ from django.template.defaultfilters import slugify
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 
 import collections
+import logging
 
 from vegancity import geocode, validators, email
+
+
+logger = logging.getLogger(__name__)
 
 
 class TagManager(models.Manager):
@@ -63,11 +67,11 @@ class _TagModel(models.Model):
     name = models.CharField(
         help_text="short name, all lowercase alphas, underscores for spaces",
         max_length=255, unique=True
-        )
+    )
     description = models.CharField(
         help_text="Nicely formatted text.  About a sentence.",
         max_length=255
-        )
+    )
     created = models.DateTimeField(auto_now_add=True, null=True)
     objects = TagManager()
 
@@ -100,6 +104,7 @@ class VegLevel(models.Model):
     def __unicode__(self):
         return "(%s) %s" % (self.super_category, self.description)
 
+
 class NeighborhoodManager(models.Manager):
 
     def with_vendors(self):
@@ -108,7 +113,9 @@ class NeighborhoodManager(models.Manager):
                .filter(vendor_count__gt=0)
         return qs
 
+
 class Neighborhood(models.Model):
+
     """Used for determining what neighborhood a vendor is in."""
     name = models.CharField(max_length=255, unique=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
@@ -137,6 +144,7 @@ class UserProfile(models.Model):
 
 
 class BlogEntry(models.Model):
+
     "Blog entries. They get entered in the admin."
     title = models.CharField(max_length=255)
     created = models.DateTimeField(auto_now_add=True)
@@ -178,6 +186,7 @@ class VeganDish(models.Model):
 
 
 class ReviewManager(models.Manager):
+
     "Manager class for handling searches by review."
 
     def pending_approval(self):
@@ -189,6 +198,7 @@ class ReviewManager(models.Manager):
 
 
 class ApprovedReviewManager(ReviewManager):
+
     "Manager for approved reviews only."
 
     def get_query_set(self):
@@ -249,6 +259,7 @@ class Review(models.Model):
 
 
 class VendorManager(models.GeoManager):
+
     "Manager class for handling searches by vendor."
 
     def pending_approval(self):
@@ -260,9 +271,11 @@ class VendorManager(models.GeoManager):
 
 
 class ApprovedVendorManager(VendorManager):
+
     """Manager for approved vendors only.
 
     Inherits the normal vendor manager."""
+
     def get_query_set(self):
         normal_qs = super(VendorManager, self).get_query_set()
         new_qs = normal_qs.filter(approval_status='approved')
@@ -270,6 +283,7 @@ class ApprovedVendorManager(VendorManager):
 
 
 class Vendor(models.Model):
+
     "The main class for this application"
 
     # CORE FIELDS
@@ -364,7 +378,8 @@ class Vendor(models.Model):
             self.location = Point(x=longitude, y=latitude, srid=4326)
             if neighborhood:
                 try:
-                    neighborhood_obj = Neighborhood.objects.get(name=neighborhood)
+                    neighborhood_obj = Neighborhood.objects.get(
+                        name=neighborhood)
                 except ObjectDoesNotExist:
                     neighborhood_obj = Neighborhood.objects\
                                                    .create(name=neighborhood)
@@ -372,8 +387,8 @@ class Vendor(models.Model):
                 self.neighborhood = neighborhood_obj
 
         else:
-            print ("WARNING: Geocoding of '%s' failed. Not geocoding vendor %s!"
-                   % (self.address, self.name))
+            logger.warn("WARNING: Geocoding of '%s' failed. "
+                        "Not geocoding vendor %s!" % (self.address, self.name))
 
     def save(self, *args, **kwargs):
         if self.pk is None:

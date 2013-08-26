@@ -16,6 +16,7 @@
 # along with Vegancity.  If not, see <http://www.gnu.org/licenses/>.
 
 import functools
+import logging
 
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, get_object_or_404, redirect
@@ -33,6 +34,8 @@ import django.contrib.auth.views
 from vegancity import forms
 from vegancity import models
 from vegancity import search
+
+search_logger = logging.getLogger('vegancity-search')
 
 
 def password_change(request):
@@ -89,7 +92,7 @@ def home(request):
         'neighborhoods': neighborhoods,
         'cuisine_tags': cuisine_tags,
         'feature_tags': feature_tags,
-        }
+    }
 
     return render_to_response("vegancity/home.html", ctx,
                               context_instance=RequestContext(request))
@@ -144,6 +147,16 @@ def vendors(request):
 
     vendors, search_type = search.filter_vendors_by_search(
         vendors, current_query, search_type)
+
+    if current_query:
+        current_query_blob = "%s searched for '%s', " % (request.user,
+                                                         current_query)
+        previous_query_blob = ("after searching for '%s', " % (previous_query)
+                               if previous_query else "")
+        results_blob = ("vendors returned were: %s" %
+                        [v.id for v in vendors])
+        log_message = current_query_blob + previous_query_blob + results_blob
+        search_logger.info(log_message)
 
     ctx = {
         'cuisine_tags': models.CuisineTag.objects.all(),

@@ -1,17 +1,34 @@
 from django.test import TestCase
 from django.test.client import RequestFactory
+from django.test.simple import DjangoTestSuiteRunner
 from mock import Mock
 
 from django.core.exceptions import ValidationError
 from django.contrib.gis.geos import Point
+from django.conf import settings
 
 from vegancity import models, views, email, geocode
 from bs4 import BeautifulSoup
 
+
 def get_user():
-    user = models.User(username="Moby")
-    user.save()
+    user, _ = models.User.objects.get_or_create(username="Moby")
     return user
+
+import logging
+
+
+class VegancityTestRunner(DjangoTestSuiteRunner):
+
+    def run_tests(self, *args, **kwargs):
+        logging.disable(logging.CRITICAL)
+        super(VegancityTestRunner, self).run_tests(*args, **kwargs)
+
+    def build_suite(self, test_labels, *args, **kwargs):
+        test_labels = test_labels or settings.MANAGED_APPS
+        return super(VegancityTestRunner, self).build_suite(test_labels,
+                                                            *args,
+                                                            **kwargs)
 
 
 class PageLoadTest(TestCase):
@@ -50,7 +67,7 @@ class PageLoadTest(TestCase):
         PAGES_RETURNING_302 = [
             '/vendors/add/',
             '/accounts/logout/',
-            ]
+        ]
 
         PAGES_RETURNING_200 = [
             '/',
@@ -59,7 +76,7 @@ class PageLoadTest(TestCase):
             '/accounts/login/',
             '/accounts/register/',
             '/admin/',
-            ]
+        ]
 
         for url in PAGES_RETURNING_302:
             self.assertNoBrokenTemplates(url)
@@ -71,6 +88,7 @@ class PageLoadTest(TestCase):
 
 
 class VendorGeocodeTest(TestCase):
+
     def setUp(self):
         self.user = get_user()
 
@@ -141,6 +159,7 @@ class VendorGeocodeTest(TestCase):
 
 
 class VendorModelTest(TestCase):
+
     def setUp(self):
         self.user = get_user()
 
@@ -190,6 +209,7 @@ class VendorModelTest(TestCase):
 
 
 class VendorViewTest(TestCase):
+
     def setUp(self):
         self.factory = RequestFactory()
         self.user = get_user()
@@ -260,10 +280,12 @@ class VendorEmailTest(TestCase):
 
 
 class VendorVeganDishValidationTest(TestCase):
+
     """
     Tests that trying to delete vegan dish relationships for
     vendors that have reviews will signal an error.
     """
+
     def setUp(self):
         self.user = get_user()
 
@@ -323,23 +345,32 @@ class VendorVeganDishValidationTest(TestCase):
                           self.vendor.vegan_dishes.remove,
                           self.vegan_dish1)
 
+
 class SearchTest(TestCase):
+
     def setUp(self):
-        self.v1 = models.Vendor.objects.create(name="Test Vendor Foo", approval_status='approved')
-        self.v2 = models.Vendor.objects.create(name="Test Vendor Bar", approval_status='approved')
-        self.v3 = models.Vendor.objects.create(name="Test Vendor Baz", approval_status='approved')
-        self.v4 = models.Vendor.objects.create(name="Test Vendor Bart", approval_status='approved')
+        self.v1 = models.Vendor.objects.create(
+            name="Test Vendor Foo", approval_status='approved')
+        self.v2 = models.Vendor.objects.create(
+            name="Test Vendor Bar", approval_status='approved')
+        self.v3 = models.Vendor.objects.create(
+            name="Test Vendor Baz", approval_status='approved')
+        self.v4 = models.Vendor.objects.create(
+            name="Test Vendor Bart", approval_status='approved')
         self.factory = RequestFactory()
 
     def test_search_by_name_for_substring(self):
         request = self.factory.get('',
-                                   {'current_query': 'Bar',})
+                                   {'current_query': 'Bar', })
+
+        request.user = get_user()
 
         response = views.vendors(request)
         self.assertEqual(response.content.count("Results (2)"), 1)
 
         request = self.factory.get('',
-                                   {'current_query': 'Vendor',})
+                                   {'current_query': 'Vendor', })
+        request.user = get_user()
 
         response = views.vendors(request)
         self.assertEqual(response.content.count("Results (4)"), 1)
@@ -349,7 +380,8 @@ class SearchTest(TestCase):
         self.v4.save()
 
         request = self.factory.get('',
-                                   {'current_query': 'Vendor',})
+                                   {'current_query': 'Vendor', })
+        request.user = get_user()
 
         response = views.vendors(request)
         self.assertEqual(response.content.count("Results (3)"), 1)
@@ -361,8 +393,9 @@ class SearchTest(TestCase):
             request = self.factory.get('')
             response = views.vendors(request)
             content = BeautifulSoup(response.content)
-            neighborhood_element = filter(lambda x: x['name'] == 'neighborhood',
-                                          content.find_all('select'))[0]
+            neighborhood_element = filter(
+                lambda x: x['name'] == 'neighborhood',
+                content.find_all('select'))[0]
             return len(neighborhood_element.find_all('option'))
 
         n1 = models.Neighborhood.objects.create(name="Foo")
@@ -373,4 +406,3 @@ class SearchTest(TestCase):
         self.v1.save()
 
         self.assertEqual(count_option_elements(), 2)
-

@@ -9,12 +9,13 @@ install:
   - pip install -r requirements.txt
   - pip install -q Django==$DJANGO --use-mirrors
 before_script:
+  - sudo bash utils/os.sh
   - psql -c 'create database template_postgis;' -U postgres
   - psql -d template_postgis -f `pg_config --sharedir`/contrib/postgis-1.5/postgis.sql -U postgres
   - psql -d template_postgis -f `pg_config --sharedir`/contrib/postgis-1.5/spatial_ref_sys.sql -U postgres
   - psql -c 'create database vegphilly with template=template_postgis;' -U postgres
   - echo -e "EMAIL_HOST_USER = 'foo'\nEMAIL_HOST_PASSWORD = 'bar'\n" >> vegancity/settings_local.py
 script:
-  - coverage run manage.py test vegancity
+  - coverage run manage.py test
   - coverage report --include="vegancity/*"
 

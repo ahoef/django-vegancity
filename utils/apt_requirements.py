@@ -11,7 +11,7 @@ packages = [
     "python-pip",
     "supervisor",
     "nginx",
-    ]
+]
 
 not_installed = []
 

@@ -27,6 +27,7 @@ JQUERY = 'http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js'
 
 
 class VegUserCreationForm(UserCreationForm):
+
     "Form used for creating new users."
     email_explanation = ("VegPhilly is currently under development. "
                          "We may use your email to contact you ONLY "
@@ -80,6 +81,7 @@ class VegUserCreationForm(UserCreationForm):
 
 
 class VegUserEditForm(forms.ModelForm):
+
     """Form for users to edit their information"""
 
     first_name = forms.CharField(max_length=30, required=False)
@@ -91,6 +93,7 @@ class VegUserEditForm(forms.ModelForm):
 
 
 class VegProfileEditForm(forms.ModelForm):
+
     class Meta:
         model = models.UserProfile
         fields = ('bio', 'mailing_list',)
@@ -107,7 +110,7 @@ class AdminVendorForm(forms.ModelForm):
             GMPS,
             JQUERY,
             'js/vendor_form.js',
-            )
+        )
 
     class Meta:
         model = models.Vendor
@@ -119,13 +122,14 @@ class AdminVendorForm(forms.ModelForm):
 
 
 class NewVendorForm(forms.ModelForm):
+
     "Form used for adding new vendors."
 
     class Media:
         js = (
             JQUERY,
             'js/vendor_form.js',
-            )
+        )
 
     class Meta:
         model = models.Vendor
@@ -133,7 +137,7 @@ class NewVendorForm(forms.ModelForm):
         widgets = {
             'cuisine_tags': forms.CheckboxSelectMultiple,
             'feature_tags': forms.CheckboxSelectMultiple,
-            }
+        }
 
 ##############################
 ### Review Forms
@@ -141,6 +145,7 @@ class NewVendorForm(forms.ModelForm):
 
 
 class _BaseReviewForm(forms.ModelForm):
+
     """Base Class for making Review forms.
 
     This class should not be instantiated directly."""
