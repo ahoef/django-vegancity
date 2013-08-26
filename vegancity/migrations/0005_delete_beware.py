@@ -4,17 +4,18 @@ from south.db import db
 from south.v2 import DataMigration
 from django.db import models
 
+
 class Migration(DataMigration):
 
     def forwards(self, orm):
         "Write your forwards methods here."
-        # Note: Remember to use orm['appname.ModelName'] rather than "from appname.models..."
+        # Note: Remember to use orm['appname.ModelName'] rather than "from
+        # appname.models..."
         try:
             beware = orm.VegLevel.objects.get(name='beware')
             beware.delete()
         except:
             pass
-
 
     def backwards(self, orm):
         "Write your backwards methods here."

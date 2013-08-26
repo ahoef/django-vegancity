@@ -11,13 +11,12 @@ class Migration(SchemaMigration):
         # Deleting field 'Vendor.approved'
         db.delete_column('vegancity_vendor', 'approved')
 
-
     def backwards(self, orm):
         # Adding field 'Vendor.approved'
         db.add_column('vegancity_vendor', 'approved',
-                      self.gf('django.db.models.fields.BooleanField')(default=False),
+                      self.gf('django.db.models.fields.BooleanField')(
+                          default=False),
                       keep_default=False)
-
 
     models = {
         'auth.group': {

@@ -35,8 +35,8 @@ DATABASES = {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'vegphilly',
         'USER': 'postgres',
-        }
     }
+}
 
 TIME_ZONE = None
 
@@ -120,8 +120,9 @@ LOGGING = {
     'disable_existing_loggers': True,
     'formatters': {
         'standard': {
-            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
-            'datefmt' : "%d/%b/%Y %H:%M:%S"
+            'format': ("[%(asctime)s] %(levelname)s "
+                       "[%(name)s:%(lineno)s] %(message)s"),
+            'datefmt': "%d/%b/%Y %H:%M:%S"
         },
         'simple': {
             'format': '%(levelname)s %(message)s'
@@ -129,40 +130,40 @@ LOGGING = {
     },
     'handlers': {
         'general': {
-            'level':'DEBUG',
-            'class':'logging.handlers.RotatingFileHandler',
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': '/var/log/vegphilly/django-general.log',
             'maxBytes': 500000,
             'backupCount': 2,
             'formatter': 'simple',
         },
         'request': {
-            'level':'DEBUG',
-            'class':'logging.handlers.RotatingFileHandler',
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': '/var/log/vegphilly/django-request.log',
             'maxBytes': 500000,
             'backupCount': 2,
             'formatter': 'simple',
         },
         'sql': {
-            'level':'DEBUG',
-            'class':'logging.handlers.RotatingFileHandler',
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': '/var/log/vegphilly/django-sql.log',
             'maxBytes': 500000,
             'backupCount': 2,
             'formatter': 'standard',
         },
         'vegancity-general': {
-            'level':'DEBUG',
-            'class':'logging.handlers.RotatingFileHandler',
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': '/var/log/vegphilly/vegancity-general.log',
             'maxBytes': 500000,
             'backupCount': 2,
             'formatter': 'standard',
         },
         'vegancity-search': {
-            'level':'DEBUG',
-            'class':'logging.handlers.RotatingFileHandler',
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': '/var/log/vegphilly/vegancity-search.log',
             'maxBytes': 500000,
             'backupCount': 2,

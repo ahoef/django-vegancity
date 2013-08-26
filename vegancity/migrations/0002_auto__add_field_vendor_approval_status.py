@@ -10,14 +10,13 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding field 'Vendor.approval_status'
         db.add_column('vegancity_vendor', 'approval_status',
-                      self.gf('django.db.models.fields.CharField')(default='pending', max_length=100),
+                      self.gf('django.db.models.fields.CharField')(
+                          default='pending', max_length=100),
                       keep_default=False)
-
 
     def backwards(self, orm):
         # Deleting field 'Vendor.approval_status'
         db.delete_column('vegancity_vendor', 'approval_status')
-
 
     models = {
         'auth.group': {

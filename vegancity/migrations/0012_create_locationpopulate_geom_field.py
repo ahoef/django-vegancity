@@ -6,17 +6,18 @@ from django.db import models
 
 from django.contrib.gis.geos import Point
 
+
 class Migration(DataMigration):
 
     def forwards(self, orm):
         "Write your forwards methods here."
-        # Note: Remember to use orm['appname.ModelName'] rather than "from appname.models..."
+        # Note: Remember to use orm['appname.ModelName'] rather than "from
+        # appname.models..."
         for vendor in orm.Vendor.objects.all():
             if vendor.latitude and vendor.longitude:
                 p = Point(x=vendor.longitude, y=vendor.latitude, srid=4326)
                 vendor.location = p
                 vendor.save()
-                
 
     def backwards(self, orm):
         "Write your backwards methods here."
@@ -25,7 +26,6 @@ class Migration(DataMigration):
                 vendor.latitude = vendor.location.y
                 vendor.longitude = vendor.location.x
                 vendor.save()
-                
 
     models = {
         'auth.group': {

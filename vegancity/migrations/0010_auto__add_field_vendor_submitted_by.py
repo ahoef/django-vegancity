@@ -10,14 +10,13 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding field 'Vendor.submitted_by'
         db.add_column('vegancity_vendor', 'submitted_by',
-                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True, blank=True),
+                      self.gf('django.db.models.fields.related.ForeignKey')(
+                          to=orm['auth.User'], null=True, blank=True),
                       keep_default=False)
-
 
     def backwards(self, orm):
         # Deleting field 'Vendor.submitted_by'
         db.delete_column('vegancity_vendor', 'submitted_by_id')
-
 
     models = {
         'auth.group': {

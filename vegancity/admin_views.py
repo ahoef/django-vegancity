@@ -40,7 +40,7 @@ def pending_approval(request):
     ctx = {
         'pending_vendors': pending_vendors,
         'pending_reviews': pending_reviews,
-        }
+    }
     return render_to_response("admin/pending_approval.html", ctx,
                               context_instance=RequestContext(request))
 

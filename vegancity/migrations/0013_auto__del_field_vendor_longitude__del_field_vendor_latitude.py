@@ -14,18 +14,18 @@ class Migration(SchemaMigration):
         # Deleting field 'Vendor.latitude'
         db.delete_column('vegancity_vendor', 'latitude')
 
-
     def backwards(self, orm):
         # Adding field 'Vendor.longitude'
         db.add_column('vegancity_vendor', 'longitude',
-                      self.gf('django.db.models.fields.FloatField')(default=None, null=True, blank=True),
+                      self.gf('django.db.models.fields.FloatField')(
+                          default=None, null=True, blank=True),
                       keep_default=False)
 
         # Adding field 'Vendor.latitude'
         db.add_column('vegancity_vendor', 'latitude',
-                      self.gf('django.db.models.fields.FloatField')(default=None, null=True, blank=True),
+                      self.gf('django.db.models.fields.FloatField')(
+                          default=None, null=True, blank=True),
                       keep_default=False)
-
 
     models = {
         'auth.group': {

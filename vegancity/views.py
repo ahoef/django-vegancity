@@ -37,6 +37,7 @@ from vegancity import search
 
 search_logger = logging.getLogger('vegancity-search')
 
+
 def password_change(request):
     response = django.contrib.auth.views.password_change(
         request, "registration/password_change_form.html",
@@ -91,7 +92,7 @@ def home(request):
         'neighborhoods': neighborhoods,
         'cuisine_tags': cuisine_tags,
         'feature_tags': feature_tags,
-        }
+    }
 
     return render_to_response("vegancity/home.html", ctx,
                               context_instance=RequestContext(request))
