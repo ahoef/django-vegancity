@@ -119,9 +119,9 @@ def vendors(request):
     current_query = request.GET.get('current_query', None)
     previous_query = request.GET.get('previous_query', None)
     search_type = request.GET.get('search_type', None)
-    selected_neighborhood = request.GET.get('neighborhood', None)
     selected_cuisine_tag_id = request.GET.get('cuisine_tag', None)
     selected_feature_tag_id = request.GET.get('feature_tag', None)
+    selected_neighborhood_id = request.GET.get('neighborhood', '')
     checked_feature_filters = [f for f
                                in models.FeatureTag.objects.with_vendors()
                                if request.GET.get(f.name) or
@@ -129,8 +129,8 @@ def vendors(request):
 
     vendors = models.Vendor.approved_objects.all()
 
-    if selected_neighborhood:
-        vendors = vendors.filter(neighborhood__id=selected_neighborhood)
+    if selected_neighborhood_id:
+        vendors = vendors.filter(neighborhood__id=selected_neighborhood_id)
 
     if selected_cuisine_tag_id:
         selected_cuisine_tag = models.CuisineTag.objects.get(
@@ -167,6 +167,8 @@ def vendors(request):
         'previous_query': previous_query,
         'current_query': current_query,
         'selected_cuisine_tag': selected_cuisine_tag,
+        'selected_neighborhood_id': (int(selected_neighborhood_id)
+                                     if selected_neighborhood_id else None),
         'checked_feature_filters': checked_feature_filters,
         'search_type': search_type,
         'has_get_params': len(request.GET) > 0,

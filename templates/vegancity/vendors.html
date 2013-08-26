@@ -94,9 +94,9 @@ This prevents null searches from getting a value of None stuck here and throwing
 
             <h4>Neighborhood:</h4>
               <select id="id_neighborhood" name="neighborhood">
-                <option value="" selected="selected">---------</option>
+                <option value="" {% if not selected_neighborhood_id %}selected="selected"{% endif %}>---------</option>
                 {% for neighborhood in neighborhoods %}
-                <option value="{{ neighborhood.id }}">{{ neighborhood.name }}</option>
+                <option value="{{ neighborhood.id }}" {% if neighborhood.id == selected_neighborhood_id %}selected="selected"{% endif %}>{{ neighborhood.name }}</option>
                 {% endfor %}
               </select>
             <h4>Cuisine:</h4>
