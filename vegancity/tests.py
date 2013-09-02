@@ -1,14 +1,15 @@
-from django.test import TestCase
-from django.test.client import RequestFactory
-from django.test.simple import DjangoTestSuiteRunner
 from mock import Mock
+from bs4 import BeautifulSoup
 
 from django.core.exceptions import ValidationError
 from django.contrib.gis.geos import Point
 from django.conf import settings
 
 from vegancity import models, views, email, geocode
-from bs4 import BeautifulSoup
+from django.test import TestCase
+from django.test.client import RequestFactory
+from django.test.simple import DjangoTestSuiteRunner
+
 
 
 def get_user():
