@@ -5,15 +5,16 @@ from django.core.exceptions import ValidationError
 from django.contrib.gis.geos import Point
 from django.conf import settings
 
-from vegancity import models, views, email, geocode
 from django.test import TestCase
 from django.test.client import RequestFactory
 from django.test.simple import DjangoTestSuiteRunner
 
+from vegancity import views, email, geocode
+from vegancity.models import User, Review, Vendor, Neighborhood, VeganDish
 
 
 def get_user():
-    user, _ = models.User.objects.get_or_create(username="Moby")
+    user, _ = User.objects.get_or_create(username="Moby")
     return user
 
 import logging
@@ -41,8 +42,8 @@ class PageLoadTest(TestCase):
     fixtures = ['public_data.json']
 
     def setUp(self):
-        self.reviews = models.Review.approved_objects.all()
-        self.vendors = models.Vendor.approved_objects.all()
+        self.reviews = Review.approved_objects.all()
+        self.vendors = Vendor.approved_objects.all()
         self.vendor_count = self.vendors.count()
 
     def assertNoBrokenTemplates(self, url):
@@ -98,7 +99,7 @@ class VendorGeocodeTest(TestCase):
         self.user = get_user()
 
     def test_no_address_no_geocode(self):
-        vendor = models.Vendor(name="Test Vendor")
+        vendor = Vendor(name="Test Vendor")
         vendor.save()
 
         self.assertEqual(vendor.location, None)
@@ -107,7 +108,7 @@ class VendorGeocodeTest(TestCase):
 
     def test_address_causes_geocode(self):
         geocode.geocode_address = Mock(return_value=(100, 100, "South Philly"))
-        vendor = models.Vendor(
+        vendor = Vendor(
             name="Test Vendor",
             address="300 Christian St, Philadelphia, PA, 19147")
 
@@ -117,7 +118,7 @@ class VendorGeocodeTest(TestCase):
         self.assertNotEqual(vendor.neighborhood, None)
 
     def test_needs_geocoding(self):
-        vendor = models.Vendor(name="Test Vendor")
+        vendor = Vendor(name="Test Vendor")
         self.assertFalse(vendor.needs_geocoding())
 
         vendor.address = "300 Christian St, Philadelphia, PA, 19147"
@@ -129,7 +130,7 @@ class VendorGeocodeTest(TestCase):
     def run_apply_geocoding_test(self, geocoder_return_value,
                                  location, neighborhood):
         geocode.geocode_address = Mock(return_value=geocoder_return_value)
-        vendor = models.Vendor(name="Test Vendor", address="123 Main Street")
+        vendor = Vendor(name="Test Vendor", address="123 Main Street")
         vendor.save()
         vendor.apply_geocoding()
         self.assertEqual(vendor.location, location)
@@ -169,13 +170,13 @@ class VendorModelTest(TestCase):
         self.user = get_user()
 
     def test_food_and_atmosphere_rating(self):
-        vendor = models.Vendor(name="Test Vendor")
+        vendor = Vendor(name="Test Vendor")
         vendor.save()
 
         self.assertEqual(vendor.food_rating(), None)
         self.assertEqual(vendor.atmosphere_rating(), None)
 
-        models.Review(vendor=vendor,
+        Review(vendor=vendor,
                       approved=True,
                       food_rating=1,
                       atmosphere_rating=1,
@@ -184,7 +185,7 @@ class VendorModelTest(TestCase):
         self.assertEqual(vendor.food_rating(), 1)
         self.assertEqual(vendor.atmosphere_rating(), 1)
 
-        review2 = models.Review(vendor=vendor,
+        review2 = Review(vendor=vendor,
                                 approved=False,
                                 food_rating=4,
                                 atmosphere_rating=4,
@@ -201,7 +202,7 @@ class VendorModelTest(TestCase):
         self.assertEqual(vendor.food_rating(), 2)
         self.assertEqual(vendor.atmosphere_rating(), 2)
 
-        review3 = models.Review(vendor=vendor,
+        review3 = Review(vendor=vendor,
                                 approved=True,
                                 food_rating=4,
                                 atmosphere_rating=4,
@@ -229,7 +230,7 @@ class VendorViewTest(TestCase):
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(1,
-                         models.Vendor.objects.filter(name="test123").count())
+                         Vendor.objects.filter(name="test123").count())
 
     def test_invalid_new_vendor_does_not_save(self):
         request = self.factory.post('/vendors/add',
@@ -240,7 +241,7 @@ class VendorViewTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(0,
-                         models.Vendor.objects.filter(name="test123").count())
+                         Vendor.objects.filter(name="test123").count())
 
 
 class VendorEmailTest(TestCase):
@@ -259,7 +260,7 @@ class VendorEmailTest(TestCase):
         """
 
         # not called because it is not yet approved
-        vendor = models.Vendor(name="The Test Vendor",
+        vendor = Vendor(name="The Test Vendor",
                                address="123 Main St",
                                submitted_by=self.user)
         vendor.save()
@@ -294,17 +295,17 @@ class VendorVeganDishValidationTest(TestCase):
     def setUp(self):
         self.user = get_user()
 
-        self.vendor = models.Vendor(name="Test Vendor",
+        self.vendor = Vendor(name="Test Vendor",
                                     address="123 Main St")
         self.vendor.save()
 
-        self.vegan_dish1 = models.VeganDish(name="Tofu Scramble")
+        self.vegan_dish1 = VeganDish(name="Tofu Scramble")
         self.vegan_dish1.save()
 
-        self.vegan_dish2 = models.VeganDish(name="Tempeh Hash")
+        self.vegan_dish2 = VeganDish(name="Tempeh Hash")
         self.vegan_dish2.save()
 
-        self.review1 = models.Review(vendor=self.vendor,
+        self.review1 = Review(vendor=self.vendor,
                                      author=self.user,
                                      content="ahhhh")
         self.review1.save()
@@ -354,13 +355,13 @@ class VendorVeganDishValidationTest(TestCase):
 class SearchTest(TestCase):
 
     def setUp(self):
-        self.v1 = models.Vendor.objects.create(
+        self.v1 = Vendor.objects.create(
             name="Test Vendor Foo", approval_status='approved')
-        self.v2 = models.Vendor.objects.create(
+        self.v2 = Vendor.objects.create(
             name="Test Vendor Bar", approval_status='approved')
-        self.v3 = models.Vendor.objects.create(
+        self.v3 = Vendor.objects.create(
             name="Test Vendor Baz", approval_status='approved')
-        self.v4 = models.Vendor.objects.create(
+        self.v4 = Vendor.objects.create(
             name="Test Vendor Bart", approval_status='approved')
         self.factory = RequestFactory()
 
@@ -403,7 +404,7 @@ class SearchTest(TestCase):
                 content.find_all('select'))[0]
             return len(neighborhood_element.find_all('option'))
 
-        n1 = models.Neighborhood.objects.create(name="Foo")
+        n1 = Neighborhood.objects.create(name="Foo")
 
         self.assertEqual(count_option_elements(), 1)
 
