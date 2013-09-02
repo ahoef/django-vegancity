@@ -412,3 +412,39 @@ class SearchTest(TestCase):
         self.v1.save()
 
         self.assertEqual(count_option_elements(), 2)
+
+class WithVendorsManagerTest(TestCase):
+
+    def setUp(self):
+        self.n1 = Neighborhood.objects.create(name="Logan Square")
+        self.n2 = Neighborhood.objects.create(name="Pilsen")
+
+        self.v1 = Vendor.objects.create(name="Test Vendor",
+                                        neighborhood=self.n1,
+                                        approval_status='approved')
+        self.v2 = Vendor.objects.create(name="Test Vendor 2",
+                                        neighborhood=self.n2,
+                                        approval_status='approved')
+
+    def assertCounts(self, vendors, with_vendors_count, without_vendors_count):
+        self.assertEqual(with_vendors_count,
+                         Neighborhood.objects.with_vendors(vendors).count())
+        self.assertEqual(without_vendors_count,
+                         Neighborhood.objects.with_vendors().count())
+
+    def test_no_vendors_returns_none(self):
+        Vendor.objects.all().delete()
+        vendors = Vendor.objects.all()
+        self.assertCounts(vendors, 0, 0)
+
+    def test_initial_vendors_empty_queryset(self):
+        vendors = Vendor.objects.none()
+        self.assertCounts(vendors, 0, 2)
+
+    def test_initial_vendors_limited_queryset(self):
+        vendors = Vendor.objects.filter(pk=self.v1.pk)
+        self.assertCounts(vendors, 1, 2)
+
+    def test_initial_vendors_complete_queryset(self):
+        vendors = Vendor.objects.all()
+        self.assertCounts(vendors, 2, 2)
