@@ -23,7 +23,7 @@ class VegancityTestRunner(DjangoTestSuiteRunner):
 
     def run_tests(self, *args, **kwargs):
         logging.disable(logging.CRITICAL)
-        super(VegancityTestRunner, self).run_tests(*args, **kwargs)
+        return super(VegancityTestRunner, self).run_tests(*args, **kwargs)
 
     def build_suite(self, test_labels, *args, **kwargs):
         test_labels = test_labels or settings.MANAGED_APPS
