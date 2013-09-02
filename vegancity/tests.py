@@ -20,6 +20,10 @@ import logging
 
 
 class VegancityTestRunner(DjangoTestSuiteRunner):
+    def __init__(self, *args, **kwargs):
+        # TODO: find a better way to force failfast
+        kwargs = {k: v for k, v in kwargs.iteritems() if k != 'failfast'}
+        return super(VegancityTestRunner, self).__init__(failfast=True, *args, **kwargs)
 
     def run_tests(self, *args, **kwargs):
         logging.disable(logging.CRITICAL)
