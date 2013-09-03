@@ -7,35 +7,6 @@
 
 {% load vegancity_template_tags %}
 
-{% block header_extra %}
-<meta name="description" content="View local vegan and vegetarian restaurants in Philly. Search food vendors by cuisine, features, or neighborhood.">
-  <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script>
-  <script type="text/javascript">
-
-    var autoResize = {% if has_get_params %}true{% else %}false{% endif %};
-    var defaultCenter = new google.maps.LatLng({{ center_latitude }}, {{ center_longitude }});
-    var vendors = [
-    {% for vendor in vendors %}{% if vendor.location %}
-        {
-            id: "{{ vendor.id }}",
-            name: "{{ vendor.name }}",
-            address: "{{ vendor.address|linebreaksbr }}",
-            phone: "{{ vendor.phone }}",
-            url: "{{ vendor.get_absolute_url }}",
-            latitude: "{{ vendor.location.y }}", 
-            longitude: "{{ vendor.location.x }}",
-            vegLevel: {% if vendor.veg_level %}{{ vendor.veg_level.id }}{% else %}0{% endif %}
-        }{% if not forloop.last %},{% endif %}
-    {% endif %}{% endfor %}
-    ];
-
-  </script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/map.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/vendors.js"></script>
-{% endblock %}
-
 {% block headline %}{% endblock %}
 
 {% block summary %}
@@ -175,3 +146,32 @@ This prevents null searches from getting a value of None stuck here and throwing
   </div>
   </div>
 {% endblock content %}
+
+{% block body_extra %}
+<meta name="description" content="View local vegan and vegetarian restaurants in Philly. Search food vendors by cuisine, features, or neighborhood.">
+  <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script>
+  <script type="text/javascript">
+
+    var autoResize = {% if has_get_params %}true{% else %}false{% endif %};
+    var defaultCenter = new google.maps.LatLng({{ center_latitude }}, {{ center_longitude }});
+    var vendors = [
+    {% for vendor in vendors %}{% if vendor.location %}
+        {
+            id: "{{ vendor.id }}",
+            name: "{{ vendor.name }}",
+            address: "{{ vendor.address|linebreaksbr }}",
+            phone: "{{ vendor.phone }}",
+            url: "{{ vendor.get_absolute_url }}",
+            latitude: "{{ vendor.location.y }}", 
+            longitude: "{{ vendor.location.x }}",
+            vegLevel: {% if vendor.veg_level %}{{ vendor.veg_level.id }}{% else %}0{% endif %}
+        }{% if not forloop.last %},{% endif %}
+    {% endif %}{% endfor %}
+    ];
+
+  </script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/map.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/vendors.js"></script>
+{% endblock body_extra %}

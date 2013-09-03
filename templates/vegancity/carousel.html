@@ -6,8 +6,18 @@
 
 {% block headline %}{% endblock %}
 
-{% block header_extra %}
+{% block content %}
+<div class="container">
+<h3>Check Out Our Flyers!</h3>
+  <br>
+  <p>Browse through the gallery below to see our designs, or <a href="#">download and print a sheet of four</a>. If you have ideas for a flyer, we'd love to include your designs here too. <a href="mailto:vegphilly@gmail.com">Let's talk!</a></p>
+  <p>
+  <br>
+  <div id="this-carousel-id" class="carousel slide"></div>
+</div>
+{% endblock content %}
 
+{% block body_extra %}
 
 <script>
   $(document).ready(function(){
@@ -28,16 +38,4 @@
 }
 
 </style>
-{% endblock %}
-
-
-{% block content %}
-<div class="container">
-<h3>Check Out Our Flyers!</h3>
-  <br>
-  <p>Browse through the gallery below to see our designs, or <a href="#">download and print a sheet of four</a>. If you have ideas for a flyer, we'd love to include your designs here too. <a href="mailto:vegphilly@gmail.com">Let's talk!</a></p>
-  <p>
-  <br>
-  <div id="this-carousel-id" class="carousel slide"></div>
-</div>
-{% endblock content %}
+{% endblock body_extra %}

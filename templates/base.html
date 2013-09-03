@@ -21,7 +21,7 @@
     {% include "analytics.html" %}
 
     {% block header_extra %}
-    {% endblock %}
+    {% endblock header_extra %}
 
 
   </head>
@@ -82,5 +82,7 @@
         </p>
       </div>
     </div>
+    {% block body_extra %}
+    {% endblock body_extra %}
   </body>
 </html>

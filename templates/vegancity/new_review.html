@@ -4,10 +4,6 @@
 
 {% block headline %}Write a Review{% endblock %}
 
-{% block header_extra %}
-<script type="text/javascript" src="{{ STATIC_URL }}js/review_form.js"></script>
-{% endblock %}
-
 {% block content %}
 <div class="container">
 
@@ -108,4 +104,8 @@
 </form>
 </div>
 {% endblock content %}
+
+{% block body_extra %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/review_form.js"></script>
+{% endblock body_extra %}
 

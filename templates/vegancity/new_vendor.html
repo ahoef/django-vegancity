@@ -1,9 +1,5 @@
 {% extends "base.html" %}
 
-{% block header_extra %}
-  {{ form.media }}
-{% endblock %}
-
 {% block headline %}Add a Food Vendor{% endblock %}
 
 {% block content %}
@@ -88,4 +84,8 @@
 
 {% endblock content %}
 
+
+{% block body_extra %}
+  {{ form.media }}
+{% endblock body_extra %}
 

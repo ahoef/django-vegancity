@@ -2,124 +2,11 @@
 
 {% block title %}VegPhilly | About{% endblock %}
 
-
-
 {% block headline %}About{% endblock %}
 
 {% block header_extra %}
-
-<link href='http://fonts.googleapis.com/css?family=Cabin:400,700' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Chivo:400,400italic' rel='stylesheet' type='text/css'>
-<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 <meta name="description" content="Read the story behind VegPhilly, meet the founders and contributors, and see the free software tools used to make the site.">
-
-<script>
-  $(document).ready(function(){
-    $('.carousel').carousel();
-  });
-</script>
-
-<style type="text/css">
-
-a:hover
-{
-  color: #d25d09;
-}
-
-h2
-{
-  font-family: 'Chivo';
-  font-style: italic;
-  font-weight: 400;
-  font-size: 250%;
-}
-
-h3
-{
-  font-family: 'Cabin';
-  text-transform: uppercase;
-  font-size: 150%;
-  margin-bottom: 20px;
-  display: inline-block;
-  color: #8daa8f;
-}
-
-h5 {
-  padding-top: 12px;
-  padding-bottom: 3px;
-}
-
-ul {
-  margin-right: 125px;
-  margin-left: 100px;
-}
-
-.aboutpic {
-  border-radius: 100%;
-  width: 230px;
-  height: 230px;
-}
-
-.bio {
-  padding-left: 35px;
-  padding-right: 35px;
-  text-align: left;
-}
-
-#vegphilly-icons {
-  text-align: center;
-  margin-top: 20px;
-}
-
-#vegphilly-icons img
-{
-  max-height: 100px;
-  margin-left: 3%;
-  margin-right: 3%;
-}
-
-.about-hero
-{
-  background-image:url('{{ STATIC_URL }}images/skyline.png');
-  height: 400px;
-  background-size: cover;
-  text-align: right;
-  padding-top: 30px;
-}
-
-.about-hero h3
-{
-  font-family: 'Source Sans Pro', sans-serif;
-  text-transform: none;
-  width: 100%;
-  color: #f6c084;
-  font-weight: 400;
-  font-size: 200%;
-}
-
-.grey
-{
-  background-color: #383638;
-}
-
-.grey p
-{
-  color: #fff;
-  padding: 0 10% 15% 10%;
-  font-size: 18px;
-  line-height: 1.25em;
-}
-
-i
-{
-  color: #383638;
-  font-size: 150%;
-}
-
-
-</style>
-{% endblock %}
-
+{% endblock header_extra %}
 
 {% block content %}
 <div class="container">
@@ -231,3 +118,113 @@ Check out <a href="http://justadudeintheworld.info/" target="_blank">Zack's Port
   <br><br>
 </div>
 {% endblock content %}
+
+{% block body_extra %}
+<link href='http://fonts.googleapis.com/css?family=Cabin:400,700' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Chivo:400,400italic' rel='stylesheet' type='text/css'>
+<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+<script>
+  $(document).ready(function(){
+    $('.carousel').carousel();
+  });
+</script>
+
+<style type="text/css">
+
+a:hover
+{
+  color: #d25d09;
+}
+
+h2
+{
+  font-family: 'Chivo';
+  font-style: italic;
+  font-weight: 400;
+  font-size: 250%;
+}
+
+h3
+{
+  font-family: 'Cabin';
+  text-transform: uppercase;
+  font-size: 150%;
+  margin-bottom: 20px;
+  display: inline-block;
+  color: #8daa8f;
+}
+
+h5 {
+  padding-top: 12px;
+  padding-bottom: 3px;
+}
+
+ul {
+  margin-right: 125px;
+  margin-left: 100px;
+}
+
+.aboutpic {
+  border-radius: 100%;
+  width: 230px;
+  height: 230px;
+}
+
+.bio {
+  padding-left: 35px;
+  padding-right: 35px;
+  text-align: left;
+}
+
+#vegphilly-icons {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#vegphilly-icons img
+{
+  max-height: 100px;
+  margin-left: 3%;
+  margin-right: 3%;
+}
+
+.about-hero
+{
+  background-image:url('{{ STATIC_URL }}images/skyline.png');
+  height: 400px;
+  background-size: cover;
+  text-align: right;
+  padding-top: 30px;
+}
+
+.about-hero h3
+{
+  font-family: 'Source Sans Pro', sans-serif;
+  text-transform: none;
+  width: 100%;
+  color: #f6c084;
+  font-weight: 400;
+  font-size: 200%;
+}
+
+.grey
+{
+  background-color: #383638;
+}
+
+.grey p
+{
+  color: #fff;
+  padding: 0 10% 15% 10%;
+  font-size: 18px;
+  line-height: 1.25em;
+}
+
+i
+{
+  color: #383638;
+  font-size: 150%;
+}
+</style>
+
+{% endblock body_extra %}

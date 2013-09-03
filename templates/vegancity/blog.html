@@ -3,26 +3,8 @@
 {% block title %}VegPhilly | Blog{% endblock %}
 
 {% block header_extra %}
-
   <meta name="description" content="Read blog posts about the latest VegPhilly news and local vegan and vegetarian restaurant information.">
-
-  <style>
-
-  .cat {
-    box-shadow: 5px 5px 5px #888;
-    display: block;
-    margin: auto;
-    margin-top: 125px;
-  }
-
-  #caption {
-    text-align: center;
-    margin-top: 20px;
-  }
-
-  </style>
-
-{% endblock %}
+{% endblock header_extra %}
 
 {% block headline %}Welcome to the VegPhilly Blog!{% endblock %}
 
@@ -55,3 +37,22 @@
 
 {% endblock content %}
 
+{% block body_extra %}
+
+  <style>
+
+  .cat {
+    box-shadow: 5px 5px 5px #888;
+    display: block;
+    margin: auto;
+    margin-top: 125px;
+  }
+
+  #caption {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  </style>
+
+{% endblock body_extra %}
