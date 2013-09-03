@@ -9,6 +9,7 @@
 {% endblock summary %}
 
 {% block content %}
+  <div class="container">
   <img src="{{ profile_user.email|gravatar_urlify }}" title="add your photo on gravatar.com!"><br>
   {% if user == profile_user %}
     {% if messages %}
@@ -47,4 +48,5 @@
   {% endfor %}
 {% endif %}
 
+</div>
 {% endblock content %}

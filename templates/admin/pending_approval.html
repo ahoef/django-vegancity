@@ -3,6 +3,8 @@
 {% block title %}Items pending approval{% endblock %}
 
 {% block content %}
+<div class="container">
+
 <h3>Items pending approval</h3>
 <br/>
   {% if pending_vendors %}
@@ -45,4 +47,5 @@
     <p>There are no pending reviews</p>
   {% endif %}
 
-{% endblock %}
+</div>
+{% endblock content %}

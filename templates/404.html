@@ -11,9 +11,11 @@ h1, h3 {
 {% endblock %}
 
 {% block content %}
+  <div class="container">
   <div style="width: 40%; margin: auto;">
   	<img src="{{ STATIC_URL }}images/404cat.png" alt="404 Kitty"> 
     <h1 >404 Error</h1>
     <h3>Page Not Found</h3>
   </div>
-{% endblock %}
+  </div>
+{% endblock content %}

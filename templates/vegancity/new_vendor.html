@@ -7,6 +7,8 @@
 {% block headline %}Add a Food Vendor{% endblock %}
 
 {% block content %}
+  <div class="container">
+
   <form action="" method="post">
     {{ form.non_field_errors }}
     {% if form.errors %}
@@ -82,7 +84,8 @@
     <input type="submit" class="btn btn-custom" value="Submit">
 
   </form>
+  </div>
 
-{% endblock %}
+{% endblock content %}
 
 
