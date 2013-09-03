@@ -7,7 +7,7 @@
 ###############################
 ## PREPARE WEBSERVER
 ###############################
-cp -v /usr/local/vegphilly/utils/dev_env/nginx_vegphilly.conf /etc/nginx/conf.d/
+cp -v /usr/local/vegphilly/utils/config/nginx_vegphilly.conf /etc/nginx/conf.d/
 rm /etc/nginx/sites-enabled/default
 rm /etc/nginx/sites-available/default
 sudo service nginx restart
@@ -46,7 +46,7 @@ chown -R vegphilly:nogroup /var/log/vegphilly/
 ## PREPARE GUNICORN
 ###############################
 
-cp -v /usr/local/vegphilly/utils/dev_env/supervisor_vegphilly_runserver_TEMPLATE.conf /etc/supervisor/conf.d/vegphilly_runserver.conf
+cp -v /usr/local/vegphilly/utils/config/supervisor_vegphilly_runserver_TEMPLATE.conf /etc/supervisor/conf.d/vegphilly_runserver.conf
 supervisorctl update
 supervisorctl reload
 

@@ -9,7 +9,7 @@ install:
   - pip install -r requirements.txt
   - pip install -q Django==$DJANGO --use-mirrors
 before_script:
-  - sudo bash utils/os.sh
+  - sudo bash utils/dev_env/os.sh
   - psql -c 'create database template_postgis;' -U postgres
   - psql -d template_postgis -f `pg_config --sharedir`/contrib/postgis-1.5/postgis.sql -U postgres
   - psql -d template_postgis -f `pg_config --sharedir`/contrib/postgis-1.5/spatial_ref_sys.sql -U postgres
