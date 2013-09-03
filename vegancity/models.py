@@ -36,23 +36,32 @@ from vegancity import geocode, validators, email
 logger = logging.getLogger(__name__)
 
 
-class TagManager(models.Manager):
+class WithVendorsManager(models.Manager):
+    """
+    Adds a method for conveniently filtering down to only
+    objects with approved vendors.
+    """
+    def with_vendors(self, vendors=None):
+        qs = self.filter(vendor__approval_status='approved')
+
+        if not (vendors is None):
+            qs = qs.filter(vendor__in=vendors)
+
+        qs = (qs
+              .distinct()
+              .annotate(vendor_count=Count('vendor'))
+              .filter(vendor_count__gt=0))
+
+        return qs
+
+
+class TagManager(WithVendorsManager):
 
     def word_search(self, word):
         "takes a word and searches all tag names for that word"
         qs = self.filter(name__icontains=word)
         if not qs and word[-1] == 's':
             qs = self.filter(name__icontains=word[:-1])
-        return qs
-
-    def with_vendors(self, vendors=None):
-        "filters tags to tags that actually have vendors"
-        qs = self.all()
-        if vendors:
-            qs = qs.filter(vendor__in=vendors).distinct('name')
-        else:
-            annotated = self.annotate(num_vendors=Count('vendor'))
-            qs = annotated.filter(num_vendors__gte=1)
         return qs
 
     def get_vendors(self, qs):
@@ -78,10 +87,6 @@ class _TagModel(models.Model):
     def __unicode__(self):
         return self.description
 
-    def get_vendors(self):
-        "returns all the vendors that are tagged with this tag."
-        return self.vendor_set.all()
-
     class Meta:
         abstract = True
         get_latest_by = "created"
@@ -105,22 +110,13 @@ class VegLevel(models.Model):
         return "(%s) %s" % (self.super_category, self.description)
 
 
-class NeighborhoodManager(models.Manager):
-
-    def with_vendors(self):
-        qs = self.all()
-        qs = qs.annotate(vendor_count=Count('vendor'))\
-               .filter(vendor_count__gt=0)
-        return qs
-
-
 class Neighborhood(models.Model):
 
     """Used for determining what neighborhood a vendor is in."""
     name = models.CharField(max_length=255, unique=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
 
-    objects = NeighborhoodManager()
+    objects = WithVendorsManager()
 
     def __unicode__(self):
         return self.name
