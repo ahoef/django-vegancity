@@ -62,7 +62,7 @@ h3
 
 h4
 {
-  padding: 55px 0px 0px 40px;
+  padding: 0px 0px 0px 40px;
   font-size: 18px;
   font-weight: normal;
   color: #2A3655;
@@ -134,6 +134,12 @@ td {
     width: 100%;
  }
 
+.profile {
+    max-height: 100px;
+    float: right;
+    margin-right: 30px;
+ }
+
 .review_title h3 {
     line-height: 30px;
     background-color: #8DA189;
@@ -152,7 +158,6 @@ td {
     padding-left: 20px;
     color: #d25d09;
 }
-
 
 .button {
   display: inline-block;
@@ -176,6 +181,78 @@ td {
   color: #ffffff;
 }
 
+#button-section {
+    text-align: center;
+    margin: auto;
+    width: 100%;
+    border: 1px solid red;
+}
+
+#button-section p {
+  display: inline;
+}
+
+
+#arrow {
+  width: 150px;
+  display: inline;
+  /*position: relative;
+   right: 150px;
+
+
+  /*
+  position: absolute;
+  right: 615px;
+  top: 5px;*/
+}
+
+#help-text {
+    width: 400px;
+    text-align: left;
+    float: right;
+    position: relative;
+    right: 200px;
+
+    /*position: relative;
+    left: 550px;
+    bottom: 50px;
+    position: absolute;
+    top: 15px;
+    right: 205px;
+    float: right;
+    margin: 20px 200px 30px 5px;*/
+}
+
+.button {
+  display: inline-block;
+  background-color: #2a3655;
+  padding: 18px 35px;
+  margin: 10px 0;
+  text-decoration: none;
+  font-size: 20px;
+  color: #ffffff;
+  width: 85%;
+  font-family: 'Cabin', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-align: center;
+}
+
+.button:hover {
+  opacity: 0.6;
+  text-decoration: none;
+  color: #ffffff;
+}
+
+@media (max-width: 935px) {
+  #left-carrot, #right-carrot {display: none;}
+  .reviews-box  {width: 60%;}
+  .reviews-box h4 {padding-top: 75px;}
+}
+
+@media (max-width: 768px) {
+  .profile {display: none;}
+}
 </style>
 
 {% endblock %}
@@ -295,23 +372,19 @@ td {
         <div class="row">
           <div class="span12">
               <div class="reviews-divider">
-                <img class="hidden-phone" id="left-carrot" src="{{ STATIC_URL }}images/horiz_carrot.png" width="375px">
+                <img id="left-carrot" src="{{ STATIC_URL }}images/horiz_carrot.png" width="375px">
                 <h2>Reviews</h2>
-                <img class="hidden-phone" id="right-carrot" src="{{ STATIC_URL }}images/horiz_carrot.png" width="375px">
+                <img id="right-carrot" src="{{ STATIC_URL }}images/horiz_carrot.png" width="375px">
               </div>
             <br>
             {% if vendor.approved_reviews %}
             {% for review in vendor.approved_reviews %}
 
-              <div class="reviews-box">
+              <div class="reviews-box clearfix">
               <span class="review_title"><h3>{{review.title|default:"<em>untitled</em>" }}</h3></span>
               <!-- <div class="watermark"><img class="hidden-phone" src="{{ STATIC_URL }}images/default_user_icon.jpg"></div> -->
-              <div class="row">
-                <div class="span1">
-                  <!-- <img class="profile" src="{{ review.author.email|gravatar_urlify }}" title="add your photo on gravatar.com!"> -->
-                  <!-- <img class="profile" src="{{ STATIC_URL }}images/default_user_icon.jpg" title="add your photo on gravatar.com!"> -->
-                </div>
-                <br>
+              <div class="row clearfix">
+                  <img class="profile" src="{{ review.author.email|gravatar_urlify }}" title="add your photo on gravatar.com!">
                 <div class="span5">
                   <h4>entered by <a href="{% url 'user_profile' username=review.author.username %}">{{ review.author }}</a> on {{ review.created|date:"M. d, Y" }}</h4>
                 </div>
