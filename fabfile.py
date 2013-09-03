@@ -100,11 +100,16 @@ def rebuild_fixture():
 # use these commands to run unit tests or linting on source
 
 
-def test(test_filter=""):
-    """ run application tests """
+def test_all(test_filter=""):
+    """ run application unit and integration tests """
     require('site_path')
-
     _manage('test %s' % test_filter)
+
+
+def test(test_filter=""):
+    """ run application unit tests """
+    require('site_path')
+    _manage('test --exclude-page-tests %s' % test_filter)
 
 
 def check():

@@ -16,6 +16,7 @@ before_script:
   - psql -c 'create database vegphilly with template=template_postgis;' -U postgres
   - echo -e "EMAIL_HOST_USER = 'foo'\nEMAIL_HOST_PASSWORD = 'bar'\n" >> vegancity/settings_local.py
 script:
-  - coverage run manage.py test
+  - python manage.py test vegancity.PageLoadTest
+  - coverage run manage.py test --exclude-page-tests
   - coverage report --include="vegancity/*"
 
