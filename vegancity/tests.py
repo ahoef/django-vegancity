@@ -45,7 +45,6 @@ class PageLoadTest(TestCase):
     def setUp(self):
         self.reviews = Review.approved_objects.all()
         self.vendors = Vendor.approved_objects.all()
-        self.vendor_count = self.vendors.count()
 
     def assertNoBrokenTemplates(self, url):
         response = self.client.post(url)
