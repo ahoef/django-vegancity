@@ -157,7 +157,8 @@ This prevents null searches from getting a value of None stuck here and throwing
     var autoResize = {% if has_get_params %}true{% else %}false{% endif %};
     var defaultCenter = new google.maps.LatLng({{ center_latitude }}, {{ center_longitude }});
     var vendors = [
-    {% for vendor in vendors %}{% if vendor.location %}
+    {% for vendor in vendors %}
+      {% if vendor.location %}
         {
             id: "{{ vendor.id }}",
             name: "{{ vendor.name }}",
@@ -168,7 +169,8 @@ This prevents null searches from getting a value of None stuck here and throwing
             longitude: "{{ vendor.location.x }}",
             vegLevel: {% if vendor.veg_level %}{{ vendor.veg_level_id }}{% else %}0{% endif %}
         }{% if not forloop.last %},{% endif %}
-    {% endif %}{% endfor %}
+      {% endif %}
+    {% endfor %}
     ];
 
   </script>

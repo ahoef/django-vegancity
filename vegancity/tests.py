@@ -26,13 +26,14 @@ class VegancityTestRunner(DjangoTestSuiteRunner):
 
     option_list = (
         make_option('-e', '--exclude-page-tests',
-                    help=("Do not run the slow page load tests, "
+                    help=("Do not run the slow "
+                          "page load tests, "
                           "run unnit tests only."),
                     action='store_const',
                     dest='exclude_page_tests',
-                    const=True, default=False,
-                ),
+                    const=True, default=False),
     )
+
     def __init__(self, *args, **kwargs):
         self.exclude_page_tests = kwargs['exclude_page_tests']
         return super(VegancityTestRunner, self).__init__(interactve=False,
@@ -181,6 +182,7 @@ class VendorGeocodeTest(TestCase):
             location=Point(100, 100, srid=4326),
             neighborhood="South Philly")
 
+
 class VendorManagerTest(TestCase):
 
     def test_pending_approval_no_vendors(self):
@@ -195,11 +197,10 @@ class VendorManagerTest(TestCase):
 
     def test_pending_approval_some_approved(self):
         Vendor.objects.create(name="Test Vendor 1",
-                                        approval_status='approved')
+                              approval_status='approved')
         Vendor.objects.create(name="Test Vendor 2")
         self.assertEqual(1,
                          Vendor.objects.pending_approval().count())
-
 
     def test_pending_approval_all_approved(self):
         Vendor.objects.create(name="Test Vendor 1",
@@ -209,10 +210,11 @@ class VendorManagerTest(TestCase):
         self.assertEqual(0,
                          Vendor.objects.pending_approval().count())
 
+
 class VendorApprovedManagerTest(TestCase):
 
     def assertVendorCounts(self, without_count, with_count):
-        self.assertEqual(without_count, 
+        self.assertEqual(without_count,
                          Vendor.approved_objects.without_reviews().count())
         self.assertEqual(with_count,
                          Vendor.approved_objects.with_reviews().count())
@@ -227,7 +229,7 @@ class VendorApprovedManagerTest(TestCase):
 
     def test_with_without_reviews_no_approved_reviews(self):
         v1 = Vendor.objects.create(name='tv1', approval_status='approved')
-        v2 = Vendor.objects.create(name='tv2', approval_status='approved')
+        Vendor.objects.create(name='tv2', approval_status='approved')
         Review.objects.create(vendor=v1, author=get_user())
         self.assertVendorCounts(2, 0)
 
@@ -265,16 +267,17 @@ class VendorApprovedManagerTest(TestCase):
     def test_get_random_unreviewed_multiple_unreviewed_vendor(self):
         v1 = Vendor.objects.create(name='tv1', approval_status='approved')
         v2 = Vendor.objects.create(name='tv2', approval_status='approved')
-        self.assertIn(Vendor.approved_objects.get_random_unreviewed(), [v1, v2])
+        self.assertIn(Vendor.approved_objects.get_random_unreviewed(),
+                      [v1, v2])
 
     def test_get_random_unreviewed_mixed_unreviewed_vendors_and_reviewed(self):
         v1 = Vendor.objects.create(name='tv1', approval_status='approved')
         v2 = Vendor.objects.create(name='tv2', approval_status='approved')
         v3 = Vendor.objects.create(name='tv3', approval_status='approved')
         Review.objects.create(vendor=v1, approved=True, author=get_user())
-        self.assertIn(Vendor.approved_objects.get_random_unreviewed(), [v2, v3])
+        self.assertIn(Vendor.approved_objects.get_random_unreviewed(),
+                      [v2, v3])
 
-        
 
 class VendorModelTest(TestCase):
 
@@ -289,19 +292,19 @@ class VendorModelTest(TestCase):
         self.assertEqual(vendor.atmosphere_rating(), None)
 
         Review(vendor=vendor,
-                      approved=True,
-                      food_rating=1,
-                      atmosphere_rating=1,
-                      author=self.user).save()
+               approved=True,
+               food_rating=1,
+               atmosphere_rating=1,
+               author=self.user).save()
 
         self.assertEqual(vendor.food_rating(), 1)
         self.assertEqual(vendor.atmosphere_rating(), 1)
 
         review2 = Review(vendor=vendor,
-                                approved=False,
-                                food_rating=4,
-                                atmosphere_rating=4,
-                                author=self.user)
+                         approved=False,
+                         food_rating=4,
+                         atmosphere_rating=4,
+                         author=self.user)
         review2.save()
 
         self.assertEqual(vendor.food_rating(), 1)
@@ -315,10 +318,10 @@ class VendorModelTest(TestCase):
         self.assertEqual(vendor.atmosphere_rating(), 2)
 
         review3 = Review(vendor=vendor,
-                                approved=True,
-                                food_rating=4,
-                                atmosphere_rating=4,
-                                author=self.user)
+                         approved=True,
+                         food_rating=4,
+                         atmosphere_rating=4,
+                         author=self.user)
         review3.save()
 
         # Floored Average
@@ -373,8 +376,8 @@ class VendorEmailTest(TestCase):
 
         # not called because it is not yet approved
         vendor = Vendor(name="The Test Vendor",
-                               address="123 Main St",
-                               submitted_by=self.user)
+                        address="123 Main St",
+                        submitted_by=self.user)
         vendor.save()
         email.send_new_vendor_approval.assert_not_called()
 
@@ -408,7 +411,7 @@ class VendorVeganDishValidationTest(TestCase):
         self.user = get_user()
 
         self.vendor = Vendor(name="Test Vendor",
-                                    address="123 Main St")
+                             address="123 Main St")
         self.vendor.save()
 
         self.vegan_dish1 = VeganDish(name="Tofu Scramble")
@@ -418,8 +421,8 @@ class VendorVeganDishValidationTest(TestCase):
         self.vegan_dish2.save()
 
         self.review1 = Review(vendor=self.vendor,
-                                     author=self.user,
-                                     content="ahhhh")
+                              author=self.user,
+                              content="ahhhh")
         self.review1.save()
 
         self.vendor.vegan_dishes.add(self.vegan_dish1)
@@ -525,6 +528,7 @@ class SearchTest(TestCase):
         self.v1.save()
 
         self.assertEqual(count_option_elements(), 2)
+
 
 class WithVendorsManagerTest(TestCase):
 

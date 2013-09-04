@@ -295,7 +295,6 @@ class ApprovedVendorManager(VendorManager):
         except IndexError:
             return None
 
-    
 
 class Vendor(models.Model):
 

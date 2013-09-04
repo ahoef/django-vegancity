@@ -17,14 +17,13 @@
 
 import functools
 import logging
-import random
 
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
-from django.db.models import Max, Count, Avg
+from django.db.models import Avg
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.views.generic import DetailView, TemplateView
@@ -77,7 +76,6 @@ def home(request):
     recently_active = (Vendor.approved_objects
                        .filter(pk__in=recent_review_vendors)[:5])
 
-
     recently_added = vendors.exclude(created=None).order_by('-created')[:5]
 
     most_reviewed = Vendor.approved_objects.with_reviews()[:5]
@@ -111,8 +109,9 @@ def user_profile(request, username):
             return redirect('user_profile', username=request.user.username)
     else:
         profile_user = get_object_or_404(User, username=username)
-        reviews = Review.approved_objects.filter(author=profile_user)\
-                                                .order_by('-created')
+        reviews = (Review.approved_objects
+                   .filter(author=profile_user)
+                   .order_by('-created'))
         return render_to_response(
             'vegancity/profile_page.html',
             {'profile_user': profile_user, 'reviews': reviews},
