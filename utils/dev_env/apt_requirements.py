@@ -11,6 +11,7 @@ packages = [
     "python-pip",
     "supervisor",
     "nginx",
+    "libtidy-dev",
 ]
 
 not_installed = []

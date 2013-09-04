@@ -11,6 +11,7 @@ DATABASES = {
 
 DEVELOPMENT_APPS = (
     'debug_toolbar',
+    'debug_toolbar_htmltidy',
 )
 
 DEVELOPMENT_MIDDLEWARE_CLASSES = (
@@ -29,6 +30,7 @@ DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.sql.SQLDebugPanel',
     'debug_toolbar.panels.signals.SignalDebugPanel',
     'debug_toolbar.panels.logger.LoggingPanel',
+    'debug_toolbar_htmltidy.panels.HTMLTidyDebugPanel',
 )
 
 EMAIL_HOST_USER = 'foo'
