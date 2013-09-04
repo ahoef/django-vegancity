@@ -7,6 +7,7 @@ env:
 install:
   - sudo apt-get install binutils libproj-dev gdal-bin postgis postgresql-9.1-postgis
   - pip install -r requirements.txt
+  - pip install -r dev_requirements.txt
   - pip install -q Django==$DJANGO --use-mirrors
 before_script:
   - sudo bash utils/dev_env/os.sh

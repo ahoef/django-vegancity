@@ -22,6 +22,7 @@ echo '0 2 * * * /usr/local/vegphilly/utils/db_backup.py' | crontab -
 ## INITIALIZE PYTHON PACKAGES
 ###############################
 pip install -r /usr/local/vegphilly/requirements.txt
+pip install -r /usr/local/vegphilly/dev_requirements.txt
 
 ###############################
 ## PREPARE APP ENV

@@ -82,7 +82,7 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.app_directories.Loader',
 )
 
-MIDDLEWARE_CLASSES = (
+GLOBAL_MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -112,8 +112,6 @@ UNMANAGED_APPS = (
 MANAGED_APPS = (
     'vegancity',
 )
-
-INSTALLED_APPS = UNMANAGED_APPS + MANAGED_APPS
 
 LOGGING = {
     'version': 1,
@@ -226,11 +224,17 @@ EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 EMAIL_PORT = 587
 
+DEVELOPMENT_APPS = tuple()
+DEVELOPMENT_MIDDLEWARE_CLASSES = tuple()
+
 try:
     from settings_local import *  # NOQA
 except ImportError:
     pass
 
+INSTALLED_APPS = UNMANAGED_APPS + MANAGED_APPS + DEVELOPMENT_APPS
+
+MIDDLEWARE_CLASSES = GLOBAL_MIDDLEWARE_CLASSES + DEVELOPMENT_MIDDLEWARE_CLASSES
 
 if EMAIL_HOST_USER == '' or EMAIL_HOST_PASSWORD == '':
     error_message = ("No valid email login configured. Please specify "
