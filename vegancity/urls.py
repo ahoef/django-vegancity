@@ -53,3 +53,12 @@ urlpatterns = patterns(
 
     url(r'^users/(?P<username>[a-zA-Z0-9_@.+-]+)/$', 'vegancity.views.user_profile', name='user_profile'),
 )
+
+localpatterns = patterns('',)
+
+try:
+    from urls_local import *  # NOQA
+except ImportError:
+    pass
+
+urlpatterns = urlpatterns + localpatterns

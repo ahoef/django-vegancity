@@ -3,6 +3,7 @@ db
 *.pot
 *.pyc
 settings_local.py
+dev_urls.py
 nohup.out
 templates/analytics.html
 *~
