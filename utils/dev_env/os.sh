@@ -8,7 +8,7 @@
 ## PREPARE OS FOR APP
 ###############################
 
-mkdir /var/log/vegphilly
+mkdir -p /var/log/vegphilly
 touch /var/log/vegphilly/gunicorn-general.log
 touch /var/log/vegphilly/gunicorn-access.log
 touch /var/log/vegphilly/gunicorn-error.log
@@ -19,4 +19,4 @@ touch /var/log/vegphilly/vegancity-general.log
 touch /var/log/vegphilly/vegancity-search.log
 chmod -R 777 /var/log/vegphilly/
 chown -R vegphilly:nogroup /var/log/vegphilly/
-mkdir /var/vegphilly_backups/
+mkdir -p /var/vegphilly_backups/

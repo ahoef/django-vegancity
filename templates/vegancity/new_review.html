@@ -4,11 +4,9 @@
 
 {% block headline %}Write a Review{% endblock %}
 
-{% block header_extra %}
-<script type="text/javascript" src="{{ STATIC_URL }}js/review_form.js"></script>
-{% endblock %}
-
 {% block content %}
+<div class="container">
+
 <h3>{{ vendor.name }}</h3>
 <form action="" method="post">
   {% csrf_token %}
@@ -104,5 +102,10 @@
   </div> <!-- row -->
 
 </form>
-{% endblock %}
+</div>
+{% endblock content %}
+
+{% block body_extra %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/review_form.js"></script>
+{% endblock body_extra %}
 

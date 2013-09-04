@@ -7,260 +7,15 @@
 {% block title %}{{ vendor.name }} | VegPhilly{% endblock %}
 
 {% block header_extra %}
-  <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
-  <script type="text/javascript">
-    var vendors = [
-        {
-            id: "{{ vendor.id }}",
-            name: "{{ vendor.name }}",
-            address: "{{ vendor.address|linebreaksbr }}",
-            phone: "{{ vendor.phone }}",
-            url: "{{ vendor.get_absolute_url }}",
-            latitude: "{{ vendor.location.y }}",
-            longitude: "{{ vendor.location.x }}"
-        }
-    ];
-  </script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/map.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/vendor_detail.js"></script>
-  <link href='http://fonts.googleapis.com/css?family=Cabin:400,700' rel='stylesheet' type='text/css'>
-
-{% if vendor.notes %}
-<meta name="description" content="{{ vendor.notes }}">
-{% endif %}
-
-<style>
-
-h1
-{
-  font-family: 'Cabin', sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: #8DA189;
-}
-
-h2
-{
-  font-family: 'Cabin', sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  font-size: 45px;
-  color: #444;
-  display: inline;
-  position: relative;
-  top: 20px;
-}
-
-h3
-{
-  text-align: center;
-  font-family: 'Source Sans Pro';
-  font-weight: normal;
-  font-size: 18px;
-}
-
-h4
-{
-  padding: 0px 0px 0px 40px;
-  font-size: 18px;
-  font-weight: normal;
-  color: #2A3655;
-  font-family: 'Source Sans Pro', sans-serif;
-}
-
-h5 {
-  font-weight: normal;
-}
-
-h6 {
-  font-weight: normal;
-  color: #444444;
-  font-size: 16px;
-  padding: 10px 40px 30px 40px;
-}
-
-td {
-  padding-left: 40px;
-}
-
-#left-carrot {
-    padding-top: 40px;
-}
-
-#right-carrot {
-    top: -20px;
-    transform:rotate(180deg);
-    -ms-transform:rotate(180deg);
-    -moz-transform:rotate(180deg);
-    -webkit-transform:rotate(180deg);
-    -o-transform:rotate(180deg);
- }
-
-#map-area {
-  width: 80%;
-  min-width: 400px;
-  margin: auto;
-  padding-top: 60px;
-  margin-right: 0px;
-}
-
- #map_canvas {
-  height: 300px !important;
-  opacity: .75;
- }
-
-.reviews-container {
-  background-image:url('{{ STATIC_URL }}images/wavegrid.png');
-  margin: 0 auto;
-}
-
-.reviews-box {
-    width: 40%;
-    min-width: 350px;
-    background-color: #FFFFFF;
-    margin: auto;
-    margin-top: 20px;
-    margin-bottom: 50px;
-}
-
-.reviews-divider {
-    text-align: center;
-    margin: auto;
-    width: 100%;
-}
-
-.span12 {
-    width: 100%;
- }
-
-.profile {
-    max-height: 100px;
-    float: right;
-    margin-right: 30px;
- }
-
-.review_title h3 {
-    line-height: 30px;
-    background-color: #8DA189;
-    display: inline;
-    padding: 15px 20px;
-    color: #ffffff;
-    font-size: 18px;
-    position: relative;
-    left: -30px;
-    top: 45px;
-    box-shadow: 1px 1px 1px #888;
-    font-family: 'Merriweather Sans', sans-serif;
-}
-
-.review_number {
-    padding-left: 20px;
-    color: #d25d09;
-}
-
-.button {
-  display: inline-block;
-  background-color: #2a3655;
-  padding: 18px 35px;
-  margin: 10px 0;
-  text-decoration: none;
-  font-size: 20px;
-  color: #ffffff;
-  font-weight: bold;
-  width: 85%;
-  font-family: 'Cabin', sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  text-align: center;
-}
-
-.button:hover {
-  opacity: 0.6;
-  text-decoration: none;
-  color: #ffffff;
-}
-
-#button-section {
-    text-align: center;
-    margin: auto;
-    width: 100%;
-    border: 1px solid red;
-}
-
-#button-section p {
-  display: inline;
-}
-
-
-#arrow {
-  width: 150px;
-  display: inline;
-  /*position: relative;
-   right: 150px;
-
-
-  /*
-  position: absolute;
-  right: 615px;
-  top: 5px;*/
-}
-
-#help-text {
-    width: 400px;
-    text-align: left;
-    float: right;
-    position: relative;
-    right: 200px;
-
-    /*position: relative;
-    left: 550px;
-    bottom: 50px;
-    position: absolute;
-    top: 15px;
-    right: 205px;
-    float: right;
-    margin: 20px 200px 30px 5px;*/
-}
-
-.button {
-  display: inline-block;
-  background-color: #2a3655;
-  padding: 18px 35px;
-  margin: 10px 0;
-  text-decoration: none;
-  font-size: 20px;
-  color: #ffffff;
-  width: 85%;
-  font-family: 'Cabin', sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  text-align: center;
-}
-
-.button:hover {
-  opacity: 0.6;
-  text-decoration: none;
-  color: #ffffff;
-}
-
-@media (max-width: 935px) {
-  #left-carrot, #right-carrot {display: none;}
-  .reviews-box  {width: 60%;}
-  .reviews-box h4 {padding-top: 75px;}
-}
-
-@media (max-width: 768px) {
-  .profile {display: none;}
-}
-</style>
-
-{% endblock %}
+  {% if vendor.notes %}
+    <meta name="description" content="{{ vendor.notes }}">
+  {% endif %}
+{% endblock header_extra %}
 
 {% block summary %}
 {% endblock %}
 
-{% block content_flexible %}
+{% block content %}
   <div class="container">
     <br/>
     <div class="row">
@@ -422,6 +177,176 @@ td {
           </div>
         </div>
       </div>
-{% endblock %}
+{% endblock content %}
 
 
+{% block body_extra %}
+  <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+  <script type="text/javascript">
+    var vendors = [
+        {
+            id: "{{ vendor.id }}",
+            name: "{{ vendor.name }}",
+            address: "{{ vendor.address|linebreaksbr }}",
+            phone: "{{ vendor.phone }}",
+            url: "{{ vendor.get_absolute_url }}",
+            latitude: "{{ vendor.location.y }}",
+            longitude: "{{ vendor.location.x }}"
+        }
+    ];
+  </script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/map.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/vendor_detail.js"></script>
+  <link href='http://fonts.googleapis.com/css?family=Cabin:400,700' rel='stylesheet' type='text/css'>
+
+
+<style>
+
+h1
+{
+  font-family: 'Cabin', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #8DA189;
+}
+
+h2
+{
+  font-family: 'Cabin', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-size: 45px;
+  color: #444;
+  display: inline;
+  position: relative;
+  top: 20px;
+}
+
+h3
+{
+  text-align: center;
+  font-family: 'Source Sans Pro';
+  font-weight: normal;
+  font-size: 18px;
+}
+
+h4
+{
+  padding: 55px 0px 0px 40px;
+  font-size: 18px;
+  font-weight: normal;
+  color: #2A3655;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+h5 {
+  font-weight: normal;
+}
+
+h6 {
+  font-weight: normal;
+  color: #444444;
+  font-size: 16px;
+  padding: 10px 40px 30px 40px;
+}
+
+td {
+  padding-left: 40px;
+}
+
+#left-carrot {
+    padding-top: 40px;
+}
+
+#right-carrot {
+    top: -20px;
+    transform:rotate(180deg);
+    -ms-transform:rotate(180deg);
+    -moz-transform:rotate(180deg);
+    -webkit-transform:rotate(180deg);
+    -o-transform:rotate(180deg);
+ }
+
+#map-area {
+  width: 80%;
+  min-width: 400px;
+  margin: auto;
+  padding-top: 60px;
+  margin-right: 0px;
+}
+
+ #map_canvas {
+  height: 300px !important;
+  opacity: .75;
+ }
+
+.reviews-container {
+  background-image:url('{{ STATIC_URL }}images/wavegrid.png');
+  margin: 0 auto;
+}
+
+.reviews-box {
+    width: 40%;
+    min-width: 350px;
+    background-color: #FFFFFF;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 50px;
+}
+
+.reviews-divider {
+    text-align: center;
+    margin: auto;
+    width: 100%;
+}
+
+.span12 {
+    width: 100%;
+ }
+
+.review_title h3 {
+    line-height: 30px;
+    background-color: #8DA189;
+    display: inline;
+    padding: 15px 20px;
+    color: #ffffff;
+    font-size: 18px;
+    position: relative;
+    left: -30px;
+    top: 45px;
+    box-shadow: 1px 1px 1px #888;
+    font-family: 'Merriweather Sans', sans-serif;
+}
+
+.review_number {
+    padding-left: 20px;
+    color: #d25d09;
+}
+
+
+.button {
+  display: inline-block;
+  background-color: #2a3655;
+  padding: 18px 35px;
+  margin: 10px 0;
+  text-decoration: none;
+  font-size: 20px;
+  color: #ffffff;
+  font-weight: bold;
+  width: 85%;
+  font-family: 'Cabin', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-align: center;
+}
+
+.button:hover {
+  opacity: 0.6;
+  text-decoration: none;
+  color: #ffffff;
+}
+
+</style>
+
+{% endblock body_extra %}

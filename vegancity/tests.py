@@ -1,5 +1,7 @@
 from mock import Mock
 from bs4 import BeautifulSoup
+from optparse import make_option
+from unittest import TestSuite
 
 from django.core.exceptions import ValidationError
 from django.contrib.gis.geos import Point
@@ -21,10 +23,22 @@ import logging
 
 
 class VegancityTestRunner(DjangoTestSuiteRunner):
+
+    option_list = (
+        make_option('-e', '--exclude-page-tests',
+                    help=("Do not run the slow page load tests, "
+                          "run unnit tests only."),
+                    action='store_const',
+                    dest='exclude_page_tests',
+                    const=True, default=False,
+                ),
+    )
     def __init__(self, *args, **kwargs):
+        self.exclude_page_tests = kwargs['exclude_page_tests']
         # TODO: find a better way to force failfast
         kwargs = {k: v for k, v in kwargs.iteritems() if k != 'failfast'}
-        return super(VegancityTestRunner, self).__init__(failfast=True, *args, **kwargs)
+        return super(VegancityTestRunner, self).__init__(failfast=True, interactve=False,
+                                                         *args, **kwargs)
 
     def run_tests(self, *args, **kwargs):
         logging.disable(logging.CRITICAL)
@@ -32,9 +46,16 @@ class VegancityTestRunner(DjangoTestSuiteRunner):
 
     def build_suite(self, test_labels, *args, **kwargs):
         test_labels = test_labels or settings.MANAGED_APPS
-        return super(VegancityTestRunner, self).build_suite(test_labels,
-                                                            *args,
-                                                            **kwargs)
+
+        suite = super(VegancityTestRunner, self).build_suite(test_labels,
+                                                             *args,
+                                                             **kwargs)
+
+        if self.exclude_page_tests:
+            suite = TestSuite([test for test in suite
+                               if not isinstance(test, PageLoadTest)])
+
+        return suite
 
 
 class PageLoadTest(TestCase):
@@ -44,7 +65,6 @@ class PageLoadTest(TestCase):
     def setUp(self):
         self.reviews = Review.approved_objects.all()
         self.vendors = Vendor.approved_objects.all()
-        self.vendor_count = self.vendors.count()
 
     def assertNoBrokenTemplates(self, url):
         response = self.client.post(url)

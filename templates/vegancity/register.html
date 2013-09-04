@@ -3,6 +3,7 @@
 {% block headline %}Register{% endblock %}
 
 {% block content %}
+<div class="container">
 
 <br>
 <p>Please take note of our <a class="uline" href="#privacyModal" data-toggle="modal">Privacy Policy</a></p>
@@ -13,5 +14,7 @@
       {{ form.as_p }}
       <input class="btn btn-custom" type="submit" value="Create">
   </form>
-{% endblock %}
+
+</div>
+{% endblock content %}
 
