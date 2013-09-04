@@ -17,6 +17,7 @@
 
 import functools
 import logging
+import random
 
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, get_object_or_404, redirect
@@ -56,6 +57,14 @@ def home(request):
 
     vendors = Vendor.approved_objects.all()
     vendors_with_reviews = vendors.filter(review__approved=True).distinct()
+
+    if request.user.is_authenticated():
+        random_unreviewed = random.choice(Vendor
+                                          .approved_objects
+                                          .without_reviews())
+    else:
+        random_unreviewed = None
+
     top_5 = vendors.annotate(fscore=Avg('review__food_rating'))\
                    .annotate(ascore=Avg('review__atmosphere_rating'))\
                    .exclude(fscore=None)\
@@ -86,6 +95,7 @@ def home(request):
         'neighborhoods': neighborhoods,
         'cuisine_tags': cuisine_tags,
         'feature_tags': feature_tags,
+        'random_unreviewed': random_unreviewed,
     }
 
     return render_to_response("vegancity/home.html", ctx,
