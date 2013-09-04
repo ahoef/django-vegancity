@@ -127,7 +127,7 @@ def vendors(request):
                                if request.GET.get(f.name) or
                                selected_feature_tag_id == str(f.id)]
 
-    vendors = models.Vendor.approved_objects.all()
+    vendors = Vendor.approved_objects.select_related('veg_level').all()
 
     if selected_neighborhood_id:
         vendors = vendors.filter(neighborhood__id=selected_neighborhood_id)

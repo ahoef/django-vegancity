@@ -126,7 +126,7 @@ This prevents null searches from getting a value of None stuck here and throwing
             <tbody>
               {% for vendor in vendors %}
                 <tr>
-                  <td><img src="" class="marker-link vendor-{{vendor.id}} veg-level-{{vendor.veg_level.id|default:"0"}}"></td>
+                  <td><img src="" class="marker-link vendor-{{vendor.id}} veg-level-{{vendor.veg_level_id|default:"0"}}"></td>
                   <td><a class="blue" href="{{ vendor.get_absolute_url }}">{{ vendor.name }}</a></td>
                 </tr>
               {% endfor %}
@@ -166,7 +166,7 @@ This prevents null searches from getting a value of None stuck here and throwing
             url: "{{ vendor.get_absolute_url }}",
             latitude: "{{ vendor.location.y }}", 
             longitude: "{{ vendor.location.x }}",
-            vegLevel: {% if vendor.veg_level %}{{ vendor.veg_level.id }}{% else %}0{% endif %}
+            vegLevel: {% if vendor.veg_level %}{{ vendor.veg_level_id }}{% else %}0{% endif %}
         }{% if not forloop.last %},{% endif %}
     {% endif %}{% endfor %}
     ];
