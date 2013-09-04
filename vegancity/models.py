@@ -213,7 +213,7 @@ class Review(models.Model):
     # ADMINISTRATIVE FIELDS
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    approved = models.BooleanField(default=False)
+    approved = models.BooleanField(default=False, db_index=True)
     objects = ReviewManager()
     approved_objects = ApprovedReviewManager()
 
@@ -283,9 +283,10 @@ class Vendor(models.Model):
     "The main class for this application"
 
     # CORE FIELDS
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255, unique=True, db_index=True)
     address = models.TextField(null=True)
-    neighborhood = models.ForeignKey('Neighborhood', blank=True, null=True)
+    neighborhood = models.ForeignKey('Neighborhood', blank=True, null=True,
+                                     db_index=True)
     phone = models.CharField(max_length=50, blank=True, null=True,
                              validators=[validators.validate_phone_number])
     website = models.URLField(blank=True, null=True,
@@ -298,6 +299,7 @@ class Vendor(models.Model):
     submitted_by = models.ForeignKey(User, null=True, blank=True)
     modified = models.DateTimeField(auto_now=True, null=True)
     approval_status = models.CharField(max_length=100,
+                                       db_index=True,
                                        default='pending',
                                        choices=(('pending',
                                                  'Pending Approval'),
@@ -316,6 +318,7 @@ class Vendor(models.Model):
                                         "the vendor. Notes will appear below "
                                         "the vendor's name."))
     veg_level = models.ForeignKey('VegLevel', blank=True, null=True,
+                                  db_index=True,
                                   help_text=("How vegan friendly is "
                                              "this place? See "
                                              "documentation for "
