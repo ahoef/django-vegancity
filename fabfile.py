@@ -159,10 +159,6 @@ def app_status():
     sudo(_supervisor_runserver("status"))
 
 
-def watch_log():
-    """ view the development webserver console in realtime """
-    sudo("tail -f /var/log/vegphilly/access.log")
-
 ####################################################################
 # terminal shell/debugger commands
 ####################################################################
