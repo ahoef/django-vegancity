@@ -35,9 +35,7 @@ class VegancityTestRunner(DjangoTestSuiteRunner):
     )
     def __init__(self, *args, **kwargs):
         self.exclude_page_tests = kwargs['exclude_page_tests']
-        # TODO: find a better way to force failfast
-        kwargs = {k: v for k, v in kwargs.iteritems() if k != 'failfast'}
-        return super(VegancityTestRunner, self).__init__(failfast=True, interactve=False,
+        return super(VegancityTestRunner, self).__init__(interactve=False,
                                                          *args, **kwargs)
 
     def run_tests(self, *args, **kwargs):
@@ -183,6 +181,100 @@ class VendorGeocodeTest(TestCase):
             location=Point(100, 100, srid=4326),
             neighborhood="South Philly")
 
+class VendorManagerTest(TestCase):
+
+    def test_pending_approval_no_vendors(self):
+        self.assertEqual(0,
+                         Vendor.objects.pending_approval().count())
+
+    def test_pending_approval_none_approved(self):
+        Vendor.objects.create(name="Test Vendor 1")
+        Vendor.objects.create(name="Test Vendor 2")
+        self.assertEqual(2,
+                         Vendor.objects.pending_approval().count())
+
+    def test_pending_approval_some_approved(self):
+        Vendor.objects.create(name="Test Vendor 1",
+                                        approval_status='approved')
+        Vendor.objects.create(name="Test Vendor 2")
+        self.assertEqual(1,
+                         Vendor.objects.pending_approval().count())
+
+
+    def test_pending_approval_all_approved(self):
+        Vendor.objects.create(name="Test Vendor 1",
+                              approval_status='approved')
+        Vendor.objects.create(name="Test Vendor 2",
+                              approval_status='approved')
+        self.assertEqual(0,
+                         Vendor.objects.pending_approval().count())
+
+class VendorApprovedManagerTest(TestCase):
+
+    def assertVendorCounts(self, without_count, with_count):
+        self.assertEqual(without_count, 
+                         Vendor.approved_objects.without_reviews().count())
+        self.assertEqual(with_count,
+                         Vendor.approved_objects.with_reviews().count())
+
+    def test_with_without_reviews_no_vendors(self):
+        self.assertVendorCounts(0, 0)
+
+    def test_with_without_reviews_no_reviews(self):
+        Vendor.objects.create(name='tv1', approval_status='approved')
+        Vendor.objects.create(name='tv2', approval_status='approved')
+        self.assertVendorCounts(2, 0)
+
+    def test_with_without_reviews_no_approved_reviews(self):
+        v1 = Vendor.objects.create(name='tv1', approval_status='approved')
+        v2 = Vendor.objects.create(name='tv2', approval_status='approved')
+        Review.objects.create(vendor=v1, author=get_user())
+        self.assertVendorCounts(2, 0)
+
+    def test_with_without_review_with_some_approved_reviews(self):
+        v1 = Vendor.objects.create(name='tv1', approval_status='approved')
+        v2 = Vendor.objects.create(name='tv2', approval_status='approved')
+        Review.objects.create(vendor=v1, approved=True, author=get_user())
+        Review.objects.create(vendor=v2, approved=False, author=get_user())
+        self.assertVendorCounts(1, 1)
+
+    def test_with_without_review_with_all_approved_reviews(self):
+        v1 = Vendor.objects.create(name='tv1', approval_status='approved')
+        v2 = Vendor.objects.create(name='tv2', approval_status='approved')
+        Review.objects.create(vendor=v1, approved=True, author=get_user())
+        Review.objects.create(vendor=v2, approved=True, author=get_user())
+        self.assertVendorCounts(0, 2)
+
+    def test_get_random_unreviewed_no_vendors(self):
+        self.assertEqual(None, Vendor.approved_objects.get_random_unreviewed())
+
+    def test_get_random_unreviewed_no_unreviewed_vendors(self):
+        v1 = Vendor.objects.create(name='tv1', approval_status='approved')
+        Review.objects.create(vendor=v1, approved=True, author=get_user())
+        self.assertEqual(None, Vendor.approved_objects.get_random_unreviewed())
+
+    def test_get_random_unreviewed_with_only_unapproved_reviews(self):
+        v1 = Vendor.objects.create(name='tv1', approval_status='approved')
+        Review.objects.create(vendor=v1, approved=False, author=get_user())
+        self.assertEqual(v1, Vendor.approved_objects.get_random_unreviewed())
+
+    def test_get_random_unreviewed_one_vendor(self):
+        v1 = Vendor.objects.create(name='tv1', approval_status='approved')
+        self.assertEqual(v1, Vendor.approved_objects.get_random_unreviewed())
+
+    def test_get_random_unreviewed_multiple_unreviewed_vendor(self):
+        v1 = Vendor.objects.create(name='tv1', approval_status='approved')
+        v2 = Vendor.objects.create(name='tv2', approval_status='approved')
+        self.assertIn(Vendor.approved_objects.get_random_unreviewed(), [v1, v2])
+
+    def test_get_random_unreviewed_mixed_unreviewed_vendors_and_reviewed(self):
+        v1 = Vendor.objects.create(name='tv1', approval_status='approved')
+        v2 = Vendor.objects.create(name='tv2', approval_status='approved')
+        v3 = Vendor.objects.create(name='tv3', approval_status='approved')
+        Review.objects.create(vendor=v1, approved=True, author=get_user())
+        self.assertIn(Vendor.approved_objects.get_random_unreviewed(), [v2, v3])
+
+        
 
 class VendorModelTest(TestCase):
 
@@ -384,6 +476,7 @@ class SearchTest(TestCase):
         self.v4 = Vendor.objects.create(
             name="Test Vendor Bart", approval_status='approved')
         self.factory = RequestFactory()
+        geocode.geocode_address = Mock(return_value=(100, 100, "South Philly"))
 
     def test_search_by_name_for_substring(self):
         request = self.factory.get('',

@@ -29,6 +29,7 @@ from django.core.exceptions import ValidationError, ObjectDoesNotExist
 
 import collections
 import logging
+import random
 
 from vegancity import geocode, validators, email
 
@@ -50,7 +51,8 @@ class WithVendorsManager(models.Manager):
         qs = (qs
               .distinct()
               .annotate(vendor_count=Count('vendor'))
-              .filter(vendor_count__gt=0))
+              .filter(vendor_count__gt=0)
+              .order_by('-vendor_count'))
 
         return qs
 
@@ -260,10 +262,8 @@ class VendorManager(models.GeoManager):
 
     def pending_approval(self):
         """returns all vendors that are not approved, which are
-        otherwise impossible to get in a normal query (for now)."""
-        normal_qs = super(VendorManager, self).get_query_set()
-        pending = normal_qs.filter(approval_status='pending')
-        return pending
+        otherwise impossible to get in a normal query."""
+        return self.filter(approval_status='pending')
 
 
 class ApprovedVendorManager(VendorManager):
@@ -277,6 +277,25 @@ class ApprovedVendorManager(VendorManager):
         new_qs = normal_qs.filter(approval_status='approved')
         return new_qs
 
+    def without_reviews(self):
+        review_vendors = (Review
+                          .approved_objects
+                          .values_list('vendor_id', flat=True))
+        return self.all().exclude(pk__in=review_vendors)
+
+    def with_reviews(self):
+        return self.filter(review__approved=True)\
+                   .distinct()\
+                   .annotate(review_count=Count('review'))\
+                   .order_by('-review_count')
+
+    def get_random_unreviewed(self):
+        try:
+            return random.choice(self.without_reviews())
+        except IndexError:
+            return None
+
+    
 
 class Vendor(models.Model):
 

@@ -56,14 +56,12 @@ def home(request):
     "The view for the homepage."
 
     vendors = Vendor.approved_objects.all()
-    vendors_with_reviews = vendors.filter(review__approved=True).distinct()
 
-    if request.user.is_authenticated():
-        random_unreviewed = random.choice(Vendor
-                                          .approved_objects
-                                          .without_reviews())
-    else:
-        random_unreviewed = None
+    random_unreviewed = (Vendor
+                         .approved_objects
+                         .get_random_unreviewed()
+                         if request.user.is_authenticated()
+                         else None)
 
     top_5 = vendors.annotate(fscore=Avg('review__food_rating'))\
                    .annotate(ascore=Avg('review__atmosphere_rating'))\
@@ -71,15 +69,18 @@ def home(request):
                    .exclude(ascore=None)\
                    .order_by('-fscore', '-ascore')[:5]
 
-    recently_active = vendors_with_reviews\
-        .annotate(score=Max('review__created'))\
-        .exclude(score=None)\
-        .order_by('-score')[:5]
+    recent_review_vendors = list(Review.approved_objects
+                                 .filter(vendor__approval_status='approved')
+                                 .values_list('vendor_id', flat=True)
+                                 .distinct()[:5])
+
+    recently_active = (Vendor.approved_objects
+                       .filter(pk__in=recent_review_vendors)[:5])
+
 
     recently_added = vendors.exclude(created=None).order_by('-created')[:5]
 
-    most_reviewed = vendors_with_reviews.annotate(count=Count('review'))\
-                                        .order_by('-count')[:5]
+    most_reviewed = Vendor.approved_objects.with_reviews()[:5]
 
     neighborhoods = Neighborhood.objects.with_vendors()[:21]
 
