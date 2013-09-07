@@ -28,6 +28,7 @@ pip install -r /usr/local/vegphilly/dev_requirements.txt
 ## PREPARE APP ENV
 ###############################
 cp -v /usr/local/vegphilly/utils/dev_env/settings_local_TEMPLATE.py /usr/local/vegphilly/vegancity/settings_local.py
+cp -v /usr/local/vegphilly/utils/dev_env/dev_urls_TEMPLATE.py /usr/local/vegphilly/vegancity/dev_urls.py
 python /usr/local/vegphilly/manage.py syncdb --noinput
 python /usr/local/vegphilly/manage.py migrate
 python /usr/local/vegphilly/manage.py loaddata /usr/local/vegphilly/vegancity/fixtures/public_data.json
