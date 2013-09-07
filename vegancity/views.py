@@ -32,7 +32,8 @@ from django.conf import settings
 import django.contrib.auth.views
 
 from vegancity import forms
-from vegancity import models
+from vegancity.models import (Vendor, CuisineTag, FeatureTag,
+                              Neighborhood, User, Review)
 from vegancity import search
 
 search_logger = logging.getLogger('vegancity-search')
@@ -53,7 +54,7 @@ def password_change(request):
 def home(request):
     "The view for the homepage."
 
-    vendors = models.Vendor.approved_objects.all()
+    vendors = Vendor.approved_objects.all()
     vendors_with_reviews = vendors.filter(review__approved=True).distinct()
     top_5 = vendors.annotate(fscore=Avg('review__food_rating'))\
                    .annotate(ascore=Avg('review__atmosphere_rating'))\
@@ -71,18 +72,11 @@ def home(request):
     most_reviewed = vendors_with_reviews.annotate(count=Count('review'))\
                                         .order_by('-count')[:5]
 
-    neighborhoods = models.Neighborhood.objects.with_vendors()\
-                                               .order_by('-vendor_count')[:21]
+    neighborhoods = Neighborhood.objects.with_vendors()[:21]
 
-    cuisine_tags = models.CuisineTag.objects\
-                                    .with_vendors()\
-                                    .annotate(vcount=Count('vendor'))\
-                                    .order_by('-vcount')[:21]
+    cuisine_tags = CuisineTag.objects.with_vendors()[:21]
 
-    feature_tags = models.FeatureTag.objects\
-                                    .with_vendors()\
-                                    .annotate(vcount=Count('vendor'))\
-                                    .order_by('-vcount')[:21]
+    feature_tags = FeatureTag.objects.with_vendors()[:21]
 
     ctx = {
         'top_5': top_5,
@@ -105,8 +99,8 @@ def user_profile(request, username):
         else:
             return redirect('user_profile', username=request.user.username)
     else:
-        profile_user = get_object_or_404(models.User, username=username)
-        reviews = models.Review.approved_objects.filter(author=profile_user)\
+        profile_user = get_object_or_404(User, username=username)
+        reviews = Review.approved_objects.filter(author=profile_user)\
                                                 .order_by('-created')
         return render_to_response(
             'vegancity/profile_page.html',
@@ -123,7 +117,7 @@ def vendors(request):
     selected_cuisine_tag_id = request.GET.get('cuisine_tag', '')
     selected_feature_tag_id = request.GET.get('feature_tag', '')
     checked_feature_filters = [f for f
-                               in models.FeatureTag.objects.with_vendors()
+                               in FeatureTag.objects.with_vendors()
                                if request.GET.get(f.name) or
                                selected_feature_tag_id == str(f.id)]
 
@@ -155,9 +149,9 @@ def vendors(request):
         search_logger.info(log_message)
 
     ctx = {
-        'cuisine_tags': models.CuisineTag.objects.all(),
-        'feature_tags': models.FeatureTag.objects.all(),
-        'neighborhoods': models.Neighborhood.objects.with_vendors(),
+        'cuisine_tags': CuisineTag.objects.all(),
+        'feature_tags': FeatureTag.objects.all(),
+        'neighborhoods': Neighborhood.objects.with_vendors(),
         'vendor_count': len(vendors),
         'vendors': vendors,
         'previous_query': previous_query,
@@ -284,7 +278,7 @@ def new_review(request, vendor_id):
     "Create a new vendor-specific review."
 
     # get vendor, place in ctx dict for the template
-    vendor = models.Vendor.approved_objects.get(id=vendor_id)
+    vendor = Vendor.approved_objects.get(id=vendor_id)
     ctx = {'vendor': vendor}
 
     # Apply the vendor as an argument to the form constructor.
@@ -345,7 +339,7 @@ def account_edit(request):
 
 class VendorDetailView(DetailView):
     template_name = 'vegancity/vendor_detail.html'
-    queryset = models.Vendor.approved_objects.all()
+    queryset = Vendor.approved_objects.all()
 
 
 class AboutView(TemplateView):
@@ -358,7 +352,7 @@ class PrivacyView(TemplateView):
 
 class ReviewThanksView(DetailView):
     template_name = 'vegancity/review_thanks.html'
-    queryset = models.Vendor.approved_objects.all()
+    queryset = Vendor.approved_objects.all()
 
     def get_context_data(self, **kwargs):
         context = super(ReviewThanksView, self).get_context_data(**kwargs)
