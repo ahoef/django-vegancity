@@ -6,28 +6,65 @@
 
 {% block header_extra %}
 
-<style>
+<link href='http://fonts.googleapis.com/css?family=Chivo:400,400italic' rel='stylesheet' type='text/css'>
 
-.user-info
+<style>
+body
+{
+  background-image:url('{{ STATIC_URL }}images/wavegrid.png');
+}
+
+/*#wrapper
+{
+  width: 55%;
+}*/
+
+.container
+{
+  width: 60%;
+}
+
+.row
+{
+  background-color: rgba(255, 255, 255, .5);
+/*  padding: 30px 0;*/
+  margin: 0;
+}
+
+
+/*.user-info
 {
   margin-bottom: 40px;
 }
-.user-info img
+*/.user-info img
 {
-  width: 100%;
+  width: 85%;
+  border-radius: 100%;
+  padding-top: 30px;
+}
+
+.user-info-text
+{
+  padding-top: 30px;
+}
+
+.user-info-text p
+{
+  padding-right: 20px;
+  padding-bottom: 20px;
 }
 .button {
   display: inline-block;
   background-color: #2a3655;
-  padding: 18px 35px;
+  padding: 14px 20px;
   margin: 10px 0;
   text-decoration: none;
-  font-size: 20px;
+  font-size: 14px;
   color: #ffffff;
-  width: 85%;
+/*  width: 85%;*/
   font-family: 'Cabin', sans-serif;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
+  letter-spacing: 1px;
   text-align: center;
 }
 
@@ -35,6 +72,24 @@
   opacity: 0.6;
   text-decoration: none;
   color: #ffffff;
+}
+
+h3
+{
+
+  font-family: 'Cabin', sans-serif;
+  font-size: 28px;
+  padding-bottom: 10px;
+  color: #444;
+}
+
+h4
+{
+  font-family: 'Chivo', sans-serif;
+  font-style: italic;
+  font-weight: normal;
+  font-size: 20px;
+  padding-bottom: 10px;
 }
 .reviews-section
 {
@@ -63,13 +118,14 @@
 {
   display: inline-block;
   font-family: 'Cabin', sans-serif;
-  text-transform: uppercase;
   letter-spacing: 1.5px;
-  font-size: 35px;
-  color: #444;
+  font-size: 28px;
+  color: white;
   display: inline;
-  position: relative;
-  top: 20px;
+  background-color: #2A3655;
+  width: 100%;
+
+
 
 }
 
@@ -77,7 +133,7 @@
 {% endblock %}
 
 {% block summary %}
-  <h1>{{ profile_user.username }}</h1>
+<!--   <h1>{{ profile_user.username }}</h1> -->
 {% endblock summary %}
 
 {% block content %}
@@ -105,41 +161,38 @@
         {% endfor %}
       {% endif %}
     {% endif %}
+    <div class="span4">
+    <img src="{{ profile_user.email|gravatar_urlify }}" title="add your photo on gravatar.com!"><br>
+
   </div>
 
-  <div class="span4">
-    <table class="table table-hover">
-      {% if user == profile_user %}
-        {% if profile_user.first_name %}<tr><td>Name:</td><td>{{ profile_user.first_name }} {{ profile_user.last_name }}</td></tr>{% endif %}
-          <tr><td>Email:</td><td>{{ profile_user.email }}</td></tr>
-          <tr><td>Subscribed to mailing list:</td><td>{% if profile_user.get_profile.mailing_list %}Yes{% else %}No{% endif %}</td></tr>
-        {% else %}
-          {% if profile_user.first_name %}<tr><td>Name:</td><td>{{ profile_user.first_name }}&nbsp;{{ profile_user.last_name.0.upper }}</td></tr>{% endif %}
-        {% endif %}
-      {% if profile_user.get_profile.bio %}<tr><td>Bio:</td><td>{{ profile_user.get_profile.bio }}</td></tr>{% endif %}
-    </table>
-  </div>
-  <div class="span4">
+  <div class="span4 user-info-text">
+
     {% if user == profile_user %}
-      <p><a href="{% url 'account_edit' %}" class="button">Edit your profile</a>
-      <p><a href="{% url 'password_change' %}" class="button">Change Your Password</a>
+      {% if profile_user.first_name %}<h3>{{ profile_user.first_name }} {{ profile_user.last_name }}</h3>{% endif %}
+          <h4>{{ profile_user.email }}</h4>
+         <!--  Subscribed to mailing list:{% if profile_user.get_profile.mailing_list %}Yes{% else %}No{% endif %} -->
+        {% else %}
+          {% if profile_user.first_name %}<h4>{{ profile_user.first_name }}&nbsp;{{ profile_user.last_name.0.upper }}</h4>{% endif %}
+        {% endif %}
+      {% if profile_user.get_profile.bio %}<p>{{ profile_user.get_profile.bio }}</p>{% endif %}
+       {% if user == profile_user %}
+      <a href="{% url 'account_edit' %}" class="button">Edit your profile</a>
     {% endif %}
+
   </div>
 </div>
 
 {% if reviews %}
-
-<div class="reviews-section">
-<div class="container">
+<div class="row">
+<!-- <div class="reviews-section"> -->
 
   <div class="reviews-header">
-    <img id="left-carrot" src="{{ STATIC_URL }}images/horiz_carrot.png" width="325px">
     {% if profile_user.first_name %}
       <h2> {{ profile_user.first_name }}'s reviews</h2>
     {% else %}
       <h2> {{ profile_user.username }}'s reviews</h2>
     {% endif %}
-    <img id="right-carrot" src="{{ STATIC_URL }}images/horiz_carrot.png" width="325px">
   </div>
   {% for review in reviews %}
     <h3>{{ review.vendor.name }}</h3>
@@ -147,8 +200,8 @@
     {{ review.content }}<br>
     <br><br>
   {% endfor %}
-</div>
 
+<!-- </div> -->
 </div>
 {% endif %}
 
