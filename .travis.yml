@@ -5,7 +5,7 @@ env:
   - DJANGO=1.4
   - DJANGO=1.5
 install:
-  - sudo apt-get install binutils libproj-dev gdal-bin postgis postgresql-9.1-postgis
+  - sudo apt-get install binutils libproj-dev gdal-bin postgis postgresql-9.1-postgis xvfb
   - pip install -r requirements.txt --use-mirrors
   - pip install -r dev_requirements.txt --use-mirrors
   - pip install -q Django==$DJANGO --use-mirrors
@@ -17,7 +17,7 @@ before_script:
   - psql -c 'create database vegphilly with template=template_postgis;' -U postgres
   - echo -e "EMAIL_HOST_USER = 'foo'\nEMAIL_HOST_PASSWORD = 'bar'\n" >> vegancity/settings_local.py
 script:
-  - python manage.py test vegancity.PageLoadTest
-  - coverage run manage.py test --exclude-page-tests
+  - python manage.py test vegancity.PageLoadTest vegancity.FunctionalSearchTest
+  - coverage run manage.py test --exclude-integration-tests
   - coverage report --include="vegancity/*"
 

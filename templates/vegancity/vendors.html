@@ -49,7 +49,7 @@ This prevents null searches from getting a value of None stuck here and throwing
                  <a href="#" class="btn btn-warning" id="clear_search">Clear Search</a>
         <br>
         {% if current_query %}
-        <h5>Showing {% if vendors %}only{% else %}no{% endif %} results{{ search_type|showing_vendors_string }}{% if current_query %}"{{ current_query }}"{% endif %}</h5>
+        <h5 id="result-description">Showing {% if vendors %}only{% else %}no{% endif %} results{{ search_type|showing_vendors_string }}{% if current_query %}"{{ current_query }}"{% endif %}</h5>
       {% else %}
         <br>
       {% endif %}

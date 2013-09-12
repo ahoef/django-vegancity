@@ -109,7 +109,7 @@ def test_all(test_filter=""):
 def test(test_filter=""):
     """ run application unit tests """
     require('site_path')
-    _manage('test --exclude-page-tests %s' % test_filter)
+    _manage('test --exclude-integration-tests %s' % test_filter)
 
 
 def check():
