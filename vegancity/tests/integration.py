@@ -1,0 +1,127 @@
+from mock import Mock
+from bs4 import BeautifulSoup
+
+from django.test import TestCase
+from django.test.client import RequestFactory
+from vegancity import views, geocode
+from vegancity.models import Review, Vendor, Neighborhood
+
+from vegancity.tests.utils import get_user
+
+
+class SearchTest(TestCase):
+
+    def setUp(self):
+        self.v1 = Vendor.objects.create(
+            name="Test Vendor Foo", approval_status='approved')
+        self.v2 = Vendor.objects.create(
+            name="Test Vendor Bar", approval_status='approved')
+        self.v3 = Vendor.objects.create(
+            name="Test Vendor Baz", approval_status='approved')
+        self.v4 = Vendor.objects.create(
+            name="Test Vendor Bart", approval_status='approved')
+        self.factory = RequestFactory()
+        geocode.geocode_address = Mock(return_value=(100, 100, "South Philly"))
+
+    def test_search_by_name_for_substring(self):
+        request = self.factory.get('',
+                                   {'current_query': 'Bar', })
+
+        request.user = get_user()
+
+        response = views.vendors(request)
+        self.assertEqual(response.content.count("Results (2)"), 1)
+
+        request = self.factory.get('',
+                                   {'current_query': 'Vendor', })
+        request.user = get_user()
+
+        response = views.vendors(request)
+        self.assertEqual(response.content.count("Results (4)"), 1)
+
+    def test_search_by_name_approved_only(self):
+        self.v4.approval_status = 'quarantined'
+        self.v4.save()
+
+        request = self.factory.get('',
+                                   {'current_query': 'Vendor', })
+        request.user = get_user()
+
+        response = views.vendors(request)
+        self.assertEqual(response.content.count("Results (3)"), 1)
+
+    def test_neighborhoods_field_is_populated(self):
+        """ This test was born out of an actual observed bug """
+
+        def count_option_elements():
+            request = self.factory.get('')
+            response = views.vendors(request)
+            content = BeautifulSoup(response.content)
+            neighborhood_element = filter(
+                lambda x: x['name'] == 'neighborhood',
+                content.find_all('select'))[0]
+            return len(neighborhood_element.find_all('option'))
+
+        n1 = Neighborhood.objects.create(name="Foo")
+
+        self.assertEqual(count_option_elements(), 1)
+
+        self.v1.neighborhood = n1
+        self.v1.save()
+
+        self.assertEqual(count_option_elements(), 2)
+
+
+class PageLoadTest(TestCase):
+
+    fixtures = ['public_data.json']
+
+    def setUp(self):
+        self.reviews = Review.approved_objects.all()
+        self.vendors = Vendor.approved_objects.all()
+
+    def assertNoBrokenTemplates(self, url):
+        response = self.client.post(url)
+        self.assertEqual(response.content.count("{{"), 0)
+        self.assertEqual(response.content.count("}}"), 0)
+
+    def assertCorrectStatusCode(self, url, desired_code):
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, desired_code)
+
+    def test_orm_links(self):
+        "Test Vendors pages using ORM"
+        for vendor in self.vendors:
+            url = vendor.get_absolute_url()
+            self.assertNoBrokenTemplates(url)
+            self.assertCorrectStatusCode(url, 200)
+
+    def test_review_links(self):
+        "Test review pages using ORM"
+        for review in self.reviews:
+            url = review.get_absolute_url()
+            self.assertNoBrokenTemplates(url)
+            self.assertCorrectStatusCode(url, 200)
+
+    def test_other_pages(self):
+        PAGES_RETURNING_302 = [
+            '/vendors/add/',
+            '/accounts/logout/',
+        ]
+
+        PAGES_RETURNING_200 = [
+            '/',
+            '/vendors/',
+            '/about/',
+            '/accounts/login/',
+            '/accounts/register/',
+            '/admin/',
+        ]
+
+        for url in PAGES_RETURNING_302:
+            self.assertNoBrokenTemplates(url)
+            self.assertCorrectStatusCode(url, 302)
+
+        for url in PAGES_RETURNING_200:
+            self.assertNoBrokenTemplates(url)
+            self.assertCorrectStatusCode(url, 200)
