@@ -1,13 +1,15 @@
 from mock import Mock
 from bs4 import BeautifulSoup
 
-from django.test import TestCase
+from django.test import TestCase, LiveServerTestCase
 from django.test.client import RequestFactory
 from vegancity import views, geocode
 from vegancity.models import Review, Vendor, Neighborhood
 
 from vegancity.tests.utils import get_user
 
+from selenium.webdriver.firefox.webdriver import WebDriver
+from pyvirtualdisplay import Display
 
 class SearchTest(TestCase):
 
@@ -125,3 +127,26 @@ class PageLoadTest(TestCase):
         for url in PAGES_RETURNING_200:
             self.assertNoBrokenTemplates(url)
             self.assertCorrectStatusCode(url, 200)
+
+
+class FunctionalSearchTest(LiveServerTestCase):
+    def setUp(self):
+        self.display = Display('xvfb',
+                               visible=1,
+                               size=(1280, 1024))
+        self.display.start()
+        self.driver = WebDriver()
+        super(FunctionalSearchTest, self).setUp()
+
+    def tearDown(self):
+        self.driver.quit()
+        self.display.stop()
+
+        super(FunctionalSearchTest, self).tearDown()
+
+    def test_simple_homepage_address_search_redirect(self):
+        self.driver.get(self.live_server_url)
+        input = self.driver.find_element_by_id('vc-search-input')
+        input.send_keys('foobar\r')
+        summary = self.driver.find_element_by_id('result-description')
+        self.assertEqual(summary.text, 'Showing no results near "foobar"')

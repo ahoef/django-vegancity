@@ -12,6 +12,8 @@ packages = [
     "supervisor",
     "nginx",
     "libtidy-dev",
+    "firefox",
+    "xvfb",
 ]
 
 not_installed = []
