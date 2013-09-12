@@ -11,6 +11,15 @@ from vegancity.tests.utils import get_user
 from selenium.webdriver.firefox.webdriver import WebDriver
 from pyvirtualdisplay import Display
 
+
+class IntegrationTest(TestCase):
+    """
+    This is currently used as a way to flag tests that should
+    be excluded from the normal unit test runner
+    """
+    pass
+
+
 class SearchTest(TestCase):
 
     def setUp(self):
@@ -74,7 +83,7 @@ class SearchTest(TestCase):
         self.assertEqual(count_option_elements(), 2)
 
 
-class PageLoadTest(TestCase):
+class PageLoadTest(IntegrationTest):
 
     fixtures = ['public_data.json']
 

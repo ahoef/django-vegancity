@@ -16,17 +16,17 @@ from vegancity.tests.integration import *  # NOQA
 class VegancityTestRunner(DjangoTestSuiteRunner):
 
     option_list = (
-        make_option('-e', '--exclude-page-tests',
+        make_option('-e', '--exclude-integration-tests',
                     help=("Do not run the slow "
                           "page load tests, "
                           "run unnit tests only."),
                     action='store_const',
-                    dest='exclude_page_tests',
+                    dest='exclude_integration_tests',
                     const=True, default=False),
     )
 
     def __init__(self, *args, **kwargs):
-        self.exclude_page_tests = kwargs['exclude_page_tests']
+        self.exclude_integration_tests = kwargs['exclude_integration_tests']
         return super(VegancityTestRunner, self).__init__(interactve=False,
                                                          *args, **kwargs)
 
@@ -41,8 +41,27 @@ class VegancityTestRunner(DjangoTestSuiteRunner):
                                                              *args,
                                                              **kwargs)
 
-        if self.exclude_page_tests:
-            suite = TestSuite([test for test in suite
-                               if not isinstance(test, PageLoadTest)])
+        full_suite = TestSuite([test for test in suite if not
+                                isinstance(test,
+                                           (IntegrationTest,
+                                            LiveServerTestCase))])
 
-        return suite
+        # if running all tests, add the IntegrationTests and THEN
+        # the LiveServerTestCases. This is a workaround because django
+        # automatically fills the test database with ContentType data
+        # as soon as you run the live test server. This wouldn't be
+        # a problem, but the IntegrationTests are currently using
+        # test fixtures (I know, I know) that have hardcoded ContentType
+        # IDs in them. Even calling ContentType.objects.all().delete()
+        # in the tearDown() method doesn't work, because the id_seq
+        # would need to be reset, which is a bother. So, this'll do
+        # for now.
+        if not self.exclude_integration_tests:
+            for test in suite:
+                if isinstance(test, IntegrationTest):
+                    full_suite.addTest(test)
+            for test in suite:
+                if isinstance(test, LiveServerTestCase):
+                    full_suite.addTest(test)
+
+        return full_suite
