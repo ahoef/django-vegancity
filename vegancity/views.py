@@ -119,6 +119,7 @@ def user_profile(request, username):
 
 
 def vendors(request):
+    has_get_params = len(request.GET) > 0
     center_latitude, center_longitude = settings.DEFAULT_CENTER
     current_query = request.GET.get('current_query', None)
     previous_query = request.GET.get('previous_query', None)
@@ -148,22 +149,14 @@ def vendors(request):
     vendors, search_type = search.filter_vendors_by_search(
         vendors, current_query, search_type)
 
-    if current_query:
-        current_query_blob = "%s searched for '%s', " % (request.user,
-                                                         current_query)
-        previous_query_blob = ("after searching for '%s', " % (previous_query)
-                               if previous_query else "")
-        results_blob = ("vendors returned were: %s" %
-                        [v.id for v in vendors])
-        log_message = current_query_blob + previous_query_blob + results_blob
-        search_logger.info(log_message)
-
     ctx = {
         'cuisine_tags': CuisineTag.objects.all(),
         'feature_tags': FeatureTag.objects.all(),
         'neighborhoods': Neighborhood.objects.with_vendors(),
         'vendor_count': len(vendors),
         'vendors': vendors,
+        'request_user': request.user or None,
+        'request_ip': request.META.get('REMOTE_ADDR', None),
         'previous_query': previous_query,
         'current_query': current_query,
         'selected_neighborhood_id': (int(selected_neighborhood_id)
@@ -172,10 +165,14 @@ def vendors(request):
                                     if selected_cuisine_tag_id else None),
         'checked_feature_filters': checked_feature_filters,
         'search_type': search_type,
-        'has_get_params': len(request.GET) > 0,
+        'has_get_params': has_get_params,
         'center_latitude': center_latitude,
         'center_longitude': center_longitude,
     }
+
+    if has_get_params:
+        search_logger.info('USER_SEARCH', extra=ctx)
+
     return render_to_response('vegancity/vendors.html', ctx,
                               context_instance=RequestContext(request))
 
