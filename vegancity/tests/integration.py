@@ -66,6 +66,7 @@ class SearchTest(TestCase):
 
         def count_option_elements():
             request = self.factory.get('')
+            request.user = get_user()
             response = views.vendors(request)
             content = BeautifulSoup(response.content)
             neighborhood_element = filter(

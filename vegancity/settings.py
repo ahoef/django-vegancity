@@ -124,6 +124,40 @@ LOGGING = {
         'simple': {
             'format': '%(levelname)s %(message)s'
         },
+        'search': {
+            'format': ("[%(asctime)s] %(levelname)s "
+                       "%(message)s::user::"
+                       "%(request_user)s\n"
+
+                       "[%(asctime)s] %(levelname)s "
+                       "%(message)s::ip_address::"
+                       "%(request_ip)s\n"
+
+                       "[%(asctime)s] %(levelname)s "
+                       "%(message)s::search_type::"
+                       "%(search_type)s\n"
+
+                       "[%(asctime)s] %(levelname)s "
+                       "%(message)s::current_query::"
+                       "%(current_query)s\n"
+
+                       "[%(asctime)s] %(levelname)s "
+                       "%(message)s::previous_query::"
+                       "%(previous_query)s\n"
+
+                       "[%(asctime)s] %(levelname)s "
+                       "%(message)s::selected_neighborhood_id::"
+                       "%(selected_neighborhood_id)s\n"
+
+                       "[%(asctime)s] %(levelname)s "
+                       "%(message)s::selected_cuisine_tag_id::"
+                       "%(selected_cuisine_tag_id)s\n"
+
+                       "[%(asctime)s] %(levelname)s "
+                       "%(message)s::checked_feature_filters::"
+                       "%(checked_feature_filters)s\n"),
+            'datefmt': "%d/%b/%Y %H:%M:%S"
+        },
     },
     'handlers': {
         'general': {
@@ -164,7 +198,7 @@ LOGGING = {
             'filename': '/var/log/vegphilly/vegancity-search.log',
             'maxBytes': 500000,
             'backupCount': 2,
-            'formatter': 'standard',
+            'formatter': 'search',
         },
     },
     'loggers': {
