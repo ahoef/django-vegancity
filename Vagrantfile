@@ -7,18 +7,13 @@ Vagrant::Config.run do |config|
   # for selenium tests
   config.ssh.forward_x11 = true
 
-  # Forward guest port 80 to host port 8080
+  # for the gunicorn server to host port 8080
   config.vm.forward_port 80, 8080
+  # forward 8000 to 8000 for development use
   config.vm.forward_port 8000, 8000
 
   config.vm.share_folder "share", "/usr/local/vegphilly", "."
 
-  # run provisioner script from utils
-  config.vm.provision :shell, :path => "utils/dev_env/apt_requirements.py"
-  config.vm.provision :shell, :path => "utils/dev_env/perms.sh"
-  config.vm.provision :shell, :path => "utils/dev_env/sys.sh"
-  config.vm.provision :shell, :path => "utils/dev_env/postgres.sh"
-  config.vm.provision :shell, :path => "utils/dev_env/os.sh"
-  config.vm.provision :shell, :path => "utils/dev_env/build.sh"
+  config.vm.provision :shell, :path => "utils/provision_vagrant.py"
 
 end

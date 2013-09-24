@@ -9,6 +9,7 @@ DATABASES = {
     }
 }
 
+{% if is_dev_server == "True" %}
 DEVELOPMENT_APPS = (
     'debug_toolbar',
     'debug_toolbar_htmltidy',
@@ -35,8 +36,11 @@ DEBUG_TOOLBAR_PANELS = (
 )
 
 IGNORED_TEMPLATES = ['debug_toolbar/*']
+TEST_HEADLESS = False
+{% else %}
+TEST_HEADLESS = True
+{% endif %}
 
 EMAIL_HOST_USER = 'foo'
 EMAIL_HOST_PASSWORD = 'bar'
 
-TEST_HEADLESS = True
