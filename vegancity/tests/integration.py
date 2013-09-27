@@ -9,8 +9,7 @@ from vegancity.models import Review, Vendor, Neighborhood
 from vegancity.tests.utils import get_user
 
 from selenium.webdriver.firefox.webdriver import WebDriver
-from pyvirtualdisplay import Display
-
+from django.conf import settings
 
 class IntegrationTest(TestCase):
     """
@@ -141,16 +140,22 @@ class PageLoadTest(IntegrationTest):
 
 class FunctionalSearchTest(LiveServerTestCase):
     def setUp(self):
-        self.display = Display('xvfb',
-                               visible=1,
-                               size=(1280, 1024))
-        self.display.start()
+
+        if settings.TEST_HEADLESS:
+            from pyvirtualdisplay import Display
+            self.display = Display('xvfb',
+                                   visible=1,
+                                   size=(1280, 1024))
+            self.display.start()
+
         self.driver = WebDriver()
+        self.driver.implicitly_wait(10)
         super(FunctionalSearchTest, self).setUp()
 
     def tearDown(self):
         self.driver.quit()
-        self.display.stop()
+        if hasattr(self, 'display'):
+            self.display.stop()
 
         super(FunctionalSearchTest, self).tearDown()
 

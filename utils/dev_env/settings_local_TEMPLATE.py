@@ -38,3 +38,5 @@ IGNORED_TEMPLATES = ['debug_toolbar/*']
 
 EMAIL_HOST_USER = 'foo'
 EMAIL_HOST_PASSWORD = 'bar'
+
+TEST_HEADLESS = True
