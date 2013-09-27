@@ -7,5 +7,6 @@ ipython==1.0.0
 ipdb==0.7
 django-debug-toolbar==0.9.4
 django-dtpanel-htmltidy==0.1.1
+django-debug-toolbar-template-timings==0.5.1
 selenium==2.35.0
 PyVirtualDisplay==0.1.2
