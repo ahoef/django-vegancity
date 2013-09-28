@@ -3,8 +3,10 @@ from django.test.client import RequestFactory
 
 import csv
 
+from itertools import izip_longest
+
 from vegancity.admin_views import vendor_list, mailing_list
-from vegancity.models import Vendor, Neighborhood, VegLevel, User
+from vegancity.models import Vendor, Neighborhood, VegLevel, User, UserProfile
 from vegancity.tests.utils import get_user
 
 class CSVViewTest(TestCase):
@@ -12,7 +14,9 @@ class CSVViewTest(TestCase):
 
         csv_data = csv.reader(response, delimiter=",")
 
-        test_along = zip(csv_data, [[]] + expected_data)
+        padded_expected_data = [[], ['\xef\xbb\xbf']] + expected_data
+
+        test_along = izip_longest(csv_data, padded_expected_data)
         for csv_row, expected_row in test_along:
             self.assertEqual(csv_row, expected_row)
         
@@ -22,8 +26,12 @@ class CSVViewTest(TestCase):
                                            last_name="lover",
                                            email="vl@example.com",
                                            is_staff=True)
+        profile = UserProfile(user=veggie_lover)
+        profile.mailing_list = True
+        profile.save()
+
         expected_data = [
-            ['username', 'firstname', 'lastname', 'email'],
+            ['username', 'first_name', 'last_name', 'email'],
             ['veggie_lover', 'veggie', 'lover', 'vl@example.com']
         ]
 
@@ -51,12 +59,12 @@ class CSVViewTest(TestCase):
         ]
 
         expected_data = [
-            ['name', 'address', 'neighborhood', 'phone', 'website',
-             'veg_level', 'notes'],
+            ['name', 'address', 'neighborhood__name', 'phone', 'website',
+             'veg_level__name', 'notes'],
             ["test vendor 1", "123 Main Street", "South Philly", "1234567890",
-             "www.example.com", "() vegan", "A great place to eat"],
+             "www.example.com", "vegan", "A great place to eat"],
             ["test vendor 2", "456 Main Street", "West Philly", "0987654321",
-             "www.example.com", "() vegetarian", "The food is ok"]
+             "www.example.com", "vegetarian", "The food is ok"]
         ]
 
         for row in model_rows:

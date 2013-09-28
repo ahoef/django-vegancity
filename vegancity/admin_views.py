@@ -22,9 +22,8 @@ from django.template import RequestContext
 from django.contrib.admin.views.decorators import staff_member_required
 
 import models
-import csv
-import datetime
 
+from djqscsv import render_to_csv_response
 
 @staff_member_required
 def pending_approval_count(request):
@@ -45,69 +44,31 @@ def pending_approval(request):
                               context_instance=RequestContext(request))
 
 
-def csv_filename_builder(filename_prefix):
-    """
-    Takes a filename prefix and returns an HttpResponse with headers
-    set for csv and with a filename that is uniquified using the
-    current date.
-
-    ex:
-    'vegphilly_ml' -> response with 'vegphilly_ml_20130504.csv'
-    """
-
-    formatted_datestring = datetime.date.today().strftime("%Y%m%d")
-
-    filename_param = "filename = %s_%s.csv" % (filename_prefix,
-                                               formatted_datestring)
-
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; %s;' % filename_param
-
-    return response
-
-
 @staff_member_required
 def mailing_list(request):
-    response = csv_filename_builder('vegphilly_ml')
+    mailing_list_users = models.User\
+                               .objects.filter(userprofile__mailing_list=True)\
+                                       .values('username',
+                                               'first_name',
+                                               'last_name',
+                                               'email')
 
-    mailing_list_users = models.User.objects.filter(
-        userprofile__mailing_list=True)
-
-    writer = csv.writer(response)
-    writer.writerow(['username', 'firstname', 'lastname', 'email'])
-
-    for user in mailing_list_users:
-        writer.writerow([user.username, user.first_name,
-                         user.last_name, user.email])
-
-    return response
+    return render_to_csv_response(mailing_list_users,
+                                  append_datestamp=True,
+                                  filename='vegphilly_ml')
 
 
 @staff_member_required
 def vendor_list(request):
-    response = csv_filename_builder('vegphilly_vendors')
+    vendors = models.Vendor.approved_objects\
+                           .values('name',
+                                   'address',
+                                   'neighborhood__name',
+                                   'phone',
+                                   'website',
+                                   'veg_level__name',
+                                   'notes')
 
-    vendors = models.Vendor.approved_objects.all()
-
-    writer = csv.writer(response)
-    writer.writerow(['name',
-                     'address',
-                     'neighborhood',
-                     'phone',
-                     'website',
-                     'veg_level',
-                     'notes'])
-
-    for vendor in vendors:
-        name = vendor.name.encode("utf-8")
-        address = vendor.address.encode("utf-8")
-        neighborhood = vendor.neighborhood
-        phone = vendor.phone
-        website = vendor.website.encode("utf-8")
-        veg_level = vendor.veg_level
-        notes = vendor.notes.encode("utf-8")
-
-        writer.writerow([name, address, neighborhood,
-                         phone, website, veg_level, notes])
-
-    return response
+    return render_to_csv_response(vendors,
+                                  append_datestamp=True,
+                                  filename='vegphilly_vendors')
