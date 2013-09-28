@@ -23,4 +23,4 @@ def provision_vagrant():
                       "/usr/local/vegphilly/ansible/appservers.yml")
 
 if __name__ == '__main__':
-    provison_vagrant()
+    provision_vagrant()
