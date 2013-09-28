@@ -16,4 +16,12 @@ Vagrant::Config.run do |config|
 
   config.vm.provision :shell, :path => "utils/provision_vagrant.py"
 
+  if ENV['VAGRANT_MORE_MEMORY']
+    if ENV['VAGRANT_MORE_MEMORY'] == 'true'
+      print "running vagrant with extra memory\n"
+      config.vm.customize ["modifyvm", :id, "--memory", "1024"]
+    end
+  else
+    print "NOTE: set the environment variable 'VAGRANT_MORE_MEMORY' to 'true' to use more RAM.\n"
+  end
 end
