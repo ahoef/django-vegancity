@@ -1,0 +1,227 @@
+
+#################################
+# configure OS
+#################################
+
+- name: update apt
+  apt: update_cache=yes # TODO: only do this every time on production
+
+- name: install sys apt requirements
+  apt: pkg=$item state=latest
+  with_items:
+    - postgresql
+    - postgresql-server-dev-9.1 # TODO use postgresql 9.1
+    - python-software-properties
+    - python-dev
+    - python-pip
+    - supervisor # TODO install supervisor manually
+    - nginx
+    - git
+
+- name: install pip requirements
+  pip: requirements=/usr/local/vegphilly/requirements.txt
+
+- name: create vegphilly group
+  group: name=vegphilly state=present system=yes
+
+- name: create vegphilly user
+  user: name=vegphilly state=present system=yes createhome=no group=vegphilly
+
+- name: create log dir
+  file: dest=/var/log/vegphilly owner=vegphilly group=vegphilly state=directory mode=755
+
+- name: create log files
+  copy: src=empty_log.log dest=/var/log/vegphilly/$item.log owner=vegphilly group=vegphilly mode=766
+  with_items:
+    - gunicorn-access
+    - gunicorn-error
+    - gunicorn-general
+    - vegancity-general
+    - vegancity-search
+    - django-request
+    - django-sql
+    - django-general
+
+- name: chown/chmod log files
+  file: dest=/var/log/vegphilly/gunicorn-$item.log owner=vegphilly mode=766
+  with_items:
+    - gunicorn-access
+    - gunicorn-error
+    - gunicorn-general
+    - vegancity-general
+    - vegancity-search
+    - django-request
+    - django-sql
+    - django-general
+
+  with_items:
+    - access
+    - error
+
+- name: create app dir # todo just make sure this exists
+  file: dest=/usr/local/vegphilly owner=vegphilly state=directory
+
+#################################
+# postgres
+#################################
+
+- name: write postgres permissions file
+  template: src=pg_hba.conf.j2 dest=/etc/postgresql/9.1/main/pg_hba.conf owner=postgres mode=640 # TODO make perms 640
+  notify:
+    - restart postgres
+
+- name: restart postgres forcibly # TODO: I shouldn't have to do this
+  service: name=postgresql state=running
+
+- name: create postgres user vegphilly # TODO use variables
+  sudo: True
+  sudo_user: postgres
+  postgresql_user: name=vegphilly password=vegphilly # TODO use variables
+  register: last_result
+
+- name: drop database vegphilly
+  sudo: True
+  sudo_user: postgres
+  postgresql_db: name=vegphilly state=absent
+
+- name: create database vegphilly # TODO use variables
+  sudo: True
+  sudo_user: postgres
+  postgresql_db: name=vegphilly owner=vegphilly encoding='UTF-8' lc_collate='en_US.UTF-8' lc_ctype='en_US.UTF-8' template='template0'
+  register: last_result # TODO: what is this?
+
+- name: make sure postgres is running # TODO make this a handler
+  service: name=postgresql state=running
+
+#################################
+# postgis
+#################################
+
+- name: install postgis build requirements
+  apt: pkg=$item state=latest
+  with_items:
+    - build-essential
+    - libxml2-dev
+    - libgeos-dev
+    - libproj-dev
+    - libgdal1-dev
+    - libpq-dev
+    - python-dev
+
+- name: create download dir
+  file: dest=/tmp/postgis/download owner=postgres state=directory
+
+- name: download postGIS # todo how about a newer postgis?
+  action: get_url url=http://postgis.org/download/postgis-2.0.1.tar.gz 
+              dest=/tmp/postgis/download/postgis-2.0.1.tar.gz mode=0440
+
+- name: untar postGIS
+  command: tar xzf postgis-2.0.1.tar.gz
+           chdir=/tmp/postgis/download/
+           creates=/tmp/postgis/download/postgis-2.0.1
+
+- name: install postGIS
+  # sudo: True
+  command: $item
+           chdir=/tmp/postgis/download/postgis-2.0.1
+           creates=/usr/share/postgresql/9.1/extension/postgis--2.0.1.sql
+  with_items:
+    - ./configure --without-topology
+    - make
+    - make install
+
+- name: add PostGIS extension to vegphilly database
+  # sudo: True
+  sudo_user: postgres
+  command: psql vegphilly -c "CREATE EXTENSION IF NOT EXISTS postgis"
+
+
+
+#################################
+# setup app
+#################################
+
+- name: Update local settings
+  template: src=settings_local.py.j2
+            dest=/usr/local/vegphilly/vegancity/settings_local.py
+            owner=vegphilly
+  notify:
+    - restart gunicorn
+
+- name: configure gunicorn
+  template: src=gunicorn_supervisor.conf.j2 dest=/etc/supervisor/conf.d/vegphilly_gunicorn.conf
+  notify:
+    - restart supervisor
+    - restart gunicorn
+
+
+#################################
+# nginx
+#################################
+
+- name: ensure nginx is at the latest version
+  apt: pkg=nginx state=latest
+
+- name: write the nginx site config
+  template: src=nginx_vegphilly.conf.j2 dest=/etc/nginx/sites-available/vegphilly.conf
+  notify:
+    - restart nginx
+
+- name: activate the vegphilly site # TODO use variables
+  file: state=link src=/etc/nginx/sites-available/vegphilly.conf path=/etc/nginx/sites-enabled/vegphilly
+  notify:
+    - restart nginx
+
+- name: delete default nginx site config
+  file: state=absent path=/etc/nginx/sites-enabled/default
+  notify:
+    - restart nginx
+
+- name: Ensure nginx is running
+  service: name=nginx state=running
+
+#################################
+# dev env
+#################################
+
+- name: install app requirements for dev
+  apt: pkg=$item state=latest
+  with_items:
+    - libtidy-dev
+    - firefox
+    - xvfb
+  when: is_dev_server == "True"
+
+- name: make postgres user 'vegphilly'
+  sudo: True
+  sudo_user: postgres
+  postgresql_user: name=vegphilly role_attr_flags=SUPERUSER
+  when: is_dev_server == "True"
+
+- name: install dev pip requirements
+  pip: requirements=/usr/local/vegphilly/dev_requirements.txt
+  when: is_dev_server == "True"
+
+- name: run syncdb
+  sudo: True
+  sudo_user: vegphilly
+  command: python /usr/local/vegphilly/manage.py syncdb --noinput
+  when: is_dev_server == "True"
+
+- name: run migrate
+  sudo: True
+  sudo_user: vegphilly
+  command: python /usr/local/vegphilly/manage.py migrate --noinput
+  when: is_dev_server == "True"
+
+- name: install dev fixture
+  sudo: True
+  sudo_user: vegphilly
+  command: python /usr/local/vegphilly/manage.py loaddata /usr/local/vegphilly/vegancity/fixtures/public_data.json
+  when: is_dev_server == "True"
+
+- name: Make sure gunicorn is running
+  supervisorctl: name=vegphilly_gunicorn state=restarted
+
+- name: setup cronjob
+  cron: name="backup db" hour=2 job=/usr/local/vegphilly/utils/db_backup.py user=vegphilly

@@ -10,7 +10,17 @@ install:
   - pip install -r dev_requirements.txt --use-mirrors
   - pip install -q Django==$DJANGO --use-mirrors
 before_script:
-  - sudo bash utils/dev_env/os.sh
+  - sudo mkdir -p /var/log/vegphilly
+  - sudo touch /var/log/vegphilly/gunicorn-general.log
+  - sudo touch /var/log/vegphilly/gunicorn-access.log
+  - sudo touch /var/log/vegphilly/gunicorn-error.log
+  - sudo touch /var/log/vegphilly/django-general.log
+  - sudo touch /var/log/vegphilly/django-request.log
+  - sudo touch /var/log/vegphilly/django-sql.log
+  - sudo touch /var/log/vegphilly/vegancity-general.log
+  - sudo touch /var/log/vegphilly/vegancity-search.log
+  - sudo chmod -R 777 /var/log/vegphilly/
+  - sudo mkdir -p /var/vegphilly_backups/
   - psql -c 'create database template_postgis;' -U postgres
   - psql -d template_postgis -f `pg_config --sharedir`/contrib/postgis-1.5/postgis.sql -U postgres
   - psql -d template_postgis -f `pg_config --sharedir`/contrib/postgis-1.5/spatial_ref_sys.sql -U postgres
