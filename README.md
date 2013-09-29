@@ -1,6 +1,7 @@
 VegPhilly / django-vegancity 
 ================
 [![Build Status](https://travis-ci.org/vegphilly/vegphilly.com.png)](https://travis-ci.org/vegphilly/vegphilly.com)
+[![Coverage Status](https://coveralls.io/repos/vegphilly/vegphilly.com/badge.png)](https://coveralls.io/r/vegphilly/vegphilly.com)
 
 
 description
