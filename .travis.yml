@@ -6,6 +6,7 @@ env:
   - DJANGO=1.5
 install:
   - sudo apt-get install binutils libproj-dev gdal-bin postgis postgresql-9.1-postgis xvfb
+  - pip install coveralls
   - pip install -r requirements.txt --use-mirrors
   - pip install -r dev_requirements.txt --use-mirrors
   - pip install -q Django==$DJANGO --use-mirrors
@@ -30,4 +31,5 @@ script:
   - python manage.py test vegancity.PageLoadTest vegancity.FunctionalSearchTest
   - coverage run manage.py test --exclude-integration-tests
   - coverage report --include="vegancity/*"
-
+after_success:
+  - coveralls
