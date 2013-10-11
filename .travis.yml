@@ -6,7 +6,7 @@ env:
   - DJANGO=1.5
 install:
   - sudo apt-get install binutils libproj-dev gdal-bin postgis postgresql-9.1-postgis xvfb
-  - pip install coveralls
+  - pip install coveralls --use-mirrors
   - pip install -r requirements.txt --use-mirrors
   - pip install -r dev_requirements.txt --use-mirrors
   - pip install -q Django==$DJANGO --use-mirrors
@@ -29,7 +29,6 @@ before_script:
   - echo -e "EMAIL_HOST_USER = 'foo'\nEMAIL_HOST_PASSWORD = 'bar'\n" >> vegancity/settings_local.py
 script:
   - python manage.py test vegancity.PageLoadTest vegancity.FunctionalSearchTest
-  - coverage run manage.py test --exclude-integration-tests
-  - coverage report --include="vegancity/*"
+  - coverage run --source=vegancity manage.py test --exclude-integration-tests
 after_success:
   - coveralls
