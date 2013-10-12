@@ -15,12 +15,13 @@ def provision_vagrant():
             os.system("apt-add-repository -y ppa:rquillo/ansible")
             os.system("apt-get update")
             os.system("apt-get install -y ansible")
-            os.system("echo localhost > /etc/ansible/hosts")
             break
 
+    os.system("echo [dev_servers] > /etc/ansible/hosts")
+    os.system("echo localhost >> /etc/ansible/hosts")
     os.system("ansible-playbook --connection=local --user=vagrant "
               "--sudo --extra-vars is_dev_server=True "
-              "/usr/local/vegphilly/ansible/appservers.yml")
+              "/usr/local/vegphilly/ansible/site.yml")
 
 if __name__ == '__main__':
     provision_vagrant()

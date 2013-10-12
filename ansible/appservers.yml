@@ -1,4 +1,0 @@
- - name: configure a singleserver app
-   hosts: localhost # TODO: don't hardcore this?
-   roles: 
-     - app

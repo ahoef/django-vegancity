@@ -1,1 +1,13 @@
-  - include: appservers.yml
+- hosts: production_servers
+  roles:
+    - role: app
+
+- hosts: staging_servers
+  roles:
+    - role: app
+
+- hosts: dev_servers
+  roles:
+    - role: app
+    - role: dev
+
