@@ -19,8 +19,8 @@ def provision_vagrant():
 
     os.system("echo [dev_servers] > /etc/ansible/hosts")
     os.system("echo localhost >> /etc/ansible/hosts")
-    os.system("ansible-playbook --connection=local --user=vagrant "
-              "--sudo --extra-vars is_dev_server=True "
+
+    os.system("ansible-playbook --connection=local --user=vagrant --sudo "
               "/usr/local/vegphilly/ansible/site.yml")
 
 if __name__ == '__main__':

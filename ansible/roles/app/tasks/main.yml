@@ -66,7 +66,7 @@
 #################################
 
 - name: write postgres permissions file
-  template: src=pg_hba.conf.j2 dest=/etc/postgresql/9.1/main/pg_hba.conf owner=postgres mode=640 # TODO make perms 640
+  template: src=pg_hba.conf.j2 dest=/etc/postgresql/9.1/main/pg_hba.conf owner=postgres mode=640
   notify:
     - restart postgres
 
@@ -184,47 +184,8 @@
   service: name=nginx state=running
 
 #################################
-# dev env
+# misc
 #################################
-
-- name: install app requirements for dev
-  apt: pkg=$item state=latest
-  with_items:
-    - libtidy-dev
-    - firefox
-    - xvfb
-  when: is_dev_server == "True"
-
-- name: make postgres user 'vegphilly'
-  sudo: True
-  sudo_user: postgres
-  postgresql_user: name=vegphilly role_attr_flags=SUPERUSER
-  when: is_dev_server == "True"
-
-- name: install dev pip requirements
-  pip: requirements=/usr/local/vegphilly/dev_requirements.txt
-  when: is_dev_server == "True"
-
-- name: run syncdb
-  sudo: True
-  sudo_user: vegphilly
-  command: python /usr/local/vegphilly/manage.py syncdb --noinput
-  when: is_dev_server == "True"
-
-- name: run migrate
-  sudo: True
-  sudo_user: vegphilly
-  command: python /usr/local/vegphilly/manage.py migrate --noinput
-  when: is_dev_server == "True"
-
-- name: install dev fixture
-  sudo: True
-  sudo_user: vegphilly
-  command: python /usr/local/vegphilly/manage.py loaddata /usr/local/vegphilly/vegancity/fixtures/public_data.json
-  when: is_dev_server == "True"
-
-- name: Make sure gunicorn is running
-  supervisorctl: name=vegphilly_gunicorn state=restarted
 
 - name: setup cronjob
   cron: name="backup db" hour=2 job=/usr/local/vegphilly/utils/db_backup.py user=vegphilly

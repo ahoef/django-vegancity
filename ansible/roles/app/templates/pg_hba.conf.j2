@@ -1,7 +1,3 @@
 # TYPE  DATABASE        USER            ADDRESS                 METHOD
 local   all             postgres                                peer
 local   vegphilly       vegphilly                               trust
-{% if is_dev_server %}
-local   test_vegphilly  vegphilly                               trust
-local   all             vagrant                                 trust
-{% endif %}
