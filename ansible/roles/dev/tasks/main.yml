@@ -4,13 +4,13 @@
 
 - name: clobber settings_local with more dev settings
   template: src=settings_local.py.j2
-            dest=/usr/local/vegphilly/vegancity/settings_local.py
-            owner=vegphilly
+            dest={{ project_dir }}/vegancity/settings_local.py
+            owner={{ app_user }}
   notify:
     - restart gunicorn
 
 - name: copy dev urls
-  copy: src=dev_urls.py dest=/usr/local/vegphilly/vegancity/dev_urls.py owner=vegphilly
+  copy: src=dev_urls.py dest={{ project_dir }}/vegancity/dev_urls.py owner={{ app_user }}
 
 - name: install app requirements for dev
   apt: pkg=$item state=latest
@@ -19,13 +19,13 @@
     - firefox
     - xvfb
 
-- name: make postgres user 'vegphilly' a superuser
+- name: make postgres user '{{ db_user }}' a superuser
   sudo: True
   sudo_user: postgres
-  postgresql_user: name=vegphilly role_attr_flags=SUPERUSER
+  postgresql_user: name={{ db_user }} role_attr_flags=SUPERUSER
 
 - name: install dev pip requirements
-  pip: requirements=/usr/local/vegphilly/dev_requirements.txt
+  pip: requirements={{ project_dir }}/dev_requirements.txt
 
 - name: write postgres permissions file with more perms
   template: src=pg_hba.conf.j2 dest=/etc/postgresql/9.1/main/pg_hba.conf owner=postgres mode=640
@@ -34,18 +34,18 @@
 
 - name: run syncdb
   sudo: True
-  sudo_user: vegphilly
-  command: python /usr/local/vegphilly/manage.py syncdb --noinput
+  sudo_user: $app_user
+  command: python {{ project_dir }}/manage.py syncdb --noinput
 
 - name: run migrate
   sudo: True
-  sudo_user: vegphilly
-  command: python /usr/local/vegphilly/manage.py migrate --noinput
+  sudo_user: $app_user
+  command: python {{ project_dir }}/manage.py migrate --noinput
 
 - name: install dev fixture
   sudo: True
-  sudo_user: vegphilly
-  command: python /usr/local/vegphilly/manage.py loaddata /usr/local/vegphilly/vegancity/fixtures/public_data.json
+  sudo_user: $app_user
+  command: python {{ project_dir }}/manage.py loaddata {{ project_dir }}/vegancity/fixtures/public_data.json
 
 #################################
 # final checks

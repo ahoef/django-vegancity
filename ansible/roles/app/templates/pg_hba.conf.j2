@@ -1,3 +1,5 @@
 # TYPE  DATABASE        USER            ADDRESS                 METHOD
 local   all             postgres                                peer
-local   vegphilly       vegphilly                               trust
+# is this necessary? if db_user is owner of db_name, do they need
+# trust privileges.
+local   {{ db_name }}   {{ db_user }}                           trust
