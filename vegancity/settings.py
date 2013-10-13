@@ -39,6 +39,8 @@ DATABASES = {
     }
 }
 
+GOOGLE_ANALYTICS_TRACKING_ID = ''
+
 TIME_ZONE = None
 
 LANGUAGE_CODE = 'en-us'
@@ -99,6 +101,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
     'django.core.context_processors.request',
+    'vegancity.context_processors.globals',
 )
 
 ROOT_URLCONF = 'vegancity.urls'
