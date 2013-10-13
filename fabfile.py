@@ -57,7 +57,7 @@ def _python(cmd):
 
 
 def _supervisor_runserver(cmd):
-    return "supervisorctl %s vegphilly" % cmd
+    return "supervisorctl %s vegphilly_gunicorn" % cmd
 
 
 def _manage(cmd):
@@ -80,13 +80,6 @@ def syncdb():
     require('site_path')
     _manage('syncdb --noinput')
     _manage('migrate --noinput')
-
-
-def schemamigration(app_name, flag=' --auto'):
-    """ create a south schemamigration """
-    require('site_path')
-
-    _manage('schemamigration %s %s' % (app_name, flag))
 
 
 def rebuild_fixture():
