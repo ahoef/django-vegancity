@@ -141,6 +141,9 @@
 # setup app
 #################################
 
+- name: start supervisor
+  service: name=supervisor state=started
+
 - name: Update local settings
   template: src=settings_local.py.j2
             dest=/usr/local/vegphilly/vegancity/settings_local.py
