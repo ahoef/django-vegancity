@@ -70,7 +70,7 @@
     - make install
 
 - name: add PostGIS extension to {{ db_name }} database
-  # sudo: True
+  sudo: True
   sudo_user: postgres
   command: psql {{ db_name }} -c "CREATE EXTENSION IF NOT EXISTS postgis"
 
