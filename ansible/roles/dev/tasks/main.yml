@@ -1,6 +1,5 @@
-#################################
-# dev env
-#################################
+# This playbook will add the additional settings necessary for the various
+# debug tools used in development. It also automatically loads a fixture.
 
 - name: clobber settings_local with more dev settings
   template: src=settings_local.py.j2
