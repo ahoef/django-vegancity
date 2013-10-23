@@ -7,7 +7,7 @@
   apt: update_cache=yes # TODO: only do this every time on production
 
 - name: install sys apt requirements
-  apt: pkg=$item state=latest
+  apt: pkg={{ item }} state=latest
   with_items:
     - postgresql
     - postgresql-server-dev-9.1 # TODO use postgresql 9.1
@@ -31,7 +31,7 @@
   file: dest={{ log_dir }} owner={{ app_user }} group={{ app_user }} state=directory mode=755
 
 - name: create log files
-  copy: src=empty_log.log dest={{ log_dir }}/$item.log owner={{ app_user }} group={{ app_user }} mode=766
+  copy: src=empty_log.log dest={{ log_dir }}/{{ item }}.log owner={{ app_user }} group={{ app_user }} mode=766
   with_items:
     - gunicorn-access
     - gunicorn-error
@@ -43,7 +43,7 @@
     - django-general
 
 - name: chown/chmod log files
-  file: dest={{ log_dir }}/gunicorn-$item.log owner={{ app_user }} mode=766
+  file: dest={{ log_dir }}/gunicorn-{{ item }}.log owner={{ app_user }} mode=766
   with_items:
     - gunicorn-access
     - gunicorn-error
@@ -98,7 +98,7 @@
 #################################
 
 - name: install postgis build requirements
-  apt: pkg=$item state=latest
+  apt: pkg={{ item }} state=latest
   with_items:
     - build-essential
     - libxml2-dev
@@ -121,7 +121,6 @@
            creates=/tmp/postgis/download/postgis-2.0.1
 
 - name: install postGIS
-  # sudo: True
   command: $item
            chdir=/tmp/postgis/download/postgis-2.0.1
            creates=/usr/share/postgresql/9.1/extension/postgis--2.0.1.sql
