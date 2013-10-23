@@ -1,0 +1,26 @@
+
+- name: delete old zip
+  file: name=/tmp/vegphilly.zip state=absent
+
+- name: delete download dir
+  file: name=/tmp/vegphilly.com-master state=absent
+
+- name: delete old app dir
+  file: name=/usr/local/vegphilly state=absent
+
+- name: download vegphilly
+  get_url: url=https://github.com/vegphilly/vegphilly.com/archive/master.zip
+              dest=/tmp/vegphilly.zip mode=0440
+
+- name: unzip vegphilly
+  command: unzip vegphilly.zip
+           chdir=/tmp/
+           creates=/tmp/vegphilly.com-master
+
+- name: move app folder to destination
+  command: mv /tmp/vegphilly.com-master /usr/local/vegphilly
+           creates=/usr/local/vegphilly
+
+
+- name: chown/chmod app dir
+  file: dest=/usr/local/vegphilly owner=vegphilly mode=777 state=directory
