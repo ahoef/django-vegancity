@@ -1,13 +1,16 @@
 - hosts: production_servers
   roles:
+    - role: os
     - role: app
 
 - hosts: staging_servers
   roles:
+    - role: os
     - role: app
 
 - hosts: dev_servers
   roles:
+    - role: os
     - role: app
     - role: dev
 
