@@ -163,7 +163,7 @@ def app_status():
 #
 
 
-def debugserver():
+def runserver():
     """
     run a development server in the current terminal
 
