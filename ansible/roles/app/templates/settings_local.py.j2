@@ -1,15 +1,15 @@
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'vegphilly',
-        'USER': 'vegphilly',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
+        'NAME': '{{ db_name }}',
+        'USER': '{{ app_user }}',
+        'PASSWORD': '{{ database_password|default("") }}',
+        'HOST': '{{ db_host|default("") }}',
+        'PORT': '{{ db_port|default("") }}',
     }
 }
 
-EMAIL_HOST_USER = 'foo'
-EMAIL_HOST_PASSWORD = 'bar'
+EMAIL_HOST_USER = '{{ email_username|default("foo") }}'
+EMAIL_HOST_PASSWORD = '{{ email_password|default("bar") }}'
 
 TEST_HEADLESS = True

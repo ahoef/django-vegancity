@@ -1,62 +1,7 @@
 
-#################################
-# configure OS
-#################################
-
-- name: update apt
-  apt: update_cache=yes # TODO: only do this every time on production
-
-- name: install sys apt requirements
-  apt: pkg=$item state=latest
-  with_items:
-    - postgresql
-    - postgresql-server-dev-9.1 # TODO use postgresql 9.1
-    - python-software-properties
-    - python-dev
-    - python-pip
-    - supervisor # TODO install supervisor manually
-    - nginx
-    - git
-
 - name: install pip requirements
   pip: requirements={{ project_dir }}/requirements.txt
 
-- name: create {{ app_user }} group
-  group: name={{ app_user }} state=present system=yes
-
-- name: create {{ app_user }} user
-  user: name={{ app_user }} state=present system=yes createhome=no group={{ app_user }}
-
-- name: create log dir
-  file: dest={{ log_dir }} owner={{ app_user }} group={{ app_user }} state=directory mode=755
-
-- name: create log files
-  copy: src=empty_log.log dest={{ log_dir }}/$item.log owner={{ app_user }} group={{ app_user }} mode=766
-  with_items:
-    - gunicorn-access
-    - gunicorn-error
-    - gunicorn-general
-    - vegancity-general
-    - vegancity-search
-    - django-request
-    - django-sql
-    - django-general
-
-- name: chown/chmod log files
-  file: dest={{ log_dir }}/gunicorn-$item.log owner={{ app_user }} mode=766
-  with_items:
-    - gunicorn-access
-    - gunicorn-error
-    - gunicorn-general
-    - vegancity-general
-    - vegancity-search
-    - django-request
-    - django-sql
-    - django-general
-
-  with_items:
-    - access
-    - error
 
 - name: create app dir # todo just make sure this exists
   file: dest={{ project_dir }} owner={{ app_user }} state=directory
@@ -79,12 +24,7 @@
   postgresql_user: name={{ db_user }} password={{ db_password }}
   register: last_result
 
-- name: drop database {{ db_name }}
-  sudo: True
-  sudo_user: postgres
-  postgresql_db: name={{ db_name }} state=absent
-
-- name: create database {{ db_name }} # TODO use variables
+- name: create database {{ db_name }}
   sudo: True
   sudo_user: postgres
   postgresql_db: name={{ db_name }} owner={{ db_user }} encoding='UTF-8' lc_collate='en_US.UTF-8' lc_ctype='en_US.UTF-8' template='template0'
@@ -98,7 +38,7 @@
 #################################
 
 - name: install postgis build requirements
-  apt: pkg=$item state=latest
+  apt: pkg={{ item }} state=latest
   with_items:
     - build-essential
     - libxml2-dev
@@ -121,7 +61,6 @@
            creates=/tmp/postgis/download/postgis-2.0.1
 
 - name: install postGIS
-  # sudo: True
   command: $item
            chdir=/tmp/postgis/download/postgis-2.0.1
            creates=/usr/share/postgresql/9.1/extension/postgis--2.0.1.sql
@@ -131,7 +70,7 @@
     - make install
 
 - name: add PostGIS extension to {{ db_name }} database
-  # sudo: True
+  sudo: True
   sudo_user: postgres
   command: psql {{ db_name }} -c "CREATE EXTENSION IF NOT EXISTS postgis"
 
