@@ -1,7 +1,7 @@
 [program:vegphilly_gunicorn]
 directory = /usr/local/vegphilly/
-user = vegphilly
+user = {{ app_user }}
 autorestart = false
-command = /usr/local/vegphilly/manage.py run_gunicorn 127.0.0.1:12000 --workers=4 --log-level=debug --log-file=/var/log/vegphilly/gunicorn-general.log
-stdout_logfile = /var/log/vegphilly/gunicorn-access.log
-stderr_logfile = /var/log/vegphilly/gunicorn-error.log
+command = {{ project_dir }}/manage.py run_gunicorn 127.0.0.1:12000 --workers=4 --log-level=debug --log-file={{ log_dir }}/gunicorn-general.log
+stdout_logfile = {{ log_dir }}/gunicorn-access.log
+stderr_logfile = {{ log_dir }}/gunicorn-error.log

@@ -105,12 +105,12 @@
   apt: pkg=nginx state=latest
 
 - name: write the nginx site config
-  template: src=nginx_vegphilly.conf.j2 dest=/etc/nginx/sites-available/vegphilly.conf
+  template: src=nginx_vegphilly.conf.j2 dest=/etc/nginx/sites-available/{{ app_name }}
   notify:
     - restart nginx
 
 - name: activate the vegphilly site # TODO use variables
-  file: state=link src=/etc/nginx/sites-available/vegphilly.conf path=/etc/nginx/sites-enabled/vegphilly
+  file: state=link src=/etc/nginx/sites-available/{{ app_name }} path=/etc/nginx/sites-enabled/{{ app_name }}
   notify:
     - restart nginx
 
