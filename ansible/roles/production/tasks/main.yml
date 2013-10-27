@@ -21,6 +21,5 @@
   command: mv /tmp/vegphilly.com-master /usr/local/vegphilly
            creates=/usr/local/vegphilly
 
-
-- name: chown/chmod app dir
-  file: dest=/usr/local/vegphilly owner=vegphilly mode=777 state=directory
+- name: chown app dir
+  command: chown {{ app_user }}:{{ app_user }} /usr/local/vegphilly
