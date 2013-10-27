@@ -6,7 +6,7 @@
   file: name=/tmp/vegphilly.com-master state=absent
 
 - name: delete old app dir
-  file: name=/usr/local/vegphilly state=absent
+  file: name={{ project_dir }} state=absent
 
 - name: download vegphilly
   get_url: url=https://github.com/vegphilly/vegphilly.com/archive/master.zip
@@ -19,8 +19,7 @@
 
 - name: move app folder to destination
   command: mv /tmp/vegphilly.com-master /usr/local/vegphilly
-           creates=/usr/local/vegphilly
+           creates={{ project_dir }}
 
-
-- name: chown/chmod app dir
-  file: dest=/usr/local/vegphilly owner=vegphilly mode=777 state=directory
+- name: chown app dir
+  command: chown {{ app_user }}:{{ app_user }} /usr/local/vegphilly

@@ -3,6 +3,7 @@ project_dir: /usr/local/vegphilly
 log_dir: /var/log/vegphilly
 
 # TODO: stuff will probably break if these aren't all the same (except the pw)
+app_name: vegphilly
 app_user: vegphilly
 db_user: vegphilly
 db_password: vegphilly

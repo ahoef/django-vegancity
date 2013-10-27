@@ -72,5 +72,3 @@
 
 - name: restart gunicorn
   supervisorctl: name=vegphilly_gunicorn state=restarted
-
-

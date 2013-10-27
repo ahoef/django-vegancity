@@ -105,12 +105,12 @@
   apt: pkg=nginx state=latest
 
 - name: write the nginx site config
-  template: src=nginx_vegphilly.conf.j2 dest=/etc/nginx/sites-available/vegphilly.conf
+  template: src=nginx_vegphilly.conf.j2 dest=/etc/nginx/sites-available/{{ app_name }}
   notify:
     - restart nginx
 
 - name: activate the vegphilly site # TODO use variables
-  file: state=link src=/etc/nginx/sites-available/vegphilly.conf path=/etc/nginx/sites-enabled/vegphilly
+  file: state=link src=/etc/nginx/sites-available/{{ app_name }} path=/etc/nginx/sites-enabled/{{ app_name }}
   notify:
     - restart nginx
 
@@ -125,6 +125,16 @@
 #################################
 # misc
 #################################
+
+- name: run syncdb
+  sudo: True
+  sudo_user: $app_user
+  command: python {{ project_dir }}/manage.py syncdb --noinput
+
+- name: run migrate
+  sudo: True
+  sudo_user: $app_user
+  command: python {{ project_dir }}/manage.py migrate --noinput
 
 - name: setup cronjob
   cron: name="backup db" hour=2 job={{ project_dir }}/utils/db_backup.py user={{ app_user }}
