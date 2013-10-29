@@ -83,8 +83,13 @@
         </ul>
       </div>
       <div class="span6 visible-desktop">
-        <a class="twitter-timeline" data-dnt="true" href="https://twitter.com/VegPhilly" data-widget-id="358633092363190272">Tweets by @VegPhilly</a>
+        <a class="twitter-timeline" data-dnt="true" href="https://twitter.com/VegPhilly" data-widget-id="358633092363190272" data-chrome="noborders nofooter">Tweets by @VegPhilly</a>
         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);};}(document,"script","twitter-wjs");</script>
+        <script>
+$(window).load(function() {
+  $("#twitter-widget-0").contents().find('head').append('<link href="/static/css/twitterstyle.css" rel="stylesheet" type="text/css" />');
+});
+</script>
       </div>
     </div>
   </div>
