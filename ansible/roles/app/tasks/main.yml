@@ -72,9 +72,17 @@
 - name: add PostGIS extension to {{ db_name }} database
   sudo: True
   sudo_user: postgres
-  command: psql {{ db_name }} -c "CREATE EXTENSION IF NOT EXISTS postgis"
+  command: psql {{ db_name }} -c "CREATE EXTENSION IF NOT EXISTS postgis;"
 
+- name: add unaccent extension to {{ db_name }} database
+  sudo: True
+  sudo_user: postgres
+  command: psql {{ db_name }} -c "CREATE EXTENSION IF NOT EXISTS unaccent;"
 
+- name: make unaccent function immutable in {{ db_name }} database
+  sudo: True
+  sudo_user: postgres
+  command: psql {{ db_name }} -c "ALTER FUNCTION unaccent(text) IMMUTABLE;"
 
 #################################
 # setup app

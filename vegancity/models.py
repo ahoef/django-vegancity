@@ -33,11 +33,22 @@ import random
 
 from vegancity import geocode, validators, email
 
+from djorm_pgfulltext.models import SearchManagerMixIn
+from djorm_pgfulltext.fields import VectorField
 
 logger = logging.getLogger(__name__)
 
 
-class WithVendorsManager(models.Manager):
+class VendorSearchManagerMixin(SearchManagerMixIn):
+    def vendor_search(self, *args, **kwargs):
+        qs = self.search(*args, **kwargs).values_list('vendor', flat=True)
+        # TODO: not sure why this has to be casted to a list, but
+        # caused an error without it
+        vendors = Vendor.approved_objects.filter(pk__in=list(qs))
+        return vendors
+
+
+class WithVendorsManagerMixin(object):
     """
     Adds a method for conveniently filtering down to only
     objects with approved vendors.
@@ -57,7 +68,18 @@ class WithVendorsManager(models.Manager):
         return qs
 
 
-class TagManager(WithVendorsManager):
+class VendorSearchManager(VendorSearchManagerMixin, models.Manager):
+    pass
+
+
+class WithVendorsManager(WithVendorsManagerMixin,
+                         models.Manager):
+    pass
+
+
+class TagManager(WithVendorsManagerMixin,
+                 VendorSearchManagerMixin,
+                 models.Manager):
 
     def word_search(self, word):
         "takes a word and searches all tag names for that word"
@@ -84,7 +106,13 @@ class _TagModel(models.Model):
         max_length=255
     )
     created = models.DateTimeField(auto_now_add=True, null=True)
-    objects = TagManager()
+
+    search_index = VectorField()
+
+    objects = TagManager(
+        fields=('name', 'description'),
+        auto_update_search_field=True
+    )
 
     def __unicode__(self):
         return self.description
@@ -173,6 +201,13 @@ class VeganDish(models.Model):
     name = models.CharField(max_length=255, unique=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
 
+    search_index = VectorField()
+
+    objects = VendorSearchManager(
+        fields=('name'),
+        auto_update_search_field=True
+    )
+
     def __unicode__(self):
         return self.name
 
@@ -183,7 +218,7 @@ class VeganDish(models.Model):
         verbose_name_plural = "Vegan Dishes"
 
 
-class ReviewManager(models.Manager):
+class ReviewManager(VendorSearchManagerMixin, models.Manager):
 
     "Manager class for handling searches by review."
 
@@ -216,8 +251,16 @@ class Review(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     approved = models.BooleanField(default=False, db_index=True)
-    objects = ReviewManager()
-    approved_objects = ApprovedReviewManager()
+    search_index = VectorField()
+
+    objects = ReviewManager(
+        fields=('title', 'content'),
+        auto_update_search_field = True
+    )
+    approved_objects = ApprovedReviewManager(
+        fields=('title', 'content'),
+        auto_update_search_field = True
+    )
 
     # DESCRIPTIVE FIELDS
     title = models.CharField(
@@ -256,7 +299,7 @@ class Review(models.Model):
         verbose_name_plural = "Reviews"
 
 
-class VendorManager(models.GeoManager):
+class VendorManager(SearchManagerMixIn, models.GeoManager):
 
     "Manager class for handling searches by vendor."
 
@@ -327,8 +370,17 @@ class Vendor(models.Model):
 
                                                 ('quarantined',
                                                  'Quarantined')))
-    objects = VendorManager()
-    approved_objects = ApprovedVendorManager()
+
+    search_index = VectorField()
+
+    objects = VendorManager(
+        fields=('name', 'notes', 'website', 'address'),
+        auto_update_search_field = True
+    )
+    approved_objects = ApprovedVendorManager(
+        fields=('name', 'notes', 'website', 'address'),
+        auto_update_search_field = True
+    )
 
     # DESCRIPTIVE FIELDS
     notes = models.TextField(blank=True, null=True,
