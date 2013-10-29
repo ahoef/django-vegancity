@@ -9,6 +9,7 @@ from vegancity.models import Review, Vendor, Neighborhood
 from vegancity.tests.utils import get_user
 
 from selenium.webdriver.firefox.webdriver import WebDriver
+from selenium.common.exceptions import WebDriverException
 from django.conf import settings
 
 
@@ -140,16 +141,25 @@ class PageLoadTest(IntegrationTest):
 
 
 class FunctionalSearchTest(LiveServerTestCase):
+    def use_xvfb(self):
+        from pyvirtualdisplay import Display
+        self.display = Display('xvfb',
+                               visible=1,
+                               size=(1280, 1024))
+        self.display.start()
+        self.driver = WebDriver()
+
     def setUp(self):
 
-        if settings.TEST_HEADLESS:
-            from pyvirtualdisplay import Display
-            self.display = Display('xvfb',
-                                   visible=1,
-                                   size=(1280, 1024))
-            self.display.start()
+        try:
+            self.driver = WebDriver()
+            ui_is_not_available = False
+        except WebDriverException:
+            ui_is_not_available = True
 
-        self.driver = WebDriver()
+        if settings.TEST_HEADLESS or ui_is_not_available:
+            self.use_xvfb()
+
         self.driver.implicitly_wait(10)
         super(FunctionalSearchTest, self).setUp()
 
