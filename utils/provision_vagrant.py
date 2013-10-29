@@ -4,6 +4,7 @@ import os
 
 REQUIRED_PACKAGES = ["python-software-properties", "ansible"]
 
+
 def install_dependencies():
     for package in REQUIRED_PACKAGES:
         command_template = "dpkg -l | grep 'ii  %s '"
@@ -16,6 +17,7 @@ def install_dependencies():
             os.system("apt-get update")
             os.system("apt-get install -y ansible")
             break
+
 
 def run_ansible():
     os.system("echo [dev_servers] > /etc/ansible/hosts")

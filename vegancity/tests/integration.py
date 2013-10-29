@@ -11,6 +11,7 @@ from vegancity.tests.utils import get_user
 from selenium.webdriver.firefox.webdriver import WebDriver
 from django.conf import settings
 
+
 class IntegrationTest(TestCase):
     """
     This is currently used as a way to flag tests that should

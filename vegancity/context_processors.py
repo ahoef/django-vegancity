@@ -1,5 +1,6 @@
 from django.conf import settings
 
+
 def globals(request):
 
     return {
