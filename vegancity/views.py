@@ -123,7 +123,6 @@ def vendors(request):
     center_latitude, center_longitude = settings.DEFAULT_CENTER
     current_query = request.GET.get('current_query', None)
     previous_query = request.GET.get('previous_query', None)
-    search_type = request.GET.get('search_type', None)
     selected_neighborhood_id = request.GET.get('neighborhood', '')
     selected_cuisine_tag_id = request.GET.get('cuisine_tag', '')
     selected_feature_tag_id = request.GET.get('feature_tag', '')
@@ -146,8 +145,8 @@ def vendors(request):
     for f in checked_feature_filters:
         vendors = vendors.filter(feature_tags__id__exact=f.id)
 
-    vendors, search_type = search.filter_vendors_by_search(
-        vendors, current_query, search_type)
+    if current_query:
+        vendors = search.master_search(current_query, vendors)
 
     ctx = {
         'cuisine_tags': CuisineTag.objects.all(),
@@ -164,7 +163,6 @@ def vendors(request):
         'selected_cuisine_tag_id': (int(selected_cuisine_tag_id)
                                     if selected_cuisine_tag_id else None),
         'checked_feature_filters': checked_feature_filters,
-        'search_type': search_type,
         'has_get_params': has_get_params,
         'center_latitude': center_latitude,
         'center_longitude': center_longitude,

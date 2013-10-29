@@ -20,36 +20,23 @@
     <div class="span6">
 
       <form action="{% url 'vendors' %}" method="get" name="filters" id="filters" class="form-search">
-        {% if search_type %}
-          {% comment %}If there's a search_type, stick it in the form, otherwise dont.
-This prevents null searches from getting a value of None stuck here and throwing off the UI.{% endcomment %}            
-        <input id="search_type" name="search_type" type="hidden" value="{{ search_type }}">
-      {% endif %}        
         {% if search_from.old_query %}
         <input id="previous_query" name="previous_query" type="hidden" value="{{ previous_query }}">
       {% endif %}
         <input id="search-input" type="text" class="input-large" 
                autofocus="autofocus" autocomplete="off" name="current_query" 
                {% if current_query %}value="{{ current_query }}"{% endif %}>
-                 {% if search_type %}
-               <div class="btn-group">
-                 <button class="btn btn-custom" id="search_by_dynamic" title="{{ search_type|format_button_title }}">Search by {{ search_type|format_search_type }}</button>
-                 <button class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
-                   <span class="caret"></span>
-                 </button>
-                 <ul class="dropdown-menu">
-                   <li><a type="#" id="search_by_name">Search by Name</a></li>
-                   <li><a href="#" id="search_by_tag">Search by Cuisine & Feature</a></li>
-                   <li><a href="#" id="search_by_location">Search by Location</a></li>
-                 </ul>
-               </div>
-               {% else %}
                  <button class="btn btn-custom" id="search_by_dynamic">Search</button>
-               {% endif %}
                  <a href="#" class="btn btn-warning" id="clear_search">Clear Search</a>
-        <br>
+                 <br>
         {% if current_query %}
-        <h5 id="result-description">Showing {% if vendors %}only{% else %}no{% endif %} results{{ search_type|showing_vendors_string }}{% if current_query %}"{{ current_query }}"{% endif %}</h5>
+        <h5 id="result-description">
+          {% if vendors %}
+          Showing only results for "{{ current_query }}"
+          {% else %}
+          No results for "{{ current_query }}"
+          {% endif %}
+        </h5>
       {% else %}
         <br>
       {% endif %}
