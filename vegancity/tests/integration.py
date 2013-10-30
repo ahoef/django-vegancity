@@ -88,8 +88,6 @@ class SearchTest(TestCase):
         self.assertEqual(count_option_elements(), 2)
 
 
-@skip("djorm_ext can't install fixtures. This test causes problems "
-      "all the time, and doesn't give much benefit.")
 class PageLoadTest(IntegrationTest):
 
     fixtures = ['public_data.json']

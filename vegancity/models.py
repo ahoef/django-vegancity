@@ -107,13 +107,6 @@ class _TagModel(models.Model):
     )
     created = models.DateTimeField(auto_now_add=True, null=True)
 
-    search_index = VectorField()
-
-    objects = TagManager(
-        fields=('name', 'description'),
-        auto_update_search_field=True
-    )
-
     def __unicode__(self):
         return self.description
 
@@ -602,6 +595,14 @@ m2m_changed.connect(validate_vegan_dish, sender=Vendor.vegan_dishes.through)
 
 
 class CuisineTag(_TagModel):
+    search_index = VectorField()
+
+    objects = TagManager(
+        fields=('name', 'description'),
+        auto_update_search_field=True
+    )
+
+
 
     class Meta(_TagModel.Meta):
         verbose_name = "Cuisine Tag"
@@ -609,6 +610,13 @@ class CuisineTag(_TagModel):
 
 
 class FeatureTag(_TagModel):
+    search_index = VectorField()
+
+    objects = TagManager(
+        fields=('name', 'description'),
+        auto_update_search_field=True
+    )
+
 
     class Meta(_TagModel.Meta):
         verbose_name = "Feature Tag"
