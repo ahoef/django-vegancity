@@ -1,0 +1,37 @@
+@import url(http://fonts.googleapis.com/css?family=PT+Sans|Merriweather+Sans);
+
+span.p-name.customisable-highlight {
+//text-decoration:line-through !important;
+font-family: 'Merriweather Sans', sans-serif !important;
+color:#d25d09 !important;
+//font-size:20px !important;
+}
+
+span.p-nickname {
+font-family: 'Merriweather Sans', sans-serif !important;
+color:#2A3655 !important;
+}
+
+p.e-entry-title {
+font-family: 'PT Sans', sans-serif !important;
+color:#383638 !important;
+}
+
+a.customisable-highlight {
+font-family: 'Merriweather Sans', sans-serif !important;
+color:#d25d09 !important;
+}
+
+div.retweet-credit {
+font-family: 'PT Sans', sans-serif !important;
+color:#d25d09 !important;
+}
+
+a.profile.h-card {
+font-family: 'PT Sans', sans-serif !important;
+color:#2A3655 !important;
+}
+
+a.hashtag.customisable {
+color:#d25d09 !important;
+}
