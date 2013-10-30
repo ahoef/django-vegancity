@@ -148,10 +148,6 @@ LOGGING = {
                        "%(request_ip)s\n"
 
                        "[%(asctime)s] %(levelname)s "
-                       "%(message)s::search_type::"
-                       "%(search_type)s\n"
-
-                       "[%(asctime)s] %(levelname)s "
                        "%(message)s::current_query::"
                        "%(current_query)s\n"
 

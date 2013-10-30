@@ -1,6 +1,8 @@
 from mock import Mock
 from bs4 import BeautifulSoup
 
+from unittest import skip
+
 from django.test import TestCase, LiveServerTestCase
 from django.test.client import RequestFactory
 from vegancity import views, geocode
@@ -9,7 +11,9 @@ from vegancity.models import Review, Vendor, Neighborhood
 from vegancity.tests.utils import get_user
 
 from selenium.webdriver.firefox.webdriver import WebDriver
+from selenium.common.exceptions import WebDriverException
 from django.conf import settings
+
 
 class IntegrationTest(TestCase):
     """
@@ -40,7 +44,8 @@ class SearchTest(TestCase):
         request.user = get_user()
 
         response = views.vendors(request)
-        self.assertEqual(response.content.count("Results (2)"), 1)
+
+        self.assertEqual(response.content.count("Results (1)"), 1)
 
         request = self.factory.get('',
                                    {'current_query': 'Vendor', })
@@ -139,16 +144,25 @@ class PageLoadTest(IntegrationTest):
 
 
 class FunctionalSearchTest(LiveServerTestCase):
+    def use_xvfb(self):
+        from pyvirtualdisplay import Display
+        self.display = Display('xvfb',
+                               visible=1,
+                               size=(1280, 1024))
+        self.display.start()
+        self.driver = WebDriver()
+
     def setUp(self):
 
-        if settings.TEST_HEADLESS:
-            from pyvirtualdisplay import Display
-            self.display = Display('xvfb',
-                                   visible=1,
-                                   size=(1280, 1024))
-            self.display.start()
+        try:
+            self.driver = WebDriver()
+            ui_is_not_available = False
+        except WebDriverException:
+            ui_is_not_available = True
 
-        self.driver = WebDriver()
+        if settings.TEST_HEADLESS or ui_is_not_available:
+            self.use_xvfb()
+
         self.driver.implicitly_wait(10)
         super(FunctionalSearchTest, self).setUp()
 
@@ -164,4 +178,4 @@ class FunctionalSearchTest(LiveServerTestCase):
         input = self.driver.find_element_by_id('vc-search-input')
         input.send_keys('foobar\r')
         summary = self.driver.find_element_by_id('result-description')
-        self.assertEqual(summary.text, 'Showing no results near "foobar"')
+        self.assertEqual(summary.text, 'No results for "foobar"')

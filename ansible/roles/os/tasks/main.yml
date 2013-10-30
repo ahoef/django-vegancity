@@ -6,6 +6,7 @@
   with_items:
     - postgresql
     - postgresql-server-dev-9.1 # TODO use postgresql 9.1
+    - postgresql-contrib-9.1
     - python-software-properties
     - python-dev
     - python-pip
