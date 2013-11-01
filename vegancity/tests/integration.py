@@ -1,8 +1,6 @@
 from mock import Mock
 from bs4 import BeautifulSoup
 
-from unittest import skip
-
 from django.test import TestCase, LiveServerTestCase
 from django.test.client import RequestFactory
 from vegancity import views, geocode

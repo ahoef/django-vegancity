@@ -602,8 +602,6 @@ class CuisineTag(_TagModel):
         auto_update_search_field=True
     )
 
-
-
     class Meta(_TagModel.Meta):
         verbose_name = "Cuisine Tag"
         verbose_name_plural = "Cuisine Tags"
@@ -616,7 +614,6 @@ class FeatureTag(_TagModel):
         fields=('name', 'description'),
         auto_update_search_field=True
     )
-
 
     class Meta(_TagModel.Meta):
         verbose_name = "Feature Tag"

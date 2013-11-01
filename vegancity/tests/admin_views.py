@@ -9,6 +9,7 @@ from vegancity.admin_views import vendor_list, mailing_list
 from vegancity.models import Vendor, Neighborhood, VegLevel, User, UserProfile
 from vegancity.tests.utils import get_user
 
+
 class CSVViewTest(TestCase):
     def assertCSVIsCorrect(self, response, expected_data):
 
@@ -19,7 +20,7 @@ class CSVViewTest(TestCase):
         test_along = izip_longest(csv_data, padded_expected_data)
         for csv_row, expected_row in test_along:
             self.assertEqual(csv_row, expected_row)
-        
+
     def test_mailing_list(self):
         veggie_lover = User.objects.create(username="veggie_lover",
                                            first_name="veggie",
@@ -41,7 +42,6 @@ class CSVViewTest(TestCase):
         response = mailing_list(request)
 
         self.assertCSVIsCorrect(response, expected_data)
-
 
     def test_vendor_list(self):
 

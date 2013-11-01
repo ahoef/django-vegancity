@@ -25,6 +25,7 @@ import models
 
 from djqscsv import render_to_csv_response
 
+
 @staff_member_required
 def pending_approval_count(request):
     pending_vendor_count = models.Vendor.objects.pending_approval().count()
