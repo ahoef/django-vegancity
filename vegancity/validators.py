@@ -19,5 +19,5 @@ def validate_website(value):
 
         req = urllib2.Request(value, None, headers)
         urllib2.urlopen(req)
-    except urllib2.URLError:
+    except (urllib2.URLError, ValueError):
         raise ValidationError(u'That url appears not to work.')
