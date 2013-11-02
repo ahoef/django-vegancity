@@ -330,6 +330,66 @@ class VendorModelTest(TestCase):
         self.assertEqual(vendor.food_rating(), 3)
         self.assertEqual(vendor.atmosphere_rating(), 3)
 
+    def test_best_vegan_dish_with(self):
+        v = Vendor.objects.create(name="test vendor",
+                                  address="123 Main Street",
+                                  approval_status="approved")
+        d1 = VeganDish.objects.create(name="french toast")
+        d2 = VeganDish.objects.create(name="tofu scramble")
+        v.vegan_dishes.add(d1)
+        v.vegan_dishes.add(d2)
+
+        r = Review.objects.create(vendor=v, author=self.user,
+                                  approved=True,
+                                  best_vegan_dish=d1)
+        r = Review.objects.create(vendor=v, author=self.user,
+                                  approved=True,
+                                  best_vegan_dish=d1)
+        r = Review.objects.create(vendor=v, author=self.user,
+                                  approved=True,
+                                  best_vegan_dish=d2)
+        self.assertEqual(v.best_vegan_dish(), d1)
+
+    def test_best_vegan_dish_without(self):
+        v = Vendor.objects.create(name="test vendor",
+                                  address="123 Main Street",
+                                  approval_status="approved")
+        self.assertEqual(v.best_vegan_dish(), None)
+
+    def test_approved_reviews_with_approved(self):
+        v = Vendor.objects.create(name="test vendor",
+                                  address="123 Main Street",
+                                  approval_status="approved")
+        r = Review.objects.create(vendor=v, author=self.user,
+                                  approved=True)
+        self.assertIn(r, v.approved_reviews())
+
+    def test_approved_reviews_with_unapproved(self):
+        v = Vendor.objects.create(name="test vendor",
+                                  address="123 Main Street",
+                                  approval_status="approved")
+        r = Review.objects.create(vendor=v, author=self.user)
+        self.assertNotIn(r, v.approved_reviews())
+
+    def test_approved_reviews_with_none(self):
+        v = Vendor.objects.create(name="test vendor",
+                                  address="123 Main Street",
+                                  approval_status="approved")
+        self.assertEqual(v.approved_reviews().count(), 0)
+
+    def test_unicode_method(self):
+        v = Vendor.objects.create(name="test vendor",
+                                  address="123 Main Street",
+                                  approval_status="approved")
+        self.assertEqual(str(v), "test vendor")
+
+    def test_validate_pending(self):
+        v = Vendor.objects.create(name="test vendor",
+                                  address="123 Main Street",
+                                  approval_status="approved")
+        v.approval_status = "pending"
+        self.assertRaises(ValidationError, v.save)
+
 
 class VendorEmailTest(TestCase):
 
