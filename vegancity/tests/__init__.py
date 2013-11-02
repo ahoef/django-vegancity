@@ -14,6 +14,8 @@ from vegancity.tests.integration import *  # NOQA
 
 from vegancity.tests.admin_views import *  # NOQA
 
+from vegancity.tests.validators import *  # NOQA
+
 
 class VegancityTestRunner(DjangoTestSuiteRunner):
 
