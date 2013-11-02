@@ -80,20 +80,7 @@ class WithVendorsManager(WithVendorsManagerMixin,
 class TagManager(WithVendorsManagerMixin,
                  VendorSearchManagerMixin,
                  models.Manager):
-
-    def word_search(self, word):
-        "takes a word and searches all tag names for that word"
-        qs = self.filter(name__icontains=word)
-        if not qs and word[-1] == 's':
-            qs = self.filter(name__icontains=word[:-1])
-        return qs
-
-    def get_vendors(self, qs):
-        results = set()
-        for tag in qs:
-            results = results.union(tag.vendor_set.all())
-        return results
-
+    pass
 
 class _TagModel(models.Model):
 
