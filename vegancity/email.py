@@ -37,4 +37,4 @@ def send_new_vendor_approval(vendor):
                                  recipients)
 
     msg.attach_alternative(html_body, "text/html")
-    msg.send()
+    msg.send(fail_silently=True)
