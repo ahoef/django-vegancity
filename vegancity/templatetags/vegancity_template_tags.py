@@ -24,6 +24,8 @@ def strip_http(text):
         if text[-1] == '/':
             text = text[:-1]
         return text
+    else:
+        return ''
 
 register = template.Library()
 strip_http = register.filter(strip_http, is_safe=True)
