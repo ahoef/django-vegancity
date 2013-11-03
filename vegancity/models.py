@@ -148,30 +148,6 @@ class UserProfile(models.Model):
     karma_points = models.IntegerField(null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
 
-
-class BlogEntry(models.Model):
-
-    "Blog entries. They get entered in the admin."
-    title = models.CharField(max_length=255)
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
-    author = models.ForeignKey(User)
-    body = models.TextField()
-
-    class Meta:
-        ordering = ('-created',)
-        verbose_name = "Blog Entry"
-        verbose_name_plural = "Blog Entries"
-        get_latest_by = "created"
-
-    def __unicode__(self):
-        return self.title
-
-    @models.permalink
-    def get_absolute_url(self):
-        return (reverse('blog_detail'), (str(self.id),))
-
-
 ##########################################
 # VENDOR-RELATED MODELS
 ##########################################

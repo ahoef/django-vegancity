@@ -54,17 +54,6 @@ class VendorAdmin(GeoModelAdmin):
     form = forms.AdminVendorForm
 
 
-class BlogEntryAdmin(admin.ModelAdmin):
-
-    exclude = ('author',)
-    readonly_fields = ('author',)
-    list_display = ('title', 'author', 'body')
-
-    def save_model(self, request, blog_entry, form, change):
-        blog_entry.author = request.user
-        blog_entry.save()
-
-
 class UserProfileInline(admin.StackedInline):
     model = models.UserProfile
 
@@ -88,7 +77,6 @@ admin.site.register(models.UserProfile)
 
 admin.site.register(models.Vendor, VendorAdmin)
 admin.site.register(models.Review, ReviewAdmin)
-admin.site.register(models.BlogEntry, BlogEntryAdmin)
 admin.site.register(models.VeganDish, VeganDishAdmin)
 admin.site.register(models.CuisineTag)
 admin.site.register(models.FeatureTag)
