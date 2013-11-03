@@ -1,9 +1,9 @@
 import re
-from django import template
 import hashlib
+
 from urllib import quote_plus
 
-register = template.Library()
+from django import template
 from django.conf import settings
 
 DEFAULT_USER_ICON = quote_plus(
@@ -25,5 +25,6 @@ def strip_http(text):
             text = text[:-1]
         return text
 
+register = template.Library()
 strip_http = register.filter(strip_http, is_safe=True)
 gravatar_urlify = register.filter(gravatar_urlify, is_safe=True)
