@@ -5,3 +5,4 @@ psycopg2==2.5.1
 django-tastypie==0.9.15
 djorm-ext-pgfulltext==0.8
 git+git://github.com/azavea/django-queryset-csv.git@2869a12c60
+django-grappelli==2.4.7

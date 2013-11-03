@@ -21,6 +21,8 @@ import os
 APP_ROOT = os.path.dirname(os.path.realpath(__file__))
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
+HOSTNAME = "www.vegphilly.com"
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 TEST_HEADLESS = True
@@ -74,8 +76,8 @@ STATICFILES_DIRS = (
 )
 
 STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'django.contrib.staticfiles.finders.FileSystemFinder',
 )
 
 SECRET_KEY = 'insecure'
@@ -116,6 +118,7 @@ UNMANAGED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'grappelli',
     'django.contrib.admin',
     'django.contrib.gis',
     'south',
