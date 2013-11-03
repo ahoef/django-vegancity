@@ -169,12 +169,12 @@ def runserver():
 
     kills the daemon appserver first to avoid port conflicts.
     """
-    _manage("runserver 0.0.0.0:8000")
+    _manage("runserver_plus 0.0.0.0:8000")
 
 
 def django_shell():
     """ Opens a python shell that connects to the django application """
-    operations.open_shell(command=_manage("shell"))
+    operations.open_shell(command=_manage("shell_plus"))
 
 
 def dbshell():
