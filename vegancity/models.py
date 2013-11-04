@@ -80,20 +80,7 @@ class WithVendorsManager(WithVendorsManagerMixin,
 class TagManager(WithVendorsManagerMixin,
                  VendorSearchManagerMixin,
                  models.Manager):
-
-    def word_search(self, word):
-        "takes a word and searches all tag names for that word"
-        qs = self.filter(name__icontains=word)
-        if not qs and word[-1] == 's':
-            qs = self.filter(name__icontains=word[:-1])
-        return qs
-
-    def get_vendors(self, qs):
-        results = set()
-        for tag in qs:
-            results = results.union(tag.vendor_set.all())
-        return results
-
+    pass
 
 class _TagModel(models.Model):
 
@@ -160,30 +147,6 @@ class UserProfile(models.Model):
     mailing_list = models.BooleanField(default=False)
     karma_points = models.IntegerField(null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
-
-
-class BlogEntry(models.Model):
-
-    "Blog entries. They get entered in the admin."
-    title = models.CharField(max_length=255)
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
-    author = models.ForeignKey(User)
-    body = models.TextField()
-
-    class Meta:
-        ordering = ('-created',)
-        verbose_name = "Blog Entry"
-        verbose_name_plural = "Blog Entries"
-        get_latest_by = "created"
-
-    def __unicode__(self):
-        return self.title
-
-    @models.permalink
-    def get_absolute_url(self):
-        return (reverse('blog_detail'), (str(self.id),))
-
 
 ##########################################
 # VENDOR-RELATED MODELS
