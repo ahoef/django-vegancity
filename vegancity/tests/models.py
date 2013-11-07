@@ -345,7 +345,7 @@ class VendorModelTest(TestCase):
         r = Review.objects.create(vendor=v, author=self.user,
                                   approved=True,
                                   best_vegan_dish=d1)
-        r = Review.objects.create(vendor=v, author=self.user,
+        r = Review.objects.create(vendor=v, author=self.user,  # NOQA
                                   approved=True,
                                   best_vegan_dish=d2)
         self.assertEqual(v.best_vegan_dish(), d1)

@@ -51,9 +51,7 @@ def password_change(request):
     return response
 
 
-def home(request):
-    "The view for the homepage."
-
+def _get_home_context(request):
     vendors = Vendor.approved_objects.all()
 
     random_unreviewed = (Vendor
@@ -97,7 +95,12 @@ def home(request):
         'random_unreviewed': random_unreviewed,
     }
 
-    return render_to_response("vegancity/home.html", ctx,
+    return ctx
+
+
+def home(request):
+    return render_to_response("vegancity/home.html",
+                              _get_home_context(request),
                               context_instance=RequestContext(request))
 
 

@@ -9,6 +9,7 @@ from django.conf import settings
 DEFAULT_USER_ICON = quote_plus(
     "http://%s/static/images/default_user_icon.jpg" % settings.HOSTNAME)
 
+
 def gravatar_urlify(email_address, size=72):
     if email_address:
         hash = hashlib.md5(email_address).hexdigest()
