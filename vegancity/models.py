@@ -18,7 +18,6 @@
 from django.contrib.gis.db import models
 from django.contrib.gis.geos import Point
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
 
 from django.db.models.signals import m2m_changed
 
@@ -81,6 +80,7 @@ class TagManager(WithVendorsManagerMixin,
                  VendorSearchManagerMixin,
                  models.Manager):
     pass
+
 
 class _TagModel(models.Model):
 

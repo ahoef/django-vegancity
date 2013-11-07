@@ -4,16 +4,17 @@ import hashlib
 
 from django.template.loader import get_template_from_string
 from django.template.base import Context
-from vegancity.templatetags.vegancity_template_tags import gravatar_urlify, strip_http, DEFAULT_USER_ICON
+from vegancity.templatetags.vegancity_template_tags import (strip_http,
+                                                            DEFAULT_USER_ICON)
+
 
 class TemplateTagTest(TestCase):
-    
+
     def assertSimpleTemplate(self, template_string, expected_value):
         template = get_template_from_string(template_string)
         template_value = template.render(Context({}))
         self.assertEqual(template_value, expected_value)
 
-    
     def test_gravatar_urlify_with_email(self):
         hash = hashlib.md5('ex@example.com').hexdigest()
 
@@ -57,6 +58,3 @@ class TemplateTagTest(TestCase):
     def test_strip_http_with_trailing_slash_no_strip(self):
         self.assertEqual(strip_http('www.example.com/'),
                          'www.example.com')
-
-        
-
