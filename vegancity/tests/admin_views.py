@@ -5,7 +5,7 @@ import csv
 
 from itertools import izip_longest
 
-from vegancity.admin_views import vendor_list, mailing_list
+from vegancity.admin_views import vendor_list, mailing_list, pending_approval_count
 from vegancity.models import Vendor, Neighborhood, VegLevel, User, UserProfile
 from vegancity.tests.utils import get_user
 
@@ -83,3 +83,26 @@ class CSVViewTest(TestCase):
         response = vendor_list(request)
 
         self.assertCSVIsCorrect(response, expected_data)
+
+
+class PendingApprovalCountTest(TestCase):
+    def test_pending_approval_count_none(self):
+        request = RequestFactory().get('')
+        request.user = get_user(is_staff=True)
+        response = pending_approval_count(request)
+        self.assertEqual(response.content, "0")
+
+    def test_pending_approval_count_all_approved(self):
+        Vendor.objects.create(name="Test Vendor",
+                              approval_status="approved")
+        request = RequestFactory().get('')
+        request.user = get_user(is_staff=True)
+        response = pending_approval_count(request)
+        self.assertEqual(response.content, "0")
+
+    def test_pending_approval_count_with_pending(self):
+        Vendor.objects.create(name="Test Vendor")
+        request = RequestFactory().get('')
+        request.user = get_user(is_staff=True)
+        response = pending_approval_count(request)
+        self.assertEqual(response.content, "1")
