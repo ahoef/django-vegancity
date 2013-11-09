@@ -10,6 +10,8 @@ from vegancity.tests.models import *  # NOQA
 
 from vegancity.tests.views import *  # NOQA
 
+from vegancity.tests.forms import *  # NOQA
+
 from vegancity.tests.integration import *  # NOQA
 
 from vegancity.tests.admin_views import *  # NOQA
