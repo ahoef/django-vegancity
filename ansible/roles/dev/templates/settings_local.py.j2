@@ -5,10 +5,12 @@ DEVELOPMENT_APPS = (
     'debug_toolbar_htmltidy',
     'template_timings_panel',
     'django_extensions',
+    'django-pdb',
 )
 
 DEVELOPMENT_MIDDLEWARE_CLASSES = (
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'django_pdb.middleware.PdbMiddleware',
 )
 
 INTERNAL_IPS = ('127.0.0.1', '10.0.2.2')
