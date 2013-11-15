@@ -82,7 +82,6 @@
           {% endfor %}
         </ul>
       </div>
-<!--     <div class="span6 visible-desktop">-->
         <style type="text/css">
             #twitter-widget-0 {width:50% !important;}
         </style>
@@ -93,7 +92,6 @@ $(window).load(function() {
   $("#twitter-widget-0").contents().find('head').append('<link href="/static/css/twitterstyle.css" rel="stylesheet" type="text/css" />');
 });
 </script>
-<!--      </div>-->
     </div>
   </div>
 
@@ -138,17 +136,9 @@ $(window).load(function() {
     text-align: center;
     }
 
+    #twitter-widget-0 {width:50% !important;}
 
-    /*
-    this is a temporary hack to get
-    around the automatic styling that
-    twitter does when they build the
-    widget
-    
-    iframe.twitter-timeline {
-    min-width: 567px !important;
-    }
-  </style>*/
+  </style>
 
 {% endblock body_extra %}
 
