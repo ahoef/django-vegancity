@@ -5,7 +5,8 @@ import hashlib
 from django.template.loader import get_template_from_string
 from django.template.base import Context
 from vegancity.templatetags.vegancity_template_tags import (strip_http,
-                                                            DEFAULT_USER_ICON)
+                                                            DEFAULT_USER_ICON,
+                                                            graphical_rating)
 
 
 class TemplateTagTest(TestCase):
@@ -58,3 +59,6 @@ class TemplateTagTest(TestCase):
     def test_strip_http_with_trailing_slash_no_strip(self):
         self.assertEqual(strip_http('www.example.com/'),
                          'www.example.com')
+
+    def test_graphical_rating(self):
+        pass
