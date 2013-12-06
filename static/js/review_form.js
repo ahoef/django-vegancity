@@ -27,7 +27,8 @@ $(document).ready(function () {
     });
 
     $("div.vegan-dish-freeform input").keyup(function () {
-        if ($("div.vegan-dish-freeform input").val() === "") {
+        if (("div.vegan-dish-choices select option").length > 1 &&
+            $("div.vegan-dish-freeform input").val() === "") {
             $("div.vegan-dish-choices").show(700);
         } else {
             $("div.vegan-dish-choices").hide(700);

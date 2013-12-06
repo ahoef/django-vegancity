@@ -66,13 +66,13 @@
           {% if vendor.food_rating %}
             <tr>
               <td>Food Rating:</td>
-              <td><p>{{ vendor.food_rating }} / 4</p></td>
+              <td><p>{{ vendor.food_rating|graphical_rating|safe }}</p></td>
             </tr>
           {% endif %}
           {% if vendor.atmosphere_rating %}
             <tr>
               <td>Atmosphere Rating:</td>
-              <td><p>{{ vendor.atmosphere_rating }} / 4</p></td>
+              <td><p>{{ vendor.atmosphere_rating|graphical_rating|safe }}</p></td>
             </tr>
           {% endif %}
           {% if vendor.best_vegan_dish %}
@@ -149,13 +149,13 @@
                 {% if review.atmosphere_rating %}
                   <tr>
                     <td>Atmosphere rating:</td>
-                    <td class="review_number">{{ review.atmosphere_rating }} / 4</td>
+                    <td class="review_number">{{ review.atmosphere_rating|graphical_rating|safe }}</td>
                   </tr>
                 {% endif %}
                 {% if review.food_rating %}
                   <tr>
                     <td>Food rating:</td>
-                    <td class="review_number">{{ review.food_rating }} / 4</td>
+                    <td class="review_number">{{ review.food_rating|graphical_rating|safe }}</td>
                   </tr>
                 {% endif %}
                  {% if review.best_vegan_dish %}
@@ -345,6 +345,11 @@ td {
   opacity: 0.6;
   text-decoration: none;
   color: #ffffff;
+}
+
+.rating {
+  width: 20px;
+  height: 40px;
 }
 
 </style>

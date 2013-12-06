@@ -28,6 +28,13 @@ def strip_http(text):
     else:
         return ''
 
+
+def graphical_rating(rating):
+    rating_icons = ('<img class="rating" src="' + settings.STATIC_URL + 'images/rating-solid.png">') * rating
+    rating_icons += ('<img class="rating" src="' + settings.STATIC_URL + 'images/rating-faded.png">') * (4 - rating)
+    return rating_icons
+
 register = template.Library()
 strip_http = register.filter(strip_http, is_safe=True)
 gravatar_urlify = register.filter(gravatar_urlify, is_safe=True)
+graphical_rating = register.filter(graphical_rating, is_safe=True)
