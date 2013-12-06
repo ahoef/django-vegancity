@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.test import TestCase
 
 import hashlib
@@ -61,4 +62,14 @@ class TemplateTagTest(TestCase):
                          'www.example.com')
 
     def test_graphical_rating(self):
-        pass
+        rating = 3
+        img_class_src = '<img class="rating" src="' + settings.STATIC_URL
+        result_markup = ''.join((
+            img_class_src + 'images/rating-solid.png">',
+            img_class_src + 'images/rating-solid.png">',
+            img_class_src + 'images/rating-solid.png">',
+            img_class_src + 'images/rating-faded.png">'
+            ))
+
+        self.assertEqual(graphical_rating(rating), result_markup)
+                         
