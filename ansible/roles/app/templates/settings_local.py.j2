@@ -13,3 +13,7 @@ EMAIL_HOST_USER = '{{ email_username|default("foo") }}'
 EMAIL_HOST_PASSWORD = '{{ email_password|default("bar") }}'
 
 TEST_HEADLESS = True
+
+DEBUG = False
+
+ALLOWED_HOSTS = {{ allowed_hosts }}
