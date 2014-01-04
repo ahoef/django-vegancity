@@ -21,6 +21,9 @@
 - name: create {{ app_user }} user
   user: name={{ app_user }} state=present system=yes createhome=no group={{ app_user }}
 
+- name: create backup dir
+  file: dest={{ backup_dir }} owner={{ app_user }} group={{ app_user }} state=directory mode=755
+
 - name: create log dir
   file: dest={{ log_dir }} owner={{ app_user }} group={{ app_user }} state=directory mode=755
 

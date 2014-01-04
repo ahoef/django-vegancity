@@ -1,11 +1,12 @@
-db
-*.pot
-*.pyc
+
+# local settings is where private data is kept
 settings_local.py
+
+# created dynamically during provisioning, not in VC
 vegancity/dev_urls.py
-nohup.out
-templates/analytics.html
-*~
+
+# misc dev/os file lint, kept here for convenience
+*.pyc
+*.pot
 .vagrant
-private_data.sql
 .DS_Store

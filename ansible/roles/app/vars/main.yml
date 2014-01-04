@@ -1,6 +1,7 @@
 
 project_dir: /usr/local/vegphilly
 log_dir: /var/log/vegphilly
+backup_dir: /var/vegphilly_backups
 
 # TODO: stuff will probably break if these aren't all the same (except the pw)
 app_name: vegphilly
@@ -9,4 +10,4 @@ db_user: vegphilly
 db_password: vegphilly
 db_name: vegphilly
 # TODO - have this come from private hostfile not FOSS repo
-allowed_hosts: ['www.vegphilly.com']
+allowed_hosts: ['.vegphilly.com']
