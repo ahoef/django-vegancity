@@ -9,5 +9,3 @@ app_user: vegphilly
 db_user: vegphilly
 db_password: vegphilly
 db_name: vegphilly
-# TODO - have this come from private hostfile not FOSS repo
-allowed_hosts: ['.vegphilly.com']

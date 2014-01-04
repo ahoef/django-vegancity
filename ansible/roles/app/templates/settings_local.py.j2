@@ -16,4 +16,4 @@ TEST_HEADLESS = True
 
 DEBUG = False
 
-ALLOWED_HOSTS = {{ allowed_hosts }}
+ALLOWED_HOSTS = {{ allowed_hosts|default("[]") }}
