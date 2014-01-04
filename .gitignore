@@ -5,6 +5,9 @@ settings_local.py
 # created dynamically during provisioning, not in VC
 vegancity/dev_urls.py
 
+# static assets are collected to static/
+static/
+
 # misc dev/os file lint, kept here for convenience
 *.pyc
 *.pot
