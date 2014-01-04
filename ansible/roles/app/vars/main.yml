@@ -1,6 +1,7 @@
 
 project_dir: /usr/local/vegphilly
 log_dir: /var/log/vegphilly
+backup_dir: /var/vegphilly_backups
 
 # TODO: stuff will probably break if these aren't all the same (except the pw)
 app_name: vegphilly
