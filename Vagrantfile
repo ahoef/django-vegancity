@@ -15,7 +15,10 @@ Vagrant.configure("2") do |config|
 
   config.vm.synced_folder ".", "/usr/local/vegphilly"
 
-  config.vm.provision :shell, :path => "utils/provision_vagrant.py"
+  config.vm.provision :shell do |shell|
+    shell.path = "utils/provision_locally.py"
+    shell.args = "vagrant /usr/local/vegphilly/ansible/site.yml /usr/local/vegphilly vagrant"
+  end
 
   config.vm.provider :virtualbox do |vb, override|
     mem = ENV['VAGRANT_MORE_MEMORY']
