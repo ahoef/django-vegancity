@@ -50,6 +50,13 @@
           {{ form.website }}
         </div>
 
+        <div class="fieldWrapper">
+          {{ form.notes.errors }}
+          {{ form.notes.label_tag }}
+          {{ form.notes }}<br>
+          ({{ form.notes.help_text }})
+        </div>
+
         <div class="span2"></div>
         <div class="span2"></div>
       </div>
