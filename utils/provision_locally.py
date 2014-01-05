@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import sys
 
 REQUIRED_PACKAGES = ["python-software-properties", "ansible"]
 
@@ -19,13 +20,15 @@ def install_dependencies():
             break
 
 
-def run_ansible():
+def run_ansible(user, path, project_dir, app_user):
     os.system("echo [dev_servers] > /etc/ansible/hosts")
     os.system("echo localhost >> /etc/ansible/hosts")
 
-    os.system("ansible-playbook --connection=local --user=vagrant --sudo "
-              "/usr/local/vegphilly/ansible/site.yml")
+    os.system('ansible-playbook %s '
+              '--connection=local --user=%s --sudo '
+              '--extra-vars "project_dir=%s app_user=%s db_user=%s db_password=%s"'
+              % (path, user, project_dir, app_user, app_user, app_user))
 
 if __name__ == '__main__':
     install_dependencies()
-    run_ansible()
+    run_ansible(*sys.argv[1:])
