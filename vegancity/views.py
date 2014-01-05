@@ -66,13 +66,15 @@ def _get_home_context(request):
                    .exclude(ascore=None)\
                    .order_by('-fscore', '-ascore')[:5]
 
-    recent_review_vendors = list(Review.approved_objects
-                                 .filter(vendor__approval_status='approved')
-                                 .values_list('vendor_id', flat=True)
-                                 .distinct()[:5])
+    recent_review_vendors = (Review.approved_objects
+                             .filter(vendor__approval_status='approved')
+                             .order_by('-created')
+                             .values_list('vendor_id', flat=True)
+                             .distinct())
 
     recently_active = (Vendor.approved_objects
-                       .filter(pk__in=recent_review_vendors)[:5])
+                       .filter(pk__in=recent_review_vendors)
+                       .order_by('-review__created')[:5])
 
     recently_added = vendors.exclude(created=None).order_by('-created')[:5]
 
