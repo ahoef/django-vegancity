@@ -9,16 +9,24 @@
     {{ form.non_field_errors }}
     {% if form.errors %}
       <p style="color: red">There were errors in your submission. Please review the fields below.</p>
+      <br>
     {% endif %} 
     {% csrf_token %}
 
     <div class="row">
       <div class="span4">
         <div class="fieldWrapper">
+          {% with errors=form.name.errors %}
           <label for="id_name">{{ form.name.label }}
-            {% if form.name.errors %}<span style="color: red">* (Required)</span>{% endif %}
+            {% if errors %}<span style="color: red">* (Required)</span>{% endif %}
           </label>
+          {% if errors %}
+          <div style="color: red">
+            {{ errors }}
+          </div>
+          {% endif %}
           {{ form.name }}
+          {% endwith %}
         </div>
 
         <div class="fieldWrapper">
