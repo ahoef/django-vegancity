@@ -133,7 +133,7 @@ class NewVendorForm(forms.ModelForm):
 
     class Meta:
         model = models.Vendor
-        exclude = ('approval_status', 'notes',)
+        exclude = ('approval_status',)
         widgets = {
             'cuisine_tags': forms.CheckboxSelectMultiple,
             'feature_tags': forms.CheckboxSelectMultiple,
