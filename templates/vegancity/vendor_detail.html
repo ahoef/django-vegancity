@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block content %}
-  <div class="container">
+  <div class="container vendor-detail">
     <br/>
     <div class="row">
       <div class="span6">
@@ -25,7 +25,6 @@
           {% if user.is_staff %}<h1>- <a href="/admin/vegancity/vendor/{{ vendor.id }}/">Edit</a></h1>{% endif %}
         {% endif %}
          {% if vendor.notes %}
-         <br>
           <h5>{{ vendor.notes }}</h5>
           {% if not approved_reviews %}
           <h5>{{ vendor.name }} has not been reviewed yet -- let us know what you think!</h5>
@@ -68,13 +67,13 @@
           {% endif %}
           {% if vendor.food_rating %}
             <tr>
-              <td>Food Rating:</td>
+              <td>Average <br>Food Rating:</td>
               <td><p>{{ vendor.food_rating|graphical_rating|safe }}</p></td>
             </tr>
           {% endif %}
           {% if vendor.atmosphere_rating %}
             <tr>
-              <td>Atmosphere Rating:</td>
+              <td>Average <br>Atmosphere Rating:</td>
               <td><p>{{ vendor.atmosphere_rating|graphical_rating|safe }}</p></td>
             </tr>
           {% endif %}
@@ -163,7 +162,7 @@
                 {% endif %}
                  {% if review.best_vegan_dish %}
                   <tr>
-                    <td>Best vegan dish:</td>
+                    <td style="height:42px">Best vegan dish:</td>
                     <td class="review_number">{{ review.best_vegan_dish }}</td>
                   </tr>
                 {% endif %}
@@ -212,6 +211,8 @@ h1
   text-transform: uppercase;
   letter-spacing: 1.5px;
   color: #8DA189;
+  margin-bottom: 18px;
+  font-size: 32px;
 }
 
 h2
@@ -258,6 +259,10 @@ td {
   padding-left: 40px;
 }
 
+td p {
+  margin-bottom: 0px;
+}
+
 #left-carrot {
     padding-top: 40px;
 }
@@ -283,6 +288,10 @@ td {
   height: 300px !important;
   opacity: .75;
  }
+
+/*table td {
+  width: 5%;
+}*/
 
 .reviews-container {
   background-image:url('{{ STATIC_URL }}images/wavegrid.png');
