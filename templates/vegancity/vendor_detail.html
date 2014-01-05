@@ -122,7 +122,7 @@
   </div>
 
 
-  {% if vendor.approved_reviews %}
+  {% if approved_reviews %}
       <div class="reviews-container">
         <div class="row">
           <div class="span12">
@@ -132,8 +132,8 @@
                 <img id="right-carrot" src="{{ STATIC_URL }}images/horiz_carrot.png" width="375px">
               </div>
             <br>
-            {% if vendor.approved_reviews %}
-            {% for review in vendor.approved_reviews %}
+            {% if approved_reviews %}
+            {% for review in approved_reviews %}
 
               <div class="reviews-box clearfix">
               <span class="review_title"><h3>{{review.title|default:"<em>untitled</em>" }}</h3></span>
