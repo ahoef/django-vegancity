@@ -27,6 +27,9 @@
          {% if vendor.notes %}
          <br>
           <h5>{{ vendor.notes }}</h5>
+          {% if not approved_reviews %}
+          <h5>{{ vendor.name }} has not been reviewed yet -- let us know what you think!</h5>
+          {% endif %}
           <br>
         {% endif %}
 
