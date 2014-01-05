@@ -5,28 +5,10 @@ env:
   - DJANGO=1.5
   - DJANGO=1.6
 install:
-  - sudo apt-get install binutils libproj-dev gdal-bin postgis postgresql-9.1-postgis xvfb
   - pip install coveralls --use-mirrors
-  - pip install -r requirements.txt --use-mirrors
-  - pip install -r dev_requirements.txt --use-mirrors
   - pip install -q Django==$DJANGO --use-mirrors
 before_script:
-  - sudo mkdir -p /var/log/vegphilly
-  - sudo touch /var/log/vegphilly/gunicorn-general.log
-  - sudo touch /var/log/vegphilly/gunicorn-access.log
-  - sudo touch /var/log/vegphilly/gunicorn-error.log
-  - sudo touch /var/log/vegphilly/django-general.log
-  - sudo touch /var/log/vegphilly/django-request.log
-  - sudo touch /var/log/vegphilly/django-sql.log
-  - sudo touch /var/log/vegphilly/vegancity-general.log
-  - sudo touch /var/log/vegphilly/vegancity-search.log
-  - sudo chmod -R 777 /var/log/vegphilly/
-  - sudo mkdir -p /var/vegphilly_backups/
-  - psql -c 'create database template_postgis;' -U postgres
-  - psql -d template_postgis -f `pg_config --sharedir`/contrib/postgis-1.5/postgis.sql -U postgres
-  - psql -d template_postgis -f `pg_config --sharedir`/contrib/postgis-1.5/spatial_ref_sys.sql -U postgres
-  - psql -c 'create database vegphilly with template=template_postgis;' -U postgres
-  - echo -e "EMAIL_HOST_USER = 'foo'\nEMAIL_HOST_PASSWORD = 'bar'\n" >> vegancity/settings_local.py
+  - sudo python utils/provision_locally.py travis ansible/site.yml $TRAVIS_BUILD_DIR travis
 script:
   - python manage.py test vegancity.PageLoadTest vegancity.FunctionalSearchTest
   - coverage run --source=vegancity manage.py test --exclude-integration-tests
