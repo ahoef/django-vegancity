@@ -46,11 +46,9 @@ class VendorVeganDishInline(admin.TabularInline):
 
 class VendorAdmin(GeoModelAdmin):
     readonly_fields = ('location', 'submitted_by')
-    list_display = ('name', 'approval_status', 'created', 'neighborhood')
-    list_display_links = ('name',)
-    list_filter = ('approval_status',)
+    list_display = ('name', 'approval_status', 'created', 'submitted_by', 'neighborhood')
+    list_filter = ('approval_status', 'submitted_by')
     ordering = ('name',)
-    filter_vertical = ('cuisine_tags', 'feature_tags', 'vegan_dishes',)
     form = forms.AdminVendorForm
 
 
