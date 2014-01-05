@@ -340,15 +340,17 @@ def account_edit(request):
                                'profile_form': profile_form},
                               context_instance=RequestContext(request))
 
+def vendor_detail(request, pk):
+    vendor = get_object_or_404(Vendor.approved_objects, pk=pk)
+    approved_reviews = vendor.approved_reviews()
+    return render_to_response('vegancity/vendor_detail.html',
+                              {'vendor': vendor,
+                               'approved_reviews': approved_reviews },
+                              context_instance=RequestContext(request))
 
 ###########################
 ## generic views
 ###########################
-
-class VendorDetailView(DetailView):
-    template_name = 'vegancity/vendor_detail.html'
-    queryset = Vendor.approved_objects.all()
-
 
 class AboutView(TemplateView):
     template_name = 'vegancity/about.html'
