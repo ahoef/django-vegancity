@@ -117,7 +117,7 @@
   notify:
     - restart nginx
 
-- name: activate the vegphilly site # TODO use variables
+- name: activate the vegphilly nginx site
   file: state=link src=/etc/nginx/sites-available/{{ app_name }} path=/etc/nginx/sites-enabled/{{ app_name }}
   notify:
     - restart nginx
