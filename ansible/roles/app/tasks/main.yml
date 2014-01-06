@@ -99,7 +99,7 @@
     - restart gunicorn
 
 - name: configure gunicorn
-  template: src=gunicorn_supervisor.conf.j2 dest=/etc/supervisor/conf.d/vegphilly_gunicorn.conf
+  template: src=gunicorn_supervisor.conf.j2 dest=/etc/supervisor/conf.d/vegphilly_gunicorn.conf mode=755
   notify:
     - restart supervisor
     - restart gunicorn
@@ -117,7 +117,7 @@
   notify:
     - restart nginx
 
-- name: activate the vegphilly site # TODO use variables
+- name: activate the vegphilly nginx site
   file: state=link src=/etc/nginx/sites-available/{{ app_name }} path=/etc/nginx/sites-enabled/{{ app_name }}
   notify:
     - restart nginx
