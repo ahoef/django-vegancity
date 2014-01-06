@@ -99,7 +99,7 @@
     - restart gunicorn
 
 - name: configure gunicorn
-  template: src=gunicorn_supervisor.conf.j2 dest=/etc/supervisor/conf.d/vegphilly_gunicorn.conf
+  template: src=gunicorn_supervisor.conf.j2 dest=/etc/supervisor/conf.d/vegphilly_gunicorn.conf mode=755
   notify:
     - restart supervisor
     - restart gunicorn

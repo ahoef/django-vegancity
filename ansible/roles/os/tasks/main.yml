@@ -10,10 +10,31 @@
     - python-software-properties
     - python-dev
     - python-pip
-    - supervisor # TODO install supervisor manually
     - nginx
     - git
     - unzip
+
+
+######################################
+## supervisor
+######################################
+
+- name: install sys pip requirements
+  pip: name=supervisor version=3.0
+
+- name: create init script for supervisor
+  template: src=supervisord_init.sh.j2 dest=/etc/init.d/supervisor owner=root group=root mode=755
+
+- name: create supervisor conf dir
+  file: dest=/etc/supervisor/conf.d owner=root group=root state=directory mode=755
+
+- name: create configuration file for supervisor
+  template: src=supervisord.conf.j2 dest=/etc/supervisord.conf owner=root group=root mode=755
+
+
+######################################
+## create necessary users/files
+######################################
 
 - name: create {{ app_user }} group
   group: name={{ app_user }} state=present system=yes
