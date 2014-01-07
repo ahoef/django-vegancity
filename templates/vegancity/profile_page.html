@@ -250,24 +250,16 @@ body
   </div>
 </div>
 
-{% if reviews %}
-<div class="row">
+{% if approved_reviews %}
+  {% include "vegancity/partials/reviews_section.html" %}
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/partials/reviews_section.css">
+  <style>
+    .reviews-container {
+    background-image:url('{{ STATIC_URL }}images/wavegrid.png');
+    margin: 0 auto;
+    }
+  </style>
 
-  <div class="reviews-header">
-    {% if profile_user.first_name %}
-      <h2> {{ profile_user.first_name }}'s reviews</h2>
-    {% else %}
-      <h2> {{ profile_user.username }}'s reviews</h2>
-    {% endif %}
-  </div>
-  {% for review in reviews %}
-    <h3>{{ review.vendor.name }}</h3>
-    {{ review.title }}<br>
-    {{ review.content }}<br>
-    <br><br>
-  {% endfor %}
-
-</div>
 {% endif %}
 
 </div>

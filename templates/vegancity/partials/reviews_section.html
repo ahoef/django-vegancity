@@ -1,0 +1,57 @@
+{% load url from future %}
+
+{% load vegancity_template_tags %}
+
+<div class="reviews-container">
+  <div class="row">
+    <div class="span12">
+      <div class="reviews-divider">
+        <img id="left-carrot" src="{{ STATIC_URL }}images/horiz_carrot.png" width="375px">
+        <h2>Reviews</h2>
+        <img id="right-carrot" src="{{ STATIC_URL }}images/horiz_carrot.png" width="375px">
+      </div>
+      <br>
+      {% if approved_reviews %}
+      {% for review in approved_reviews %}
+
+      <div class="reviews-box clearfix">
+        <span class="review_title"><h3>{{review.title|default:"<em>untitled</em>" }}</h3></span>
+        <div class="row clearfix">
+          <img class="profile" src="{{ review.author.email|gravatar_urlify }}" title="add your photo on gravatar.com!">
+          <div class="span5">
+            <h4>entered by <a href="{% url 'user_profile' username=review.author.username %}">{{ review.author }}</a> on {{ review.created|date:"M. d, Y" }}</h4>
+          </div>
+        </div>
+        <br>
+        <table class="review_summary">
+          {% if review.atmosphere_rating %}
+          <tr>
+            <td>Atmosphere rating:</td>
+            <td class="review_number">{{ review.atmosphere_rating|graphical_rating|safe }}</td>
+          </tr>
+          {% endif %}
+          {% if review.food_rating %}
+          <tr>
+            <td>Food rating:</td>
+            <td class="review_number">{{ review.food_rating|graphical_rating|safe }}</td>
+          </tr>
+          {% endif %}
+          {% if review.best_vegan_dish %}
+          <tr>
+            <td style="height:42px">Best vegan dish:</td>
+            <td class="review_number">{{ review.best_vegan_dish }}</td>
+          </tr>
+          {% endif %}
+        </table>
+        <h6>{{ review.content|linebreaks }}</h6>
+      </div>
+      {% endfor %}
+
+      {% else %}
+      <div class="reviews-box">
+        <h6>There are no reviews for this vendor yet. Be the first!</h6>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>

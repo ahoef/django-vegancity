@@ -114,12 +114,13 @@ def user_profile(request, username):
             return redirect('user_profile', username=request.user.username)
     else:
         profile_user = get_object_or_404(User, username=username)
-        reviews = (Review.approved_objects
+        approved_reviews = (Review.approved_objects
                    .filter(author=profile_user)
                    .order_by('-created'))
         return render_to_response(
             'vegancity/profile_page.html',
-            {'profile_user': profile_user, 'reviews': reviews},
+            {'profile_user': profile_user,
+             'approved_reviews': approved_reviews},
             context_instance=RequestContext(request))
 
 
