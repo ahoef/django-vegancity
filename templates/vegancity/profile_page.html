@@ -196,10 +196,6 @@ body
 </style>
 {% endblock %}
 
-{% block summary %}
-<!--   <h1>{{ profile_user.username }}</h1> -->
-{% endblock summary %}
-
 {% block content %}
 <div class="container">
 
@@ -256,7 +252,6 @@ body
 
 {% if reviews %}
 <div class="row">
-<!-- <div class="reviews-section"> -->
 
   <div class="reviews-header">
     {% if profile_user.first_name %}
@@ -272,7 +267,6 @@ body
     <br><br>
   {% endfor %}
 
-<!-- </div> -->
 </div>
 {% endif %}
 
