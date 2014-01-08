@@ -251,7 +251,7 @@ body
 </div>
 
 {% if approved_reviews %}
-  {% include "vegancity/partials/reviews_section.html" %}
+  {% include "vegancity/partials/reviews_section.html" with show_vendor_name=True %}
   <link rel="stylesheet" href="{{ STATIC_URL }}css/partials/reviews_section.css">
   <style>
     .reviews-container {

@@ -5,24 +5,37 @@
 <div class="reviews-container">
   <div class="row">
     <div class="span12">
+
       <div class="reviews-divider">
-        <img id="left-carrot" src="{{ STATIC_URL }}images/horiz_carrot.png" width="375px">
-        <h2>Reviews</h2>
+        {% if show_vendor_name %}
+          <img id="left-carrot" src="{{ STATIC_URL }}images/horiz_carrot.png" width="275px">
+          <span class="user-review-header"><h2>{{ profile_user }}'s Reviews</h2></span>
+          <img id="right-carrot" src="{{ STATIC_URL }}images/horiz_carrot.png" width="275px">
+        {% else %}
+          <img id="left-carrot" src="{{ STATIC_URL }}images/horiz_carrot.png" width="375px">
+          <h2>Reviews</h2>
         <img id="right-carrot" src="{{ STATIC_URL }}images/horiz_carrot.png" width="375px">
+        {% endif %}
       </div>
       <br>
       {% if approved_reviews %}
       {% for review in approved_reviews %}
 
       <div class="reviews-box clearfix">
+        {% if show_vendor_name %}
+        <div class="reviewed-restaurant"><a href="{{ review.vendor.get_absolute_url }}" target="_blank" rel="nofollow"><h3>{{review.vendor.name }}</h3></a></div>
+        {% endif %}
         <span class="review_title"><h3>{{review.title|default:"<em>untitled</em>" }}</h3></span>
         <div class="row clearfix">
-          <img class="profile" src="{{ review.author.email|gravatar_urlify }}" title="add your photo on gravatar.com!">
+            {% if not show_vendor_name %}
+            <img class="profile" src="{{ review.author.email|gravatar_urlify }}" title="add your photo on gravatar.com!">
+            {% endif %}
+
+
           <div class="span5">
             <h4>entered by <a href="{% url 'user_profile' username=review.author.username %}">{{ review.author }}</a> on {{ review.created|date:"M. d, Y" }}</h4>
           </div>
         </div>
-        <br>
         <table class="review_summary">
           {% if review.atmosphere_rating %}
           <tr>
@@ -32,7 +45,7 @@
           {% endif %}
           {% if review.food_rating %}
           <tr>
-            <td>Food rating:</td>
+            <td id="food-rating">Food rating:</td>
             <td class="review_number">{{ review.food_rating|graphical_rating|safe }}</td>
           </tr>
           {% endif %}
