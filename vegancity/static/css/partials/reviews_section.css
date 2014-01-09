@@ -1,0 +1,164 @@
+
+.reviews-box {
+    width: 40%;
+    min-width: 350px;
+    background-color: #FFFFFF;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 50px;
+}
+
+.reviews-container h3
+{
+  text-align: center;
+  font-family: 'Source Sans Pro';
+  font-weight: normal;
+  font-size: 18px;
+}
+
+.reviews-container h4
+{
+  padding: 65px 0px 10px 10px;
+  font-size: 18px;
+  font-weight: normal;
+  color: #2A3655;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+.reviews-container td {
+  padding-left: 40px;
+}
+
+.reviews-container td p {
+  margin-bottom: 0px;
+}
+
+.reviews-box {
+  position: relative;
+}
+
+.profile {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+
+}
+
+.reviews-divider {
+    text-align: center;
+    margin: auto;
+    width: 100%;
+}
+
+.review_title h3, .reviewed-restaurant h3 {
+    line-height: 30px;
+    background-color: #8DA189;
+    display: inline;
+    padding: 15px 20px;
+    color: #ffffff;
+    font-size: 18px;
+    position: relative;
+    left: -30px;
+    top: 45px;
+    box-shadow: 1px 1px 1px #888;
+    font-family: 'Merriweather Sans', sans-serif;
+}
+
+.reviewed-restaurant {
+  padding-bottom: 40px;
+}
+
+.reviewed-restaurant h3 {
+  color: #888;
+  background-color: #fff;
+  box-shadow: none;
+  left: 20px;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.reviewed-restaurant a {
+  color: #888;
+}
+
+.review_number {
+    padding-left: 20px;
+    color: #d25d09;
+}
+
+
+#left-carrot {
+    padding-top: 40px;
+}
+
+#right-carrot {
+    top: -20px;
+    transform:rotate(180deg);
+    -ms-transform:rotate(180deg);
+    -moz-transform:rotate(180deg);
+    -webkit-transform:rotate(180deg);
+    -o-transform:rotate(180deg);
+ }
+
+.reviews-container h2, .user-review-header h2
+{
+  font-family: 'Cabin', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-size: 45px;
+  color: #444;
+  display: inline;
+  position: relative;
+  top: 20px;
+}
+
+.user-review-header h2 {
+  font-size: 30px;
+}
+
+.reviews-container .rating {
+  width: 20px;
+  height: 40px;
+}
+
+.reviews-container .span12 {
+    width: 100%;
+ }
+
+
+.reviews-container h6 {
+  font-weight: normal;
+  color: #444444;
+  font-size: 16px;
+  padding: 10px 40px 30px 40px;
+}
+
+
+
+@media (max-width: 950px) {
+  #left-carrot, #right-carrot {
+    display: none;
+  }
+  .reviews-box {
+    width: 60%;
+  }
+  .reviews-container h2 {
+    font-size: 36px;
+  }
+}
+
+@media (max-width: 750px) {
+  .reviews-box {width: 80%}
+}
+
+@media (max-width: 400px) {
+  .profile {display: none;}
+  table td {min-width: 0px;}
+  .reviews-container h4 {font-size: 16px;}
+  .reviews-container td {padding-left: 0px;}
+  .row, .span5 {max-width: 400px;}
+}
+
+.reviews-container h2 {
+  font-size: 36px;
+}

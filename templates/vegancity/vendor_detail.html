@@ -125,60 +125,16 @@
 
 
   {% if approved_reviews %}
-      <div class="reviews-container">
-        <div class="row">
-          <div class="span12">
-              <div class="reviews-divider">
-                <img id="left-carrot" src="{{ STATIC_URL }}images/horiz_carrot.png" width="375px">
-                <h2>Reviews</h2>
-                <img id="right-carrot" src="{{ STATIC_URL }}images/horiz_carrot.png" width="375px">
-              </div>
-            <br>
-            {% if approved_reviews %}
-            {% for review in approved_reviews %}
+  {% include "vegancity/partials/reviews_section.html" %}
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/partials/reviews_section.css">
+  <style>
+    .reviews-container {
+    background-image:url('{{ STATIC_URL }}images/wavegrid.png');
+    margin: 0 auto;
+    }
+  </style>
+  {% endif %}
 
-              <div class="reviews-box clearfix">
-              <span class="review_title"><h3>{{review.title|default:"<em>untitled</em>" }}</h3></span>
-              <!-- <div class="watermark"><img class="hidden-phone" src="{{ STATIC_URL }}images/default_user_icon.jpg"></div> -->
-              <div class="row clearfix">
-                  <img class="profile" src="{{ review.author.email|gravatar_urlify }}" title="add your photo on gravatar.com!">
-                <div class="span5">
-                  <h4>entered by <a href="{% url 'user_profile' username=review.author.username %}">{{ review.author }}</a> on {{ review.created|date:"M. d, Y" }}</h4>
-                </div>
-              </div>
-              <br>
-              <table class="review_summary">
-                {% if review.atmosphere_rating %}
-                  <tr>
-                    <td>Atmosphere rating:</td>
-                    <td class="review_number">{{ review.atmosphere_rating|graphical_rating|safe }}</td>
-                  </tr>
-                {% endif %}
-                {% if review.food_rating %}
-                  <tr>
-                    <td>Food rating:</td>
-                    <td class="review_number">{{ review.food_rating|graphical_rating|safe }}</td>
-                  </tr>
-                {% endif %}
-                 {% if review.best_vegan_dish %}
-                  <tr>
-                    <td style="height:42px">Best vegan dish:</td>
-                    <td class="review_number">{{ review.best_vegan_dish }}</td>
-                  </tr>
-                {% endif %}
-              </table>
-              <h6>{{ review.content|linebreaks }}</h6>
-              </div>
-            {% endfor %}
-
-            {% else %}
-              <div class="reviews-box">
-                <h6>There are no reviews for this vendor yet. Be the first!</h6>
-              </div>
-            {% endif %}{% endif %}
-          </div>
-        </div>
-      </div>
 {% endblock content %}
 
 
@@ -215,66 +171,16 @@ h1
   font-size: 32px;
 }
 
-h2
-{
-  font-family: 'Cabin', sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  font-size: 45px;
-  color: #444;
-  display: inline;
-  position: relative;
-  top: 20px;
-}
-
-h3
-{
+h3 {
   text-align: center;
   font-family: 'Source Sans Pro';
   font-weight: normal;
   font-size: 18px;
 }
 
-h4
-{
-  padding: 55px 0px 0px 40px;
-  font-size: 18px;
-  font-weight: normal;
-  color: #2A3655;
-  font-family: 'Source Sans Pro', sans-serif;
-}
-
 h5 {
   font-weight: normal;
 }
-
-h6 {
-  font-weight: normal;
-  color: #444444;
-  font-size: 16px;
-  padding: 10px 40px 30px 40px;
-}
-
-td {
-  padding-left: 40px;
-}
-
-td p {
-  margin-bottom: 0px;
-}
-
-#left-carrot {
-    padding-top: 40px;
-}
-
-#right-carrot {
-    top: -20px;
-    transform:rotate(180deg);
-    -ms-transform:rotate(180deg);
-    -moz-transform:rotate(180deg);
-    -webkit-transform:rotate(180deg);
-    -o-transform:rotate(180deg);
- }
 
 #map-area {
   width: 80%;
@@ -284,58 +190,10 @@ td p {
   margin-right: 0px;
 }
 
- #map_canvas {
+#map_canvas {
   height: 300px !important;
   opacity: .75;
  }
-
-/*table td {
-  width: 5%;
-}*/
-
-.reviews-container {
-  background-image:url('{{ STATIC_URL }}images/wavegrid.png');
-  margin: 0 auto;
-}
-
-.reviews-box {
-    width: 40%;
-    min-width: 350px;
-    background-color: #FFFFFF;
-    margin: auto;
-    margin-top: 20px;
-    margin-bottom: 50px;
-}
-
-.reviews-divider {
-    text-align: center;
-    margin: auto;
-    width: 100%;
-}
-
-.span12 {
-    width: 100%;
- }
-
-.review_title h3 {
-    line-height: 30px;
-    background-color: #8DA189;
-    display: inline;
-    padding: 15px 20px;
-    color: #ffffff;
-    font-size: 18px;
-    position: relative;
-    left: -30px;
-    top: 45px;
-    box-shadow: 1px 1px 1px #888;
-    font-family: 'Merriweather Sans', sans-serif;
-}
-
-.review_number {
-    padding-left: 20px;
-    color: #d25d09;
-}
-
 
 .button {
   display: inline-block;
@@ -358,11 +216,24 @@ td p {
   text-decoration: none;
   color: #ffffff;
 }
+table td {
+  min-width: 150px;
+}
+
+td p {
+  margin-bottom: 0px;
+}
 
 .rating {
   width: 20px;
   height: 40px;
 }
+
+@media (max-width: 768px) {
+  #map-area{
+    width: 100%;
+    padding-top: 5px;
+  }
 
 </style>
 
