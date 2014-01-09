@@ -114,7 +114,7 @@ input#vc-search-input, input#search-input {
 }
 
 .btn {
-    font-family: 'Average Sans', serif;
+    font-family: 'Source Sans Pro', serif;
     font-weight: bold;
     background-image: none;
 }
@@ -173,4 +173,59 @@ div#vendor_table {
 .btn:focus {
   opacity: 0.8;
   background-position: 0 0px;
+}
+
+
+/*///// About Page Style /////*/
+
+.aboutpic {
+  border-radius: 100%;
+  width: 230px;
+  height: 230px;
+}
+
+.bios h5 {
+  padding-top: 12px;
+  padding-bottom: 3px;
+}
+
+.bios .bio {
+  padding-left: 35px;
+  padding-right: 35px;
+  text-align: left;
+}
+
+.about-summary
+{
+  background-color: #383638;
+}
+
+.about-summary p
+{
+  color: #fff;
+  padding: 0 10% 15% 10%;
+  font-size: 18px;
+  line-height: 1.25em;
+}
+
+.about-hero h3
+{
+  font-family: 'Source Sans Pro', sans-serif;
+  text-transform: none;
+  width: 100%;
+  color: #f6c084;
+  font-weight: 400;
+  font-size: 200%;
+}
+
+#vegphilly-icons {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#vegphilly-icons img
+{
+  max-height: 100px;
+  margin-left: 3%;
+  margin-right: 3%;
 }

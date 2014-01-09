@@ -11,12 +11,11 @@
 {% block content %}
 <div class="container">
 <div class="about-hero row">
-
   <h3>VegPhilly helps answer the inevitable question:</h3>
   <h2>Where are we going to eat?<h2>
 </div>
 
-<div class="grey row">
+<div class="about-summary row">
 <div class="span4">
   <p>We founded VegPhilly because we wanted more detailed and accurate information about vegan and vegan-friendly establishments in our city. We want to create the most comprehensive list of vegan restaurants and places that offer vegan options, reviewed and rated.</p>
 </div>
@@ -32,7 +31,7 @@
   <br>
   <i class="icon-long-arrow-right"></i>
   <h3>Team</h3>
-  <div class="row" style="text-align: center">
+  <div class="row bios" style="text-align: center">
     <br>
     <div class="span4">
       <img class="aboutpic" src="{{ STATIC_URL }}images/steve.jpg">
@@ -56,7 +55,7 @@ Check out <a href="http://justadudeintheworld.info/" target="_blank">Zack's Port
       </p></div>
     </div>
   </div>
-  <div class="row" style="text-align: center">
+  <div class="row bios" style="text-align: center">
     <br>
     <br>
     <div class="span4">
@@ -83,7 +82,7 @@ Check out <a href="http://justadudeintheworld.info/" target="_blank">Zack's Port
   <br>
   <i class="icon-long-arrow-right"></i>
   <h3>Contributors</h3>
-  <div class="row" style="text-align: center">
+  <div class="row bios" style="text-align: center">
     <br>
     <div class="span4">
     <h5>Jeff Frankl</h5>
@@ -120,7 +119,6 @@ Check out <a href="http://justadudeintheworld.info/" target="_blank">Zack's Port
 {% endblock content %}
 
 {% block body_extra %}
-<link href='http://fonts.googleapis.com/css?family=Cabin:400,700' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Chivo:400,400italic' rel='stylesheet' type='text/css'>
 <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 <script>
@@ -154,40 +152,6 @@ h3
   color: #8daa8f;
 }
 
-h5 {
-  padding-top: 12px;
-  padding-bottom: 3px;
-}
-
-ul {
-  margin-right: 125px;
-  margin-left: 100px;
-}
-
-.aboutpic {
-  border-radius: 100%;
-  width: 230px;
-  height: 230px;
-}
-
-.bio {
-  padding-left: 35px;
-  padding-right: 35px;
-  text-align: left;
-}
-
-#vegphilly-icons {
-  text-align: center;
-  margin-top: 20px;
-}
-
-#vegphilly-icons img
-{
-  max-height: 100px;
-  margin-left: 3%;
-  margin-right: 3%;
-}
-
 .about-hero
 {
   background-image:url('{{ STATIC_URL }}images/skyline.png');
@@ -195,29 +159,6 @@ ul {
   background-size: cover;
   text-align: right;
   padding-top: 30px;
-}
-
-.about-hero h3
-{
-  font-family: 'Source Sans Pro', sans-serif;
-  text-transform: none;
-  width: 100%;
-  color: #f6c084;
-  font-weight: 400;
-  font-size: 200%;
-}
-
-.grey
-{
-  background-color: #383638;
-}
-
-.grey p
-{
-  color: #fff;
-  padding: 0 10% 15% 10%;
-  font-size: 18px;
-  line-height: 1.25em;
 }
 
 i
