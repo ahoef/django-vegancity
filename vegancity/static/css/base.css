@@ -61,7 +61,7 @@ p.vc-nav-item {
     font-weight: bold;
     /* Must override text shadow or
      Bootstrap will do what it wants */
-    text-shadow: 0pt 0px 0pt white;
+    text-shadow: none !important;
 }
 
 div#map_canvas {
