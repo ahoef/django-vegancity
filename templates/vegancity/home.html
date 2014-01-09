@@ -6,6 +6,9 @@
 
 {% block header_extra %}
   <meta name="description" content="VegPhilly is a community driven vegan and vegetarian food search guide for Philadelphia. Browse restaurants, add a new restaurant, and write reviews.">
+
+  <link href='http://fonts.googleapis.com/css?family=Sanchez' rel='stylesheet' type='text/css'>
+
 {% endblock header_extra %}
 
 {% block headline %}{% endblock %}
@@ -60,7 +63,7 @@
           {% for vendor in recently_added %}
             <li><a href="{{ vendor.get_absolute_url }}" class="blue">{{ vendor.name }}</a></li>
           {% endfor %}
-        </ul>  
+        </ul>
         <h3>Recently Reviewed</h3>
         <ul>
           {% for vendor in recently_active %}
