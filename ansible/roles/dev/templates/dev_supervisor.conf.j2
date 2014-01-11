@@ -1,0 +1,7 @@
+[program:vegphilly_detached_dev]
+directory = /usr/local/vegphilly/
+user = {{ app_user }}
+autorestart = true
+command = {{ project_dir }}/manage.py runserver 0.0.0.0:8888
+stdout_logfile = /tmp/detached-dev-access.log
+stderr_logfile = /tmp/detached-dev-error.log
