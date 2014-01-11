@@ -10,7 +10,9 @@ Vagrant.configure("2") do |config|
 
   # for the gunicorn server
   config.vm.network :forwarded_port, guest: 80, host: 8080
-  # forward development use
+  # for a detached development server
+  config.vm.network :forwarded_port, guest: 8888, host: 8888
+  # for development use
   config.vm.network :forwarded_port, guest: 8000, host: 8000
 
   config.vm.synced_folder ".", "/usr/local/vegphilly"

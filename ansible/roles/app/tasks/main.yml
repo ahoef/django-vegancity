@@ -98,7 +98,7 @@
   notify:
     - restart gunicorn
 
-- name: configure gunicorn
+- name: configure gunicorn supervisor job
   template: src=gunicorn_supervisor.conf.j2 dest=/etc/supervisor/conf.d/vegphilly_gunicorn.conf mode=755
   notify:
     - restart supervisor
