@@ -2,32 +2,28 @@
 // TEMPLATES
 /////////////////////////////////////
 
-var tChunks = {
-    name: '<strong><%= name %></strong><br/>',
-    address: '<%= address %><br/>',
-    phone: '<%= phone %><br/>',
-    url: '<a class="uline" href="<%= url %>">More Info</a>',
-    seperator: ' | ',
-    google_url: '<a class="uline" href="http://maps.google.com/maps?q=<%= address %>" target="_BLANK" rel="nofollow">Google Maps</a><br/>'
-},
-summaryCaptionTemplate = [tChunks.name, tChunks.address, tChunks.phone, tChunks.url, tChunks.seperator, tChunks.google_url].join(""),
-detailCaptionTemplate = [tChunks.name, tChunks.google_url].join(""),
-// TODO: all of this can be abstracted beyond veg level to allow coloring by anything
-vegLevelCategoryMapping = {
-    1: 'vegan',
-    2: 'vegetarian',
-    3: 'vegetarian',
-    4: 'vegetarian',
-    5: 'omni',
-    6: 'omni',
-    7: 'omni',
-    0: 'omni' // There is no zero in postgres, but we are coercing nulls to 0
-}
-vegCategoryMarkerMapping = {
-    'vegan': '/static/images/marker-vegan.png',
-    'vegetarian': '/static/images/marker-vegetarian.png',
-    'omni': '/static/images/marker-omni.png'
-};
+var summaryCaptionTemplate = [
+    '<strong><a class="uline" href="<%= url %>"><%= name %></a></strong><br/>',
+    '<%= address %><br/>',
+    '<%= phone %><br/>'].join(""),
+    detailCaptionTemplate = '<strong><%= name %></strong><br/>',
+
+    // TODO: all of this can be abstracted beyond veg level to allow coloring by anything
+    vegLevelCategoryMapping = {
+        1: 'vegan',
+        2: 'vegetarian',
+        3: 'vegetarian',
+        4: 'vegetarian',
+        5: 'omni',
+        6: 'omni',
+        7: 'omni',
+        0: 'omni' // There is no zero in postgres, but we are coercing nulls to 0
+    },
+    vegCategoryMarkerMapping = {
+        'vegan': '/static/images/marker-vegan.png',
+        'vegetarian': '/static/images/marker-vegetarian.png',
+        'omni': '/static/images/marker-omni.png'
+    };
 
 /////////////////////////////////////
 // MAP WRAPPER OBJECT

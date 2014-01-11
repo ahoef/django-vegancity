@@ -105,6 +105,17 @@
               </td>
             </tr>
           {% endif %}
+            {% if vendor.address %}
+            <tr>
+              <td>Location: </td>
+              <td>
+                <a target="_BLANK" rel="nofollow"
+                   href="http://maps.google.com/maps?q={{ vendor.address|linebreaksbr }}">
+                  View on Google Maps
+                </a>
+              </td>
+            </tr>
+            {% endif %}
         </table>
       </div>
 
