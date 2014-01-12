@@ -115,8 +115,8 @@ def user_profile(request, username):
     else:
         profile_user = get_object_or_404(User, username=username)
         approved_reviews = (Review.approved_objects
-                   .filter(author=profile_user)
-                   .order_by('-created'))
+                            .filter(author=profile_user)
+                            .order_by('-created'))
         return render_to_response(
             'vegancity/profile_page.html',
             {'profile_user': profile_user,
@@ -343,17 +343,19 @@ def account_edit(request):
                                'profile_form': profile_form},
                               context_instance=RequestContext(request))
 
+
 def vendor_detail(request, pk):
     vendor = get_object_or_404(Vendor.approved_objects, pk=pk)
     approved_reviews = vendor.approved_reviews()
     return render_to_response('vegancity/vendor_detail.html',
                               {'vendor': vendor,
-                               'approved_reviews': approved_reviews },
+                               'approved_reviews': approved_reviews},
                               context_instance=RequestContext(request))
 
 ###########################
 ## generic views
 ###########################
+
 
 class AboutView(TemplateView):
     template_name = 'vegancity/about.html'

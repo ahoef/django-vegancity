@@ -30,8 +30,12 @@ def strip_http(text):
 
 
 def graphical_rating(rating):
-    rating_icons = ('<img class="rating" src="' + settings.STATIC_URL + 'images/rating-solid.png">') * rating
-    rating_icons += ('<img class="rating" src="' + settings.STATIC_URL + 'images/rating-faded.png">') * (4 - rating)
+    rating_icons = ('<img class="rating" src="' +
+                    settings.STATIC_URL +
+                    'images/rating-solid.png">') * rating
+    rating_icons += ('<img class="rating" src="' +
+                     settings.STATIC_URL +
+                     'images/rating-faded.png">') * (4 - rating)
     return rating_icons
 
 register = template.Library()

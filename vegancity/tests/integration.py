@@ -43,14 +43,14 @@ class SearchTest(TestCase):
 
         response = views.vendors(request)
 
-        self.assertEqual(response.content.count("Results (1)"), 1)
+        self.assertEqual(response.content.count("Showing 1 vendors"), 1)
 
         request = self.factory.get('',
                                    {'current_query': 'Vendor', })
         request.user = get_user()
 
         response = views.vendors(request)
-        self.assertEqual(response.content.count("Results (4)"), 1)
+        self.assertEqual(response.content.count("Showing 4 vendors"), 1)
 
     def test_search_by_name_approved_only(self):
         self.v4.approval_status = 'quarantined'
@@ -61,7 +61,7 @@ class SearchTest(TestCase):
         request.user = get_user()
 
         response = views.vendors(request)
-        self.assertEqual(response.content.count("Results (3)"), 1)
+        self.assertEqual(response.content.count("Showing 3 vendors"), 1)
 
     def test_neighborhoods_field_is_populated(self):
         """ This test was born out of an actual observed bug """

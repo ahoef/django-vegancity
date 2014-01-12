@@ -3,7 +3,6 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-
 	<meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -35,67 +34,8 @@
 
     {% block header_extra %}
     {% endblock header_extra %}
-
-
   </head>
-  <body data-spy="scroll">
-
-    <div id="wrapper">
-      <div id="top_push" class="visible-desktop"></div>
-      <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-          <div class="container">
-            <a class="brand" href= "{% url 'home' %}"><img src="{{ STATIC_URL }}images/vegphilly-carrot-logo.png" alt="VegPhilly carrot logo" width="24px"></a>
-            <a class="brand" href= "{% url 'home' %}" style="color: white; padding-top: 35px">VegPhilly</a>
-
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </a>
-
-            <div class="nav-collapse collapse">
-              <ul class="nav pull-right">
-		        <li><a href="{% url 'vendors' %}"><p class="vc-nav-item">Restaurants</p></a></li>
-                <li><a href="{% url 'about' %}"><p class="vc-nav-item">About</p></a></li>
-                {% if user.is_authenticated %}
-                  <li><a href="{% url 'my_account' %}"><p class="vc-nav-item">My Account (<u>{{user}}</u>)</p></a></li>
-                  <li><a href="{% url 'logout' %}"><p class="vc-nav-item">Logout</p></a></li>
-                {% else %}
-                  <li><a href="{% url 'login' %}"><p class="vc-nav-item">Login</p></a></li>
-                {% endif %}
-              </ul>
-
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-
-      <div class="container" id="headline_main">
-        <h1>{% block headline %}{% endblock %}</h1>
-        <h3>{% block summary %}{% endblock %}</h3>
-      </div>
-
-
-      {% block content %}
-      {% endblock content %}
-      <br>
-      <div id="bottom_push"></div>
-    </div>
-    <div id="footer">
-      <br>
-      <div class="container">
-        <p>
-          <a href="{% url 'privacy' %}" class="white">Privacy Policy</a>&nbsp;&nbsp;&nbsp;
-          <a href="{% url 'about' %}" class="white">About</a>&nbsp;&nbsp;&nbsp;
-          <a href="http://www.facebook.com/vegphilly"><img src="{{ STATIC_URL }}images/f_logo.png" width="10px" alt="facebook icon"></a>
-          <a href="http://www.twitter.com/vegphilly"><img src="{{ STATIC_URL }}images/t_logo.png" width="40px" alt="twitter icon"></a>
-        </p>
-      </div>
-    </div>
-    {% block body_extra %}
-    {% endblock body_extra %}
-  </body>
+  {% block body %}
+  <body></body>
+  {% endblock body %}
 </html>

@@ -1,0 +1,13 @@
+.navbar-inner {
+   background: #2A3655 !important;
+}
+
+p.vc-nav-item {
+    padding-top: 30px;
+    color: white;
+    font-weight: bold;
+    /* Must override text shadow or
+     Bootstrap will do what it wants */
+    text-shadow: none !important;
+}
+

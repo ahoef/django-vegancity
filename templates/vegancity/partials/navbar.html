@@ -1,0 +1,28 @@
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href= "{% url 'home' %}"><img src="{{ STATIC_URL }}images/vegphilly-carrot-logo.png" alt="VegPhilly carrot logo" width="24px"></a>
+      <a class="brand" href= "{% url 'home' %}" style="color: white; padding-top: 35px">VegPhilly</a>
+
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+
+      <div class="nav-collapse collapse">
+        <ul class="nav pull-right">
+		  <li><a href="{% url 'vendors' %}"><p class="vc-nav-item">Restaurants</p></a></li>
+          <li><a href="{% url 'about' %}"><p class="vc-nav-item">About</p></a></li>
+          {% if user.is_authenticated %}
+          <li><a href="{% url 'my_account' %}"><p class="vc-nav-item">My Account (<u>{{user}}</u>)</p></a></li>
+          <li><a href="{% url 'logout' %}"><p class="vc-nav-item">Logout</p></a></li>
+          {% else %}
+          <li><a href="{% url 'login' %}"><p class="vc-nav-item">Login</p></a></li>
+          {% endif %}
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</div>

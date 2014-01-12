@@ -26,7 +26,8 @@ def run_ansible(user, path, project_dir, app_user):
 
     os.system('ansible-playbook %s '
               '--connection=local --user=%s --sudo '
-              '--extra-vars "project_dir=%s app_user=%s db_user=%s db_password=%s"'
+              '--extra-vars "project_dir=%s '
+              'app_user=%s db_user=%s db_password=%s"'
               % (path, user, project_dir, app_user, app_user, app_user))
 
 if __name__ == '__main__':
