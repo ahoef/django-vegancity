@@ -11,86 +11,86 @@
            autofocus="autofocus" autocomplete="off" name="current_query"
            {% if current_query %}value="{{ current_query }}"{% endif %}>
     <button class="button search-button" id="search_by_dynamic"><i class="fa fa-caret-right"></i></i></button>
-    <br>
-    {% if current_query %}
-    <h5 id="result-description">
-      {% if vendors %}
-      Showing only results for "{{ current_query }}"
-      {% else %}
-      No results for "{{ current_query }}"
-      {% endif %}
-    </h5>
-    <a href="#" class="button" id="clear_search">Clear Search</a>
-    {% else %}
-    {% endif %}
+<br>
+{% if current_query %}
+<h5 id="result-description">
+  {% if vendors %}
+  Showing only results for "{{ current_query }}"
+  {% else %}
+  No results for "{{ current_query }}"
+  {% endif %}
+</h5>
+<a href="#" class="button" id="clear_search">Clear Search</a>
+{% else %}
+{% endif %}
+</div>
+
+<div id="filter-area">
+  <h4>Browse by Neighborhood</h4>
+  <div class="filter-cover">
+    <span id="neighborhood_mask"></span>
+    <span class="filter-cover-right"><i class="fa fa-caret-down"></i></span>
+    <select id="id_neighborhood" name="neighborhood">
+      <option value="" {% if not selected_neighborhood_id %}selected="selected"{% endif %}>---------</option>
+      {% for neighborhood in neighborhoods %}
+      <option value="{{ neighborhood.id }}" {% if neighborhood.id == selected_neighborhood_id %}selected="selected"{% endif %}>{{ neighborhood.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <h4>Browse by Cuisine</h4>
+  <div class="filter-cover">
+    <span id="cuisine_mask"></span>
+    <span class="filter-cover-right"><i class="fa fa-caret-down"></i></span>
+    <select id="id_cuisine" name="cuisine_tag">
+      <option value="" {% if not selected_cuisine_tag_id %}selected="selected"{% endif %}>---------</option>
+      {% for cuisine_tag in cuisine_tags %}
+      <option value="{{ cuisine_tag.id }}" {% if cuisine_tag.id == selected_cuisine_tag_id %}selected="selected"{% endif %}>{{ cuisine_tag.description }}</option>
+      {% endfor %}
+    </select>
   </div>
 
-  <div id="filter-area">
-    <h4>Browse by Neighborhood</h4>
-    <div class="filter-cover">
-      <span id="neighborhood_mask"></span>
-      <span class="filter-cover-right"><i class="fa fa-caret-down"></i></span>
-      <select id="id_neighborhood" name="neighborhood">
-        <option value="" {% if not selected_neighborhood_id %}selected="selected"{% endif %}>---------</option>
-        {% for neighborhood in neighborhoods %}
-        <option value="{{ neighborhood.id }}" {% if neighborhood.id == selected_neighborhood_id %}selected="selected"{% endif %}>{{ neighborhood.name }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <h4>Browse by Cuisine</h4>
-    <div class="filter-cover">
-      <span id="cuisine_mask"></span>
-      <span class="filter-cover-right"><i class="fa fa-caret-down"></i></span>
-      <select id="id_cuisine" name="cuisine_tag">
-        <option value="" {% if not selected_cuisine_tag_id %}selected="selected"{% endif %}>---------</option>
-        {% for cuisine_tag in cuisine_tags %}
-        <option value="{{ cuisine_tag.id }}" {% if cuisine_tag.id == selected_cuisine_tag_id %}selected="selected"{% endif %}>{{ cuisine_tag.description }}</option>
-        {% endfor %}
-      </select>
-    </div>
+  <h4>Browse by Features</h4>
 
-    <h4>Browse by Features</h4>
-
-      <div class="filter-cover features-filter-cover">
-      <span class="filter-cover-right"><i class="fa fa-caret-down"></i></span>
-      <select id="id_feature" name="feature_tag">
-        <option value="" {% if selected_feature_tag %}selected="selected"{% endif %}>---------</option>
-        {% for feature_tag in feature_tags %}
-        <option value="{{ feature_tag.id }}">
-          {{ feature_tag.description }}
-        </option>
-        {% endfor %}
-      </select>
-      </div>
-
-            <div id="checked_feature_tags">
-      {% for checked in checked_feature_filters %}
-      <label class="checkbox">
-        <input type="checkbox" id="id_feature_{{ checked.name }}" name="{{ checked.name }}" value="True" checked="checked" onchange="this.form.submit()">
-        {{ checked }}
-      </label>
+  <div class="filter-cover features-filter-cover">
+    <span class="filter-cover-right"><i class="fa fa-caret-down"></i></span>
+    <select id="id_feature" name="feature_tag">
+      <option value="" {% if selected_feature_tag %}selected="selected"{% endif %}>---------</option>
+      {% for feature_tag in feature_tags %}
+      <option value="{{ feature_tag.id }}">
+        {{ feature_tag.description }}
+      </option>
       {% endfor %}
-      </div>
+    </select>
+  </div>
 
-          {% if selected_neighborhood_id or selected_cuisine_tag_id or checked_feature_filters %}
-      <a href="#" class="button" id="clear_all">Clear Filters</a>
-    {% else %}
-    {% endif %}
+  <div id="checked_feature_tags">
+    {% for checked in checked_feature_filters %}
+    <label class="checkbox">
+      <input type="checkbox" id="id_feature_{{ checked.name }}" name="{{ checked.name }}" value="True" checked="checked" onchange="this.form.submit()">
+      {{ checked }}
+    </label>
+    {% endfor %}
+  </div>
+
+  {% if selected_neighborhood_id or selected_cuisine_tag_id or checked_feature_filters %}
+  <a href="#" class="button" id="clear_all">Clear Filters</a>
+  {% else %}
+  {% endif %}
 </div>
 </form>
 
 <div id="vendor-area">
-   <h5>Showing {{ vendor_count|default:"0" }} vendors</h5>
-    <div class="vendor-filter-cover">Jump to Vendor
-      <span class="vendor-filter-cover-right"><i class="fa fa-caret-down"></i></span>
-      <select id="id_vendors" name="vendor">
-        <option value="">---------</option>
-        {% for vendor in vendors %}
-          <option value="{{ vendor.id }}">{{ vendor.name }}</option>
-        {% endfor %}
-      </select>
-    </div>
+  <h5>Showing {{ vendor_count|default:"0" }} vendors</h5>
+  <div class="vendor-filter-cover">Jump to Vendor
+    <span class="vendor-filter-cover-right"><i class="fa fa-caret-down"></i></span>
+    <select id="id_vendors" name="vendor">
+      <option value="">---------</option>
+      {% for vendor in vendors %}
+      <option value="{{ vendor.id }}">{{ vendor.name }}</option>
+      {% endfor %}
+    </select>
   </div>
+</div>
 
 
 <div id="add-restaurant-area">
@@ -99,22 +99,6 @@
 </div>
 
 <script>
-  function syncSelect(srcSelector, destSelector) {
-    var itemName = $(srcSelector + ' :selected').text();
-    $(destSelector).text(itemName);
-  }
-  function syncNeighborhoodMask () { syncSelect('#id_neighborhood', '#neighborhood_mask'); }
-  function syncCuisineMask () { syncSelect('#id_cuisine', '#cuisine_mask'); }
-  function syncFeatureMask () { syncSelect('#id_feature', '.select-textasfasf'); }
-
-  $('#id_neighborhood').change(syncNeighborhoodMask);
-  $('#id_cuisine_tag').change(syncCuisineMask);
-  $('#id_feature_tag').change(syncFeatureMask);
-  $(document)
-            .ready(syncNeighborhoodMask)
-            .ready(syncCuisineMask)
-            .ready(syncFeatureMask);
-
 </script>
 
 

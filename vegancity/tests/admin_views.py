@@ -5,7 +5,8 @@ import csv
 
 from itertools import izip_longest
 
-from vegancity.admin_views import vendor_list, mailing_list, pending_approval_count
+from vegancity.admin_views import (vendor_list, mailing_list,
+                                   pending_approval_count)
 from vegancity.models import Vendor, Neighborhood, VegLevel, User, UserProfile
 from vegancity.tests.utils import get_user
 

@@ -72,4 +72,3 @@ class TemplateTagTest(TestCase):
             ))
 
         self.assertEqual(graphical_rating(rating), result_markup)
-                         

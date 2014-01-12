@@ -120,3 +120,17 @@ var vendorMap = {
         return marker;   
     }
 };
+
+function syncSelect(srcSelector, destSelector) {
+    var itemName = $(srcSelector + ' :selected').text();
+    $(destSelector).text(itemName);
+}
+
+var syncNeighborhoodMask = _.partial(syncSelect, '#id_neighborhood', '#neighborhood_mask');
+var syncCuisineMask = _.partial(syncSelect, '#id_cuisine', '#cuisine_mask');
+
+$('#id_neighborhood').change(syncNeighborhoodMask);
+$('#id_cuisine_tag').change(syncCuisineMask);
+$(document)
+    .ready(syncNeighborhoodMask)
+    .ready(syncCuisineMask);
