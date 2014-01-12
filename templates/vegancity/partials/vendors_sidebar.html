@@ -1,0 +1,81 @@
+<form action="{% url 'vendors' %}" method="get" name="filters" id="filters" class="form-search">
+  {% if search_from.old_query %}
+  <input id="previous_query" name="previous_query" type="hidden" value="{{ previous_query }}">
+  {% endif %}
+  <input id="search-input" type="text" class="input-large" 
+         autofocus="autofocus" autocomplete="off" name="current_query" 
+         {% if current_query %}value="{{ current_query }}"{% endif %}>
+  <button class="btn btn-custom" id="search_by_dynamic">Search</button>
+  <a href="#" class="btn btn-warning" id="clear_search">Clear Search</a>
+  <br>
+  {% if current_query %}
+  <h5 id="result-description">
+    {% if vendors %}
+    Showing only results for "{{ current_query }}"
+    {% else %}
+    No results for "{{ current_query }}"
+    {% endif %}
+  </h5>
+  {% else %}
+  <br>
+  {% endif %}
+
+  <hr/>
+
+  <h4>Neighborhood:</h4>
+  <select id="id_neighborhood" name="neighborhood">
+    <option value="" {% if not selected_neighborhood_id %}selected="selected"{% endif %}>---------</option>
+    {% for neighborhood in neighborhoods %}
+    <option value="{{ neighborhood.id }}" {% if neighborhood.id == selected_neighborhood_id %}selected="selected"{% endif %}>{{ neighborhood.name }}</option>
+    {% endfor %}
+  </select>
+  <h4>Cuisine:</h4>
+  <select id="id_cuisine" name="cuisine_tag">
+    <option value="" {% if not selected_cuisine_tag_id %}selected="selected"{% endif %}>---------</option>
+    {% for cuisine_tag in cuisine_tags %}
+    <option value="{{ cuisine_tag.id }}" {% if cuisine_tag.id == selected_cuisine_tag_id %}selected="selected"{% endif %}>{{ cuisine_tag.description }}</option>
+    {% endfor %}
+  </select>
+
+  <h4>Features:</h4>
+
+  {% for checked in checked_feature_filters %}
+  <label class="checkbox">
+    <input type="checkbox" id="id_feature_{{ checked.name }}" name="{{ checked.name }}" value="True" checked="checked" onchange="this.form.submit()">
+    {{ checked }}
+  </label>
+  {% endfor %}         
+  <select id="id_feature" name="feature_tag">
+    <option value="" {% if selected_feature_tag %}selected="selected"{% endif %}>---------</option>
+    {% for feature_tag in feature_tags %}
+    <option value="{{ feature_tag.id }}">
+      {{ feature_tag.description }}
+    </option>
+    {% endfor %}
+  </select>
+
+</form>
+
+<p><a href="#" class="btn btn-warning" id="clear_all">Clear Filters</a></p>
+
+   <hr/>
+   <h5>Showing {{ vendor_count|default:"0" }} vendors.</h5>
+    <h4>Jump to Vendor:</h4>
+    <select id="id_vendors" name="vendor">
+      <option value="">---------</option>
+      {% for vendor in vendors %}
+        <option value="{{ vendor.id }}">{{ vendor.name }}</option>
+      {% endfor %}
+    </select>
+
+<h4>Something missing?</h4>
+<h4><a href="{% url 'new_vendor' %}" class="btn btn-custom">Add a Restaurant</a></h4>
+<hr/>
+<table id="legend-table">
+  <thead>
+    <!-- TODO: this is an html hack -->
+    <h4>Legend</h4>
+  </thead>
+  <tbody>
+  </tbody>
+</table>

@@ -46,9 +46,9 @@ var vendorMap = {
 
         this.map = new google.maps.Map($(map_container_id).get(0),
                                        { 
-                                           zoom: 13,
-                                           maxZoom: 17,
-                                           minZoom: 10,
+                                           zoom: 14,
+                                           maxZoom: 18,
+                                           minZoom: 9,
                                            center: center,
                                            mapTypeId: google.maps.MapTypeId.ROADMAP 
                                        });

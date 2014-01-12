@@ -8,11 +8,11 @@ var SearchFormView = Backbone.View.extend({
             $("#search-input").val("");
             $("#filters").submit();
         },
-        "click .marker-link": function (event) {
-            var vendor_id = $(event.currentTarget).attr('class').match(/\d+/);
+       "change #id_vendors": function (event) {
+            var vendor_id = $("#id_vendors").val();
             google.maps.event.trigger(vendorMap.markers[vendor_id], 'click');
             $('html, body').animate({ scrollTop: 100 }, 'slow');
-        },
+       },
         "change #id_neighborhood, #id_cuisine, #id_checked_features, #id_feature": function (event) {
             $('form#filters').submit();
         }
