@@ -18,9 +18,17 @@
     <div id="control-area">
       {% include "vegancity/partials/vendors_sidebar.html" %}
     </div>
-    
+
     <div id="map-area">
       <div id="map_canvas"></div>
+      <table id="legend-table">
+        <thead>
+          <!-- TODO: this is an html hack -->
+          <h4>Legend</h4>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
     </div>
 
   <link rel="stylesheet" href="{{ STATIC_URL }}css/partials/navbar.css">
@@ -42,7 +50,7 @@
     address: "{{ vendor.address|linebreaksbr }}",
     phone: "{{ vendor.phone }}",
     url: "{{ vendor.get_absolute_url }}",
-    latitude: "{{ vendor.location.y }}", 
+    latitude: "{{ vendor.location.y }}",
     longitude: "{{ vendor.location.x }}",
     vegLevel: {% if vendor.veg_level %}{{ vendor.veg_level_id }}{% else %}0{% endif %}
     }{% if not forloop.last %},{% endif %}

@@ -1,16 +1,32 @@
+h4 {
+    font-size: 14px;
+    line-height: 1em;
+    font-family: 'Chivo';
+    font-style: italic;
+    font-weight: 400;
+    margin: 8px 0;
+}
+h5 {
+    font-size: 16px;
+    text-align: center;
+    color: #444;
+    font-weight: 400;
+}
+
 #control-area {
-    padding-top: 15px;
-    padding-left: 5px;
-    width: 400px;
+
+    width: 320px;
     top: 81px;
     bottom: 0;
     overflow: auto;
     position: absolute;
+    text-align: center;
+    background-color: #eee;
 }
 
 #map-area {
     top: 81px;
-    left: 400px;
+    left: 320px;
     right: 0;
     bottom: 0;
     overflow: hidden;
@@ -20,4 +36,207 @@
 #map_canvas {
     height: 100%;
     width: 100%;
+}
+
+.button {
+  display: inline-block;
+  background-color: #8DAA8F;
+  padding: 12px 20px;
+  /*margin: 10px 0;*/
+  text-decoration: none;
+  font-size: 14px;
+  color: #ffffff;
+  font-family: 'Cabin', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+  width: 160px;
+}
+
+.button:hover {
+  opacity: 0.6;
+  text-decoration: none;
+  color: #ffffff;
+}
+
+
+
+/*SEARCH AREA*/
+#search-area {
+    background-color: #eee;
+    padding: 10px 45px 20px 45px;
+    text-align: left;
+}
+#search-area h4 {
+    color: #444;
+}
+#search-input {
+    border-radius: 0px;
+    height: 25px;
+    margin-right: -4px;
+    width: 167px;
+}
+.search-button {
+    height: 35px;
+    width: 35px;
+    padding: 10px;
+    position: relative;
+    border: none;
+    background-color: #2A3655;
+}
+#result-description {
+    line-height: 1.4em;
+    padding: 4px 0;
+}
+.fa-caret-right {
+    font-size: 25px;
+    position: absolute;
+    top: 6px;
+    left: 15px;
+}
+#clear_search {
+    width: 82%;
+}
+
+/*FILTER AREA*/
+#filter-area {
+    padding: 15px 45px 20px 45px;
+    text-align: left;
+    background-color: #fff;
+}
+
+#id_neighborhood,
+    #id_cuisine,
+        #id_feature,
+            #id_vendors {
+    height: 35px;
+    background-color: white;
+    position: absolute;
+    opacity: 0;
+    width: 215px;
+    left: 0;
+}
+
+#id_vendors {
+    left: 0;
+    top: 0;
+    margin-bottom: 0;
+    height: 45px;
+}
+
+.filter-cover {
+    position: relative;
+    height: 34px;
+    background-color: #fff;
+    width: 215px;
+    border: 1px solid #888;
+    margin-bottom: 25px;
+}
+.features-filter-cover {
+    margin-bottom: 10px;
+}
+
+#neighborhood_mask, #cuisine_mask {
+    line-height: 2.3em;
+    padding: 0 10px;
+    font-size: 14px;
+}
+
+.filter-cover-right {
+    width: 35px;
+    height: 35px;
+    background-color: #2A3655;
+    color: #fff;
+    float:right;
+}
+
+.fa-caret-down {
+    font-size: 25px;
+    margin-left: 11px;
+    margin-top: 5px;
+}
+
+#clear_all {
+    width: 83%;
+    margin-top: 20px;
+}
+
+#checked_feature_tags .checkbox {
+    display: block;
+}
+
+#vendor-area {
+    background-color: #eee;
+    padding: 5px 45px 5px 45px;
+}
+#filter-area h5 {
+    margin-bottom: 15px;
+    margin-top: 25px;
+}
+.vendor-filter-cover {
+    position: relative;
+    padding: 12px;
+    background-color: #444;
+    width: 196px;
+    color: #fff;
+    font-size: 14px;
+    font-family: 'Cabin', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.vendor-filter-cover-right {
+    font-size: 25px;
+    width: 40px;
+    height: 43px;
+    background-color: #444;
+    color: #fff;
+    float: right;
+    margin-top: -11px;
+    margin-right: -12px;
+
+}
+
+.vendor-filter-cover-right .fa-caret-down {
+    margin-left: 0;
+    margin-top: 9px;
+}
+
+#legend-table {
+  position: absolute;
+  right:20px;
+  bottom: 20px;
+  z-index: 10;
+  background-color: #fff;
+  height: 160px;
+  width: 168px;
+  border: 2px solid #444;
+}
+
+#legend-table td {
+    padding: 0px 12px 8px 12px;
+}
+#legend-table td:first-child {
+    padding: 8px 12px 8px 12px;
+}
+#legend-table img {
+    margin-right: 10px;
+}
+
+form {
+    margin-bottom: 0;
+}
+
+#add-restaurant-area {
+    background-color: #fff;
+    padding: 15px 0 20px 0;
+}
+#add-restaurant-area h4 {
+    color: #444;
+    margin-bottom: 10px;
+}
+#add-restaurant-area .button {
+    width: 182px;
 }
