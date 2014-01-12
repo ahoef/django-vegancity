@@ -47,21 +47,8 @@ h5, h6 {
     font-family: 'Source Sans Pro', sans-serif;
 }
 
-.navbar-inner {
-   background: #2A3655 !important;
-}
-
 .brand {
     padding-top: 26px;
-}
-
-p.vc-nav-item {
-    padding-top: 30px;
-    color: white;
-    font-weight: bold;
-    /* Must override text shadow or
-     Bootstrap will do what it wants */
-    text-shadow: none !important;
 }
 
 div#map_canvas {
@@ -93,13 +80,6 @@ div#vc-searchbox {
     font-size: 55px;
 }
 
-#footer {
-    background-color: #d25d09;
-    opacity: .7;
-    text-align: center;
-    color: #fff;
-    font-size: 18px;
-}
 
 input#vc-search-input, input#search-input {
     box-shadow: #888888;
@@ -125,25 +105,6 @@ input#vc-search-input, input#search-input {
     background-image: -webkit-linear-gradient(top, #fbb450, #f89406);
     background-image: -o-linear-gradient(top, #fbb450, #f89406);
     background-image: linear-gradient(to bottom, #fbb450, #f89406);
-}
-
-* {
-    margin: 0;
-}
-
-html, body {
-    height: 100%;
-}
-
-#wrapper {
-    min-height: 100%;
-    height: auto !important;
-    height: 100%;
-    margin: 0 auto -100px;
-}
-
-#footer, #top_push, #bottom_push {
-    height: 100px;
 }
 
 a.uline {
@@ -175,15 +136,6 @@ div#vendor_table {
   background-position: 0 0px;
 }
 
-
-/*///// About Page Style /////*/
-
-.aboutpic {
-  border-radius: 100%;
-  width: 230px;
-  height: 230px;
-}
-
 .bios h5 {
   padding-top: 12px;
   padding-bottom: 3px;
@@ -193,29 +145,6 @@ div#vendor_table {
   padding-left: 35px;
   padding-right: 35px;
   text-align: left;
-}
-
-.about-summary
-{
-  background-color: #383638;
-}
-
-.about-summary p
-{
-  color: #fff;
-  padding: 0 10% 15% 10%;
-  font-size: 18px;
-  line-height: 1.25em;
-}
-
-.about-hero h3
-{
-  font-family: 'Source Sans Pro', sans-serif;
-  text-transform: none;
-  width: 100%;
-  color: #f6c084;
-  font-weight: 400;
-  font-size: 200%;
 }
 
 #vegphilly-icons {

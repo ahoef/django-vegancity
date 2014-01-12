@@ -1,0 +1,67 @@
+/*///// About Page Style /////*/
+
+.aboutpic {
+  border-radius: 100%;
+  width: 230px;
+  height: 230px;
+}
+
+.about-summary
+{
+  background-color: #383638;
+}
+
+.about-summary p
+{
+  color: #fff;
+  padding: 0 10% 15% 10%;
+  font-size: 18px;
+  line-height: 1.25em;
+}
+
+.about-hero h3
+{
+  font-family: 'Source Sans Pro', sans-serif;
+  text-transform: none;
+  width: 100%;
+  color: #f6c084;
+  font-weight: 400;
+  font-size: 200%;
+}
+
+a:hover
+{
+  color: #d25d09;
+}
+
+h2
+{
+  font-family: 'Chivo';
+  font-style: italic;
+  font-weight: 400;
+  font-size: 250%;
+}
+
+h3
+{
+  font-family: 'Cabin';
+  text-transform: uppercase;
+  font-size: 150%;
+  margin-bottom: 20px;
+  display: inline-block;
+  color: #8daa8f;
+}
+
+i
+{
+  color: #383638;
+  font-size: 150%;
+}
+
+.about-hero
+{
+  height: 400px;
+  background-size: cover;
+  text-align: right;
+  padding-top: 30px;
+}
