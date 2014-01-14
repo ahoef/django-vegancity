@@ -1,0 +1,25 @@
+#control-area {
+    width: 100%;
+    top: 431px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    text-align: center;
+    background-color: #fff;
+    overflow: none;
+}
+
+#map-area {
+    top: 81px;
+    left: 0;
+    right: 0;
+    height: 350px;
+    overflow: none;
+    position: absolute;
+    z-index: -1;
+}
+
+#legend-table {
+    display: none;
+}
