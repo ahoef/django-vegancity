@@ -240,3 +240,7 @@ form {
 #add-restaurant-area .button {
     width: 182px;
 }
+
+#map-show-controls {
+    display: none;
+}

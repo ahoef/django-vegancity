@@ -12,6 +12,7 @@ var SearchFormView = Backbone.View.extend({
             var vendor_id = $("#id_vendors").val();
             google.maps.event.trigger(vendorMap.markers[vendor_id], 'click');
             $('html, body').animate({ scrollTop: 100 }, 'slow');
+            $('#map-area').show();
        },
         "change #id_neighborhood, #id_cuisine, #id_checked_features, #id_feature": function (event) {
             $('form#filters').submit();
@@ -78,5 +79,9 @@ $(document).ready(function () {
     $(document)
         .ready(syncNeighborhoodMask)
         .ready(syncCuisineMask);
+
+    $('#map-show-controls').click(function () {
+        $('#map-area').hide();
+    });
 
 });
