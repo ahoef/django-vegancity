@@ -78,6 +78,18 @@ input#vc-search-input, input#search-input {
     background-image: linear-gradient(to bottom, #fbb450, #f89406);
 }
 
+#captionBubble_hyperlink {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 14px;
+    text-overflow: ellipsis;
+    color: #2A3655
+}
+
+#captionBubble_hyperlink:hover {
+    color: #d25d09;
+    text-decoration: none;
+}
+
 a.uline {
     text-decoration: underline;
 }

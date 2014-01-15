@@ -3,7 +3,7 @@
 /////////////////////////////////////
 
 var summaryCaptionTemplate = [
-    '<strong><a class="uline" href="<%= url %>"><%= name %></a></strong><br/>',
+    '<strong><a id="captionBubble_hyperlink" class="uline" href="<%= url %>"><%= name %></a></strong><br/>',
     '<%= address %><br/>',
     '<%= phone %><br/>'].join(""),
     detailCaptionTemplate = '<strong><%= name %></strong><br/>',
