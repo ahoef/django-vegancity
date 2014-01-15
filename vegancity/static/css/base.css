@@ -51,22 +51,6 @@ h5, h6 {
     padding-top: 26px;
 }
 
-div#vc-search-borderbox {
-    margin-top:21px;
-    margin-left:8px;
-    margin-right:8px;
-    margin-bottom: 21px;
-    background-color: rgb(199, 224, 227);
-    width: 100%;
-}
-
-div#vc-searchbox {
-    width: 100%;
-    padding-top: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
 .hero-unit {
     background: url(/static/images/hero_unit.jpg);
 }
