@@ -25,19 +25,21 @@
       <form action="{% url 'vendors' %}" method="get">
         <input id="vc-search-input" class="input-block-level" type="text" autocomplete="off" placeholder="e.g., 18th and Walnut, Royal Tavern, Falafel, 19143" autofocus="autofocus" name="current_query">
       </form>
-      <p>
-        <strong>Hungry?</strong> Search for somewhere to eat by name, location, or cuisine. Read and post your own vegan-specific reviews. Spread the word.<br>Get involved in our effort to bring high-quality web applications to vegans and vegetarians in Philadelphia and beyond.
-      </p>
-      <br>
-      <div class="row" style="text-align: center;">
-		<p>
-          <h4>
-            <a class="btn btn-custom btn-large hero" href="{% url 'vendors' %}">View the Map</a>
-            <a class="btn btn-custom btn-large hero" href="{% url 'new_vendor' %}">Add a Restaurant</a>
-            <a class="btn btn-custom btn-large hero" href="#reviewModal" data-toggle="modal">Write a Review</a>
-            <a class="btn btn-custom btn-large hero" href="{% url 'about' %}">Learn More</a>
-          </h4>
+      <div id="hero-details">
+        <p>
+          <strong>Hungry?</strong> Search for somewhere to eat by name, location, or cuisine. Read and post your own vegan-specific reviews. Spread the word.<br>Get involved in our effort to bring high-quality web applications to vegans and vegetarians in Philadelphia and beyond.
         </p>
+        <br>
+        <div class="row" style="text-align: center;">
+		  <p>
+            <h4>
+              <a class="btn btn-custom btn-large hero" href="{% url 'vendors' %}">View the Map</a>
+              <a class="btn btn-custom btn-large hero" href="{% url 'new_vendor' %}">Add a Restaurant</a>
+              <a class="btn btn-custom btn-large hero" href="#reviewModal" data-toggle="modal">Write a Review</a>
+              <a class="btn btn-custom btn-large hero" href="{% url 'about' %}">Learn More</a>
+            </h4>
+          </p>
+        </div>
       </div>
     </div>
     <div id="reviewModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel" aria-hidden="true">
@@ -143,6 +145,8 @@ $(window).load(function() {
     #twitter-widget-0 {width:50% !important;}
 
   </style>
+
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/home.css">
 
 {% endblock body_extra %}
 

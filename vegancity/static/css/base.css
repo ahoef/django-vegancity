@@ -51,30 +51,6 @@ h5, h6 {
     padding-top: 26px;
 }
 
-div#vc-search-borderbox {
-    margin-top:21px;
-    margin-left:8px;
-    margin-right:8px;
-    margin-bottom: 21px;
-    background-color: rgb(199, 224, 227);
-    width: 100%;
-}
-
-div#vc-searchbox {
-    width: 100%;
-    padding-top: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
-.hero-unit {
-    background: url(/static/images/hero_unit.jpg);
-}
-
-.hero-unit h1 {
-    font-size: 55px;
-}
-
 
 input#vc-search-input, input#search-input {
     box-shadow: #888888;
@@ -118,11 +94,6 @@ div#vendor_table {
     height: 650px;
     overflow: auto;
     font-size: 14px;
-}
-
-.hero {
-    margin-left: 10px;
-    margin-right: 10px;
 }
 
 .btn:hover,

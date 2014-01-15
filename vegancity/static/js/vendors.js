@@ -12,6 +12,7 @@ var SearchFormView = Backbone.View.extend({
             var vendor_id = $("#id_vendors").val();
             google.maps.event.trigger(vendorMap.markers[vendor_id], 'click');
             $('html, body').animate({ scrollTop: 100 }, 'slow');
+            $('#map-area').show();
        },
         "change #id_neighborhood, #id_cuisine, #id_checked_features, #id_feature": function (event) {
             $('form#filters').submit();
@@ -64,4 +65,23 @@ var SearchFormView = Backbone.View.extend({
 
 $(document).ready(function () {
     new SearchFormView({el: $('body') });
+
+    function syncSelect(srcSelector, destSelector) {
+        var itemName = $(srcSelector + ' :selected').text();
+        $(destSelector).text(itemName);
+    }
+
+    var syncNeighborhoodMask = _.partial(syncSelect, '#id_neighborhood', '#neighborhood_mask');
+    var syncCuisineMask = _.partial(syncSelect, '#id_cuisine', '#cuisine_mask');
+
+    $('#id_neighborhood').change(syncNeighborhoodMask);
+    $('#id_cuisine_tag').change(syncCuisineMask);
+    $(document)
+        .ready(syncNeighborhoodMask)
+        .ready(syncCuisineMask);
+
+    $('#map-show-controls').click(function () {
+        $('#map-area').hide();
+    });
+
 });
