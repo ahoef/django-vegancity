@@ -11,3 +11,16 @@
     margin-right: 10px;
 }
 
+@media (max-width: 450px) {
+    .hero-unit h1 {
+        font-size: 32px;
+    }
+    div#hero-details {
+        display: none;
+    }
+    .hero-unit {
+        padding: 40px;
+        margin-bottom: 0px;
+    }
+
+}
