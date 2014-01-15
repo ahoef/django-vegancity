@@ -1,0 +1,13 @@
+.hero-unit {
+    background: url(/static/images/hero_unit.jpg);
+}
+
+.hero-unit h1 {
+    font-size: 55px;
+}
+
+.hero {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+

@@ -51,14 +51,6 @@ h5, h6 {
     padding-top: 26px;
 }
 
-.hero-unit {
-    background: url(/static/images/hero_unit.jpg);
-}
-
-.hero-unit h1 {
-    font-size: 55px;
-}
-
 
 input#vc-search-input, input#search-input {
     box-shadow: #888888;
@@ -102,11 +94,6 @@ div#vendor_table {
     height: 650px;
     overflow: auto;
     font-size: 14px;
-}
-
-.hero {
-    margin-left: 10px;
-    margin-right: 10px;
 }
 
 .btn:hover,
