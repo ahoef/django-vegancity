@@ -21,7 +21,7 @@ h5 {
     overflow: auto;
     position: absolute;
     text-align: center;
-    background-color: #fff;
+    background-color: #eee;
 }
 
 #map-area {
@@ -74,7 +74,7 @@ h5 {
     border-radius: 0px;
     height: 25px;
     margin-right: -4px;
-    width: 167px;
+    width: 165px;
 }
 .search-button {
     height: 35px;
@@ -211,7 +211,7 @@ h5 {
   z-index: 10;
   background-color: #fff;
   height: 160px;
-  width: 175px;
+  width: 168px;
   border: 2px solid #444;
 }
 
@@ -231,7 +231,7 @@ form {
 
 #add-restaurant-area {
     background-color: #fff;
-    padding: 15px 0 20px 0;
+    padding: 15px 45px 20px 45px;
 }
 #add-restaurant-area h4 {
     color: #444;
@@ -239,8 +239,4 @@ form {
 }
 #add-restaurant-area .button {
     width: 182px;
-}
-
-#map-show-controls {
-    display: none;
 }
