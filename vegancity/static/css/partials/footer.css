@@ -1,7 +1,11 @@
 #footer {
-    background-color: #f89406;
+    background-color: #fc822b;
     opacity: 1;
     text-align: center;
     color: #fff;
     font-size: 18px;
+}
+
+#footer a {
+  margin-right: 20px;
 }
