@@ -47,6 +47,14 @@ h5, h6 {
     font-family: 'Source Sans Pro', sans-serif;
 }
 
+.navbar-inner {
+   background: #2A3655 !important;
+}
+
+p.vc-nav-item:hover {
+    color: #2A3655;
+}
+
 .brand {
     padding-top: 26px;
 }
