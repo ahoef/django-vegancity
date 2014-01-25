@@ -69,8 +69,7 @@ def _get_home_context(request):
     recent_review_vendors = (Review.approved_objects
                              .filter(vendor__approval_status='approved')
                              .order_by('-created')
-                             .values_list('vendor_id', flat=True)
-                             .distinct())
+                             .values_list('vendor_id', flat=True)[:5])
 
     recently_active = (Vendor.approved_objects
                        .filter(pk__in=recent_review_vendors)
