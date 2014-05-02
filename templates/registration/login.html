@@ -11,17 +11,24 @@
   {% endif %}
 
   <form action="" method="post">
-    {% csrf_token %}    
-    <label for="username">User name:</label>
-    <input type="text" name="username" value="" id="username">
-    <label for="password">Password:</label>
-    <input type="password" name="password" value="" id="password">
-<br/>    
-    <input class="btn btn-custom" type="submit" value="Login" />
+    {% csrf_token %}
+    <fieldset class="module aligned wide">
+      <div class="form-row">
+        <label for="username">User name:</label>
+        <input type="text" name="username" value="" id="username">
+      </div>
+      <div class="form-row">
+        <label for="password">Password:</label>
+        <input type="password" name="password" value="" id="password">
+      </div>
+    </fieldset>
+    <div class="submit-row">
+      <input class="btn btn-custom" type="submit" value="Login" />
+    </div>
     <input type="hidden" name="next" value="{% if next %}{{ next }}{% else %}{% url 'home' %}{% endif %}" />
   </form>
-
-<p>New user?  <a href="{% url 'register' %}">Sign up now!</a>
+<p>Forgot your password? <a href="{% url 'password_reset' %}">Reset it here!</a></p>
+<p>New user?  <a href="{% url 'register' %}">Sign up now!</a></p>
 </div>
 
 {% endblock content %}
