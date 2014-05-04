@@ -1,3 +1,4 @@
+/*global google *, $, _, Backbone */
 var SearchFormView = Backbone.View.extend({
     events: {
         "click #clear_all": function (event) {
@@ -46,14 +47,12 @@ var SearchFormView = Backbone.View.extend({
             $("#legend-table tbody").append(tableRow);
         });
 
-        $(".veg-level-0").attr("src", vegCategoryMarkerMapping['omni']);
-        $(".veg-level-7").attr("src", vegCategoryMarkerMapping['omni']);
-        $(".veg-level-6").attr("src", vegCategoryMarkerMapping['omni']);
-        $(".veg-level-5").attr("src", vegCategoryMarkerMapping['omni']);
-        $(".veg-level-4").attr("src", vegCategoryMarkerMapping['vegetarian']);
-        $(".veg-level-3").attr("src", vegCategoryMarkerMapping['vegetarian']);
-        $(".veg-level-2").attr("src", vegCategoryMarkerMapping['vegetarian']);
-        $(".veg-level-1").attr("src", vegCategoryMarkerMapping['vegan']);
+        _.each(_.range(0, 7), function (i) {
+            var category = vegLevelCategoryMapping[i],
+                imageUrl = vegCategoryMarkerMapping[i];
+            $(".veg-level-" + i).attr("src", imageUrl);
+        });
+
     },
 
     resetFilters: function () {
