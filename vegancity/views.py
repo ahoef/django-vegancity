@@ -60,22 +60,38 @@ def _get_home_context(request):
                          if request.user.is_authenticated()
                          else None)
 
-    top_5 = vendors.annotate(fscore=Avg('review__food_rating'))\
-                   .annotate(ascore=Avg('review__atmosphere_rating'))\
-                   .exclude(fscore=None)\
-                   .exclude(ascore=None)\
-                   .order_by('-fscore', '-ascore')[:5]
+    # it would be cooler to include these queries with the model
+    # manager, but they are tiled to the presentation logic because
+    # they only get id and name, the necessary fields.
+    annotated_vendor_select = (
+        lambda query_prefix:
+        Vendor.objects.raw(
+        """
+        SELECT V.id, V.name
+        FROM vegancity_vendor V LEFT OUTER JOIN vegancity_review R
+        ON V.id = R.vendor_id
+        WHERE V.approval_status = 'approved' AND R.approved='t'
+        %s
+        LIMIT 5
+        """ % query_prefix))
 
-    recent_review_vendors = (Review.approved_objects
-                             .filter(vendor__approval_status='approved')
-                             .order_by('-created')
-                             .values_list('vendor_id', flat=True)[:5])
+    top_5 = annotated_vendor_select(
+        """
+        AND (NOT R.food_rating IS NULL)
+        AND (NOT R.atmosphere_rating IS NULL)
+        GROUP BY V.id, V.name
+        ORDER BY avg(R.food_rating) DESC, avg(R.atmosphere_rating) DESC,
+        count(R.id) DESC, name
+        """)
 
-    recently_active = (Vendor.approved_objects
-                       .filter(pk__in=recent_review_vendors)
-                       .order_by('-review__created')[:5])
+    recently_active = annotated_vendor_select(
+        """
+        GROUP BY V.id, V.name
+        ORDER BY max(R.created) DESC
+        """)
 
-    recently_added = vendors.exclude(created=None).order_by('-created')[:5]
+    recently_added = (vendors.exclude(created=None)
+                      .order_by('-created').values('id', 'name')[:5])
 
     most_reviewed = Vendor.approved_objects.with_reviews()[:5]
 
