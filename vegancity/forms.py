@@ -22,10 +22,6 @@ import models
 
 from django.contrib.auth.forms import UserCreationForm
 
-GMPS = 'http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false'
-JQUERY = 'http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js'
-
-
 class VegUserCreationForm(UserCreationForm):
 
     "Form used for creating new users."
@@ -105,13 +101,6 @@ class VegProfileEditForm(forms.ModelForm):
 
 class AdminVendorForm(forms.ModelForm):
 
-    class Media:
-        js = (
-            GMPS,
-            JQUERY,
-            'js/vendor_form.js',
-        )
-
     class Meta:
         model = models.Vendor
 
@@ -122,14 +111,7 @@ class AdminVendorForm(forms.ModelForm):
 
 
 class NewVendorForm(forms.ModelForm):
-
     "Form used for adding new vendors."
-
-    class Media:
-        js = (
-            JQUERY,
-            'js/vendor_form.js',
-        )
 
     class Meta:
         model = models.Vendor

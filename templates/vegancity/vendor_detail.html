@@ -152,6 +152,7 @@
 {% block body_extra %}
   <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/map.js"></script>
   <script type="text/javascript">
     var vendors = [
         {
@@ -164,12 +165,12 @@
             longitude: "{{ vendor.location.x }}"
         }
     ];
+    $(document).ready(function() {
+        vendorMap.initialize("#map_canvas", vendors, "detail", true);
+    });
+
   </script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/map.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/vendor_detail.js"></script>
   <link href='http://fonts.googleapis.com/css?family=Cabin:400,700' rel='stylesheet' type='text/css'>
-
-
 <style>
 
 h1
