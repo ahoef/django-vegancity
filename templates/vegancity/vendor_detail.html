@@ -32,7 +32,7 @@
           <br>
         {% endif %}
 
-        <table class="table table-hover">
+        <table class="table ">
           {% if vendor.address %}
             <tr>
               <td>Address:</td>
@@ -67,13 +67,13 @@
           {% endif %}
           {% if vendor.food_rating %}
             <tr>
-              <td>Average <br>Food Rating:</td>
+              <td>Food <br>Rating:</td>
               <td><p>{{ vendor.food_rating|graphical_rating|safe }}</p></td>
             </tr>
           {% endif %}
           {% if vendor.atmosphere_rating %}
             <tr>
-              <td>Average <br>Atmosphere Rating:</td>
+              <td>Atmosphere <br>Rating:</td>
               <td><p>{{ vendor.atmosphere_rating|graphical_rating|safe }}</p></td>
             </tr>
           {% endif %}
@@ -86,10 +86,9 @@
           {% if vendor.cuisine_tags.all %}
             <tr>
               <td>Cuisine(s): </td>
-              <td>
+              <td class="vendor-detail-tags">
                 {% for tag in vendor.cuisine_tags.all %}
                   <a href="/vendors/?cuisine={{ tag.id }}">{{ tag }}</a>
-                  {% if not forloop.last %}, {% endif %}
                 {% endfor %}
               </td>
             </tr>
@@ -97,25 +96,14 @@
           {% if vendor.feature_tags.all %}
             <tr>
               <td>Features: </td>
-              <td>
+              <td class="vendor-detail-tags">
                 {% for tag in vendor.feature_tags.all %}
                   <a href="/vendors/?feature={{ tag.id }}">{{ tag }}</a>
-                  {% if not forloop.last %}, {% endif %}
+
                 {% endfor %}
               </td>
             </tr>
           {% endif %}
-            {% if vendor.address %}
-            <tr>
-              <td>Location: </td>
-              <td>
-                <a target="_BLANK" rel="nofollow"
-                   href="http://maps.google.com/maps?q={{ vendor.address|linebreaksbr }}">
-                  View on Google Maps
-                </a>
-              </td>
-            </tr>
-            {% endif %}
         </table>
       </div>
 
@@ -124,11 +112,21 @@
         <div id="map_canvas"></div>
         <br/>
 
-        <a class="button" href="{% url 'new_review' vendor_id=vendor.id %}" data-toggle="modal">Write a Review</a>
+        <div class="vendor-detail-cta">
 
-        <h3>Why write reviews on VegPhilly?</h3>
-            <p>Reviews help other users get an idea about what their experience at a restaurant might be like. Your reviews are one of the most important aspects of the site, and we encourage you to write as many as you'd like!</p><br>
-        <br>
+          <a class="button" href="{% url 'new_review' vendor_id=vendor.id %}" data-toggle="modal">Write a Review</a>
+
+          {% if vendor.address %}
+            <a class="button get-directions" target="_BLANK" rel="nofollow"
+              href="http://maps.google.com/maps?q={{ vendor.address|linebreaksbr }}">
+                    Get Directions
+            </a>
+          {% endif %}
+
+          <h3>Why write reviews on VegPhilly?</h3>
+          <p>Reviews help other users get an idea about what their experience at a restaurant might be like. Your reviews are one of the most important aspects of the site, and we encourage you to write as many as you'd like!</p>
+        </div>
+
       </div>
     </div>
     </div>
@@ -184,7 +182,6 @@ h1
 }
 
 h3 {
-  text-align: center;
   font-family: 'Source Sans Pro';
   font-weight: normal;
   font-size: 18px;
@@ -192,6 +189,11 @@ h3 {
 
 h5 {
   font-weight: normal;
+  line-height: 26px;
+}
+
+p {
+  line-height: 22px;
 }
 
 #map-area {
@@ -203,24 +205,32 @@ h5 {
 }
 
 #map_canvas {
-  height: 300px !important;
+  height: 350px !important;
   opacity: .75;
  }
 
+.vendor-detail-cta {
+  margin: 20px 0;
+}
+
+.vendor-detail-cta p {
+  font-size: 14px;
+  margin-bottom: 40px;
+}
+
 .button {
-  display: inline-block;
-  background-color: #2a3655;
-  padding: 18px 35px;
-  margin: 10px 0;
-  text-decoration: none;
-  font-size: 20px;
-  color: #ffffff;
-  font-weight: bold;
-  width: 85%;
-  font-family: 'Cabin', sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  text-align: center;
+display: inline-block;
+background-color: #2a3655;
+padding: 18px 0px;
+text-decoration: none;
+font-size: 13px;
+color: #ffffff;
+width: 47.5%;
+font-family: 'Cabin', sans-serif;
+text-transform: uppercase;
+letter-spacing: 1.5px;
+text-align: center;
+margin-bottom: 20px;
 }
 
 .button:hover {
@@ -228,12 +238,38 @@ h5 {
   text-decoration: none;
   color: #ffffff;
 }
+
+.button.get-directions {
+  margin-left: 3%;
+}
+
 table td {
-  min-width: 150px;
+  min-width: 120px;
 }
 
 td p {
   margin-bottom: 0px;
+}
+
+.vendor-detail-tags a {
+  padding: 5px 10px;
+  color: #8DA189;
+  border: 1px solid #8DA189;
+  margin: 10px 2px;
+  line-height: 38px;
+  font-size: 14px;
+}
+
+td a:hover {
+  opacity: 0.6;
+  color: #d25d09;
+  text-decoration: none;
+}
+
+.vendor-detail-tags a:hover {
+  background-color: #8DA189;
+  color: white;
+  opacity: 1;
 }
 
 .rating {
