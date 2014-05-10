@@ -11,8 +11,6 @@ p.vc-nav-item {
     text-shadow: none !important;
 }
 
-
-
 @media (max-width: 787px) {
   p.vc-nav-item:hover {
       color: #2A3655;
@@ -23,5 +21,8 @@ p.vc-nav-item {
     margin-left: 0;
     margin-right: 0;
   }
+
+p.vc-nav-item:hover {
+    color: #c0c1c2;
 }
 
