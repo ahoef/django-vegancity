@@ -118,7 +118,7 @@ $(window).load(function() {
 	      <h3>Cuisines</h3>
           <ul>
             {% for cuisine in cuisine_tags %}
-              <li><a href="/vendors/?cuisine={{ cuisine.id }}" class="blue">{{ cuisine.description }}</a></li>
+              <li><a href="/vendors/?cuisine_tag={{ cuisine.id }}" class="blue">{{ cuisine.description }}</a></li>
             {% endfor %}
           </ul>
         </div>
@@ -126,7 +126,7 @@ $(window).load(function() {
 	      <h3>Features</h3>
           <ul>
             {% for feature in feature_tags %}
-              <li><a href="/vendors/?feature={{ feature.id }}" class="blue">{{ feature.description }}</a></li>
+              <li><a href="/vendors/?feature_tag={{ feature.id }}" class="blue">{{ feature.description }}</a></li>
             {% endfor %}
           </ul>
         </div>
