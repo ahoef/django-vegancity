@@ -11,7 +11,17 @@ p.vc-nav-item {
     text-shadow: none !important;
 }
 
-p.vc-nav-item:hover {
-    color: #2A3655;
+
+
+@media (max-width: 787px) {
+  p.vc-nav-item:hover {
+      color: #2A3655;
+  }
+  .navbar-fixed-top,
+  .navbar-fixed-bottom,
+  .navbar-static-top {
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
 

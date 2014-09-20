@@ -8,7 +8,7 @@ html, body {
 
 #page-wrapper {
     /* offset height of header */
-    margin-bottom: -75px;
+    margin-bottom: -50px;
     min-height: 100%;
 }
 
@@ -17,7 +17,7 @@ html, body {
 }
 
 #footer, #page-wrapper:after {
-  height: 75px;
+  height: 50px;
 }
 
 #page-wrapper:after {
