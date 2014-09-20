@@ -1,7 +1,38 @@
 #footer {
-    background-color: #f89406;
+    /*background-color: #f89406;*/
+    background-color: #fc822b;
     opacity: 1;
     text-align: center;
     color: #fff;
     font-size: 18px;
+}
+
+#footer ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  padding-top: 16px;
+}
+
+#footer li {
+  display: inline-block;
+  margin-left: 5%;
+  font-size: 18px;
+}
+
+#footer li:first-child {
+  margin-left: 0;
+}
+
+#footer li a i {
+  color: white;
+}
+
+@media (max-width: 787px) {
+  #page-wrapper {
+    margin-bottom: -50px !important;
+  }
+  #footer, #page-wrapper:after {
+    height: 50px !important;
+  }
 }

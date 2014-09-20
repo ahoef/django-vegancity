@@ -11,3 +11,10 @@ p.vc-nav-item {
     text-shadow: none !important;
 }
 
+@media (max-width: 787px) {
+  .navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
