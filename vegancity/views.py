@@ -91,7 +91,7 @@ def _get_home_context(request):
         """)
 
     recently_added = (vendors.exclude(created=None)
-                      .order_by('-created').values('id', 'name')[:5])
+                      .order_by('-created')[:5])
 
     most_reviewed = Vendor.approved_objects.with_reviews()[:5]
 
