@@ -25,13 +25,9 @@
   notify:
     - restart gunicorn
 
-- name: copy dev urls
-  copy: src=dev_urls.py dest={{ project_dir }}/vegancity/dev_urls.py owner={{ app_user }}
-
 - name: install app requirements for dev
   apt: pkg="{{ item }}" state=latest
   with_items:
-    - libtidy-dev
     - firefox
     - xvfb
 
