@@ -1,10 +1,16 @@
 #footer {
     /*background-color: #f89406;*/
-    background-color: #fc822b;
+    background-color: white;
     opacity: 1;
     text-align: center;
     color: #fff;
     font-size: 18px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: .7;
+
 }
 
 #footer ul {
@@ -16,7 +22,7 @@
 
 #footer li {
   display: inline-block;
-  margin-left: 5%;
+  margin-left: 15px;
   font-size: 18px;
 }
 
@@ -24,8 +30,13 @@
   margin-left: 0;
 }
 
+#footer li a {
+  color: #222;
+}
+
 #footer li a i {
-  color: white;
+  color: #222;
+  font-size: 20px;
 }
 
 @media (max-width: 787px) {
