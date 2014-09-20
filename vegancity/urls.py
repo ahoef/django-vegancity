@@ -49,6 +49,10 @@ urlpatterns = patterns(
     url(r'^accounts/register/$', 'vegancity.views.register', name='register'),
     url(r'^accounts/register/thanks/$', views.RegisterThanksView.as_view(), name='register_thanks'),
     url(r'^accounts/password/change/$', 'vegancity.views.password_change', name='password_change'),
+    url(r'^accounts/password/reset/$', 'django.contrib.auth.views.password_reset', name='password_reset'),
+    url(r'^accounts/password/reset/done/$', 'django.contrib.auth.views.password_reset_done', name='password_reset_done'),
+    url(r'^accounts/password/reset/confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', 'django.contrib.auth.views.password_reset_confirm', name='password_reset_confirm'),
+    url(r'^accounts/password/reset/complete/$', 'django.contrib.auth.views.password_reset_complete', name='password_reset_complete'),
     url(r'^accounts/profile/$', 'vegancity.views.user_profile', {'username': None}, name='my_account'),
     url(r'^accounts/profile/edit/$', 'vegancity.views.account_edit', name='account_edit'),
 
