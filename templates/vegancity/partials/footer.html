@@ -1,11 +1,8 @@
 <div id="footer">
-  <br>
-  <div class="container">
-    <p>
-      <a href="{% url 'privacy' %}" class="white">Privacy Policy</a>
-      <a href="{% url 'about' %}" class="white">About</a>
-      <a href="http://www.facebook.com/vegphilly"><img src="{{ STATIC_URL }}images/f_logo.png" width="10px" alt="facebook icon"></a>
-      <a href="http://www.twitter.com/vegphilly"><img src="{{ STATIC_URL }}images/t_logo.png" width="40px" alt="twitter icon"></a>
-    </p>
-  </div>
+    <ul class="footer-links">
+      <li><a href="{% url 'privacy' %}">Privacy Policy</a></li>
+      <li><a href="{% url 'about' %}">About</a></li>
+      <li><a href="http://www.facebook.com/vegphilly"><i class="fa fa-facebook"></i></a></li>
+      <li><a href="http://www.twitter.com/vegphilly"><i class="fa fa-twitter"></i></a></li>
+    </ul>
 </div>
