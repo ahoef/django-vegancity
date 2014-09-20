@@ -65,3 +65,60 @@ i
   text-align: right;
   padding-top: 30px;
 }
+
+.bios {
+  margin-bottom: 50px;
+}
+
+.bios h5 {
+  padding-top: 12px;
+  padding-bottom: 3px;
+}
+
+.bios .bio {
+  padding-left: 35px;
+  padding-right: 35px;
+  text-align: left;
+}
+
+
+
+@media (max-width: 787px) {
+  .about-hero {
+    height: 180px;
+    margin-top: 30px;
+    position: relative;
+  }
+  .about-hero h3 {
+    position: absolute;
+    left: 0;
+    top: -70px;
+    max-width: 100%;
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
+  }
+  .about-hero h2 {
+    position: absolute;
+    top: -10px;
+    max-width: 100;
+    font-size: 20px;
+    line-height: 24px;
+    width: 100%;
+    text-align: center;
+  }
+  .bios {
+    margin-bottom: 0px;
+  }
+  .bios .bio {
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: left;
+  }
+  .team-member {
+    margin-bottom: 60px;
+  }
+  .contributor {
+    margin-bottom: 20px;
+  }
+}
