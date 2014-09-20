@@ -5,15 +5,13 @@
       <a class="brand" href= "{% url 'home' %}" style="color: white; padding-top: 35px">VegPhilly</a>
 
       <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
+        <i class="fa fa-bars"></i>
       </a>
 
       <div class="nav-collapse collapse">
         <ul class="nav pull-right">
 	  <li><a href="{% url 'vendors' %}"><p class="vc-nav-item">Restaurants</p></a></li>
-	  <li><a href="{% url 'connect' %}"><p class="vc-nav-item">Connect</p></a></li> 
+	  <li><a href="{% url 'connect' %}"><p class="vc-nav-item">Connect</p></a></li>
           <li><a href="{% url 'about' %}"><p class="vc-nav-item">About</p></a></li>
           {% if user.is_authenticated %}
           <li><a href="{% url 'my_account' %}"><p class="vc-nav-item">My Account (<u>{{user}}</u>)</p></a></li>
