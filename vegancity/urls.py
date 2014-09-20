@@ -39,6 +39,7 @@ urlpatterns = patterns(
     url(r'^vendors/add/thanks/$', views.VendorThanksView.as_view(), name="vendor_thanks"),
     url(r'^vendors/review/(?P<vendor_id>\d+)/$', views.new_review, name="new_review"),
     url(r'^vendors/(?P<pk>\d+)(-[\w\d]+)*/$', views.vendor_detail, name="vendor_detail"),
+    url(r'^connect/$', views.ConnectView.as_view(), name='connect'),
     url(r'^about/$', views.AboutView.as_view(), name='about'),
     url(r'^privacy/$', views.PrivacyView.as_view(), name='privacy'),
     url(r'^vendors/review/(?P<pk>\d+)/thanks/$', views.ReviewThanksView.as_view(), name="review_thanks"),
