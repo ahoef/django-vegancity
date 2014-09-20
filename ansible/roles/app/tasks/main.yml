@@ -33,42 +33,6 @@
 - name: make sure postgres is running # TODO make this a handler
   service: name=postgresql state=running
 
-#################################
-# postgis
-#################################
-
-- name: install postgis build requirements
-  apt: pkg={{ item }} state=latest
-  with_items:
-    - build-essential
-    - libxml2-dev
-    - libgeos-dev
-    - libproj-dev
-    - libgdal1-dev
-    - libpq-dev
-    - python-dev
-
-- name: create download dir
-  file: dest=/tmp/postgis/download owner=postgres state=directory
-
-- name: download postGIS # todo how about a newer postgis?
-  action: get_url url=http://postgis.org/download/postgis-2.0.1.tar.gz 
-              dest=/tmp/postgis/download/postgis-2.0.1.tar.gz mode=0440
-
-- name: untar postGIS
-  command: tar xzf postgis-2.0.1.tar.gz
-           chdir=/tmp/postgis/download/
-           creates=/tmp/postgis/download/postgis-2.0.1
-
-- name: install postGIS
-  command: $item
-           chdir=/tmp/postgis/download/postgis-2.0.1
-           creates=/usr/share/postgresql/9.1/extension/postgis--2.0.1.sql
-  with_items:
-    - ./configure --without-topology
-    - make
-    - make install
-
 - name: add PostGIS extension to {{ db_name }} database
   sudo: True
   sudo_user: postgres

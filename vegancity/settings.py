@@ -285,3 +285,5 @@ if EMAIL_HOST_USER == '' or EMAIL_HOST_PASSWORD == '':
                      "EMAIL_HOST_USER and EMAIL_HOST_PASSWORD "
                      "in your settings_local.py file.")
     raise ImproperlyConfigured(error_message)
+
+POSTGIS_VERSION = (2, 0, 3)

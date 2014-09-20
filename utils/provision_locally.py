@@ -15,6 +15,9 @@ def install_dependencies():
             os.system("apt-get update")
             os.system("apt-get install -y python-software-properties")
             os.system("apt-add-repository -y ppa:rquillo/ansible")
+            # TODO: this shouldn't really go here, it should
+            # go in the ansible config
+            os.system("apt-add-repository -y ppa:ubuntugis/ppa")
             os.system("apt-get update")
             os.system("apt-get install -y ansible")
             break
