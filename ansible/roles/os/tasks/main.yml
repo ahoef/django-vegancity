@@ -5,8 +5,9 @@
   apt: pkg={{ item }} state=latest
   with_items:
     - postgresql
-    - postgresql-server-dev-9.1 # TODO use postgresql 9.1
+    - postgresql-server-dev-9.1
     - postgresql-contrib-9.1
+    - postgresql-9.1-postgis-2.0
     - python-software-properties
     - python-dev
     - python-pip
