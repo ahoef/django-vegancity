@@ -29,7 +29,7 @@
   copy: src=dev_urls.py dest={{ project_dir }}/vegancity/dev_urls.py owner={{ app_user }}
 
 - name: install app requirements for dev
-  apt: pkg=$item state=latest
+  apt: pkg="{{ item }}" state=latest
   with_items:
     - libtidy-dev
     - firefox
@@ -50,29 +50,29 @@
 
 - name: run syncdb
   sudo: True
-  sudo_user: $app_user
+  sudo_user: "{{ app_user }}"
   command: python {{ project_dir }}/manage.py syncdb --noinput
 
 - name: run migrate
   sudo: True
-  sudo_user: $app_user
+  sudo_user: "{{ app_user }}"
   command: python {{ project_dir }}/manage.py migrate --noinput
 
 - name: run collectstatic
   sudo: True
-  sudo_user: $app_user
+  sudo_user: "{{ app_user }}"
   command: python {{ project_dir }}/manage.py collectstatic --noinput
 
 - name: install dev fixture
   sudo: True
-  sudo_user: $app_user
+  sudo_user: "{{ app_user }}"
   command: python {{ project_dir }}/manage.py loaddata {{ project_dir }}/vegancity/fixtures/public_data.json
 
 # this is done in dev because vagrant annoyingly uses a LATIN1 encoding by default
 - name: change locale on postgres template
   sudo: True
   sudo_user: postgres
-  command: $item
+  command: "{{ item }}"
   with_items:
     - psql -c "update pg_database set datistemplate = false where datname = 'template1';"
     - psql -c "drop database template1"
