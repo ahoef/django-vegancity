@@ -372,6 +372,10 @@ def vendor_detail(request, pk):
 ###########################
 
 
+class ConnectView(TemplateView):
+    template_name = 'vegancity/connect.html'
+
+
 class AboutView(TemplateView):
     template_name = 'vegancity/about.html'
 
