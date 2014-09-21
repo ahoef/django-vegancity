@@ -27,6 +27,18 @@
   color: #f6c084;
   font-weight: 400;
   font-size: 200%;
+  text-align: right;
+}
+
+.badge-container {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.be-well-badge {
+  max-width: 400px;
 }
 
 a:hover
@@ -60,7 +72,7 @@ i
 
 .about-hero
 {
-  height: 400px;
+  height: 420px;
   background-size: cover;
   text-align: right;
   padding-top: 30px;
@@ -73,12 +85,26 @@ i
 .bios h5 {
   padding-top: 12px;
   padding-bottom: 3px;
+  margin-bottom: 0;
 }
 
 .bios .bio {
   padding-left: 35px;
   padding-right: 35px;
   text-align: left;
+}
+
+h6 {
+  margin: 5px;
+}
+
+.contributors {
+  text-align: left;
+  margin-left: 6%;
+}
+.contributors h5 {
+  margin: 0;
+  padding-top: 5px;
 }
 
 
@@ -120,5 +146,13 @@ i
   }
   .contributor {
     margin-bottom: 20px;
+  }
+  .badge-container {
+    text-align: center;
+    border-top: 1px solid #B6B6B6;
+  }
+  .be-well-badge {
+    max-width: 240px;
+    margin-top: 40px;
   }
 }
